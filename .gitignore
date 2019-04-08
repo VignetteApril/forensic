@@ -52,6 +52,7 @@ node_modules/
 /public/packs
 /public/packs-test
 /public/assets
+/public/downloads
 
 # Ignore yarn files
 /yarn-error.log
@@ -67,3 +68,7 @@ yarn-debug.log*
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore files in local file system
+.idea/
+.Ds_store
