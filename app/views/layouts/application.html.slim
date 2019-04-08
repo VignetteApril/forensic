@@ -1,0 +1,63 @@
+doctype html
+html
+  head
+    title 
+      = SysConfig.sys_title
+    = stylesheet_link_tag    "application#{SKIN.to_i == 0 ? '' : SKIN.to_i.to_s}", media: 'all', 'data-turbolinks-track' => true 
+    - if GEM_LIST['s_id']
+      = stylesheet_link_tag  's_id/application', media: 'all', 'data-turbolinks-track' => true 
+    = javascript_include_tag 'application',               'data-turbolinks-track' => true 
+
+    = csrf_meta_tags 
+  body
+    <!--[if lt IE 9]>
+      <p style="text-align: center!important; margin: 0 0 0.5em!important; background-color: #d9534f!important; color: #fff!important; padding: 0.5em 1em!important;">
+        | 您正在使用 <strong>过时的</strong> 浏览器，并且有严重的安全隐患，请 
+        <a style="color: #fff!important; text-decoration: underline!important;" href="http://browsehappy.com/?locale=cn">升级你的浏览器</a> 
+        | 获得更好的用户体验。
+      </p>
+    <![endif]-->
+    = render 'layouts/top_bar'
+    == yield
+    - if GEM_LIST['s_kb'] == true && has_license('s_kb') && can?("s_kb/knowledgebase", "inner_index")
+      #kb-bar style="position:absolute;top:48px;right:0px;width:400px;height:100%;display:none;"
+        iframe src="/s_kb/knowledgebase/inner_index" style="height:100%;width:100%;"
+    - if GEM_LIST['s_id'] == true && has_license('s_id')
+      = render partial: '/s_id/menu/add_audit_idea'
+    - else
+      = render partial: '/favorites/add_bookmark'
+javascript:
+  $(function() {
+    //$('#top-bar').addClass('animated fadeInDown');
+    $('#sidebar').addClass('animated fadeInLeft');
+    $('#content').addClass('animated fadeIn');
+    
+    $('#homepage').addClass('animated fadeIn');
+    //$('#notice-box').addClass('animated slideInRight');
+    
+    init_wice_grid();
+  })
+  
+  $("#table-box-out").scroll(function() {
+    freeze_head("table-box-out", "search-result", 0);
+  });
+  if (!($("#table-box-out").offset()===undefined)) {
+    h = $(window).height() - $("#table-box-out").offset().top -80;
+    $("#table-box-out").css("height", h+'px');
+  }
+  
+  $('#search-kb').click(function() {
+    if ($('#kb-bar').css('display') == 'none') {
+      $('#kb-bar').css('display', "block")
+      $('#kb-bar').addClass('animated fadeInRight')
+      $('#kb-bar').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+        $('#kb-bar').removeClass('animated fadeInRight')
+      });
+    }else{
+      $('#kb-bar').addClass('animated fadeOutRight')
+      $('#kb-bar').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+        $('#kb-bar').css('display', "none")
+        $('#kb-bar').removeClass('animated fadeOutRight')
+      });
+    }
+  })

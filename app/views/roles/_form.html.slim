@@ -1,0 +1,23 @@
+= simple_form_for(@role, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+  .row
+    .col-sm-12
+      .form-actions
+        .btn-group.btn-group-sm role="group"
+          = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+          = f.button :submit, "保存", class: "btn btn-default btn-primary"
+  .row
+    .col-sm-12
+      - if @role.errors.any?
+        #error_explanation.alert.alert-warning
+          h4
+            | 该角色保存时出错：
+            = pluralize(@role.errors.count, "个错误")
+          ul
+            - @role.errors.full_messages.each do |message| 
+              li
+                = message
+  .row
+    .col-sm-10
+      .form-inputs
+        = f.input :name, label: '角色名称'
+        = f.input :description, label: '角色描述', as: :text, :input_html => {:rows => 5}

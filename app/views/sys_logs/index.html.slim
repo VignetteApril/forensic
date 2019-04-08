@@ -1,0 +1,23 @@
+= render "layouts/system_maintenance" 
+#content
+  .container-fluid
+    = get_bread_crumb
+    = get_notice_bar
+    .row
+      .col-sm-12
+        .btn-group.btn-group-sm role="group" aria-label="..."
+          button.wg-external-submit-button.btn.btn-primary data-grid-name="sys_logs" 过滤
+          button.wg-external-reset-button.btn.btn-default data-grid-name="sys_logs" 清除过滤条件
+        / | &nbsp;
+        / .btn-group.btn-group-sm role="group" aria-label="..."
+          / button.btn.btn-default.wg-external-csv-export-button data-grid-name='sys_logs' 导出到电子表格
+      /
+        .col-sm-4
+        = form_tag "/sys_logs/search", method: :get
+          .input-group
+            = text_field_tag :search_content, "", class: "form-control", placeholder: "这里填写搜索条件……"
+            span.input-group-btn
+              = submit_tag "搜索", class: "btn btn-default"
+    .row
+      .col-sm-12
+        = render "sys_logs_grid" 

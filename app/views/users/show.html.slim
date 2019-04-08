@@ -1,0 +1,175 @@
+= render "layouts/system_maintenance"
+#content
+  .container-fluid
+    = get_bread_crumb
+    = get_notice_bar
+    .row
+      .col-sm-12
+        .btn-group.btn-group-sm role="group"
+          = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+          = link_to '编辑', edit_user_path(@user), class: "btn btn-default" if can?("users", "edit") && can_sys?(@user)
+    .row
+      .col-sm-3
+        p.text-right
+          strong 登录名&nbsp;
+      .col-sm-3
+        = @user.login
+      .col-sm-2
+        p.text-right
+          strong 顺序号&nbsp;
+      .col-sm-3
+        = @user.sort_no
+    .row
+      .col-sm-3
+        p.text-right
+          strong 中文姓名&nbsp;
+      .col-sm-3
+        = @user.name
+      .col-sm-2
+        p.text-right
+          strong 英文姓名&nbsp;
+      .col-sm-3
+        = @user.english_name
+    .row
+      .col-sm-3
+        p.text-right
+          strong 人员编码&nbsp;
+      .col-sm-3
+        = @user.code
+      .col-sm-2
+        p.text-right
+          strong 政治面貌&nbsp;
+      .col-sm-3
+        = @user.politics_status
+    .row
+      .col-sm-3
+        p.text-right
+          strong 证件类型&nbsp;
+      .col-sm-3
+        = @user.id_type
+      .col-sm-2
+        p.text-right
+          strong 证件号码&nbsp;
+      .col-sm-3
+        = @user.id_card_no
+    .row
+      .col-sm-3
+        p.text-right
+          strong 性别&nbsp;
+      .col-sm-3
+        = @user.gender
+      .col-sm-2
+        p.text-right
+          strong 婚姻状况&nbsp;
+      .col-sm-3
+        = @user.marital_status
+    .row
+      .col-sm-3
+        p.text-right
+          strong 最高学历&nbsp;
+      .col-sm-3
+        = @user.top_education
+      .col-sm-2
+        p.text-right
+          strong 最高学位&nbsp;
+      .col-sm-3
+        = @user.top_degree
+    .row
+      .col-sm-12
+        hr
+    .row
+      .col-sm-3
+        p.text-right
+          strong 现任职务&nbsp;
+      .col-sm-3
+        = @user.position
+      .col-sm-2
+        p.text-right
+          strong 职级&nbsp;
+      .col-sm-3
+        = @user.rank
+    .row
+      .col-sm-3
+        p.text-right
+          strong 所属部门&nbsp;
+      .col-sm-3
+        = @user.department.name if @user.department
+      .col-sm-2
+        p.text-right
+          strong 所属单位&nbsp;
+      .col-sm-3
+        = @user.orgnization_name
+    .row
+      .col-sm-12
+        hr
+    .row
+      .col-sm-3
+        p.text-right
+          strong 办公电话&nbsp;
+      .col-sm-3
+        = @user.work_phone
+      .col-sm-2
+        p.text-right
+          strong 办公传真&nbsp;
+      .col-sm-3
+        = @user.work_fax
+    .row
+      .col-sm-3
+        p.text-right
+          strong 家庭电话&nbsp;
+      .col-sm-3
+        = @user.home_phone
+      .col-sm-2
+        p.text-right
+          strong 移动电话&nbsp;
+      .col-sm-3
+        = @user.mobile_phone
+    .row
+      .col-sm-3
+        p.text-right
+          strong EMAIL地址&nbsp;
+      .col-sm-3
+        = @user.email
+      .col-sm-2
+        p.text-right
+          strong EMAIL地址2&nbsp;
+      .col-sm-3
+        = @user.email2
+    .row
+      .col-sm-3
+        p.text-right
+          strong 国家&nbsp;
+      .col-sm-3
+        = @user.country
+      .col-sm-2
+        p.text-right
+          strong 邮政编码&nbsp;
+      .col-sm-3
+        = @user.zip_code
+    .row
+      .col-sm-3
+        p.text-right
+          strong 省&nbsp;
+      .col-sm-3
+        = @user.province
+      .col-sm-2
+        p.text-right
+          strong 城市&nbsp;
+      .col-sm-3
+        = @user.city
+    .row
+      .col-sm-3
+        p.text-right
+          strong 通信地址&nbsp;
+      .col-sm-9
+        = @user.address
+    .row
+      .col-sm-12
+        hr
+    .row
+      .col-sm-3
+        p.text-right
+          strong 备注&nbsp;
+      .col-sm-9
+        = simple_format @user.memo
+    

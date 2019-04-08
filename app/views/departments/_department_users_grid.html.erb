@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+      <button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='department_users_grid'>过滤</button>
+      <button class="btn btn-default btn-sm wg-external-reset-button" data-grid-name='department_users_grid'>清除过滤条件</button>
+    </div>
+    <span style="float:right;">
+      <%= link_to('增加人员', add_users_department_path(department), class: "btn btn-default btn-sm") if can?("departments", "add_users") && can_has_users?(department) && can_sys?(department) %>
+    </span>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-12">
+    <%= grid(users, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
+      g.column name: '真实姓名', attribute: 'name', ordering: false do |user|
+        link_to user.name, user_path(user)
+      end
+      g.column name: '证件号码', attribute: 'id_card_no' do |user|
+        user.id_card_no
+      end
+      g.column name: 'Email地址', attribute: 'email' do |user|
+        user.email
+      end
+      g.column name: '办公电话', attribute: 'work_phone' do |user|
+        user.work_phone
+      end
+      g.column name: '移动电话', attribute: 'mobile_phone' do |user|
+        user.mobile_phone
+      end
+      g.column name: '现任职务', attribute: 'position', ordering: false do |user|
+        user.position
+      end
+      g.column in_csv: false, html: {style: "width:30px;"}  do |user|
+        if can?("departments", "remove_user_from_department") && can_sys?(@department)
+          # link_to remove_user_from_department_department_path(department, user_id: user.id), remote: true, method: :delete, data: { confirm: '您确认移除该用户吗？' } do 
+          link_to remove_user_from_department_department_path(department, user_id: user.id), method: :delete, data: { confirm: '您确认移除该用户吗？' } do 
+            raw("<span class='glyphicon glyphicon-remove' aria-hidden='true' title='从该部门中移除此用户'></span>")
+          end
+        end
+      end
+    end -%>
+  </div>
+</div>

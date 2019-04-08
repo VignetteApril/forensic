@@ -1,0 +1,92 @@
+= render "layouts/system_maintenance" 
+#content
+  .container-fluid
+    = get_bread_crumb
+    = get_notice_bar
+    .row
+      .col-sm-8.col-sm-offset-2
+        = form_tag sys_config_path(0), method: 'put', class: 'form-horizontal' do
+          .row
+            .col-sm-8.col-sm-offset-4
+              strong 参数配置
+          br
+          .form-group
+            = label_tag(:customer_code, "客户标识", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:customer_code, SysConfig.find_by_key('CUSTOMER_CODE')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('CUSTOMER_CODE')&.desc
+          .form-group
+            = label_tag(:es_host, "索引服务器地址", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:es_host, SysConfig.find_by_key('ES_HOST')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('ES_HOST')&.desc
+          .form-group
+            = label_tag(:super_roles, "超级角色列表""", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:super_roles, SysConfig.find_by_key('SUPER_ROLES')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('SUPER_ROLES')&.desc
+          .form-group
+            = label_tag(:accounting_level, "核算级次/行政区划", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:accounting_level, SysConfig.find_by_key('ACCOUNTING_LEVEL')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('ACCOUNTING_LEVEL')&.desc
+          / .form-group
+          /   = label_tag(:black_word, "搜索关键字黑名单", class: 'col-sm-4 control-label')
+          /   .col-sm-8
+          /     = text_field_tag(:black_word, SysConfig.black_word, class: 'form-control')
+          /     span.help-block
+          /       = SysConfig.find_by_key('BLACK_WORD')&.desc
+          .form-group
+            = label_tag(:department_onlyleaf_can_has_user, "组织结构是否只有叶子节点能够拥有用户？", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = select_tag(:department_onlyleaf_can_has_user, \
+                           options_for_select(['是', '否'], (SysConfig.department_onlyleaf_can_has_user? ? '是' : '否') ), \
+                           class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('DEPARTMENT_ONLYLEAF_CAN_HAS_USER')&.desc
+          .form-group
+            = label_tag(:sys_title, "系统标题", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:sys_title, SysConfig.find_by_key('SYS_TITLE')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('SYS_TITLE')&.desc
+          .form-group
+            = label_tag(:sys_subtitle, "系统副标题", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:sys_subtitle, SysConfig.find_by_key('SYS_SUBTITLE')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('SYS_SUBTITLE')&.desc
+          .form-group
+            = label_tag(:sys_logo, "LOGO文件地址", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:sys_logo, SysConfig.find_by_key('SYS_LOGO')&.value, class: 'form-control')
+              span.help-block
+                = SysConfig.find_by_key('SYS_LOGO')&.desc
+          .form-group
+            = label_tag(:libreoffice_dir, "LibreOffice路径", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:libreoffice_dir, SysConfig.find_by_key('LIBREOFFICE_DIR')&.value, class: 'form-control')
+              span.help-block
+                = simple_format(SysConfig.find_by_key('LIBREOFFICE_DIR')&.desc)
+          .form-group
+            = label_tag(:redmine_url, "项目管理系统地址", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:redmine_url, SysConfig.find_by_key('REDMINE_URL')&.value, class: 'form-control')
+              span.help-block
+                = simple_format(SysConfig.find_by_key('REDMINE_URL')&.desc)
+          .form-group
+            = label_tag(:redmine_api_key, "项目管理系统API访问键", class: 'col-sm-4 control-label')
+            .col-sm-8
+              = text_field_tag(:redmine_api_key, SysConfig.find_by_key('REDMINE_API_KEY')&.value, class: 'form-control')
+              span.help-block
+                = simple_format(SysConfig.find_by_key('REDMINE_API_KEY')&.desc)
+          .form-group
+            .col-sm-8.col-sm-offset-4
+              = submit_tag("保存", class: 'btn btn-default')
+              | &nbsp;&nbsp;
+              button.btn.btn-default type="reset" 重置
+              

@@ -1,0 +1,39 @@
+#myModal.modal.fade
+  .modal-dialog
+    .modal-content
+      = form_tag '/favorites', remote: true, class: "form-horizontal", id: "add-favorite", method: "post" do
+        .modal-header
+          button.close type="button" data-dismiss="modal" aria-label="关闭"
+            span aria-hidden="true" &times;
+          h4.modal-title#myModalLabel 添加到收藏夹
+        .modal-body
+          .container-fluid
+            .row
+              .form-group
+                label.control-label.col-sm-2 标题
+                .col-sm-10
+                  = text_field_tag "favorite[title]", request.fullpath.truncate(255), class: 'form-control'
+            br
+            .row
+              .form-group
+                label.control-label.col-sm-2 地址
+                .col-sm-10
+                  = text_area_tag "favorite[url]", request.fullpath, class: 'form-control', rows: 5
+        .modal-footer
+          button.btn.btn-default type="button" data-dismiss="modal" 取消
+          button#submit-add.btn.btn-default.btn-primary type="button" 保存书签
+javascript:
+  $("#submit-add").click(function() {
+    if ($("#favorite_title").val()=='') {
+      alert("书签标题不能为空！");
+      return;
+    }else if ($("#favorite_url").val()=='') {
+      alert("书签地址不能为空！");
+      return;
+    }else if ($("#favorite_title").val().length>255) {
+      alert("书签标题长度不能超过255个字符！");
+      return;
+    }
+    $('#myModal').modal('hide');
+    $('#add-favorite').submit();
+  });

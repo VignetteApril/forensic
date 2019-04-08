@@ -1,0 +1,49 @@
+a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:DrakGrey;"
+  - if @current_user.favorites.map{ |b| b.url }.include?(request.fullpath)
+    span.glyphicon.glyphicon-star aria-hidden="true"
+  - else
+    span.glyphicon.glyphicon-star-empty aria-hidden="true"
+  | 收藏夹
+  span.caret
+ul.dropdown-menu style="width:360px;"
+  li role="presentation"
+    = link_to "#", id: "add-new-f" do
+      | 将当前页面添加到收藏夹&nbsp;&nbsp;
+      span.glyphicon.glyphicon-plus aria-hidden='true'
+  li.divider role="separator"
+  - if @current_user.favorites.empty?
+    li  role="presentation"
+      a href="#"
+        | 您的收藏夹是空的
+  - else
+    li role="presentation"
+      table style="width:320px;margin:20px;"
+        - @current_user.favorites.each do |f|
+          tr
+            td
+              span.glyphicon.glyphicon-bookmark aria-hidden='true'
+            td
+              = link_to f.title, f.url, style: "#{f.url==request.fullpath ? 'background-color:LightYellow;' : ''}"
+            td
+              = link_to "#", class: "edit-cur-f", fid: f.id, ftitle: f.title, furl: f.url do
+                span.glyphicon.glyphicon-edit aria-hidden='true'
+            td
+              = link_to main_app.favorite_path(f.id), method: :delete, data: { confirm: "您确认删除该书签吗？" }, remote: true do
+                span.glyphicon.glyphicon-trash aria-hidden='true'
+javascript:
+  $("#add-new-f").click(function() {
+    $("#add-favorite").attr('action', '/favorites');
+    $("#add-favorite").attr('method', 'post');
+    $("#favorite_title").val(window.location.href);
+    $("#favorite_url").val(window.location.href);
+    
+    $("#myModal").modal('show');
+  });
+  $(".edit-cur-f").click(function() {
+    $("#add-favorite").attr('action', '/favorites/'+$(this).attr('fid'));
+    $("#add-favorite").attr('method', 'put');
+    $("#favorite_title").val($(this).attr('ftitle'));
+    $("#favorite_url").val($(this).attr('furl'));
+  
+    $("#myModal").modal('show');
+  });

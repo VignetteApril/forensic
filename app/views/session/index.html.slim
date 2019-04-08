@@ -1,0 +1,103 @@
+#main
+  #homepage 
+    #homepage-content
+      - if notice
+        .alert.alert-success role="alert"
+          button.close type="button" data-dismiss="alert" aria-label="Close"
+            span aria-hidden="true" &times;
+          = simple_format notice
+      .contrainer-fluid
+        .row style="margin-top:0px;"
+          - if GEM_LIST['s_ad'] == true and has_license('s_ad')
+            - if AUDIT_OBJECT_SPECIAL_DEPARTMENTS.include?(@current_user.department&.name) || !(AUDIT_OBJECT_SPECIAL_ROLES & @current_user.roles.map{ |r| r.name }).empty?
+              a.col-md-2.col-xs-4.text-center.home-a href="/s_ad/audit_objects"
+                - if THEME == '00'
+                  div.home-icon
+                    i.fa.fa-bank
+                - else
+                  div.home-icon-svg
+                    = image_tag "homepage#{THEME}/s_ad.svg", style: "width:40%;"
+                div.h5
+                  | 审计单位管理
+            - else 
+              a.col-md-2.col-xs-4.text-center.home-a href="/s_ad/audit_objects?ao_department=#{@current_user.department_id.to_s}"
+                - if THEME == '00'
+                  div.home-icon
+                    i.fa.fa-bank
+                - else
+                  div.home-icon-svg
+                    = image_tag "homepage#{THEME}/s_ad.svg", style: "width:40%;"
+                div.h5
+                  | 审计单位管理
+          - GEM_LIST.each do |k, v|
+            - a = APPS.select{ |a| a['name'] == k }
+            - if v and has_license(k) and a.size > 0 and a[0]['autoicon']
+              / a.col-md-2.col-xs-4.text-center.home-a href="/#{k}/#{a[0]['entry']}"
+              a.col-md-2.col-xs-4.text-center.home-a href="#{a[0]['entry'].index('http://') == 0 ? '' : ('/' + k + '/')}#{a[0]['entry']}"
+                - if THEME == '00'
+                  div.home-icon
+                    i class="fa fa-#{a[0]['icon']}"
+                - else
+                  div.home-icon-svg
+                    = image_tag "homepage#{THEME}/#{k}.#{a[0]['icon_type']}", style: "width:40%;"
+                div.h5
+                  = a[0]['title']
+          / - EXTERNAL_APPS.each do |a|
+            / - a = APPS.select{ |a| a['name'] == k }
+            / - if v and has_license(k) and a.size > 0 and a[0]['autoicon']
+            a.col-md-2.col-xs-4.text-center.home-a href="#{a['entry']}"
+              - if THEME == '00'
+                div.home-icon
+                  i class="fa fa-#{a['icon']}"
+              - else
+                div.home-icon-svg
+                  = image_tag "homepage#{THEME}/#{a['name']}.#{a['icon_type']}", style: "width:40%;"
+              div.h5
+                = a['title']
+          - if GEM_LIST['s_md'] == true and has_license('s_md')
+            - SMd::Item.all.each do |i|
+              - if i.config =~ /(.)*show_in_homepage:(\s)*true(.)*/
+                a.col-md-2.col-xs-4.text-center.home-a href="/s_md/items/#{i.id}"
+                  - if THEME == '00'
+                    div.home-icon
+                      i.fa.fa-codepen
+                  - else
+                    div.home-icon-svg
+                      = image_tag "homepage#{THEME}/model.svg", style: "width:40%;"
+                  div.h5
+                    = i.title
+- if @base_date && !@base_date.empty? && @base_date.first.log_date < RELEASE_NOTES.last['date']
+  #release.modal.fade.bs-example-modal-lg
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          button.close type="button" data-dismiss="modal"
+            span aria-hidden="true" &times;
+            span.sr-only 关闭
+          h4.modal-title 系统升级啦！
+        .modal-body
+          p 从您上一次登录系统之后，系统进行了升级。本次升级的内容包括：
+          ul style="list-style-type:circle;"
+            - RELEASE_NOTES.select{ |r| r['date']>@base_date.first.log_date }.each do |r|
+              - r['note'].each do |n|
+                li 
+                  = n
+        .modal-footer
+          button.btn.btn-primary type="button" data-dismiss="modal" 知道了
+javascript:
+  /*
+  $(".home-box").hover(
+    function(){
+      $(this).css('box-shadow',"0px 2px 5px 2px #ccc");
+    },
+    function(){
+      $(this).css('box-shadow',"0px 2px 5px 2px #eee");
+    }
+  )
+  */
+  $(document).ready(function() {
+    $('#release').modal({show: true});
+  });
+  // $(".app-group").click(function() {
+  //   $("#m"+$(this).attr('id')).modal({show: true, backdrop: false, keyboard: true})
+  // })

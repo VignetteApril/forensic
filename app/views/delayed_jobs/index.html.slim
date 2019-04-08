@@ -1,0 +1,14 @@
+= render "layouts/system_maintenance" 
+#content
+  .container-fluid
+    = get_bread_crumb
+    / = get_notice_bar
+    .row
+      .col-sm-12
+        / iframe#jobs src="/jobs" frameborder="0" width="100%"
+        iframe#jobs src="/delayed_job" frameborder="0" width="100%"
+javascript:
+  $(function() {
+    h = $(window).height() - 110;
+    $("#jobs").attr("height", h+'px');
+  })

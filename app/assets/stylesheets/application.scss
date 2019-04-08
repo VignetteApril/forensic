@@ -1,0 +1,65 @@
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+
+// 示例：使用bootswatch免费主题： 'Paper' bootswatch
+// 首先导入变量
+// @import "bootswatch/cyborg/variables";
+// @import "bootswatch/slate/variables";
+// @import "bootswatch/flatly/variables";
+// @import "bootswatch/lumen/variables";
+
+// bootstrap自定义变量
+$badge-bg: #FF0000;
+$font-family-sans-serif: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-size-base: 12px;
+$navbar-height: 48px;
+$breadcrumb-padding-horizontal: 0px;
+$breadcrumb-separator: "|";
+$breadcrumb-bg: #ffffff;
+$line-height-base: 1.4;
+// $navbar-inverse-bg:#000;
+// $link-color:#3C70A9;
+$nav-tabs-border-color:#bbbbbb;
+$nav-tabs-justified-link-border-color:#bbbbbb;
+$nav-tabs-active-link-hover-border-color:#bbbbbb;
+$pagination-bg:#fff;
+$pagination-hover-bg:#ddd;
+$pagination-border:#ccc;
+$pagination-active-bg:#eee;
+// $pagination-color:#ddd;
+$pagination-disabled-bg:#fff;
+$pagination-disabled-border:#ccc;
+$pagination-disabled-color:#bbb;
+
+// 最后导入需要的bootswatch主题
+// @import "bootswatch/cyborg/bootswatch";
+// @import "bootswatch/slate/bootswatch";
+// @import "bootswatch/flatly/bootswatch";
+// @import "bootswatch/lumen/bootswatch";
+
+@import "bootstrap";
+@import "animate";
+$nprogress-color: #64abe6;
+$nprogress-height: 5px;
+$nprogress-zindex: 10100;
+@import "nprogress";
+@import "nprogress-bootstrap";
+
+// 导入bootstrap Responsive styles
+// @import "bootstrap-responsive";
+
+@import "wice_grid";
+@import "font-awesome-sprockets";
+@import "font-awesome";
+@import "bootstrap-datepicker3";
+@import "jstree-default";
+@import "select2";
+@import "select2-bootstrap";
+@import "select2totree";
+
+// 你还可以在base.css.scss文件中添加更多自定义设置
+// pivottable
+@import "base";
+@import "c3";
+// @import "subtotal";
+@import "pivot";

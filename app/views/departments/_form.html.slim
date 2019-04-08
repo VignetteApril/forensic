@@ -1,0 +1,35 @@
+= simple_form_for(@department, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+  .row
+    .col-sm-12
+      .form-actions
+        .btn-group.btn-group-sm role="group"
+          = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+          = f.button :submit, "保存", class: "btn btn-default btn-primary"
+  .row
+    .col-sm-12
+      - if @department.errors.any?
+        #error_explanation.alert.alert-warning
+          h4
+            | 该部门保存时出错：
+            = pluralize(@department.errors.count, "个错误")
+          ul
+            - @department.errors.full_messages.each do |message| 
+              li
+                = message
+  .row
+    .col-sm-10
+      .form-inputs
+        = f.input :parent_id, as: :hidden
+        .form-group
+          = f.label '上级部门', class: "col-sm-3 control-label"
+          .col-sm-9
+            = f.hint department_chain(@department)
+        = f.input :name, label: '部门名称'
+        = f.input :code
+        = f.input :brief, label: '部门简称'
+        = f.input :sort_no
+        = f.input :orgnization_name, collection: [''] + SysConfig.accounting_level, selected: @department.orgnization_name || @current_user.orgnization_name
+        = f.input :admin_level
+        = f.input :role_type
+        = f.input :contact
+        = f.input :description, label: '部门描述', as: :text, :input_html => {:rows => 5}

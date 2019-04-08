@@ -1,0 +1,19 @@
+#sidebar
+  ul.nav.nav-pills.nav-stacked
+    = get_sidebar_item('delayed_jobs', '', "/delayed_jobs", 'tasks', nil, '任务管理') 
+    = get_sidebar_item('sys_configs', '', "/sys_configs", 'cogs', nil, '参数配置') 
+    / - if get_license_type != 'application'
+    = get_sidebar_item('users', '', "/users", 'user', nil, '用户管理')
+    = get_sidebar_item('departments', '', "/departments", 'sitemap', nil, '部门管理')
+    = get_sidebar_item('roles', '', "/roles", 'graduation-cap', nil, '角色管理')
+    = get_sidebar_item('features', '', "/features", 'lock', nil, '权限管理')
+    = get_sidebar_item('sys_logs', '', "/sys_logs", 'tags', nil, '日志管理') 
+javascript:
+  $('#sidebar').affix({
+    offset: {
+      top: -3000,
+      bottom: function () {
+        return (this.bottom = $('.footer').outerHeight(true))
+      }
+    }
+  });

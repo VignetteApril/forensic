@@ -1,0 +1,14 @@
+#content
+  .container-fluid
+    = get_bread_crumb
+    = get_notice_bar
+    .row
+      .col-sm-12
+        .btn-group.btn-group-sm role="group" aria-label="..."
+          button.wg-external-submit-button.btn.btn-primary.search data-grid-name="notifications" 过滤
+          button.wg-external-reset-button.btn.btn-default.search data-grid-name="notifications" 清除过滤条件
+    | &nbsp;
+    | &nbsp;
+    .row
+      .col-sm-11
+        = render "notifications_grid" 

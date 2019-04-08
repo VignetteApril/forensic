@@ -1,0 +1,35 @@
+= render "layouts/system_maintenance" 
+#content
+  .container-fluid
+    = get_bread_crumb
+    = get_notice_bar
+    .row
+      .col-sm-12
+        .btn-group.btn-group-sm role="group" aria-label="..."
+          = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+    br
+    .row
+      .col-sm-1
+        strong 日志日期
+      .col-sm-3
+        = @sys_log.log_date.to_s
+      .col-sm-1
+        strong 用户ID
+      .col-sm-3
+        = @sys_log.user_id
+      .col-sm-1
+        strong 用户姓名
+      .col-sm-3
+        = @sys_log.user.name
+    .row
+      .col-sm-12
+        pre.pre-scrollable
+          / style="height:500px;max-height:500px;"
+          - if @search_content
+            = raw(h(@sys_log.log_content.gsub("\n", "\n\n")).gsub(@search_content, "<mark>" + @search_content + "</mark>"))
+          - else
+            = h @sys_log.log_content.gsub("\n", "\n\n")
+javascript:
+  h = $(window).height() - $("pre.pre-scrollable").offset().top -20;
+  $("pre.pre-scrollable").css("height", h+'px');
+  $("pre.pre-scrollable").css("max-height", h+'px');

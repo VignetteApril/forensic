@@ -1,0 +1,24 @@
+<br>
+<%= grid(@sys_logs, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}, header_tr_html: {style: "background-color:e5e5e5;"}) do |g|
+  g.column name: '记录时间', attribute: 'log_date', html: {style: "width:120px;"} do |sys_log|
+    sys_log.log_date.to_s
+  end
+  g.column name: '用户ID', attribute: 'user_id', html: {style: "width:80px;"} do |sys_log|
+    sys_log.user_id
+  end
+  g.column name: '用户姓名', attribute: 'name', assoc: :user, html: {class: 'text-center', style: "width:100px;"} do |sys_log|
+    link_to sys_log&.user&.name, user_path(sys_log.user)
+  end
+  g.column name: '所属单位', html: {class: 'text-center', style: "width:100px;"} do |sys_log|
+    # sys_log&.user&.department&.orgnization_name
+    sys_log&.user&.orgnization_name
+  end
+  g.column name: '操作次数', html: {style: "width:80px;text-align:right"} do |sys_log|
+    sys_log.log_content.split("Time: #{sys_log.log_date.to_s}").size-1
+  end
+  g.column name: '日志信息', attribute: 'log_content', ordering: false do |sys_log|
+    link_to truncate(sys_log.log_content, length: 100), sys_log_path(sys_log)
+  end
+  g.column in_csv: false, html: {style: "width:30px;"}  do |user|
+  end
+end -%>

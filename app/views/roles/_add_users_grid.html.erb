@@ -1,0 +1,40 @@
+<%= grid(@users, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
+  g.action_column html_check_box: false, html: {style: "width:80px;"} do |user|
+    @role.users.find_by(id: user.id).nil?
+  end
+  g.column name: '登录名', attribute: 'login' do |user|
+    user.login
+  end
+  g.column name: '真实姓名', attribute: 'name', ordering: false do |user|
+    link_to user.name, user_path(user)
+  end
+  g.column name: '所属部门', attribute: 'department_id', html: {style: "width:300px;text-align:center;"},
+           custom_filter: Department.roots_and_descendants_preordered.map{ |d| [raw("#{'&nbsp;'*d.depth*4}#{d.name}"), d.id] }, allow_multiple_selection: false do |a|
+    a.department.name if a.department
+  end
+  g.column name: '所属机构', attribute: 'orgnization_name',html: {style: "text-align:center;"},
+           custom_filter: SysConfig.accounting_level, allow_multiple_selection: false do |a|
+    a.orgnization_name
+  end
+
+  #g.column name: '人员编码', attribute: 'code' do |user|
+  #  user.code
+  #end
+  #g.column name: '证件号码', attribute: 'id_card_no' do |user|
+  #  user.id_card_no
+  #end
+  #g.column name: 'Email地址', attribute: 'email' do |user|
+  #  user.email
+  #end
+  g.column name: '办公电话', attribute: 'work_phone' do |user|
+    user.work_phone
+  end
+  g.column name: '移动电话', attribute: 'mobile_phone' do |user|
+    user.mobile_phone
+  end
+  g.column name: '现任职务', attribute: 'position', html: {style: "width:80px;"}, ordering: false do |user|
+    user.position
+  end
+  g.column html: {style: "width:20px;"} do |user|
+  end
+end -%>

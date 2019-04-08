@@ -1,0 +1,269 @@
+# customer_code: SHIKEDEMO
+title: 石刻
+subtitle: 基于大数据技术的快速分析系统
+provider:
+aversion: "2.02.14"
+
+# 下面是和权限相关的各种参数==========
+gem_list:
+  s_ad: false # 被审计单位管理 audit object
+  s_fs: false # 财务数据分析 finance
+  s_dc: false # 数据索引管理 data center
+  s_bi: false # 自助数据分析 business intelligence
+  s_dv: false # 高级数据可视化 data visualize
+  s_sq: false # SQL数据分析 sql
+  s_id: false # 分析思路管理 idea
+  s_kb: false # 知识库 knowlodge base
+  s_dp: false # 疑点管理 doubtful point
+  s_gs: false # 工商数据分析 gongshang
+  s_cg: false # 招投标数据分析 caigou
+  ai_rel: false # 关联规则分析 relation rule
+  ai_kmn: false # K-means聚类分析 k means
+  s_xl: false # 上传数据分析 excel
+  s_md: false # 分析模型 model
+  s_bt: false # 公告管理 bulletin
+  s_mg: false # 消息管理 message
+  s_pln: false # 审计计划管理 plan
+  s_prj: false # 审计项目管理 project
+  s_rtf: false # 审计整改跟踪 rectification
+  s_arc: false # 审计档案管理 archive
+  s_std: false # 审计标准管理 standard
+
+# 上传附件在服务器存储时的命名方式
+upload_file_name: new # new=编码命名 / old=保留原文件名
+forbid_shadow_login: true # 如果是TRUE，则同一个用户在同一时间只能有一个人在使用
+
+# 是否使用CAS Server单点登录
+use_cas_server: false
+
+features:
+  - [登录系统,session,"index,new,create,destroy",平台]
+  - [修改个人密码,users,"edit_password,update_password",平台]
+  - [管理个人API接口键值,users,"show_api_key,generate_api_key",平台]
+  - [用户浏览,users,"index,list",系统管理]
+  - [查看用户详细信息,users,"show",系统管理]
+  - [用户管理,users,"new,create,edit,update,destroy",系统管理]
+  - [重置用户密码,users,reset_password,系统管理]
+  - [部门浏览,departments,index,系统管理]
+  - [部门管理,departments,"new,create,edit,update,destroy",系统管理]
+  - [部门人员管理,departments,"add_users,add_users_submit,remove_user_from_department",系统管理]
+  - [角色浏览,roles,index,系统管理]
+  - [角色管理,roles,"new,create,edit,update,destroy",系统管理]
+  - [角色人员管理,roles,"add_users,add_users_submit,remove_user_from_role",系统管理]
+  - [权限浏览,features,"index,list",系统管理]
+  - [权限角色授权,features,"add_features,add_features_submit,remove_feature_from_role",系统管理]
+  - [日志管理,sys_logs,"index,show,search",系统管理]
+  - [任务管理,delayed_jobs,"index",系统管理]
+  - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
+  - [个人事务提醒,notifications,"index,show,edit",平台]
+  - [被审计对象登录系统,session,"ao,aologin,aosignin",平台]
+  # - [下载附件,attachments,"download",平台]
+  # - [浏览附件,attachments,"show",平台]
+  # - [上传附件,attachments,"new,create",平台]
+  # - [删除附件,attachments,"destroy",平台]
+  # - [队列管理,jobs,"index",系统管理]
+apps:
+  - name: 系统管理
+    module_chain:
+      - { controller: 'delayed_jobs', action: }
+      - { controller: 'sys_configs', action: }
+      - { controller: 'users', action: }
+      - { controller: 'departments', action: }
+      - { controller: 'roles', action: }
+      - { controller: 'features', action: }
+      - { controller: 'sys_logs', action: }
+
+# 关于User属性设置的各种选项
+user_politics_status: [中共党员,预备党员,共青团员,民革党员,民盟党员,民建党员,民进党员,农工党员,致公党员,九三学社,台盟党员,群众]
+user_id_type: [身份证,军人证,工作证,学生证]
+user_gender: [男,女,保密]
+user_marital_status: [已婚,未婚,离异,丧偶]
+user_education: [大学专科,大学本科,硕士研究生,博士研究生,其它]
+user_degree: [学士,硕士,博士,其它]
+user_rank:
+  - 待定
+  - 国家主席、副主席、总理级
+  - 副总理、国务委员级
+  - 部、省级
+  - 副部、副省级
+  - 司、局、地、厅级
+  - 副司、副局、副地、副厅级
+  - 县、处级
+  - 副县、副处级
+  - 正科级
+  - 副科级
+  - 科员级
+  - 办事员级
+  - 聘用人员
+
+# 这些是不建议更改的设置参数
+province:
+  - 北京
+  - 上海
+  - 天津
+  - 重庆
+  - 河北省
+  - 山西省
+  - 黑龙江省
+  - 吉林省
+  - 辽宁省
+  - 陕西省
+  - 甘肃省
+  - 青海省
+  - 山东省
+  - 河南省
+  - 江苏省
+  - 浙江省
+  - 安徽省
+  - 江西省
+  - 福建省
+  - 湖北省
+  - 湖南省
+  - 广东省
+  - 海南省
+  - 四川省
+  - 云南省
+  - 贵州省
+  - 内蒙古自治区
+  - 西藏自治区
+  - 新疆维吾尔自治区
+  - 宁夏回族自治区
+  - 广西壮族自治区
+  - 香港
+  - 澳门
+  - 台湾省
+city:
+  - province: 北京
+    city: [东城区,西城区,朝阳区,丰台区,平谷区,海淀区,怀柔区,房山区,通州区,顺义区,昌平区,大兴区,石景山区,门头沟区,密云县,延庆县]
+  - province: 上海
+    city: [黄浦区,卢湾区,徐汇区,长宁区,静安区,普陀区,闸北区,虹口区,杨浦区,闵行区,宝山区,嘉定区,浦东区,金山区,松江区,青浦区,南汇区,奉贤区,崇明县]
+  - province: 天津
+    city: [和平区,河东区,河西区,南开区,河北区,红桥区,滨海新区,东丽区,西青区,北辰区,津南区,武清区,宝坻区,静海县,宁河县,蓟县]
+  - province: 重庆
+    city: [渝中区,沙坪坝区,江北区,渝北区,南岸区,九龙坡区,大渡口区,巴南区,北碚区,万州区,涪陵区,长寿区,黔江区,永川区,江津区,南川区,合川区,大足区,綦江区,璧山县,潼南县,铜梁县,荣昌县,梁平县,城口县,丰都县,垫江县,武隆县,忠县,开县,云阳县,奉节县,巫山县,巫溪县,石柱土家族自治县,秀山土家族苗族自治县,酉阳土家族苗族自治县,彭水苗族土家族自治县]
+  - province: 河北省
+    city: [石家庄市,保定市,秦皇岛市,唐山市,邯郸市,邢台市,沧州市,承德市,廊坊市,衡水市,张家口市]
+  - province: 山西省
+    city: [太原市,大同市,阳泉市,长治市,临汾市,晋中市,运城市,晋城市,忻州市,朔州市,吕梁市]
+  - province: 黑龙江省
+    city: [哈尔滨市,伊春市,牡丹江市,大庆市,鸡西市,鹤岗市,绥化市,双鸭山,七台河,佳木斯市,黑河市,齐齐哈尔市]
+  - province: 吉林省
+    city: [长春市,吉林市,通化市,白城市,四平市,辽源市,松原市,白山市]
+  - province: 辽宁省
+    city: [沈阳市,大连市,盘锦市,鞍山市,抚顺市,本溪市,铁岭市,锦州市,丹东市,辽阳市,葫芦岛,阜新市,朝阳市,营口市]
+  - province: 陕西省
+    city: [西安市,咸阳市,榆林市,宝鸡市,铜川市,渭南市,汉中市,安康市,商洛市,延安市]
+  - province: 甘肃省
+    city: [兰州市,白银市,武威市,金昌市,平凉市,张掖市,嘉峪关,酒泉市,庆阳市,定西市,陇南市,天水市]
+  - province: 青海省
+    city: [西宁市,海东市]
+  - province: 山东省
+    city: [济南市,青岛市,潍坊市,淄博市,威海市,枣庄市,泰安市,临沂市,东营市,济宁市,烟台市,菏泽市,日照市,德州市,聊城市,滨州市,莱芜市]
+  - province: 河南省
+    city: [郑州市,洛阳市,焦作市,商丘市,信阳市,新乡市,安阳市,开封市,漯河市,南阳市,鹤壁市,平顶山,濮阳市,许昌市,周口市,三门峡,驻马店]
+  - province: 江苏省
+    city: [南京市,无锡市,常州市,扬州市,徐州市,苏州市,连云港,盐城市,淮安市,宿迁市,镇江市,南通市,泰州市]
+  - province: 浙江省
+    city: [杭州市,宁波市,绍兴市,温州市,湖州市,嘉兴市,台州市,金华市,舟山市,衢州市,丽水市]
+  - province: 安徽省
+    city: [合肥市,芜湖市,亳州市,马鞍山,池州市,淮南市,淮北市,蚌埠市,巢湖市,安庆市,宿州市,宣城市,滁州市,黄山市,六安市,阜阳市,铜陵市]
+  - province: 江西省
+    city: [南昌市,赣州市,景德镇市,九江市,萍乡市,新余市,抚州市,宜春市,上饶市,鹰潭市,吉安市]
+  - province: 福建省
+    city: [福州市,厦门市,泉州市,漳州市,南平市,三明市,龙岩市,莆田市,宁德市]
+  - province: 湖北省
+    city: [武汉市,荆门市,咸宁市,襄樊市,荆州市,黄石市,宜昌市,随州市,鄂州市,孝感市,黄冈市,十堰市]
+  - province: 湖南省
+    city: [长沙市,郴州市,娄底市,衡阳市,株洲市,湘潭市,岳阳市,常德市,邵阳市,益阳市,永州市,张家界,怀化市]
+  - province: 广东省
+    city: [广州市,深圳市,江门市,佛山市,汕头市,湛江市,韶关市,中山市,珠海市,茂名市,肇庆市,阳江市,惠州市,潮州市,揭阳市,清远市,河源市,东莞市,汕尾市,云浮市]
+  - province: 海南省
+    city: [海口市,三亚市,三沙市,儋州市]
+  - province: 四川省
+    city: [成都市,乐山市,雅安市,广安市,南充市,自贡市,泸州市,内江市,宜宾市,广元市,达州市,资阳市,绵阳市,眉山市,巴中市,攀枝花市,遂宁市,德阳市]
+  - province: 云南省
+    city: [昆明市,玉溪市,大理市,曲靖市,昭通市,保山市,丽江市,临沧市]
+  - province: 贵州省
+    city: [贵阳市,安顺市,遵义市,六盘水市,毕节市,铜仁市]
+  - province: 内蒙古自治区
+    city: [呼和浩特,呼伦贝尔,包头市,赤峰市,乌海市,通辽市,鄂尔多斯,乌兰察布,巴彦淖尔]
+  - province: 西藏自治区
+    city: [拉萨市,日喀则市,昌都市,林芝市,山南市]
+  - province: 新疆维吾尔自治区
+    city: [乌鲁木齐,克拉玛依市,吐鲁番市,哈密市]
+  - province: 宁夏回族自治区
+    city: [银川市,固原市,青铜峡市,石嘴山市,中卫市]
+  - province: 广西壮族自治区
+    city: [南宁市,贺州市,柳州市,桂林市,梧州市,北海市,玉林市,钦州市,百色市,防城港,贵港市,河池市,崇左市,来宾市]
+  - province: 香港
+  - province: 澳门
+  - province: 台湾省
+    city: [台北市,高雄市,新北市,台中市,台南市,桃园市]
+internal_tables:
+  - departments
+  - favorites
+  - features
+  - notifications
+  - role_features
+  - roles
+  - schema_migrations
+  - sessions
+  - sys_logs
+  - sys_configs
+  - user_roles
+  - users
+  - delayed_jobs
+
+theme: '01'
+skin: '00'
+
+# elasticsearch_host: 0.0.0.0:9200
+
+# 转换上传的OFFICE文档时用到
+# MacOS
+# libreoffice_dir: /Applications/LibreOffice.app/Contents/MacOS/soffice
+# CentOS 7
+# libreoffice_dir: /usr/lib64/libreoffice/program/soffice
+# Ubuntu
+# libreoffice_dir: /usr/lib/libreoffice/program/soffice
+
+# 上传下载文件本地存储路径
+# MacOS
+# file_dir: /Users/dongzhen/ruby_apps/jshike/public/
+# Linux
+# file_dir: /home/navigator/ruby_apps/jshike/public/
+
+# 全文检索关键字黑名单
+# black_word: []
+
+# 核算级次
+# accounting_level: [本级]
+  # - [本级, BJ, 0, 所有部门]
+  # - [市本级, BJ, 510101, 庐州市审计局]
+  # - [高新区, GX, 510109, 高新区审计局]
+  # - [天府区, TF, 510141, 天府区审计局]
+  # - [成夏区, CH, 510108, 成夏区审计局]
+  # - [拜州市, CZ, 510184, 拜州市审计局]
+  # - [蓝邑县, DY, 510129, 蓝邑县审计局]
+  # - [都江市, DJ, 510181, 都江市审计局]
+  # - [繁阳市, JY, 510186, 繁阳市审计局]
+  # - [金马区, JN, 510106, 金马区审计局]
+  # - [银堂县, JT, 510121, 银堂县审计局]
+  # - [素江区, JJ, 510104, 素江区审计局]
+  # - [龙泉区, LQ, 510112, 龙泉区审计局]
+  # - [莱州市, PZ, 510182, 莱州市审计局]
+  # - [排排县, PX, 510124, 排排县审计局]
+  # - [团江县, PJ, 510131, 团江县审计局]
+  # - [白江区, QB, 510113, 白江区审计局]
+  # - [青牛区, QY, 510105, 青牛区审计局]
+  # - [江莱市, QL, 510183, 江莱市审计局]
+  # - [单流区, SL, 510122, 单流区审计局]
+  # - [冷江区, WJ, 510115, 冷江区审计局]
+  # - [文侯区, WH, 510107, 文侯区审计局]
+  # - [原都区, XD, 510114, 原都区审计局]
+  # - [原津县, XJ, 510132, 原津县审计局]
+
+# 标记部门的非叶子节点是否可以包含用户？
+# department_onlyleaf_can_has_user: true
+# 哪些角色的用户可以查看所有的被审计对象
+# super_roles: [系统管理员,财政数据全域查询]

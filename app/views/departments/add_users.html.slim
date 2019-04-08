@@ -1,0 +1,23 @@
+= render "layouts/system_maintenance" 
+#content
+  .container-fluid
+    = get_bread_crumb
+    = form_tag "/departments/#{@department.id}/add_users_submit", method: :get do |f|
+      .row
+        .col-sm-12
+            .btn-group.btn-group-sm role="group" aria-label="..."
+              = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+              button.wg-external-submit-button.btn.btn-default data-grid-name="users" 过滤
+              button.wg-external-reset-button.btn.btn-default data-grid-name="users" 清除过滤条件
+            | &nbsp;
+            .btn-group.btn-group-sm role="group" aria-label="..."
+              = submit_tag('增加所选用户', class: "btn btn-primary btn-sm") \
+                if can?("departments", "add_users_submit") && can_sys?(@department) 
+            | &nbsp;
+            span.h5
+              | 当前部门：
+              = @department.name
+      br
+      .row
+        .col-sm-12
+          = render "add_users_grid" 

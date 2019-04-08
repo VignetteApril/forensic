@@ -1,0 +1,117 @@
+= simple_form_for(@user, html: { class: 'form-horizontal' }, wrapper: :horizontal_form) do |f|
+  .row
+    .col-sm-12
+      .form-actions
+        .btn-group.btn-group-sm role="group"
+          = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+          = f.button :submit, "保存", class: "btn btn-default btn-primary"
+  .row
+    .col-sm-12
+      - if @user.errors.any?
+        #error_explanation.alert.alert-warning
+          h4
+            | 该用户保存时出错：
+            = pluralize(@user.errors.count, "个错误")
+          ul
+            - @user.errors.full_messages.each do |message| 
+              li
+                = message
+  .row
+    .col-sm-8.col-sm-offset-2
+      .form-inputs
+        .panel.panel-default
+          .panel-heading 基本信息
+          .panel-body
+            .form-group
+              = f.input :login, wrapper: :horizontal_form_2_4
+              = f.input :sort_no, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :name, wrapper: :horizontal_form_2_4
+              = f.input :english_name, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :code, wrapper: :horizontal_form_2_4
+              = f.input :politics_status, collection: USER_POLITICS_STATUS, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :id_type, collection: USER_ID_TYPE, wrapper: :horizontal_form_2_4
+              = f.input :id_card_no, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :gender, collection: USER_GENDER, wrapper: :horizontal_form_2_4
+              = f.input :marital_status, collection: USER_MARITAL_STATUS, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :top_education, collection: USER_EDUCATION, wrapper: :horizontal_form_2_4
+              = f.input :top_degree, collection: USER_DEGREE, wrapper: :horizontal_form_2_4
+        .panel.panel-default
+          .panel-heading 工作信息
+          .panel-body
+            .form-group
+              = f.input :position, wrapper: :horizontal_form_2_4
+              = f.input :rank, collection: USER_RANK, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :department_id, label: '所属部门', wrapper: :horizontal_form_2_4 do
+                / = f.select :department_id, options_for_select(Department.get_select_arr(0).map { |d| [ raw(d[0]), d[1], {disabled: !can_has_users?(Department.find(d[1]))} ] }, @user.department_id ), include_blank: true, class: "select optional form-control"
+                = f.select :department_id, options_for_select(Department.roots_and_descendants_preordered.map{ |d| [raw("#{'&nbsp;'*d.depth*4}#{d.name}"), d.id, { disabled: !can_has_users?(d) }] }, @user.department_id), include_blank: true, class: "select optional form-control"
+              = f.input :orgnization_name, collection: SysConfig.accounting_level, wrapper: :horizontal_form_2_4
+        .panel.panel-default
+          .panel-heading 联系信息
+          .panel-body
+            .form-group
+              = f.input :work_phone, wrapper: :horizontal_form_2_4
+              = f.input :work_fax, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :home_phone, wrapper: :horizontal_form_2_4
+              = f.input :mobile_phone, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :email, wrapper: :horizontal_form_2_4
+              = f.input :email2, wrapper: :horizontal_form_2_4
+            .form-group
+              / = f.input :country, wrapper: :horizontal_form_2_4
+              = f.input :zip_code, wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :province, collection: PROVINCE, wrapper: :horizontal_form_2_4
+              = f.input :city, collection: (@user.province.blank? ? [] : CITY.select{ |c| c["province"]==@user.province }[0]["city"]), wrapper: :horizontal_form_2_4
+            .form-group
+              = f.input :address, wrapper: :horizontal_form_2_10
+        .panel.panel-default
+          .panel-heading 其它信息
+          .panel-body
+            .form-group
+              = f.input :memo, as: :text, :input_html => {:rows => 5}, wrapper: :horizontal_form_2_10
+              
+javascript:
+  $(document).ready(function() {
+    //$("#user_department_id").select2({
+    //  theme: "bootstrap"
+    //});
+    $("#user_department_id").addClass("select optional form-control");
+    //$(".select2.select2-container").width("100%");
+  });
+
+  $("#user_country").change(function() {
+    if($("#user_country").val() == 'CN') {
+      $("#user_province").removeAttr('disabled');
+      $("#user_city").removeAttr('disabled');
+    }else{
+      $("#user_province").attr('disabled', 'true');
+      $("#user_city").attr('disabled', 'true');
+    }  
+  })
+  var cities = eval(#{raw(CITY.to_json)})
+  $("#user_province").change(function() {
+    var city_str = '';
+    $.each(cities, function(n, value) {
+      if (value.province == $("#user_province").val()) {
+        if (typeof(value.city) !== "undefined") {
+          $.each(value.city, function(n1, value1) {
+            if (typeof(value1) === "undefined") {
+              city_str += '';
+            }else{
+              city_str += '<option>' + value1 + '</option>';
+            }
+          })
+        }
+        return false;
+      }
+    });
+    $("#user_city").empty();
+    $("#user_city").append(city_str);
+  })

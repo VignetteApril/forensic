@@ -1,0 +1,21 @@
+<%= grid(@features, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
+  g.action_column html_check_box: false, html: {style: "width:80px;"} do |feature|
+    myfeatures = []
+    @current_user.roles.each do |r| 
+      myfeatures = myfeatures | r.features.map{ |f| f.id } 
+    end
+    @role.features.find_by(id: feature.id).nil? && myfeatures.include?(feature.id)
+  end
+  g.column name: '所属应用', attribute: 'app', custom_filter: :auto do |feature|
+    feature.app
+  end
+  g.column name: '功能名称', attribute: 'name' do |feature|
+    feature.name
+  end
+  g.column name: '控制器名称', attribute: 'controller_name' do |feature|
+    feature.controller_name
+  end
+  g.column name: '操作名称', attribute: 'action_names' do |feature|
+    feature.action_names
+  end
+end -%>

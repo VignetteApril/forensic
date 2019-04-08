@@ -1,0 +1,298 @@
+zh-CN:
+  date:
+    abbr_day_names:
+    - 周日
+    - 周一
+    - 周二
+    - 周三
+    - 周四
+    - 周五
+    - 周六
+    abbr_month_names:
+    -
+    - 1月
+    - 2月
+    - 3月
+    - 4月
+    - 5月
+    - 6月
+    - 7月
+    - 8月
+    - 9月
+    - 10月
+    - 11月
+    - 12月
+    day_names:
+    - 星期日
+    - 星期一
+    - 星期二
+    - 星期三
+    - 星期四
+    - 星期五
+    - 星期六
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y年%b%d日"
+      short: "%b%d日"
+    month_names:
+    -
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: 大约一小时
+        other: 大约 %{count} 小时
+      about_x_months:
+        one: 大约一个月
+        other: 大约 %{count} 个月
+      about_x_years:
+        one: 大约一年
+        other: 大约 %{count} 年
+      almost_x_years:
+        one: 接近一年
+        other: 接近 %{count} 年
+      half_a_minute: 半分钟
+      less_than_x_minutes:
+        one: 不到一分钟
+        other: 不到 %{count} 分钟
+      less_than_x_seconds:
+        one: 不到一秒
+        other: 不到 %{count} 秒
+      over_x_years:
+        one: 一年多
+        other: "%{count} 年多"
+      x_days:
+        one: 一天
+        other: "%{count} 天"
+      x_minutes:
+        one: 一分钟
+        other: "%{count} 分钟"
+      x_months:
+        one: 一个月
+        other: "%{count} 个月"
+      x_seconds:
+        one: 一秒
+        other: "%{count} 秒"
+    prompts:
+      day: 日
+      hour: 时
+      minute: 分
+      month: 月
+      second: 秒
+      year: 年
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      accepted: 必须是可被接受的
+      blank: 不能为空字符
+      present: 必须是空白
+      confirmation: 与确认值不匹配
+      empty: 不能留空
+      equal_to: 必须等于 %{count}
+      even: 必须为双数
+      exclusion: 是保留关键字
+      greater_than: 必须大于 %{count}
+      greater_than_or_equal_to: 必须大于或等于 %{count}
+      inclusion: 不包含于列表中
+      invalid: 是无效的
+      less_than: 必须小于 %{count}
+      less_than_or_equal_to: 必须小于或等于 %{count}
+      not_a_number: 不是数字
+      not_an_integer: 必须是整数
+      odd: 必须为单数
+      record_invalid: '验证失败: %{errors}'
+      restrict_dependent_destroy:
+        has_one: 由于 %{record} 需要此记录，所以无法移除记录
+        has_many: 由于 %{record} 需要此记录，所以无法移除记录
+      taken: 已经被使用
+      too_long:
+        one: 过长（最长为一个字符）
+        other: 过长（最长为 %{count} 个字符）
+      too_short:
+        one: 过短（最短为一个字符）
+        other: 过短（最短为 %{count} 个字符）
+      wrong_length:
+        one: 长度非法（必须为一个字符）
+        other: 长度非法（必须为 %{count} 个字符）
+      other_than: 长度非法（不可为 %{count} 个字符
+      extension_whitelist_error: "您不能上传 %{extension} 类型的文件，可以上传的文件类型包括：%{allowed_types}"
+      extension_blacklist_error: "您不能上传 %{extension} 类型的文件，禁止上传的文件类型包括：%{prohibited_types}"
+    template:
+      body: 如下字段出现错误：
+      header:
+        one: 有 1 个错误发生导致「%{model}」无法被保存。
+        other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
+  helpers:
+    select:
+      prompt: 请选择
+    submit:
+      create: 新增%{model}
+      submit: 储存%{model}
+      update: 更新%{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u %n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: CN¥
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: 十亿
+          million: 百万
+          quadrillion: 千兆
+          thousand: 千
+          trillion: 兆
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: false
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", 和 "
+      two_words_connector: " 和 "
+      words_connector: ", "
+  time:
+    am: 上午
+    formats:
+      default: "%Y年%b%d日 %A %H:%M:%S %Z"
+      long: "%Y年%b%d日 %H:%M"
+      short: "%b%d日 %H:%M"
+    pm: 下午
+  delayed/web:
+    views:
+      id: ID
+      job: 任务
+      jobs: 任务队列
+      status: 状态
+      created_at: 创建时间
+      run_at: 运行时间
+      attempts: 尝试次数
+      last_error: 最后的错误
+      server_time: 服务器时间
+      handler: Handler
+      actions: 动作
+      current_queue: 队列
+      buttons:
+        run_next: 运行下一条
+        delete: 删除
+      queue:
+        empty: 队列为空
+      errors:
+        empty: 没有错误
+      statuses:
+        executing: 执行中
+        failed: 失败
+        queued: 排队中
+      confirm:
+        delete: 你确认要删除这个任务吗？
+    flashes:
+      jobs:
+        queued:
+          alert: '任务无法排队，因为他已经是：%{status} 的状态了'
+          notice: '任务已经排队'
+        destroyed:
+          alert: '任务无法删除，因为他已经是：%{status} 的状态了'
+          notice: '任务已经删除'
+  activerecord:
+    models:
+      user: "用户"
+      department: "部门"
+      role: "角色"
+      notification: "个人事务提醒"
+    attributes:
+      user:
+        login: "登录名"
+        name: "真实姓名"
+        id_card_no: "证件号码"
+        email: "EMAIL地址"
+        work_phone: "办公电话"
+        home_phone: '家庭电话'
+        work_fax: '办公传真'
+        mobile_phone: '移动电话'
+        email2: 'EMAIL地址2'
+        position: "现任职务"
+        password: "密码"
+        password_confirmation: "密码确认"
+        department_id: "所属部门"
+        code: '人员编码'
+        sort_no: '顺序号'
+        english_name: '英文姓名'
+        politics_status: '政治面貌'
+        id_type: '证件类型'
+        gender: '性别'
+        marital_status: '婚姻状况'
+        top_education: '最高学历'
+        top_degree: '最高学位'
+        rank: '职级'
+        country: '国家'
+        province: '省'
+        city: '城市'
+        zip_code: '邮政编码'
+        address: '通信地址'
+        memo: '备注'
+        orgnization_name: '所属机构'
+      department:
+        name: "名称"
+        description: "描述"
+        brief: '简称'
+        code: '组织代码'
+        sort_no: '顺序号'
+        admin_level: '组织行政级别'
+        role_type: '组织角色属性'
+        contact: '联系方式'
+        orgnization_name: '核算级次/行政区划/所属机构'
+      role:
+        name: "名称"
+        description: "描述"
+        orgnization_name: '所属机构'
+      notification:
+        channel: 类别
+        title: 标题
+        url: 入口地址
+        status: 状态
+        user_id: 被提醒人

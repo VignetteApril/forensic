@@ -1,0 +1,30 @@
+<%= grid(@notifications, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
+  g.blank_slate  do
+    content_tag :div, "暂时没有任何个人事务提醒", class: 'well'
+  end  
+  g.row_attributes do |version|
+    if version.status == '未读'
+      {style: 'font-weight: bold;', class: 'active'}
+    end
+  end
+
+  g.column name: '分类', attribute: 'channel', html: {style: "width:250px;"}, custom_filter: :auto, allow_multiple_selection: false do |a|
+    a.channel
+  end
+  g.column name: '标题', attribute: 'title' do |a|
+    link_to a.title.blank? ? "..." : a.title, notification_path(a)
+  end
+  g.column name: '生成时间', attribute: 'created_at', filter: false, html: {style: "width:150px;"} do |a|
+    distance_of_time_in_words_to_now(a.created_at, include_seconds: false) + "之前"
+  end
+  g.column name: '状态', attribute: 'status', html: {style: "width:100px;"}, custom_filter: ['未读', '已读'], allow_multiple_selection: false do |a|
+    a.status
+  end
+  g.column html: {style: "width:30px;"}  do |a|
+    if a.status == '未读'
+      link_to edit_notification_path(a) do
+        raw("<span class='glyphicon glyphicon-ok-sign' aria-hidden='true' title='标记为已读'></span>")
+      end
+    end
+  end
+end -%>

@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h4 class="h4">该角色所拥有的权限</h4>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="btn-group btn-group-sm" role="group" aria-label="...">
+      <button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='role_features'>过滤</button>
+      <button class="btn btn-default btn-sm wg-external-reset-button" data-grid-name='role_features'>清除过滤条件</button>
+    </div>
+    <span>
+      <%- if can?("features", "add_features") && can_sys?(role) %>
+        <%= link_to '角色授权', add_features_feature_path(role), class: "btn btn-default btn-sm", style: "float:right" %>
+      <%- end %>
+    </span>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm-12">
+    <%= grid(features, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
+      g.column name: '所属应用', attribute: 'app', custom_filter: :auto do |feature|
+        feature.app
+      end
+      g.column name: '功能名称', attribute: 'name' do |feature|
+        feature.name
+      end
+      g.column name: '控制器名称', attribute: 'controller_name' do |feature|
+        feature.controller_name
+      end
+      g.column name: '操作名称', attribute: 'action_names' do |feature|
+        feature.action_names
+      end
+      g.column in_csv: false, html: {style: "width:30px;"}  do |feature|
+        if can?("features", "remove_feature_from_role") && can_sys?(role)
+          # link_to remove_feature_from_role_feature_path(role, feature_id: feature.id), remote: true, method: :delete, data: { confirm: '您确认移除该权限吗？' } do 
+          link_to remove_feature_from_role_feature_path(role, feature_id: feature.id), method: :delete, data: { confirm: '您确认移除该权限吗？' } do 
+            raw("<span class='glyphicon glyphicon-remove' aria-hidden='true' title='从该角色中移除此权限'></span>")
+          end
+        end
+      end
+    end -%>
+  </div>
+</div>

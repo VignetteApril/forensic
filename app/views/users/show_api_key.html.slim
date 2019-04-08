@@ -1,0 +1,17 @@
+/ = render "layouts/system_maintenance"
+#content
+  .container-fluid
+    = get_bread_crumb
+    = get_notice_bar
+    .row
+      .col-sm-12
+        .btn-group.btn-group-sm role="group"
+          = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
+          = link_to '生成新的API接口键值', generate_api_key_user_path(@current_user), class: "btn btn-primary", method: 'post' if can?("users", "generate_api_key")
+    .row
+      .col-sm-3
+        p.text-right
+          strong 当前的API接口键值：&nbsp;
+      .col-sm-9
+        = @current_user.api_key.to_s
+    
