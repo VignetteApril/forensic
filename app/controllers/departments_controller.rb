@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class DepartmentsController < ApplicationController
   before_action :set_department, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_department]
-  after_action "make_log", only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_department]
+  after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_department]
 
   # 管理员进入“部门管理”功能，系统以树状方式显示所有部门列表。 
   # 部门列表页面显示“新增部门”按钮，针对每一个部门节点，系统显示“编辑”按钮、“删除”按钮和“人员”链接。

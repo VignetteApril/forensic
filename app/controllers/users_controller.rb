@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   # skip_before_action :authorize, only: [:list]
   skip_before_action :can, only: [:edit_password, :update_password]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
-  after_action "make_log", only: [:create, :update, :destroy, :reset_password, :update_password]
+  after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
 
   # 管理员进入“用户管理”功能，系统显示用户查询列表页面。
   # 管理员可以输入关键字进行搜索，可与对列表进行排序，列表应该进行分页显示。

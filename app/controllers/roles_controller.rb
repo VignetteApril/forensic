@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class RolesController < ApplicationController
   before_action :set_role, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_role]
-  after_action "make_log", only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_role]
+  after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_role]
 
   # 显示角色列表页面，默认显示所有系统角色，并且不需要分页显示
   # 系统在角色列表页面还需要显示“新建角色”按钮，同时针对每一个已有的角色，系统还需要显示“人员”链接和“编辑角色”、“删除角色”按钮。

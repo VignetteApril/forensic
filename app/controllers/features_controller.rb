@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class FeaturesController < ApplicationController
   before_action :set_role, only: [:add_features, :add_features_submit, :remove_feature_from_role]
-  after_action "make_log", only: [:add_features_submit, :remove_feature_from_role]
+  after_action :make_log, only: [:add_features_submit, :remove_feature_from_role]
   
   # 列出所有的系统功能列表
   def list

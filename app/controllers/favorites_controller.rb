@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class FavoritesController < ApplicationController
   skip_before_action :can, only: [:create, :update, :destroy]
-  after_action "make_log", only: [:update, :create]
+  after_action :make_log, only: [:update, :create]
   
   # 增加收藏
   def create
@@ -12,7 +12,7 @@ class FavoritesController < ApplicationController
       format.js
     end
   end
-  
+
   # 更新收藏信息
   def update
     @favorite = Favorite.find(params[:id])
