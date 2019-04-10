@@ -10,37 +10,20 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery3
+//= require popper
 //= require bootstrap-sprockets
 //= require jquery_ujs
-//= require jquery-ui 
-
+//= require jquery-ui
 //= require turbolinks
 //= require nprogress
 //= require nprogress-turbolinks
-
 //= require wice_grid
 //= require bootstrap-datepicker
-  
 //= require select2
 //= require select2_locale_zh-CN
 //= require select2totree
-
-//= require jstree
-  
 //= require papaparse
-
-// 必须严格按照顺序加载pivottable
-//= require pivottable/c3
-//= require pivottable/d3
-//= require pivottable/plotly-basic-latest.min
-//= require pivottable/pivot
-//= require pivottable/c3_renderers
-//= require pivottable/d3_renderers
-//= require pivottable/pivot.zh
-//= require pivottable/plotly_renderers
-//= require pivottable/export_renderers
-
 //= require bootstrap.file-input
 //= require hack_wice_grid
 //= require html2canvas

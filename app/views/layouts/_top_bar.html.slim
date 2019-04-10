@@ -12,9 +12,6 @@ nav#top-bar.navbar.navbar-default.navbar-fixed-top
         span.h5 style="letter-spacing:2px;"
           | ——
           = SysConfig.sys_subtitle
-        span style="font-size:11px;color:LightGray;"
-          | &nbsp;&nbsp;拥有者标识：
-          = SysConfig.customer_code.gsub(/\d+/, '')
     .collapse.navbar-collapse
       ul.nav.navbar-nav.navbar-right
         / - if get_license_type == 'platform'
