@@ -23,14 +23,14 @@ class SessionController < ApplicationController
   def create
     if user = User.authenticate(params[:login], params[:password])
       if user.is_org_of?('被审计单位')
-        redirect_to '/aologin', notice: '请使用被审计单位专用的登录页面登录！'
+        redirect_to '/aologin', flash: { warning: '请使用被审计单位专用的登录页面登录！' }
       else
         session[:user_id] = user.id
         user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
         redirect_to '/'
       end
     else
-      redirect_to :login, notice: "用户名或者密码输入错误"
+      redirect_to :login, flash: { success: '用户名或者密码输入错误' }
     end
   end
   
@@ -38,7 +38,7 @@ class SessionController < ApplicationController
   def destroy
     # @current_user.update(session_id: nil) if FORBID_SHADOW_LOGIN
     session[:user_id] = nil
-    redirect_to :login, notice: "您已经从系统中注销了"
+    redirect_to :login, flash: { success: '您已经从系统中注销了' }
   end
 
   ######### 被审计单位用户登录相关

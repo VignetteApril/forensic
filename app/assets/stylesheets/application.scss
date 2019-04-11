@@ -1,6 +1,3 @@
-// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
-//@import "bootstrap-sprockets";
-
 // 示例：使用bootswatch免费主题： 'Paper' bootswatch
 // 首先导入变量
 // @import "bootswatch/cyborg/variables";
@@ -11,14 +8,11 @@
 // bootstrap自定义变量
 $badge-bg: #FF0000;
 $font-family-sans-serif: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-//$font-size-base: 12px;
 $navbar-height: 48px;
 $breadcrumb-padding-horizontal: 0px;
 $breadcrumb-separator: "|";
 $breadcrumb-bg: #ffffff;
 $line-height-base: 1.4;
-// $navbar-inverse-bg:#000;
-// $link-color:#3C70A9;
 $nav-tabs-border-color:#bbbbbb;
 $nav-tabs-justified-link-border-color:#bbbbbb;
 $nav-tabs-active-link-hover-border-color:#bbbbbb;
@@ -26,7 +20,6 @@ $pagination-bg:#fff;
 $pagination-hover-bg:#ddd;
 $pagination-border:#ccc;
 $pagination-active-bg:#eee;
-// $pagination-color:#ddd;
 $pagination-disabled-bg:#fff;
 $pagination-disabled-border:#ccc;
 $pagination-disabled-color:#bbb;
@@ -44,10 +37,6 @@ $nprogress-height: 5px;
 $nprogress-zindex: 10100;
 @import "nprogress";
 @import "nprogress-bootstrap";
-
-// 导入bootstrap Responsive styles
-// @import "bootstrap-responsive";
-
 @import "wice_grid";
 @import "font-awesome-sprockets";
 @import "font-awesome";
@@ -60,4 +49,10 @@ $nprogress-zindex: 10100;
 // pivottable
 @import "base";
 @import "c3";
-// @import "subtotal";
+
+@import "signin";
+@import "tabler/variables";
+@import "bootstrap";
+@import "tabler";
+@import "tabler.plugins"; // optional
+@import "tabler.icons"; // optional includes [browser, flag, payments]

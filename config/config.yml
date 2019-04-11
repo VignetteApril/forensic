@@ -1,33 +1,8 @@
 # customer_code: SHIKEDEMO
-title: 石刻
+title: 司法鉴定平台
 subtitle: 基于大数据技术的快速分析系统
 provider:
-aversion: "2.02.14"
-
-# 下面是和权限相关的各种参数==========
-gem_list:
-  s_ad: false # 被审计单位管理 audit object
-  s_fs: false # 财务数据分析 finance
-  s_dc: false # 数据索引管理 data center
-  s_bi: false # 自助数据分析 business intelligence
-  s_dv: false # 高级数据可视化 data visualize
-  s_sq: false # SQL数据分析 sql
-  s_id: false # 分析思路管理 idea
-  s_kb: false # 知识库 knowlodge base
-  s_dp: false # 疑点管理 doubtful point
-  s_gs: false # 工商数据分析 gongshang
-  s_cg: false # 招投标数据分析 caigou
-  ai_rel: false # 关联规则分析 relation rule
-  ai_kmn: false # K-means聚类分析 k means
-  s_xl: false # 上传数据分析 excel
-  s_md: false # 分析模型 model
-  s_bt: false # 公告管理 bulletin
-  s_mg: false # 消息管理 message
-  s_pln: false # 审计计划管理 plan
-  s_prj: false # 审计项目管理 project
-  s_rtf: false # 审计整改跟踪 rectification
-  s_arc: false # 审计档案管理 archive
-  s_std: false # 审计标准管理 standard
+aversion: "0.0.1"
 
 # 上传附件在服务器存储时的命名方式
 upload_file_name: new # new=编码命名 / old=保留原文件名
@@ -57,11 +32,6 @@ features:
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
   - [个人事务提醒,notifications,"index,show,edit",平台]
   - [被审计对象登录系统,session,"ao,aologin,aosignin",平台]
-  # - [下载附件,attachments,"download",平台]
-  # - [浏览附件,attachments,"show",平台]
-  # - [上传附件,attachments,"new,create",平台]
-  # - [删除附件,attachments,"destroy",平台]
-  # - [队列管理,jobs,"index",系统管理]
 apps:
   - name: 系统管理
     module_chain:

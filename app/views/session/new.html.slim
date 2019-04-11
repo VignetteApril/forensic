@@ -1,45 +1,40 @@
 .container-fluid
-  .row style="height:80px;padding-top:50px;"
-    .col-sm-12.text-center
-      .h1 style="color:#3C70A9;letter-spacing:8px;"
-        = image_tag("logo_b.png", :height=>"256px", style: "margin-top:-4px;")
-      br
-      .h5 基于大数据技术的智能分析平台
-  .row
-    .col-md-12
-      hr style="border-color:pink;"
-  .row  
-    #login-form.col-md-4.col-md-offset-4.col-xs-12.col-xs-offset-0.text-center style="padding-top:40px;"
-      .panel.panel-default style="border-width:0px;width:100%;text-align:left;"
-        .panel-body style="color:Black;"
-          = form_tag "/session" do
-            .form-group.has-feedback
-              label.control-label.sr-only for="login" Username
-              .input-group
-                span.input-group-addon
-                  i.fa.fa-user-circle
-                = text_field_tag :login, params[:login], class: "form-control", \
-                                 placeholder: "请输入用户的登录名", "aria-describedby" => "login-status"
-              span#login-status.sr-only (Username)
-            .form-group.has-feedback
-              label.control-label.sr-only for="password" Password
-              .input-group
-                span.input-group-addon
-                  i.fa.fa-key
-                = password_field_tag :password, params[:password], class: "form-control", \
-                                 placeholder: "如果您是第一次登录系统，默认的密码是：123456@Shike", "aria-describedby" => "password-status"
-              span#password-status.sr-only (Password)
-            - if flash[:notice]
-              span style="color:Red;"
-                = flash[:notice]
-              br
-            br
-            = submit_tag "登 录", class: "btn btn-primary", style: "width:100%;"
-            br
-            | &nbsp;
-  .row
-    .col-sm-12
-      hr style="border-color:lightblue;"
+  .page style="width: 100%"
+    .page-single
+      .container
+        .row
+          .col.col-login.mx-auto
+            .text-center.mb-6
+              = image_tag("logo.png", class: 'h-10')
+              / img src="./demo/brand/tabler.svg" class="h-6" alt=""
+            = form_tag "/session", class: 'card' do
+              .card-body.p-6
+                .card-title
+                 | 登录您的账户
+                .form-group
+                  label.form-label
+                     | 电话号码
+                  = text_field_tag :login, params[:login], class: "form-control", \
+                                                     placeholder: "请输入用户的登录名", "aria-describedby" => "login-status"
+                .form-group
+                  .form-label
+                    | 密码
+                    a href="./forgot-password.html" class="float-right small"
+                      | 忘记密码
+                  = password_field_tag :password, params[:password], class: "form-control", \
+                                                    placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
+                .form-group
+                  label.custom-control.custom-checkbox
+                    input type="checkbox" class="custom-control-input"
+                    span.custom-control-label
+                       | 记住我
+                .form-footer
+                  button type="submit" class="btn btn-primary btn-block"
+                   | 登 录
+            .text-center.text-muted
+              | 还有没有账户?
+              a href="./register.html"
+               | 注册
   .row
     .col-sm-12.text-center.help-block style="color:DarkGray;padding-top:20px;"
       = PROVIDER

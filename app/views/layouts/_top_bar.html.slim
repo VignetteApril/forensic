@@ -45,28 +45,8 @@ nav#top-bar.navbar.navbar-default.navbar-fixed-top
             li.divider role="separator"
             li
               = link_to "查看所有个人事务提醒 >>", main_app.notifications_path
-        - if GEM_LIST['s_id'] == true and has_license('s_id') and !@current_user.is_org_of?('被审计单位')
-          li
-            / 如果是首页则禁用登记思路按钮
-            - if request.fullpath == '/'
-              a data-toggle="modal" id="register-idea" href='#' disabled="disabled" style="margin-right:-2px;padding-right:6px;" 登记思路
-            / 如果不是首页则可以点登记思路按钮
-            - else
-              a data-toggle="modal" id="register-idea" href='#' style="margin-right:-2px;padding-right:6px;" 登记思路
-          li.dropdown role="presentation"
-            a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="margin-left:-2px;padding-left:6px;"
-              span.caret
-            ul.dropdown-menu
-              li role="presentation"
-                = link_to "/s_id/subjects", id: "enter-audit-idea" do
-                  | 进入分析思路管理模块 >>
-        - else
-          li#favorite-list.dropdown role="presentation"
-            = render partial: "favorites/list"
-        - if GEM_LIST['s_kb'] == true and has_license('s_kb') and !@current_user.is_org_of?('被审计单位')
-          li
-            a id="search-kb" href="#"
-              i.fa.fa-support
+        li#favorite-list.dropdown role="presentation"
+          = render partial: "favorites/list"
         li.dropdown role="presentation"
           a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
             / span.glyphicon.glyphicon-menu-hamburger aria-hidden="true"
