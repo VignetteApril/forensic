@@ -20,14 +20,12 @@
 @import "select2-bootstrap";
 @import "select2totree";
 
-// 你还可以在base.css.scss文件中添加更多自定义设置
-// pivottable
-@import "base";
-@import "c3";
-
 // tabler
 @import "tabler/variables";
 @import "bootstrap";
 @import "tabler";
 @import "tabler.plugins"; // optional
 @import "tabler.icons"; // optional includes [browser, flag, payments]
+
+// 导入自定义的scss
+@import "custom_css/global";

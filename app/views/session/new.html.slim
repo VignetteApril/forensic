@@ -1,12 +1,11 @@
 .container-fluid
-  .page style="width: 100%"
+  .page
     .page-single
       .container
         .row
           .col.col-login.mx-auto
             .text-center.mb-6
               = image_tag("logo.png", class: 'h-10')
-              / img src="./demo/brand/tabler.svg" class="h-6" alt=""
             = form_tag "/session", class: 'card' do
               .card-body.p-6
                 .card-title
