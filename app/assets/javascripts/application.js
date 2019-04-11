@@ -16,8 +16,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require turbolinks
-//= require nprogress
-//= require nprogress-turbolinks
 //= require wice_grid
 //= require bootstrap-datepicker
 //= require select2
@@ -26,10 +24,9 @@
 //= require papaparse
 //= require bootstrap.file-input
 //= require hack_wice_grid
-//= require html2canvas
-// = require tabler/tabler
-// = require tabler/vendors/bootstrap.bundle.min
-// = require tabler/vendors/circle-progress.min
-// = require tabler/vendors/jquery.sparkline.min
-// = require tabler/core
+//= require tabler/tabler
+//= require tabler/vendors/bootstrap.bundle.min
+//= require tabler/vendors/circle-progress.min
+//= require tabler/vendors/jquery.sparkline.min
+//= require tabler/core
 

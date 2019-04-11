@@ -4,26 +4,6 @@
 // @import "bootswatch/slate/variables";
 // @import "bootswatch/flatly/variables";
 // @import "bootswatch/lumen/variables";
-
-// bootstrap自定义变量
-$badge-bg: #FF0000;
-$font-family-sans-serif: "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$navbar-height: 48px;
-$breadcrumb-padding-horizontal: 0px;
-$breadcrumb-separator: "|";
-$breadcrumb-bg: #ffffff;
-$line-height-base: 1.4;
-$nav-tabs-border-color:#bbbbbb;
-$nav-tabs-justified-link-border-color:#bbbbbb;
-$nav-tabs-active-link-hover-border-color:#bbbbbb;
-$pagination-bg:#fff;
-$pagination-hover-bg:#ddd;
-$pagination-border:#ccc;
-$pagination-active-bg:#eee;
-$pagination-disabled-bg:#fff;
-$pagination-disabled-border:#ccc;
-$pagination-disabled-color:#bbb;
-
 // 最后导入需要的bootswatch主题
 // @import "bootswatch/cyborg/bootswatch";
 // @import "bootswatch/slate/bootswatch";
@@ -32,11 +12,6 @@ $pagination-disabled-color:#bbb;
 
 @import "bootstrap";
 @import "animate";
-$nprogress-color: #64abe6;
-$nprogress-height: 5px;
-$nprogress-zindex: 10100;
-@import "nprogress";
-@import "nprogress-bootstrap";
 @import "wice_grid";
 @import "font-awesome-sprockets";
 @import "font-awesome";
@@ -50,7 +25,7 @@ $nprogress-zindex: 10100;
 @import "base";
 @import "c3";
 
-@import "signin";
+// tabler
 @import "tabler/variables";
 @import "bootstrap";
 @import "tabler";

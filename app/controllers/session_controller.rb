@@ -30,7 +30,7 @@ class SessionController < ApplicationController
         redirect_to '/'
       end
     else
-      redirect_to :login, flash: { success: '用户名或者密码输入错误' }
+      redirect_to :login, flash: { danger: '用户名或者密码输入错误' }
     end
   end
   

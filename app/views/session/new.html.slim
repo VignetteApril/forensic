@@ -11,6 +11,10 @@
               .card-body.p-6
                 .card-title
                  | 登录您的账户
+                - flash.each do |message_type, message_value|
+                  div class="alert alert-icon alert-#{message_type}"
+                    i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
+                    = message_value
                 .form-group
                   label.form-label
                      | 电话号码

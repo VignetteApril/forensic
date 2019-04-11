@@ -5,47 +5,9 @@ html
       = SysConfig.sys_title
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application',               'data-turbolinks-track' => true
+    = csrf_meta_tags
 
-    = javascript_pack_tag 'application'
-    = stylesheet_pack_tag 'application'
-
-    = csrf_meta_tags 
-  body
+  body data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
       = render 'layouts/top_bar'
       = render "layouts/flash_message"
       == yield
-javascript:
-  $(function() {
-    //$('#top-bar').addClass('animated fadeInDown');
-    $('#sidebar').addClass('animated fadeInLeft');
-    $('#content').addClass('animated fadeIn');
-
-    $('#homepage').addClass('animated fadeIn');
-    //$('#notice-box').addClass('animated slideInRight');
-
-    init_wice_grid();
-  })
-
-  $("#table-box-out").scroll(function() {
-    freeze_head("table-box-out", "search-result", 0);
-  });
-  if (!($("#table-box-out").offset()===undefined)) {
-    h = $(window).height() - $("#table-box-out").offset().top -80;
-    $("#table-box-out").css("height", h+'px');
-  }
-  
-  $('#search-kb').click(function() {
-    if ($('#kb-bar').css('display') == 'none') {
-      $('#kb-bar').css('display', "block")
-      $('#kb-bar').addClass('animated fadeInRight')
-      $('#kb-bar').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-        $('#kb-bar').removeClass('animated fadeInRight')
-      });
-    }else{
-      $('#kb-bar').addClass('animated fadeOutRight')
-      $('#kb-bar').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-        $('#kb-bar').css('display', "none")
-        $('#kb-bar').removeClass('animated fadeOutRight')
-      });
-    }
-  })
