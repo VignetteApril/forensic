@@ -1,0 +1,7 @@
+- flash.each do |message_type, message|
+  - message_type = 'success' if message_type == 'notice'
+  - message_type = 'warning' if message_type == 'alert'
+  div class="alert alert-#{message_type} alert-dismissible fade show"
+    button type="button" class="close" data-dismiss="alert"
+    = message
+

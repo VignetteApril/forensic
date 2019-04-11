@@ -12,13 +12,7 @@ html
     = csrf_meta_tags 
   body
       = render 'layouts/top_bar'
-      - flash.each do |key, value|
-        div class="alert alert-#{key} alert-dismissible fade show" role="alert"
-          strong
-            = value
-          button type="button" class="close" data-dismiss="alert" aria-label="Close"
-            span aria-hidden="true"
-              | &times
+      = render "layouts/flash_message"
       == yield
 javascript:
   $(function() {
