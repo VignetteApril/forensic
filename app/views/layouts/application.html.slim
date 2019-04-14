@@ -7,8 +7,9 @@ html
     = javascript_include_tag 'application',               'data-turbolinks-track' => true
     = csrf_meta_tags
 
-  body.page data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
-   .flex-fill
-      = render 'layouts/top_bar'
-      = render "layouts/flash_message"
-      == yield
+  body data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
+    .page
+      .flex-fill
+        = render 'layouts/top_bar'
+        = render "layouts/flash_message"
+        == yield
