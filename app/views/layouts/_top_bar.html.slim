@@ -72,7 +72,61 @@
               | 登出
       a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse"
         span class="header-toggler-icon"
-
+.header.collapse.d-lg-flex.p-0 id="headerMenuCollapse"
+  .container
+    .row.align-items-center
+      .col-lg-3.ml-auto
+        form class="input-icon my-3 my-lg-0"
+          input type="search" class="form-control header-search" placeholder="Search" tabindex="1"
+          .input-icon-addon
+            i.fe.fe-search
+      .col-lg.order-lg-first
+        ul.nav.nav-tabs.border-0.flex-column.flex-lg-row
+          li.nav-item
+            = link_to root_path, class: 'nav-link active'
+              i.fe.fe-home
+              | 主页
+          li.nav-item
+            a.nav-link data-toggle="dropdown" aria-expanded="false"
+              i.fe.fe-box
+              | Interface
+            .dropdown-menu.dropdown-menu-arrow
+              a.dropdown-item href="./cards.html" Cards design
+              a.dropdown-item href="./charts.html" Charts
+              a.dropdown-item href="./pricing-cards.html" Pricing cards
+          li.nav-item.dropdown
+            a.nav-link data-toggle="dropdown"
+              i.fe.fe-calendar
+              | Components
+            .dropdown-menu.dropdown-menu-arrow
+              a.dropdown-item href="./maps.html" Maps
+              a.dropdown-item href="./icons.html" Icons
+              a.dropdown-item href="./store.html" Store
+              a.dropdown-item href="./blog.html" Blog
+              a.dropdown-item href="./carousel.html" Carousel
+          li.nav-item.dropdown
+            a.nav-link data-toggle="dropdown"
+             i class="fe fe-file"
+             | Pages
+            .dropdown-menu.dropdown-menu-arrow
+              a.dropdown-item href="./profile.html" Profile
+              a.dropdown-item href="./login.html" Login
+              a.dropdown-item href="./register.html" Register
+              a.dropdown-item href="./forgot-password.html" Forgot password
+              a.dropdown-item href="./400.html" 400 error
+              a.dropdown-item href="./401.html" 401 error
+          li.nav-item.dropdown
+            a.nav-link href="./form-elements.html"
+              i class="fe fe-check-square"
+              | Forms
+          li.nav-item
+            a.nav-link href="./gallery.html"
+              i.fe.fe-image
+              | Gallery
+          li.nav-item
+            a.nav-link href="./docs/index.html" class="nav-link"
+              i.fe.fe-file-text
+              | Documentation
 / nav#top-bar.navbar.navbar-default.navbar-fixed-top
 /   .container-fuid
 /     .navbar-header
@@ -188,24 +242,24 @@
 /             | 联系方式：
 /             a href="mailto:redouble@outlook.com" redouble@outlook.com
 javascript:
-  $("#register-idea").click(function() {
-    // 截屏函数
-    html2canvas($('#content'), {
-      onrendered: function(canvas) {
-        image_url = canvas.toDataURL();
-        $("#cut_image").attr('src', image_url)
-        $("#step_picture").val(image_url)
-      },
-      // 这里可以设置截图的宽高
-      // width: 300,
-      // height: 300
-    });
-    $("#step_url").val(window.location.href);
-    $("#ideaModal").modal('show');
-  });
-  $("#show-about-desc").click(function() {
-    $("#aboutDesc").modal({show:true, backdrop:false, keyboard:true})
-  })
+  // $("#register-idea").click(function() {
+  //   // 截屏函数
+  //   html2canvas($('#content'), {
+  //     onrendered: function(canvas) {
+  //       image_url = canvas.toDataURL();
+  //       $("#cut_image").attr('src', image_url)
+  //       $("#step_picture").val(image_url)
+  //     },
+  //     // 这里可以设置截图的宽高
+  //     // width: 300,
+  //     // height: 300
+  //   });
+  //   $("#step_url").val(window.location.href);
+  //   $("#ideaModal").modal('show');
+  // });
+  // $("#show-about-desc").click(function() {
+  //   $("#aboutDesc").modal({show:true, backdrop:false, keyboard:true})
+  // })
   /*
   $("#show-register").click(function() {
     $("#registerDesc").modal({show:true, backdrop:false, keyboard:true})

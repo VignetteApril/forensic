@@ -12,7 +12,7 @@
 //
 //= require jquery3
 //= require popper
-//= require bootstrap-sprockets
+//= require bootstrap
 //= require jquery_ujs
 //= require jquery-ui
 //= require turbolinks
@@ -25,8 +25,6 @@
 //= require bootstrap.file-input
 //= require hack_wice_grid
 //= require tabler/tabler
-//= require tabler/vendors/bootstrap.bundle.min
 //= require tabler/vendors/circle-progress.min
-//= require tabler/vendors/jquery.sparkline.min
 //= require tabler/core
 

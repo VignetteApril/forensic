@@ -10,7 +10,13 @@
 // @import "bootswatch/flatly/bootswatch";
 // @import "bootswatch/lumen/bootswatch";
 
+// tabler
+@import "tabler/variables";
 @import "bootstrap";
+@import "tabler";
+@import "tabler.plugins"; // optional
+@import "tabler.icons"; // optional includes [browser, flag, payments]
+
 @import "animate";
 @import "wice_grid";
 @import "font-awesome-sprockets";
@@ -19,13 +25,6 @@
 @import "select2";
 @import "select2-bootstrap";
 @import "select2totree";
-
-// tabler
-@import "tabler/variables";
-@import "bootstrap";
-@import "tabler";
-@import "tabler.plugins"; // optional
-@import "tabler.icons"; // optional includes [browser, flag, payments]
 
 // 导入自定义的scss
 @import "custom_css/global";
