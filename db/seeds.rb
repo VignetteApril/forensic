@@ -43,6 +43,26 @@ Feature.all.each do |f|
   role.role_features.find_or_create_by(feature_id: f.id)
 end
 
+put "初始化地区信息表"
+file = File.read(Rails.root.join("public", "geo/city_list.json"))
+data = JSON.parse(file)
+
+data.each do |province_data|
+  province = Area.create(name: province_data['name'], code: province_data['code'], area_type: :province)
+
+  next if province_data['cityList'].nil?
+  province_data['cityList'].each do |city_data|
+    city = province.children.create(name: city_data['name'], code: city_data['code'], area_type: :city, parent_id: province.id)
+    puts "创建了省#{province.name}中的#{city.name}市"
+
+    next if city_data['areaList'].nil?
+    city_data['areaList'].each do |district_data|
+      district = city.children.create(name: district_data['name'], code: district_data['code'], area_type: :district, parent_id: city.id)
+      puts "创建了#{city.name}市中的#{district.name}区"
+    end
+  end
+end
+
 puts "初始化系统配置参数"
 SysConfig.find_or_create_by gem: '平台', key: 'SUPER_ROLES', value: '系统管理员', desc: '系统超级用户的角色名称，使用英文逗号分隔（例如：系统管理员）'
 SysConfig.find_or_create_by gem: '平台', key: 'DEPARTMENT_ONLYLEAF_CAN_HAS_USER', value: '是', desc: '组织结构中是否只有叶子节点可以拥有用户？（填写：是 / 否）'

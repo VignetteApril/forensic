@@ -1,4 +1,4 @@
-class SysConfig < ActiveRecord::Base
+class SysConfig < ApplicationRecord
   validates :key, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 100}
 
   def self.es_host

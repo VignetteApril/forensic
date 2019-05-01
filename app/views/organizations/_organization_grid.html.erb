@@ -1,0 +1,25 @@
+<%= grid(@organizations, hide_submit_button: true, hide_reset_button: true) do |g|
+  g.column name: '机构名称', attribute: 'name' do |organization|
+    organization.name
+  end
+
+  g.column name: '机构编码', attribute: 'code' do |organization|
+    organization.code
+  end
+
+  g.column name: '机构简介', attribute: 'desc' do |organization|
+    organization.desc
+  end
+
+  g.column name: '机构地址', attribute: 'addr' do |organization|
+    organization.addr
+  end
+
+  g.column name: '机构电话', attribute: 'phone' do |organization|
+    organization.phone
+  end
+
+  g.column name: '机构微信号', attribute: 'wechat_id' do |organization|
+    organization.wechat_id
+  end
+end -%>

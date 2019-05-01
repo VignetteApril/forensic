@@ -6,6 +6,6 @@ Kaminari.configure do |config|
   # config.outer_window = 0
   # config.left = 0
   config.right = 2
-  # config.page_method_name = :page
-  # config.param_name = :page
+  config.page_method_name = :page
+  config.param_name = :page
 end

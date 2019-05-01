@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @organization.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @organization.code %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @organization.desc %>
+</p>
+
+<p>
+  <strong>Area:</strong>
+  <%= @organization.area %>
+</p>
+
+<p>
+  <strong>Addr:</strong>
+  <%= @organization.addr %>
+</p>
+
+<p>
+  <strong>Phone:</strong>
+  <%= @organization.phone %>
+</p>
+
+<p>
+  <strong>Wechat:</strong>
+  <%= @organization.wechat_id %>
+</p>
+
+<%= link_to 'Edit', edit_organization_path(@organization) %> |
+<%= link_to 'Back', organizations_path %>

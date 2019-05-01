@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'digest/sha2'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   validates :login, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 50}
   validates :name, :length => {:maximum => 20}
   validates :id_card_no, :length => {:maximum => 20}

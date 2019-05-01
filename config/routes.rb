@@ -45,6 +45,8 @@ Rails.application.routes.draw do
     get :aologin, on: :collection
     post :aosignin, on: :collection
   end
+
+  resources :organizations
   
   get 'aologin' => 'session#aologin'
   get 'aosignin' => 'session#aosignin'

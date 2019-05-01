@@ -171,4 +171,12 @@ module ApplicationHelper
       ['默认类型', 0]
     end
   end
+
+  def active_class(controller, controller_name)
+      if controller.controller_name == controller_name
+        return 'list-group-item list-group-item-action active'
+      else
+        return 'list-group-item list-group-item-action'
+      end
+  end
 end

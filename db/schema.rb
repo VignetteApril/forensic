@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_061105) do
+ActiveRecord::Schema.define(version: 2019_04_30_083328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "areas", force: :cascade do |t|
+    t.string "name"
+    t.integer "code"
+    t.integer "area_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "ancestry"
+    t.index ["ancestry"], name: "index_areas_on_ancestry"
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -76,6 +86,22 @@ ActiveRecord::Schema.define(version: 2019_01_23_061105) do
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_notifications_on_created_at"
     t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.integer "code"
+    t.string "desc"
+    t.bigint "area_id"
+    t.string "addr"
+    t.string "phone"
+    t.string "wechat_id"
+    t.integer "org_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "ancestry"
+    t.index ["ancestry"], name: "index_organizations_on_ancestry"
+    t.index ["area_id"], name: "index_organizations_on_area_id"
   end
 
   create_table "role_features", force: :cascade do |t|
@@ -172,4 +198,5 @@ ActiveRecord::Schema.define(version: 2019_01_23_061105) do
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end
 
+  add_foreign_key "organizations", "areas"
 end

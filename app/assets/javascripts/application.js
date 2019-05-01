@@ -23,8 +23,24 @@
 //= require select2totree
 //= require papaparse
 //= require bootstrap.file-input
-//= require hack_wice_grid
 //= require tabler/tabler
 //= require tabler/vendors/circle-progress.min
 //= require tabler/core
 
+// 处理select2在turbolinks的bug
+$(document).on("turbolinks:before-cache", function() {
+    $('select.select2-hidden-accessible').select2('destroy');
+});
+
+$(document).on('turbolinks:load', function () {
+    $('select').select2({
+        theme: 'bootstrap'
+    });
+
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        autoclose: true,
+        todayHighlight: true
+    });
+});

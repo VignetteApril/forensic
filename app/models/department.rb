@@ -1,4 +1,4 @@
-class Department < ActiveRecord::Base
+class Department < ApplicationRecord
   validates :name, :presence => true, :length => {:maximum => 200}
   validates :code, :presence => true, :length => {:maximum => 20}
   validates :brief,                   :length => {:maximum => 100}

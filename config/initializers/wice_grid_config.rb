@@ -19,7 +19,7 @@ if defined?(Wice::Defaults)
   Wice::Defaults::CUSTOM_FILTER_ALL_LABEL = '--'
 
   # A list of classes for the table tag of the grid
-  Wice::Defaults::DEFAULT_TABLE_CLASSES = ['table', 'table-bordered', 'table-striped']
+  Wice::Defaults::DEFAULT_TABLE_CLASSES = %w(table table-hover table-outline table-vcenter text-nowrap card-table)
 
   # Allow switching between a single and multiple selection modes in custom filters (dropdown boxes)
   Wice::Defaults::ALLOW_MULTIPLE_SELECTION = true
@@ -182,7 +182,7 @@ if defined?(Wice::Defaults)
   Wice::Defaults::PAGE_METHOD_NAME = :page
 
   # The name of the theme to use for the pagination with Kaminari
-  Wice::Defaults::PAGINATION_THEME = :wice_grid
+  Wice::Defaults::PAGINATION_THEME = :bootstrap4
 
   # By default ActiveRecord calls are always executed inside Model.unscoped{}.
   # Setting <tt>USE_DEFAULT_SCOPE</tt> to true will use the default scope for all queries.

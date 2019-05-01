@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   validates :name, :presence => true, :uniqueness => true, :length => {:maximum => 50}
   
   has_many :user_roles, dependent: :delete_all
