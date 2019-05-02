@@ -6,8 +6,6 @@ class SessionController < ApplicationController
   
   # 显示系统登录之后的首页
   def index
-    redirect_to '/ao' if @current_user.is_org_of?('被审计单位')
-
     session[:bread] = [ { "title" => '主页',  "url_str" => root_path() } ]
     session[:bread_clear] = [ root_path() ]
     
@@ -22,13 +20,11 @@ class SessionController < ApplicationController
   # 用户登录信息提交，用户身份验证，成功之后转向系统首页
   def create
     if user = User.authenticate(params[:login], params[:password])
-      if user.is_org_of?('被审计单位')
-        redirect_to '/aologin', flash: { warning: '请使用被审计单位专用的登录页面登录！' }
-      else
-        session[:user_id] = user.id
-        user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
-        redirect_to '/'
-      end
+      redirect_to :login, flash: { danger: '用户被锁定，请联系管理员' } if user.is_locked == true
+
+      session[:user_id] = user.id
+      user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
+      redirect_to '/'
     else
       redirect_to :login, flash: { danger: '用户名或者密码输入错误' }
     end

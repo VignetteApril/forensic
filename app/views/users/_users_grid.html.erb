@@ -1,63 +1,48 @@
-<%= grid(@users, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}, header_tr_html: {style: "background-color:#e5e5e5;"}) do |g|
-  g.column name: '登录名', attribute: 'login' do |user|
+<%= grid(@users, show_filters: :when_filtered) do |g|
+  g.column name: '登录名', attribute: 'login', ordering: false do |user|
     user.login
   end
   g.column name: '真实姓名', attribute: 'name', ordering: false, in_csv: false do |user|
     link_to user.name, user_path(user)
   end
+
   g.column name: '真实姓名', attribute: 'name', in_html: false do |user|
     user.name
   end
-  #g.column name: '人员编码', attribute: 'code' do |user|
-  #  user.code
-  #end
-  g.column name: '所属部门', attribute: 'department_id', html: {style: "text-align:center;width:300px;"},
-           custom_filter: Department.roots_and_descendants_preordered.map{ |d| [raw("#{'&nbsp;'*d.depth*4}#{d.name}"), d.id] }, allow_multiple_selection: false do |a|
-    a.department.name if a.department
-  end
-  g.column name: '所属机构', attribute: 'orgnization_name', html: {style: "text-align:center;width:120px;"},
-           custom_filter: SysConfig.accounting_level, allow_multiple_selection: false do |a|
-    a.orgnization_name
+
+  # 平台管理员只关注用户的机构级别的信息
+  if admin?
+    g.column name: '所属机构', attribute: 'organization_id', ordering: false,
+             custom_filter: Organization.all.map{ |organization| [organization.name, organization.id] }, allow_multiple_selection: false do |a|
+      a.organization.name if a.organization
+    end
+  else
+  # 机构管理员只关注用户的科室级别的信息
+    g.column name: '所属科室', attribute: 'department_id', ordering: false,
+             custom_filter: @current_user.organization.departments.map{ |department| [department.name, department.id] }, allow_multiple_selection: false do |a|
+      a.department.name if a.department
+    end
   end
 
-  g.column name: '证件号码', attribute: 'id_card_no', html: {style: "text-align:center;width:200px;"} do |user|
-    user.id_card_no
-  end
-  #g.column name: 'Email地址', attribute: 'email' do |user|
-  #  user.email
-  #end
-  #g.column name: '办公电话', attribute: 'work_phone' do |user|
-  #  user.work_phone
-  #end
-  #g.column name: '移动电话', attribute: 'mobile_phone' do |user|
-  #  user.mobile_phone
-  #end
-  #g.column name: '现任职务', attribute: 'position', ordering: false do |user|
-  #  user.position
-  #end
-  g.column name: '所属角色', html:{ style: "width: 200px;" } do |user|
+  g.column name: '所属角色', ordering: false do |user|
     user.roles.map{ |r| r.name }.join(', ')
   end
-  
-  g.column in_csv: false, html: {style: "width:30px;"}  do |user|
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
     if can?("users", "edit") && can_sys?(user)
-      link_to edit_user_path(user) do 
-        raw("<span class='glyphicon glyphicon-edit' aria-hidden='true' title='编辑用户信息'></span>")
-      end
+      link_to '编辑', edit_user_path(user), class: 'btn btn-secondary btn-sm'
     end
   end
-  g.column in_csv: false, html: {style: "width:30px;"}  do |user|
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
+    if can?("users", "edit") && can_sys?(user)
+      link_to '重置', reset_password_user_path(user), data: {confirm: '您确认要重置该用户的密码为123456@Shike吗？' }, class: 'btn btn-secondary btn-sm'
+    end
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
     if can?("users", "destroy") && can_sys?(user)
-      link_to user, method: :delete, data: { confirm: '您确认删除吗？' } do 
-        raw("<span class='glyphicon glyphicon-trash' aria-hidden='true' title='删除用户'></span>")
-      end
-    end
-  end
-  g.column in_csv: false, html: {style: "width:30px;"}  do |user|
-    if can?("users", "reset_password") && can_sys?(user)
-      link_to reset_password_user_path(user), data: {confirm: '您确认要重置该用户的密码为123456@Shike吗？' } do 
-        raw("<span class='glyphicon glyphicon-erase' aria-hidden='true' title='重置用户密码'></span>")
-      end
+      link_to '删除', user, method: :delete, data: { confirm: '您确认删除吗？' }, class: 'btn btn-danger btn-sm'
     end
   end
 end -%>

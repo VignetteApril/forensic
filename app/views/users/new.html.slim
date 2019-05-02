@@ -1,5 +1,6 @@
-= render "layouts/system_maintenance"
-#content
-  .container-fluid
-    = get_bread_crumb
-    = render 'form' 
+= link_to '返回', users_path, class: 'btn btn-primary mb-2'
+.card
+  .card-header
+    .card-title 新建用户
+  .card-body
+    = render 'form'

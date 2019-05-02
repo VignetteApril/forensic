@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_30_083328) do
+ActiveRecord::Schema.define(version: 2019_05_02_074532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,7 +54,9 @@ ActiveRecord::Schema.define(version: 2019_04_30_083328) do
     t.string "orgnization_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "organization_id"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
+    t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
   end
 
@@ -161,31 +163,13 @@ ActiveRecord::Schema.define(version: 2019_04_30_083328) do
   create_table "users", force: :cascade do |t|
     t.string "login", limit: 50, null: false
     t.string "name", limit: 20
-    t.string "id_card_no", limit: 20
     t.string "email", limit: 100
-    t.string "work_phone", limit: 200
-    t.string "home_phone", limit: 100
-    t.string "work_fax", limit: 100
     t.string "mobile_phone", limit: 100
-    t.string "email2", limit: 100
-    t.string "position", limit: 100
     t.string "hashed_password"
     t.string "salt"
     t.integer "department_id"
-    t.string "code", limit: 100
     t.integer "sort_no"
-    t.string "english_name", limit: 100
-    t.string "politics_status", limit: 20
-    t.string "id_type", limit: 20
     t.string "gender", limit: 10
-    t.string "marital_status", limit: 20
-    t.string "top_education", limit: 20
-    t.string "top_degree", limit: 20
-    t.string "rank", limit: 100
-    t.string "country", limit: 100
-    t.string "province", limit: 100
-    t.string "city", limit: 100
-    t.string "zip_code", limit: 20
     t.string "address"
     t.text "memo"
     t.boolean "changed_password"
@@ -194,9 +178,15 @@ ActiveRecord::Schema.define(version: 2019_04_30_083328) do
     t.datetime "updated_at", null: false
     t.string "session_id"
     t.string "api_key"
+    t.string "wechat_id"
+    t.bigint "organization_id"
+    t.boolean "is_locked", default: false
     t.index ["department_id"], name: "index_users_on_department_id"
+    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end
 
+  add_foreign_key "departments", "organizations"
   add_foreign_key "organizations", "areas"
+  add_foreign_key "users", "organizations"
 end

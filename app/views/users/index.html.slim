@@ -1,21 +1,7 @@
-/!.container-fluid 
-  /!.row
-= render "layouts/system_maintenance" 
-#content
-  .container-fluid
-    = get_bread_crumb
-    = get_notice_bar
-    .row
-      .col-sm-12
-        .btn-group.btn-group-sm role="group" aria-label="..."
-          button.wg-external-submit-button.btn.btn-primary data-grid-name="users" 过滤
-          button.wg-external-reset-button.btn.btn-default data-grid-name="users" 清除过滤条件
-        | &nbsp;
-        .btn-group.btn-group-sm role="group" aria-label="..."
-          button.btn.btn-default.wg-external-csv-export-button data-grid-name='users' 导出到电子表格
-        .btn-group.btn-group-sm role="group" aria-label="..." style="float:right"
-          = link_to('新建用户', new_user_path, class: "btn btn-primary") if can?("users", "new")
-    br
-    .row
-      .col-sm-12
-        = render "users_grid" 
+.row
+  .card
+    .card-header
+      h3.card-title 用户管理
+      = link_to '新建用户', new_user_path, class: 'btn btn-primary', style: 'margin-left: auto' if can?("users", "new")
+    .table-responsive
+      = render partial: "users_grid", :locals => {users: @users}

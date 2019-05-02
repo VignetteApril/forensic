@@ -1,13 +1,6 @@
-<%= grid(@features, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
+<%= grid(@features, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
   g.action_column html_check_box: false, html: {style: "width:80px;"} do |feature|
-    myfeatures = []
-    @current_user.roles.each do |r| 
-      myfeatures = myfeatures | r.features.map{ |f| f.id } 
-    end
-    @role.features.find_by(id: feature.id).nil? && myfeatures.include?(feature.id)
-  end
-  g.column name: '所属应用', attribute: 'app', custom_filter: :auto do |feature|
-    feature.app
+    !@role.features.map(&:id).include?(feature.id)
   end
   g.column name: '功能名称', attribute: 'name' do |feature|
     feature.name

@@ -5,8 +5,3 @@
       = link_to '新建机构', new_organization_path, class: 'btn btn-primary', style: 'margin-left: auto'
     .table-responsive
       = render partial: "organization_grid", :locals => {organizations: @organizations}
-
-/
-/ <!--<td><%#= link_to 'Show', organization %></td>-->
-/ <!--<td><%#= link_to 'Edit', edit_organization_path(organization) %></td>-->
-/ <!--<td><%#= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' } %></td>-->

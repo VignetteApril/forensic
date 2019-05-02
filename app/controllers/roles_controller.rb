@@ -1,12 +1,12 @@
 # -*- encoding : utf-8 -*-
 class RolesController < ApplicationController
+  layout 'system'
   before_action :set_role, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_role]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_role]
 
   # 显示角色列表页面，默认显示所有系统角色，并且不需要分页显示
   # 系统在角色列表页面还需要显示“新建角色”按钮，同时针对每一个已有的角色，系统还需要显示“人员”链接和“编辑角色”、“删除角色”按钮。
   def index
-    init_bread('角色管理')
     if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
       @roles = Role.where(orgnization_name: [@current_user.orgnization_name, '系统'])
     else
@@ -18,13 +18,11 @@ class RolesController < ApplicationController
 
   # 显示新建角色表单页面。 
   def new
-    cal_bread('创建角色')
     @role = Role.new
   end
 
   # 管理员点击角色列表页面中针对某一 角色的“编辑角色”按钮，系统显示该角色的编辑表单页面。
   def edit
-    cal_bread('编辑角色信息')
   end
 
   # 在新建角色页面中，用户点击“提交”按钮，系统保存该角色并返回角色列表页面。
@@ -70,7 +68,6 @@ class RolesController < ApplicationController
     
   # 管理员在角色人员列表页面中，点击 “加入”按钮,系统显示所有人员的列表
   def add_users
-    cal_bread('角色人员维护')
     if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
       @users = initialize_grid( User, per_page: 50,
                                 conditions: { orgnization_name: @current_user.orgnization_name },

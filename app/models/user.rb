@@ -4,33 +4,13 @@ require 'digest/sha2'
 class User < ApplicationRecord
   validates :login, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 50}
   validates :name, :length => {:maximum => 20}
-  validates :id_card_no, :length => {:maximum => 20}
   validates :email, :length => {:maximum => 100}, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_nil: true, allow_blank: true
-  validates :work_phone, :length => {:maximum => 200}
-  validates :position, :length => {:maximum => 100}
-  validates :code, :length => {:maximum => 100}
-  validates :english_name, :length => {:maximum => 100}
-  validates :politics_status, :length => {:maximum => 20}
-  validates :id_type, :length => {:maximum => 20}
   validates :gender, :length => {:maximum => 10}
-  validates :marital_status, :length => {:maximum => 20}
-  validates :top_education, :length => {:maximum => 20}
-  validates :top_degree, :length => {:maximum => 20}
-  validates :rank, :length => {:maximum => 100}
-  validates :home_phone, :length => {:maximum => 100}
-  validates :work_fax, :length => {:maximum => 100}
   validates :mobile_phone, :length => {:maximum => 100}
-  validates :email2, :length => {:maximum => 100}
-  validates :country, :length => {:maximum => 100}
-  validates :province, :length => {:maximum => 100}
-  validates :city, :length => {:maximum => 100}
-  validates :zip_code, :length => {:maximum => 20}
-  # validates :code, :uniqueness => true
-  # validates :email2, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }
-
   validates :password, :confirmation => true
   validates :password, :presence => true, on: :create
   validates :password, format: { with: /(?![0-9a-z]+$)(?![a-zA-Z]+$)(?![0-9A-Z]+$)[\S]{8,}/ }, allow_nil: true
+  validates :department_id, :presence => false
 
   attr_accessor :password_confirmation
   attr_reader   :password
@@ -40,13 +20,11 @@ class User < ApplicationRecord
   has_many :user_roles, dependent: :delete_all
   has_many :roles, :through => :user_roles
   # 每一个用户只能同时属于一个部门（根据发布系统公告的权限以及系统对于用户查看被审计对象资料数据权限的控制原则可以看出）
-  belongs_to :department
-  # has_many :user_departments, dependent: :delete_all
-  # has_many :departments, :through => :user_departments
+  belongs_to :department, required: false
+  belongs_to :organization, required: false
 
   has_many :notifications
   has_many :sys_logs
-  # has_many :tool_files
 
   has_many :favorites
 
@@ -86,23 +64,18 @@ class User < ApplicationRecord
     end
   end
 
-  # 判断用户是否是'被审计单位'用户？
-  def is_org_of?(org_name)
-    d = self.department&.department_route&.split(' / ')
-    if d.present? and d.size > 1
-      if d[1] =~ /(.*)#{org_name}(.*)/
-        return true
-      else
-        return false
-      end
-    else
-      return false
-    end
-  end
-
   # 用于SAML登录密码验证
   def valid_password?(password)
     if self.hashed_password == User.encrypt_password(password, self.salt)
+      true
+    else
+      false
+    end
+  end
+
+  # 是否是平台管理员
+  def admin?
+    if self.login == 'admin'
       true
     else
       false

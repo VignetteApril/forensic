@@ -1,29 +1,26 @@
-= render "layouts/system_maintenance" 
-#content
-  .container-fluid
-    = get_bread_crumb
-    = get_notice_bar
-    .row
-      .col-sm-5
-        table.table.table-hover.table-condensed#role-list style="table-layout:fixed;"
-          thead
-            tr
-              th style="width:150px;" 名称
-              th 所属地区
-              th 角色描述
-              th style="width:30px;"
-          tbody
-            - @roles.each do |role|
-              tr id="role-#{role.id}" class="#{'info' if role == @role}"
-                td
-                  = role.name
-                td align="center"
-                  = role.orgnization_name
-                td
-                  = h(role.description)
-                td
-                  / = link_to role_features_grid_feature_path(role), pre_role_id: @role.id, remote: true do
-                  = link_to features_path(role_id: role.id)  do
-                    = raw("<span class='glyphicon glyphicon-user' aria-hidden='true' title='查看角色对应功能'></span>")
-      #role-features-grid.col-sm-7
-        = render partial: "role_features_grid", :locals => {role: @role, features: @features}
+.row
+  .card
+    .card-header
+      h3.card-title 角色权限管理
+    .card-body
+      .row
+        .col-md-5
+          .table-responsive
+            table.table-hover.table-outline.table-vcenter.text-nowrap.card-table
+              thead
+                tr
+                  th style="width:150px;" 名称
+                  th 角色描述
+                  th style="width:30px;"
+              tbody
+                - @roles.each do |role|
+                  tr id="role-#{role.id}" class="#{'info' if role == @role}"
+                    td
+                      = role.name
+                    td
+                      = h(role.description)
+                    td
+                      = link_to '查看权限',features_path(role_id: role.id), class: 'btn btn-secondary btn-sm'
+        .col-md-7
+          .table-responsive
+            = render partial: "role_features_grid", :locals => {role: @role, features: @features}

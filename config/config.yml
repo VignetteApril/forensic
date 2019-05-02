@@ -32,6 +32,7 @@ features:
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
   - [个人事务提醒,notifications,"index,show,edit",平台]
   - [被审计对象登录系统,session,"ao,aologin,aosignin",平台]
+  - [机构管理, organizations,"index,new,edit,create,destroy",系统管理]
 apps:
   - name: 系统管理
     module_chain:

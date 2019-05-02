@@ -191,31 +191,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # 将params中的wice_grid条件转换成where条件数组
-  # def get_where_array(q_hash)
-  #   if q_hash.present? && !q_hash.empty? && !q_hash["f"].blank? && !q_hash["f"].empty?
-  #     query_con = q_hash["f"]
-  #     qq1 = ""
-  #     query_conn = {}
-  #     query_con.each do |k, v|
-  #       if v.class == Hash || v.class == ActionController::Parameters
-  #         if v.include?("fr")
-  #           qq1 += " AND #{k} >= '#{v['fr']}' "
-  #         end
-  #         if v.include?("to")
-  #           qq1 += " AND #{k} <= '#{v['to']}' "
-  #         end
-  #         if v.include?("eq")
-  #           qq1 += " AND #{k} = '#{v['eq']}' "
-  #         end
-  #       else
-  #         qq1 += " AND #{k} LIKE '%#{v}%' "
-  #       end
-  #     end
-  #     query_conn = qq1[4, qq1.length-1] if qq1.length > 4
-  #     return query_conn
-  #   else
-  #     return " 1=1 "
-  #   end
-  # end
+  # 判断当前用户是否是平台管理员
+  def admin?
+    !(SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
+  end
 end

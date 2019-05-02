@@ -4,7 +4,17 @@
       i class="fe fe-flag"
     | 机构管理
 .list-group.list-group-transparent.mb-0
-  a href="#" class="list-group-item list-group-item-action"
+  a href="#{users_path}" class="#{active_class(controller, 'users')}"
     span class="icon mr-3"
-      i class="fe fe-alert-triangle"
+      i class="fe fe-user"
     | 用户管理
+.list-group.list-group-transparent.mb-0
+  a href="#{features_path}" class="#{active_class(controller, 'features')}"
+    span class="icon mr-3"
+      i class="fe fe-shield"
+    | 角色权限管理
+.list-group.list-group-transparent.mb-0
+  a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
+    span class="icon mr-3"
+      i class="fe fe-users"
+    | 用户角色管理

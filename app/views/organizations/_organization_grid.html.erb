@@ -1,25 +1,37 @@
-<%= grid(@organizations, hide_submit_button: true, hide_reset_button: true) do |g|
-  g.column name: '机构名称', attribute: 'name' do |organization|
+<%= grid(@organizations, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
+  g.column name: '机构名称', attribute: 'name', ordering: false do |organization|
     organization.name
   end
 
-  g.column name: '机构编码', attribute: 'code' do |organization|
+  g.column name: '机构类型', attribute: 'org_type', ordering: false do |organization|
+    Organization::ORG_TYPE_MAP[organization.org_type.try(:to_sym)]
+  end
+
+  g.column name: '机构编码', attribute: 'code', ordering: false do |organization|
     organization.code
   end
 
-  g.column name: '机构简介', attribute: 'desc' do |organization|
+  g.column name: '机构简介', attribute: 'desc', ordering: false do |organization|
     organization.desc
   end
 
-  g.column name: '机构地址', attribute: 'addr' do |organization|
+  g.column name: '机构地址', attribute: 'addr', ordering: false do |organization|
     organization.addr
   end
 
-  g.column name: '机构电话', attribute: 'phone' do |organization|
+  g.column name: '机构电话', attribute: 'phone', ordering: false do |organization|
     organization.phone
   end
 
-  g.column name: '机构微信号', attribute: 'wechat_id' do |organization|
+  g.column name: '机构微信号', attribute: 'wechat_id', ordering: false do |organization|
     organization.wechat_id
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |organization|
+    link_to '编辑', edit_organization_path(organization), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |organization|
+    link_to '删除', organization, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
   end
 end -%>

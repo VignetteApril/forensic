@@ -2,6 +2,9 @@
 
 module ApplicationHelper
   # include SLicense
+  def admin?
+    !(SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
+  end
 
   # 用户权限验证功能模块
   def can?(controller_name, action_name)

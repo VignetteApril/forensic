@@ -5,7 +5,7 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    @organizations = initialize_grid(Organization.all, per_page: 2, name: 'organizations')
+    @organizations = initialize_grid(Organization.all, per_page: 20, name: 'organizations')
   end
 
   # GET /organizations/1
@@ -29,7 +29,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to organizations_path, notice: 'Organization was successfully created.' }
+        format.html { redirect_to organizations_path, notice: '组织已经被成功的创建！' }
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class OrganizationsController < ApplicationController
   def update
     respond_to do |format|
       if @organization.update(organization_params)
-        format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
+        format.html { redirect_to organizations_path, notice: '组织已经被成功的更新！' }
         format.json { render :show, status: :ok, location: @organization }
       else
         format.html { render :edit }
@@ -57,7 +57,7 @@ class OrganizationsController < ApplicationController
   def destroy
     @organization.destroy
     respond_to do |format|
-      format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.' }
+      format.html { redirect_to organizations_url, notice: '组织已经被成功的删除！' }
       format.json { head :no_content }
     end
   end
@@ -70,6 +70,6 @@ class OrganizationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
-      params.require(:organization).permit(:name, :code, :desc, :area_id, :addr, :phone, :wechat_id)
+      params.require(:organization).permit(:name, :code, :desc, :area_id, :addr, :phone, :wechat_id, :org_type)
     end
 end

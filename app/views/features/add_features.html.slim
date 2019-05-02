@@ -1,14 +1,15 @@
-= render "layouts/system_maintenance" 
-#content
-  .container-fluid
-    = get_bread_crumb
-    = form_tag "/features/#{@role.id}/add_features_submit", method: :get do |f|
-      .row
-        .col-sm-12
+.row
+  = link_to '返回', features_path, class: "btn btn-primary mb-2"
+  .card
+    .card-header
+      h3.card-title 角色权限管理
+    .card-body
+      = form_tag "/features/#{@role.id}/add_features_submit", method: :get do |f|
+        .row
+          .col-sm-12
             .btn-group.btn-group-sm role="group" aria-label="..."
-              = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
-              button.wg-external-submit-button.btn.btn-default data-grid-name="features" 过滤
-              button.wg-external-reset-button.btn.btn-default data-grid-name="features" 清除过滤条件
+              button.wg-external-submit-button.btn.btn-primary data-grid-name="features" 过滤
+              button.wg-external-reset-button.btn.btn-secondary data-grid-name="features" 清除过滤条件
             | &nbsp;
             .btn-group.btn-group-sm role="group" aria-label="..."
               - if can?("features", "add_features_submit") && can_sys?(@role)
@@ -16,7 +17,8 @@
             span.h5
               | &nbsp;&nbsp;当前角色：
               = @role.name
-      br
-      .row
-        .col-sm-12
-          = render "add_features_grid" 
+        br
+        .row
+          .col-sm-12
+            = render "add_features_grid"
+

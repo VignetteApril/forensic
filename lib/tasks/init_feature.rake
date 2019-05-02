@@ -1,16 +1,10 @@
 desc "系统初始化功能和授权"
 task :init_feature => :environment do
   puts "初始化所有的系统功能"
-  # Feature.delete_all
-  # puts Rails.configuration.x.application["features"]
+
   features = YAML.load_file(Rails.root.join("config","config.yml"))["features"]
-  Dir::foreach(Rails.root.join("config", "engine_configs")) do |f|
-    features += YAML.load_file(Rails.root.join("config","engine_configs", f))["features"] if f != '.' && f != '..'
-  end
 
   features.each do |name, controller_name, action_names, app|
-    # Feature.create :name => name, :controller_name => controller_name, :action_names => action_names
-    # puts 'feature: ' << name
     f = Feature.where(name: name, app: app).take
     if f
       if f.controller_name != controller_name || f.action_names != action_names

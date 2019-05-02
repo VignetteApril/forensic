@@ -1,45 +1,33 @@
-= render "layouts/system_maintenance" 
-#content
-  .container-fluid
-    = get_bread_crumb
-    = get_notice_bar
-    .row
-      .col-sm-5
-        .row
-          .col-sm-12
-            .btn-group.btn-group-sm role="group" aria-label="..."
-              - if can?("roles", "new")
-                = link_to '新建角色', new_role_path, class: "btn btn-primary"
-        .row
-          .col-sm-12
-            table.table.table-hover.table-condensed#role-list style="table-layout:fixed;"
+.row
+  .card
+    .card-header
+      h3.card-title 用户角色管理
+      - if can?("roles", "new")
+        = link_to '新建角色', new_role_path, class: "btn btn-primary", style: 'margin-left: auto'
+    .card-body
+      .row
+        .col-md-6
+          .table-responsive
+            table.table-hover.table-outline.table-vcenter.text-nowrap.card-table
               thead
                 tr
-                  th style="width:150px;" 名称
-                  th 所属地区
+                  th 角色名称
                   th 角色描述
-                  th colspan="3" style="width:90px;"
+                  th
               tbody
                 - @roles.each do |role|
                   tr id="role-#{role.id}" class="#{'info' if role == @role}"
-                    td
+                    td style="width: 120px"
                       = role.name
-                    td align="center"
-                      = role.orgnization_name
                     td
                       = h(role.description)
-                    td
-                      - if can?("roles", "edit") && can_sys?(role)
-                        = link_to edit_role_path(role)  do
-                          = raw("<span class='glyphicon glyphicon-edit' aria-hidden='true' title='编辑角色信息'></span>")
-                    td
-                      - if can?("roles", "destroy") && can_sys?(role)
-                        = link_to role, method: :delete, data: { confirm: '您确认删除吗？该角色所拥有的用户也同时失去与该角色的关联(用户本身并不删除)。' } do
-                          = raw("<span class='glyphicon glyphicon-trash' aria-hidden='true' title='删除角色'></span>")  
-                    td
+                    td.text-center
                       - if can?("roles", "index")
-                        / = link_to role_users_grid_role_path(role, pre_role_id: @role.id), remote: true do
-                        = link_to roles_path(role_id: role.id) do
-                          = raw("<span class='glyphicon glyphicon-user' aria-hidden='true' title='查看角色对应人员'></span>")
-      #role-users-grid.col-sm-7
-        = render partial: "role_users_grid", :locals => {role: @role, users: @users}
+                        = link_to '查看', roles_path(role_id: role.id), class: 'btn btn-secondary btn-sm mr-1'
+                      - if can?("roles", "edit") && can_sys?(role)
+                        = link_to '编辑', edit_role_path(role), class: 'btn btn-secondary btn-sm mr-1'
+                      - if can?("roles", "destroy") && can_sys?(role)
+                        = link_to '删除', role, method: :delete, data: {confirm: '您确认删除吗？该角色所拥有的用户也同时失去与该角色的关联(用户本身并不删除)。'}, class: 'btn btn-danger btn-sm mr-1'
+        .col-sm-6
+          .table-responsive
+            = render partial: "role_users_grid", :locals => {role: @role, users: @users}
