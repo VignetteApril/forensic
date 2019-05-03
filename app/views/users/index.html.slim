@@ -3,5 +3,11 @@
     .card-header
       h3.card-title 用户管理
       = link_to '新建用户', new_user_path, class: 'btn btn-primary', style: 'margin-left: auto' if can?("users", "new")
-    .table-responsive
-      = render partial: "users_grid", :locals => {users: @users}
+    .card-body
+      .row
+        .btn-group.btn-group-sm role="group" aria-label="..."
+          button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='users' 过滤
+          button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='users' 清除过滤条件
+      .row
+        .table-responsive
+          = render partial: "users_grid", :locals => {users: @users}

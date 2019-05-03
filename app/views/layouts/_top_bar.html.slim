@@ -41,9 +41,9 @@
             = image_tag "homepage/avatar.jpg", class: "avatar"
             span.ml-2.d-none.d-lg-block
               span.text-default
-               | Jane Pearson
+               = @current_user.name
               small.text-muted.d-block.mt-1
-               | Administrator
+               = @current_user.roles.first.name if @current_user.roles
           .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
             a.dropdown-item href="#"
               i.dropdown-icon.fe.fe-user

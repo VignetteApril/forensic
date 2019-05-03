@@ -17,30 +17,38 @@
   </div>
 </div>
 <br>
-<div class="row">
-  <div class="col-sm-12">
-    <%= grid(users, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
-      g.column name: '登录名', attribute: 'login' do |user|
-        user.login
-      end
+<div class="table-responsive">
+  <div class="row">
+    <div class="col-sm-12">
+      <%= grid(users, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+        g.column name: '登录名', attribute: 'login' do |user|
+          user.login
+        end
 
-      g.column name: '真实姓名', attribute: 'name', ordering: false do |user|
-        link_to user.name, user_path(user)
-      end
+        g.column name: '真实姓名', attribute: 'name', ordering: false do |user|
+          link_to user.name, user_path(user)
+        end
 
-      g.column name: '所属机构', attribute: 'orgnization_name', ordering: false,
-               custom_filter: SysConfig.accounting_level, allow_multiple_selection: false do |user|
-        user.organization.name if user.organization
-      end
+         # 平台管理员只关注用户的机构级别的信息
+          if admin?
+            g.column name: '所属机构', attribute: 'organization_id', ordering: false,
+                     custom_filter: Organization.all.map{ |organization| [organization.name, organization.id] }, allow_multiple_selection: false do |a|
+              a.organization.name if a.organization
+            end
+          else
+          # 机构管理员只关注用户的科室级别的信息
+            g.column name: '所属科室', attribute: 'department_id', ordering: false,
+                     custom_filter: @current_user.organization.departments.map{ |department| [department.name, department.id] }, allow_multiple_selection: false do |a|
+              a.department.name if a.department
+            end
+          end
 
-      g.column in_csv: false, html: {style: "width:30px;"}  do |user|
-        if can?("roles", "remove_user_from_role") && can_sys?(role)
-          # link_to remove_user_from_role_role_path(role, user_id: user.id), remote: true, method: :delete, data: { confirm: '您确认移除该用户吗？' } do 
-          link_to remove_user_from_role_role_path(role, user_id: user.id), method: :delete, data: { confirm: '您确认移除该用户吗？' } do 
-            raw("<span class='glyphicon glyphicon-remove' aria-hidden='true' title='从该角色中移除此用户'></span>")
+        g.column in_csv: false, html: {style: "width:30px;"}  do |user|
+          if can?("roles", "remove_user_from_role") && can_sys?(role)
+            link_to '移除用户', remove_user_from_role_role_path(role, user_id: user.id), method: :delete, data: { confirm: '您确认移除该用户吗？' }, class: 'btn btn-danger btn-sm'
           end
         end
-      end
-    end -%>
+      end -%>
+    </div>
   </div>
 </div>

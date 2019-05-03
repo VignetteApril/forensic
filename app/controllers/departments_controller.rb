@@ -1,43 +1,26 @@
 # -*- encoding : utf-8 -*-
 class DepartmentsController < ApplicationController
+  layout 'system'
+
   before_action :set_department, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_department]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_department]
 
-  # 管理员进入“部门管理”功能，系统以树状方式显示所有部门列表。 
-  # 部门列表页面显示“新增部门”按钮，针对每一个部门节点，系统显示“编辑”按钮、“删除”按钮和“人员”链接。
   def index
-    init_bread('部门管理')
-    @department = params[:id] ? Department.find(params[:id]) : Department.all.first
-    d_string = []
-    Department.order('sort_no').each do |d|
-      d_string << {  id: d.id,
-                     parent: d.parent ? d.parent.id : '#',
-                     text: d.name,
-                     state: { opened: false, selected: (d==@department ? true : false) },
-                     a_attr: { href: "/departments?id=#{d.id}" },
-                     type: d.leaf? ? 'department' : 'default' }
-    end
-    @departments_str = d_string # "[#{d_string[0, (d_string.length-1)]}]"
-    @users = initialize_grid(@department.users, order: 'sort_no', order_direction: 'asc', per_page: 20, name: 'department_users_grid')
+    @departments = initialize_grid(Department, per_page: 20, name: 'departments_grid')
   end
     
   # 管理员点击部门列表页面中的“新增部门”按钮，系统显示“新增部门”表单页面。
   def new
-    cal_bread('新建部门')
-    @department = Department.find(params[:parent_id]).children.new
+    @department = Department.new
   end
 
   # 管理员针对某一个部门节点，点击“编辑”按钮，系统显示部门信息编辑表单页面。
   def edit
-    cal_bread('编辑部门信息')
   end
 
   # 管理员填写新增的部门信息之后点击“提交”按钮，系统保存新部门信息并返回部门列表页面。
   def create
-    @department = Department.find(department_params[:parent_id]).children.new(department_params)
-    if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      # @department.orgnization_name = @current_user.orgnization_name
-    end
+    @department = Department.new(department_params)
 
     respond_to do |format|
       if @department.save
@@ -68,17 +51,13 @@ class DepartmentsController < ApplicationController
   end
   # 管理员在部门人员列表页面中，点击 “加入”按钮,系统显示所有人员的列表
   def add_users
-    cal_bread('部门人员维护')
     if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      @users = initialize_grid( User, per_page: 50,
-                                conditions: { orgnization_name: @current_user.orgnization_name },
-                                order: 'sort_no', order_direction: 'asc',
+      @users = initialize_grid( User, per_page: 20,
+                                conditions: { organization_id: @current_user.organization.id },
                                 name: 'users' )
     else
       # @users = initialize_grid(User, per_page: 20, name: 'users')
-      @users = initialize_grid( User, per_page: 50,
-                                order: 'sort_no', order_direction: 'asc',
-                                name: 'users' )
+      @users = initialize_grid( User, per_page: 20, name: 'users' )
     end
   end
   
@@ -115,6 +94,11 @@ class DepartmentsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def department_params
-    params.require(:department).permit(:parent_id, :name, :description, :code, :brief, :sort_no, :admin_level, :role_type, :contact, :orgnization_name)
+    params.require(:department).permit( :parent_id,
+                                        :name,
+                                        :description,
+                                        :code,
+                                        :sort_no,
+                                        :organization_id )
   end
 end

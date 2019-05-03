@@ -29,5 +29,4 @@
                       - if can?("roles", "destroy") && can_sys?(role)
                         = link_to '删除', role, method: :delete, data: {confirm: '您确认删除吗？该角色所拥有的用户也同时失去与该角色的关联(用户本身并不删除)。'}, class: 'btn btn-danger btn-sm mr-1'
         .col-sm-6
-          .table-responsive
-            = render partial: "role_users_grid", :locals => {role: @role, users: @users}
+          = render partial: "role_users_grid", :locals => {role: @role, users: @users}

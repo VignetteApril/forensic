@@ -140,6 +140,7 @@ class ApplicationController < ActionController::Base
   # 2. 所在功能模块所在的频道中第一个能访问的功能模块
   # 3. 系统首页
   def acceptable_url(controller, action)
+
     # current_user = User.find(session[:user_id])
     APPS.each do |channel|
       next if channel["module_chain"].nil?
@@ -163,6 +164,7 @@ class ApplicationController < ActionController::Base
               end
             end
           end
+
           # 3. 如果还没有权限的话，则返回到系统首页面
           return "/"
         end

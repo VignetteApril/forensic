@@ -1,4 +1,3 @@
-# customer_code: SHIKEDEMO
 title: 司法鉴定平台
 subtitle: 基于大数据技术的快速分析系统
 provider:
@@ -31,18 +30,18 @@ features:
   - [任务管理,delayed_jobs,"index",系统管理]
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
   - [个人事务提醒,notifications,"index,show,edit",平台]
-  - [被审计对象登录系统,session,"ao,aologin,aosignin",平台]
   - [机构管理, organizations,"index,new,edit,create,destroy",系统管理]
 apps:
   - name: 系统管理
     module_chain:
-      - { controller: 'delayed_jobs', action: }
-      - { controller: 'sys_configs', action: }
+#      - { controller: 'delayed_jobs', action: }
+#      - { controller: 'sys_configs', action: }
       - { controller: 'users', action: }
       - { controller: 'departments', action: }
       - { controller: 'roles', action: }
       - { controller: 'features', action: }
-      - { controller: 'sys_logs', action: }
+#      - { controller: 'sys_logs', action: }
+      - { controller: 'organizations', action: }
 
 # 关于User属性设置的各种选项
 user_politics_status: [中共党员,预备党员,共青团员,民革党员,民盟党员,民建党员,民进党员,农工党员,致公党员,九三学社,台盟党员,群众]
@@ -203,38 +202,3 @@ skin: '00'
 # file_dir: /Users/dongzhen/ruby_apps/jshike/public/
 # Linux
 # file_dir: /home/navigator/ruby_apps/jshike/public/
-
-# 全文检索关键字黑名单
-# black_word: []
-
-# 核算级次
-# accounting_level: [本级]
-  # - [本级, BJ, 0, 所有部门]
-  # - [市本级, BJ, 510101, 庐州市审计局]
-  # - [高新区, GX, 510109, 高新区审计局]
-  # - [天府区, TF, 510141, 天府区审计局]
-  # - [成夏区, CH, 510108, 成夏区审计局]
-  # - [拜州市, CZ, 510184, 拜州市审计局]
-  # - [蓝邑县, DY, 510129, 蓝邑县审计局]
-  # - [都江市, DJ, 510181, 都江市审计局]
-  # - [繁阳市, JY, 510186, 繁阳市审计局]
-  # - [金马区, JN, 510106, 金马区审计局]
-  # - [银堂县, JT, 510121, 银堂县审计局]
-  # - [素江区, JJ, 510104, 素江区审计局]
-  # - [龙泉区, LQ, 510112, 龙泉区审计局]
-  # - [莱州市, PZ, 510182, 莱州市审计局]
-  # - [排排县, PX, 510124, 排排县审计局]
-  # - [团江县, PJ, 510131, 团江县审计局]
-  # - [白江区, QB, 510113, 白江区审计局]
-  # - [青牛区, QY, 510105, 青牛区审计局]
-  # - [江莱市, QL, 510183, 江莱市审计局]
-  # - [单流区, SL, 510122, 单流区审计局]
-  # - [冷江区, WJ, 510115, 冷江区审计局]
-  # - [文侯区, WH, 510107, 文侯区审计局]
-  # - [原都区, XD, 510114, 原都区审计局]
-  # - [原津县, XJ, 510132, 原津县审计局]
-
-# 标记部门的非叶子节点是否可以包含用户？
-# department_onlyleaf_can_has_user: true
-# 哪些角色的用户可以查看所有的被审计对象
-# super_roles: [系统管理员,财政数据全域查询]

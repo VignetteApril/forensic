@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_02_074532) do
+ActiveRecord::Schema.define(version: 2019_05_03_102224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,13 +45,8 @@ ActiveRecord::Schema.define(version: 2019_05_02_074532) do
     t.text "description"
     t.string "parent_id"
     t.string "ancestry"
-    t.string "brief", limit: 100
     t.integer "sort_no"
     t.string "code", limit: 20, default: "0000000000", null: false
-    t.string "admin_level", limit: 100
-    t.string "role_type", limit: 100
-    t.string "contact"
-    t.string "orgnization_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "organization_id"

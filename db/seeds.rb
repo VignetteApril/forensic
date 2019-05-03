@@ -21,11 +21,6 @@ role = Role.find_or_create_by name: '系统管理员'
 puts "关联系统管理员角色和用户"
 UserRole.find_or_create_by user_id: user.id, role_id: role.id
 
-puts "初始化根部门节点"
-Department.delete_all
-department = Department.create! name: '所有科室', sort_no: 0, admin_level: '本级', orgnization_name: '本级'
-department1 = Department.create! name: '本科室', sort_no: 0, parent: department, orgnization_name: '本级'
-
 puts "关联系统管理员用户和根部门"
 user.update(department_id: department1.id)
 

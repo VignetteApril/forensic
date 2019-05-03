@@ -3,5 +3,6 @@
     .card-header
       h3.card-title 组织机构管理
       = link_to '新建机构', new_organization_path, class: 'btn btn-primary', style: 'margin-left: auto'
-    .table-responsive
-      = render partial: "organization_grid", :locals => {organizations: @organizations}
+    .card-body
+      .table-responsive
+        = render partial: "organization_grid", :locals => {organizations: @organizations}

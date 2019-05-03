@@ -1,0 +1,25 @@
+<%= grid(@departments, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+  g.column name: '科室名称', attribute: 'name', ordering: false do |department|
+    department.name
+  end
+
+  g.column name: '科室编号', attribute: 'code', ordering: false do |department|
+    department.code
+  end
+
+  g.column name: '科室简介', attribute: 'description', ordering: false do |department|
+    department.description
+  end
+
+  g.column name: '所属机构', attribute: 'organization_id', ordering: false, custom_filter: organization_collection, allow_multiple_selection: false do |a|
+    a.organization.name if a.organization
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |department|
+    link_to '编辑', edit_department_path(department), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |department|
+    link_to '删除', department, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+  end
+end -%>

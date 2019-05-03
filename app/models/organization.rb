@@ -2,7 +2,8 @@
 class Organization < ApplicationRecord
 
   belongs_to :area
-  has_many :deparments
+  has_many :departments, dependent: :destroy # 每个机构有很多科室，当机构删除时，科室理应被删除
+  has_many :users, dependent: :destroy      # 每个机构中有很多个用户，当机构被删除时，用户理应被删除
 
   # 组织类型对照表
   ORG_TYPE_MAP = { court: '法院',

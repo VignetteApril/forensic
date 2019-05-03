@@ -2,6 +2,11 @@
 require 'digest/sha2'
 
 class User < ApplicationRecord
+  # 宏
+  attr_accessor :password_confirmation
+  attr_reader   :password
+
+  # 验证
   validates :login, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 50}
   validates :name, :length => {:maximum => 20}
   validates :email, :length => {:maximum => 100}, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_nil: true, allow_blank: true
@@ -11,22 +16,19 @@ class User < ApplicationRecord
   validates :password, :presence => true, on: :create
   validates :password, format: { with: /(?![0-9a-z]+$)(?![a-zA-Z]+$)(?![0-9A-Z]+$)[\S]{8,}/ }, allow_nil: true
   validates :department_id, :presence => false
+  validate  :password_must_be_present
 
-  attr_accessor :password_confirmation
-  attr_reader   :password
-
-  validate :password_must_be_present
-
+  # 关联
   has_many :user_roles, dependent: :delete_all
   has_many :roles, :through => :user_roles
-  # 每一个用户只能同时属于一个部门（根据发布系统公告的权限以及系统对于用户查看被审计对象资料数据权限的控制原则可以看出）
-  belongs_to :department, required: false
-  belongs_to :organization, required: false
-
   has_many :notifications
   has_many :sys_logs
-
   has_many :favorites
+  belongs_to :department, required: false   # 每一个用户只能同时属于一个科室
+  belongs_to :organization, required: false # 每一个用户只能同时属于一个机构
+
+  # callbacks
+  before_create :set_organization, if: :organization_empty?
 
   # 所有具有某一权限的用户集合
   def self.has_approval_role(action)
@@ -80,6 +82,16 @@ class User < ApplicationRecord
     else
       false
     end
+  end
+
+  # 通过当前部门设置机构
+  def set_organization
+    self.organization = self.department.organization
+  end
+
+  # 判断当前机构是否为空
+  def organization_empty?
+    self.organization.nil?
   end
 
   private
