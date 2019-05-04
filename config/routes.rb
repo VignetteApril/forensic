@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/delayed_job" => BetterDelayedJobWeb, :anchor => false, :via => [:get, :post]
 
@@ -47,7 +48,10 @@ Rails.application.routes.draw do
   end
 
   resources :organizations
-  
+
+  post 'areas/cities'
+  post 'areas/districts'
+
   get 'aologin' => 'session#aologin'
   get 'aosignin' => 'session#aosignin'
   get 'ao' => 'session#ao'

@@ -197,4 +197,17 @@ class ApplicationController < ActionController::Base
   def admin?
     !(SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
   end
+
+  # 判断当前地区的id
+  def _area_id(province_id, city_id, district_id)
+    if !district_id.blank?
+      district_id
+    else
+      if !city_id.blank?
+        city_id
+      else
+        province_id
+      end
+    end
+  end
 end

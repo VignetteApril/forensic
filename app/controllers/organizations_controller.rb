@@ -1,5 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :set_provinces, only: [:new, :edit]
   layout 'system'
 
   # GET /organizations
@@ -26,10 +27,12 @@ class OrganizationsController < ApplicationController
   # POST /organizations.json
   def create
     @organization = Organization.new(organization_params)
-
+    @organization.area_id = _area_id(organization_params[:province_id],
+                                     organization_params[:city_id],
+                                     organization_params[:district_id])
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to organizations_path, notice: '组织已经被成功的创建！' }
+        format.html { redirect_to organizations_url, notice: '组织已经被成功的创建！' }
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -41,10 +44,12 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
+    @organization.area_id = _area_id(organization_params[:province_id],
+                                     organization_params[:city_id],
+                                     organization_params[:district_id])
     respond_to do |format|
       if @organization.update(organization_params)
-        format.html { redirect_to organizations_path, notice: '组织已经被成功的更新！' }
-        format.json { render :show, status: :ok, location: @organization }
+        format.html { redirect_to organizations_url, notice: '组织已经被成功的更新！' }
       else
         format.html { render :edit }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
@@ -70,6 +75,20 @@ class OrganizationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
-      params.require(:organization).permit(:name, :code, :desc, :area_id, :addr, :phone, :wechat_id, :org_type)
+      params.require(:organization).permit(:name,
+                                           :code,
+                                           :desc,
+                                           :area_id,
+                                           :addr,
+                                           :phone,
+                                           :wechat_id,
+                                           :org_type,
+                                           :province_id,
+                                           :city_id,
+                                           :district_id)
+    end
+
+    def set_provinces
+      @provinces = Area.roots
     end
 end

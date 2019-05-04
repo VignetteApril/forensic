@@ -19,6 +19,10 @@
     organization.addr
   end
 
+  g.column name: '行政区划', attribute: 'area_id', ordering: false do |organization|
+    organization.area.display_name
+  end
+
   g.column name: '机构电话', attribute: 'phone', ordering: false do |organization|
     organization.phone
   end

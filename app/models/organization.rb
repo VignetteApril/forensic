@@ -1,5 +1,6 @@
 # 机构组织
 class Organization < ApplicationRecord
+  attr_accessor :province_id, :city_id, :district_id
 
   belongs_to :area
   has_many :departments, dependent: :destroy # 每个机构有很多科室，当机构删除时，科室理应被删除
