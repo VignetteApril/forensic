@@ -99,6 +99,7 @@ class DepartmentsController < ApplicationController
                                         :description,
                                         :code,
                                         :sort_no,
-                                        :organization_id )
+                                        :organization_id,
+                                        :matter)
   end
 end
