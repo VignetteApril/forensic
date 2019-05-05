@@ -1,0 +1,7 @@
+.row
+  = link_to '返回', doc_templates_path, class: 'btn btn-primary mb-2'
+  .card
+    .card-header
+      h3.card-title 编辑模板
+    .card-body
+      = render 'form', doc_template: @doc_template

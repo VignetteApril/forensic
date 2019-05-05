@@ -1,0 +1,7 @@
+= simple_form_for(@doc_template) do |f|
+
+  .form-inputs
+    = f.input :desc, label: '模板描述'
+    = f.input :attachment, label: '模板文件', as: :file, input_html: { direct_upload: true }
+  .form-actions
+    = f.button :submit, '保存', class: 'btn btn-success'

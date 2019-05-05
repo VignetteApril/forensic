@@ -26,7 +26,10 @@
 //= require tabler/tabler
 //= require tabler/vendors/circle-progress.min
 //= require tabler/core
-//= require custom_js/organizations.js
+
+//= require custom_js/organizations
+//= require custom_js/direct_uploads
+//= require custom_js/doc_templates
 
 // 处理select2在turbolinks的bug
 $(document).on("turbolinks:before-cache", function() {

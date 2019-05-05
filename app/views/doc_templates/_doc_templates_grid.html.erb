@@ -1,0 +1,21 @@
+<%= grid(@doc_templates, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
+  g.column name: '模板名称', attribute: 'name', ordering: false do |doc_template|
+    doc_template.name
+  end
+
+  g.column name: '模板描述', attribute: 'desc', ordering: false do |doc_template|
+    doc_template.desc
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|
+    link_to '下载', rails_blob_path(doc_template.attachment, disposition: 'attachment')
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|
+    link_to '编辑', edit_doc_template_path(doc_template), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|
+    link_to '删除', doc_template, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+  end
+end -%>
