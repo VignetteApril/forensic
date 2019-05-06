@@ -24,11 +24,23 @@ class DepartmentDoc < ApplicationRecord
                      executing: '鉴定执行',
                      archived: '归档' }
 
+  def case_stage_cn_name
+    CASE_STAGE_MAP[self.case_stage.to_sym]
+  end
+
   class << self
     def collection_select_arr
       rs = []
       case_stages.each do |key, value|
         rs << [CASE_STAGE_MAP[key.to_sym], key]
+      end
+      rs
+    end
+
+    def collection_filter_arr
+      rs = []
+      case_stages.each do |key, value|
+        rs << [CASE_STAGE_MAP[key.to_sym], value]
       end
       rs
     end

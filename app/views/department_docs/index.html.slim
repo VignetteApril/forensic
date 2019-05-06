@@ -5,5 +5,10 @@
       h3.card-title 科室模板文档管理
       = link_to '新建模板文档', new_department_department_doc_path(@department), class: 'btn btn-primary', style: 'margin-left: auto;'
     .card-body
-      .responsive-table
-        = render 'department_docs_grid'
+      .row
+        .btn-group.btn-group-sm role="group" aria-label="..."
+          button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='department_docs_grid' 过滤
+          button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='department_docs_grid' 清除过滤条件
+      .row
+        .table-responsive
+          = render 'department_docs_grid'

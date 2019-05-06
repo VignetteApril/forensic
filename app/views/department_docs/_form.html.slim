@@ -10,7 +10,6 @@
             = message
   .form-inputs
     = f.input :name, label: '名称'
-    = f.input :filename, label: '文件名'
     = f.input :doc_code, label: '文件编码'
     = f.input :case_stage, label: '案件阶段', collection: DepartmentDoc.collection_select_arr
     = f.input :check_archived, label: '是否归档检查'

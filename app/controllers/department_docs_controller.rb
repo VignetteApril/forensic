@@ -47,7 +47,7 @@ class DepartmentDocsController < ApplicationController
     attachment_blob = @department_doc.attachment.blob
 
     respond_to do |format|
-      if @department_doc.update(department_doc_params)
+      if @department_doc.update(department_doc_params.to_h.merge(filename: attachment_blob.filename))
         # 删除之前的文档
         attachment_blob.purge
         # 添加文档
@@ -85,7 +85,6 @@ class DepartmentDocsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def department_doc_params
       params.require(:department_doc).permit(:name,
-                                             :filename,
                                              :doc_code,
                                              :case_stage,
                                              :check_archived,
@@ -101,6 +100,7 @@ class DepartmentDocsController < ApplicationController
         @department_doc.attachment.attach io: StringIO.new(doc_template.attachment.download),
                                           filename: doc_template.attachment.filename,
                                           content_type: doc_template.attachment.content_type
+        @department_doc.update(filename: doc_template.attachment.filename)
       end
     end
 end

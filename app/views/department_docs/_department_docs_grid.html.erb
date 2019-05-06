@@ -3,6 +3,27 @@
     department_doc.name
   end
 
+  g.column name: '文件名称', attribute: 'filename', ordering: false do |department_doc|
+    department_doc.filename
+  end
+
+  g.column name: '文件编号', attribute: 'doc_code', ordering: false do |department_doc|
+    department_doc.doc_code
+  end
+
+  g.column name: '案件阶段', attribute: 'case_stage', custom_filter: DepartmentDoc.collection_filter_arr,
+                  ordering: false, allow_multiple_selection: false do |department_doc|
+    department_doc.case_stage_cn_name
+  end
+
+  g.column name: '是否归档检查', attribute: 'check_archived', ordering: false do |department_doc|
+    department_doc.check_archived
+  end
+
+  g.column name: '归档检查顺序号', attribute: 'check_archived_no', ordering: false do |department_doc|
+    department_doc.check_archived_no
+  end
+
   g.column in_csv: false, html: {style: "width:15px;"}  do |department_doc|
     link_to '编辑', edit_department_department_doc_path(@department, department_doc), class: 'btn btn-secondary btn-sm'
   end

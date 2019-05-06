@@ -4,5 +4,10 @@
       h3.card-title 组织机构管理
       = link_to '新建机构', new_organization_path, class: 'btn btn-primary', style: 'margin-left: auto'
     .card-body
-      .table-responsive
-        = render partial: "organization_grid", :locals => {organizations: @organizations}
+      .row
+        .btn-group.btn-group-sm role="group" aria-label="..."
+          button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='organization_grid' 过滤
+          button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='organization_grid' 清除过滤条件
+      .row
+        .table-responsive
+          = render partial: "organization_grid", :locals => {organizations: @organizations}

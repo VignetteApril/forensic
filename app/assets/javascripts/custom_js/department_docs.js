@@ -3,6 +3,7 @@ $(document).on('turbolinks:load', function() {
         if ($('body').attr('data-action') === 'edit' || $('body').attr('data-action') === 'new') {
             var template_select = $('#department_doc_doc_template_id');
             var attachment_upload = $('.attachment_upload');
+            var upload_attachment = $('#department_doc_attachment');
 
             // 页面渲染完成后就检查当前select2元素是否选中了值
             if (template_select.val() != '') {
@@ -17,6 +18,7 @@ $(document).on('turbolinks:load', function() {
                     attachment_upload.removeClass('d-none');
                 } else {
                     attachment_upload.addClass('d-none');
+                    upload_attachment.val('');
                 }
             });
         }
