@@ -1,0 +1,2 @@
+module DepartmentDocsHelper
+end

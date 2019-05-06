@@ -16,6 +16,10 @@
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |department|
+    link_to '模板管理', department_department_docs_path(department), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |department|
     link_to '编辑', edit_department_path(department), class: 'btn btn-secondary btn-sm'
   end
 

@@ -32,6 +32,7 @@
 //= require custom_js/direct_uploads
 //= require custom_js/doc_templates
 //= require custom_js/departments
+//= require custom_js/department_docs
 
 
 // 处理select2在turbolinks的bug

@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-
-  resources :doc_templates
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/delayed_job" => BetterDelayedJobWeb, :anchor => false, :via => [:get, :post]
 
@@ -28,6 +26,7 @@ Rails.application.routes.draw do
   end
 
   resources :departments do
+    resources :department_docs
     get :department, :on => :member
     get :add_users, :on => :member
     get :add_users_submit, :on => :member
@@ -49,6 +48,7 @@ Rails.application.routes.draw do
   end
 
   resources :organizations
+  resources :doc_templates
 
   post 'areas/cities'
   post 'areas/districts'

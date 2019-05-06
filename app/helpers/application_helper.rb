@@ -175,8 +175,8 @@ module ApplicationHelper
     end
   end
 
-  def active_class(controller, controller_name)
-      if controller.controller_name == controller_name
+  def active_class(controller, *controller_name)
+      if controller_name.include?(controller.controller_name)
         return 'list-group-item list-group-item-action active'
       else
         return 'list-group-item list-group-item-action'

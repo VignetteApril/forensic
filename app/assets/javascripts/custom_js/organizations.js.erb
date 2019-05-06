@@ -1,8 +1,6 @@
 $(document).on('turbolinks:load', function() {
     if ($('body').attr('data-controller') === 'organizations') {
         if ($('body').attr('data-action') === 'edit' || $('body').attr('data-action') === 'new') {
-
-
             var province_select2 = $("#organization_province_id");
             var city_select2 = $("#organization_city_id");
             var district_select2 = $("#organization_district_id");

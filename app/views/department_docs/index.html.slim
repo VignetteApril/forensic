@@ -1,0 +1,9 @@
+.row
+  = link_to '返回', departments_path, class: 'btn btn-primary mb-2'
+  .card
+    .card-header
+      h3.card-title 科室模板文档管理
+      = link_to '新建模板文档', new_department_department_doc_path(@department), class: 'btn btn-primary', style: 'margin-left: auto;'
+    .card-body
+      .responsive-table
+        = render 'department_docs_grid'

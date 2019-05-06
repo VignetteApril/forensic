@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_05_133654) do
+ActiveRecord::Schema.define(version: 2019_05_06_071832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,6 +59,20 @@ ActiveRecord::Schema.define(version: 2019_05_05_133654) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "department_docs", force: :cascade do |t|
+    t.string "name"
+    t.string "filename"
+    t.string "doc_code"
+    t.integer "case_stage"
+    t.boolean "check_archived"
+    t.integer "check_archived_no"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "department_id"
+    t.integer "doc_template_id"
+    t.index ["department_id"], name: "index_department_docs_on_department_id"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -211,6 +225,7 @@ ActiveRecord::Schema.define(version: 2019_05_05_133654) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "department_docs", "departments"
   add_foreign_key "departments", "organizations"
   add_foreign_key "organizations", "areas"
   add_foreign_key "users", "organizations"

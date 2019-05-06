@@ -1,0 +1,13 @@
+<%= grid(@department_docs, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+  g.column name: '模板名称', attribute: 'name', ordering: false do |department_doc|
+    department_doc.name
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |department_doc|
+    link_to '编辑', edit_department_department_doc_path(@department, department_doc), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |department_doc|
+    link_to '删除', [@department, department_doc], method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+  end
+end -%>

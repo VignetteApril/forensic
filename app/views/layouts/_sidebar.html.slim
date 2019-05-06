@@ -19,13 +19,12 @@
       i class="fe fe-users"
     | 用户角色管理
 .list-group.list-group-transparent.mb-0
-  a href="#{departments_path}" class="#{active_class(controller, 'departments')}"
+  a href="#{departments_path}" class="#{active_class(controller, 'departments', 'department_docs')}"
     span class="icon mr-3"
       i class="fe fe-codepen"
     | 科室管理
-
 .list-group.list-group-transparent.mb-0
   a href="#{doc_templates_path}" class="#{active_class(controller, 'doc_templates')}"
     span class="icon mr-3"
       i class="fe fe-folder"
-    | 文档模板管理
+    | 模板文档管理

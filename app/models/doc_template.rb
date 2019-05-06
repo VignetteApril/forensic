@@ -6,4 +6,14 @@ class DocTemplate < ApplicationRecord
   def set_template_name
     self.name = attachment.blob.filename
   end
+
+  class << self
+    def collection_templates
+      rs = []
+      self.all.each do |template|
+        rs << [template.name, template.id]
+      end
+      rs
+    end
+  end
 end

@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @department_doc.name
+p
+  strong Filename:
+  = @department_doc.filename
+p
+  strong Doc code:
+  = @department_doc.doc_code
+p
+  strong Status:
+  = @department_doc.status
+p
+  strong Check archived:
+  = @department_doc.check_archived
+p
+  strong Check archived no:
+  = @department_doc.check_archived_no
+
+=> link_to 'Edit', edit_department_doc_path(@department_doc)
+'|
+=< link_to 'Back', department_docs_path
