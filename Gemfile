@@ -41,6 +41,8 @@ gem 'webpacker',                            '>= 4.0.x'
 gem 'sdoc',                                 '0.4.1', group: :doc
 gem 'tabler-rubygem'
 gem 'selectize-rails'
+gem 'cocoon'
+gem 'aasm'
 
 group :development, :test do
   gem 'minitest-rails'

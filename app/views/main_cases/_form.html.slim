@@ -1,0 +1,98 @@
+= simple_form_for(@main_case) do |f|
+  - if @main_case.errors.any?
+    #error_explanation.alert.alert-warning
+      h4
+        | 该模板文档保存时出错：
+        = pluralize(@main_case.errors.count, "个错误")
+      ul
+        - @main_case.errors.full_messages.each do |message|
+          li
+            = message
+  .form-inputs
+    = f.input :user_id, :as => :hidden
+    // 委托方card
+    .card.gray-card
+      .card-header
+        h4.card-title 委托方
+        .card-header-btn
+          = select_tag(:court_user_id, options_for_select(@users))
+          span class='btn btn-primary' id='import_user' 导入
+          / = link_to '新建委托人', '#', class: 'btn btn-primary'
+      .card-body.principal
+        .row
+          .col-md-4
+            = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
+          .col-md-4
+            = f.input :city_id, collection: [], label: '市', include_blank: false
+          .col-md-4
+            = f.input :district_id, collection: [], label: '区县', include_blank: false
+        .row
+          .col-md-6
+            = f.input :organization_name, label: '委托方名称'
+          .col-md-6
+            = f.input :user_name, label: '委托方联系人'
+        .row
+          .col-md-6
+            = f.input :organization_phone, label: '联系电话'
+          .col-md-6
+            = f.input :organization_addr, label: '联系地址'
+    // 委托鉴定事项card
+    .card.gray-card
+      .card-header
+        h4.card-title 委托鉴定事项
+      .card-body
+        .row
+          .col-md-4
+            = f.input :anyou, label: '案由', collection: @anyou
+          .col-md-4
+            = f.input :case_property, label: '案件性质', collection: @case_property
+          .col-md-4
+            = f.input :commission_date, as: :date, label: '委托日期', html5: true
+        .row
+          .col-md-6
+            = f.association :department, label: '受委托科室'
+          .col-md-6
+            = f.input :matter, label: '鉴定事项', collection: []
+        .row
+          .col-md-6
+            = f.input :matter_demand, label: '鉴定事项及要求', as: :text, :input_html => {:rows => 5}
+          .col-md-6
+            = f.input :base_info, label: '基本案情', as: :text, :input_html => {:rows => 5}
+    // 移交材料card
+    .card.gray-card
+      .card-header
+        h4.card-title 移交材料
+      .card-body
+        #transfer_docs
+          = f.simple_fields_for :transfer_docs do |transfer_doc|
+            = render 'transfer_doc_fields', f: transfer_doc, render_options: { wrapper: 'bootstrap' }
+            .links
+            = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary'
+    // 被鉴定人card
+    .card.gray-card
+      .card-header
+        h4.card-title 被鉴定人
+      .card-body
+        = f.simple_fields_for :appraised_unit do |appraised_unit|
+          .row
+            .col-md-12
+              = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
+                      collection: AppraisedUnit.unit_types_arr, checked: 'user'
+          .row
+            .col-md-4
+              = appraised_unit.input :name, label: '名称'
+            .col-md-8
+              = appraised_unit.input :addr, label: '联系地址'
+          #hidden-fields
+            .row
+              .col-md-3
+                = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
+              .col-md-3
+                = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
+              .col-md-2
+                = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
+              .col-md-4
+                = appraised_unit.input :id_num, label: '证件号码'
+
+  .form-actions
+    = f.button :submit, '保存', class: 'btn btn-success'

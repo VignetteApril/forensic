@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_06_071832) do
+ActiveRecord::Schema.define(version: 2019_05_12_154747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,20 @@ ActiveRecord::Schema.define(version: 2019_05_06_071832) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "appraised_units", force: :cascade do |t|
+    t.integer "unit_type"
+    t.string "name"
+    t.integer "gender"
+    t.datetime "birthday"
+    t.integer "id_type"
+    t.string "id_num"
+    t.string "addr"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "main_case_id"
+    t.index ["main_case_id"], name: "index_appraised_units_on_main_case_id"
+  end
+
   create_table "areas", force: :cascade do |t|
     t.string "name"
     t.integer "code"
@@ -44,6 +58,16 @@ ActiveRecord::Schema.define(version: 2019_05_06_071832) do
     t.datetime "updated_at", null: false
     t.string "ancestry"
     t.index ["ancestry"], name: "index_areas_on_ancestry"
+  end
+
+  create_table "case_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "main_case_id"
+    t.integer "pos"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["main_case_id"], name: "index_case_users_on_main_case_id"
+    t.index ["user_id"], name: "index_case_users_on_user_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -114,6 +138,36 @@ ActiveRecord::Schema.define(version: 2019_05_06_071832) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controller_name"], name: "index_features_on_controller_name"
+  end
+
+  create_table "main_cases", force: :cascade do |t|
+    t.string "serial_no"
+    t.string "case_no"
+    t.integer "user_id"
+    t.datetime "accept_date"
+    t.integer "case_stage"
+    t.datetime "case_close_date"
+    t.integer "case_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "user_name"
+    t.string "organization_name"
+    t.integer "organization_id"
+    t.string "anyou"
+    t.integer "area_id"
+    t.string "organization_phone"
+    t.string "organization_addr"
+    t.bigint "department_id"
+    t.string "matter"
+    t.text "matter_demand"
+    t.text "base_info"
+    t.integer "pass_user"
+    t.integer "sign_user"
+    t.datetime "supplement_date"
+    t.string "case_property"
+    t.datetime "commission_date"
+    t.integer "financial_stage"
+    t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -189,6 +243,21 @@ ActiveRecord::Schema.define(version: 2019_05_06_071832) do
     t.index ["user_id"], name: "index_sys_logs_on_user_id"
   end
 
+  create_table "transfer_docs", force: :cascade do |t|
+    t.string "name"
+    t.integer "doc_type"
+    t.integer "num"
+    t.string "unit"
+    t.string "traits"
+    t.string "status"
+    t.datetime "receive_date"
+    t.string "barcode"
+    t.bigint "main_case_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
+  end
+
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "role_id", null: false
@@ -219,14 +288,20 @@ ActiveRecord::Schema.define(version: 2019_05_06_071832) do
     t.string "wechat_id"
     t.bigint "organization_id"
     t.boolean "is_locked", default: false
+    t.integer "user_type"
     t.index ["department_id"], name: "index_users_on_department_id"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "appraised_units", "main_cases"
+  add_foreign_key "case_users", "main_cases"
+  add_foreign_key "case_users", "users"
   add_foreign_key "department_docs", "departments"
   add_foreign_key "departments", "organizations"
+  add_foreign_key "main_cases", "departments"
   add_foreign_key "organizations", "areas"
+  add_foreign_key "transfer_docs", "main_cases"
   add_foreign_key "users", "organizations"
 end

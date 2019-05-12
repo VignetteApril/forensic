@@ -23,30 +23,7 @@ INTERNAL_TABLES = YAML.load_file(Rails.root.join("config","config.yml"))["intern
 
 # 遍历所有插件中的module_chain
 apps = YAML.load_file(Rails.root.join("config","config.yml"))["apps"]
-# Dir::foreach(Rails.root.join("config", "engine_configs")) do |f|
-  # if f != '.' && f != '..' && f[0] != '.' && YAML.load_file(Rails.root.join("config","engine_configs", f))["app"]
-    # puts YAML.load_file(Rails.root.join("config","engine_configs", f))["app"].to_s
-    # app = YAML.load_file(Rails.root.join("config","engine_configs", f))["app"]
-    # apps.push(app)
-    # apps.each_key do |k|
-      # apps[k]['icons'].each_index do |i|
-        # if apps[k]['icons'][i]['id'] && apps[k]['icons'][i]['id'] == app['name']
-          # if apps[k]['icons'][i]['done'] == 'group'
-            # apps[k]['icons'][i]['icons'] = app['icons']
-          # else
-            # apps[k]['icons'][i]['module_chain'] = app['module_chain']
-          # end
-          # break
-        # end
-      # end
-    # end
-  # end
-# end
 APPS = apps
-# puts APPS
-# EXTERNAL_APPS = YAML.load_file(Rails.root.join("config","config.yml"))["external_apps"]
-
-# ##########
 
 UPLOAD_FILE_NAME = YAML.load_file(Rails.root.join("config","config.yml"))["upload_file_name"]
 FORBID_SHADOW_LOGIN = YAML.load_file(Rails.root.join("config","config.yml"))["forbid_shadow_login"]
@@ -54,14 +31,8 @@ USE_CAS_SERVER = YAML.load_file(Rails.root.join("config","config.yml"))["use_cas
 
 # 这里需要遍历所有插件所加入的notification
 notification_channels = YAML.load_file(Rails.root.join("config","config.yml"))["notification_channels"] || []
-# Dir::foreach(Rails.root.join("config", "engine_configs")) do |f|
-  # if f != '.' && f != '..' && YAML.load_file(Rails.root.join("config","engine_configs", f))["notification_channels"]
-    # notification_channels += YAML.load_file(Rails.root.join("config","engine_configs", f))["notification_channels"]
-  # end
-# end
-NOTIFICATION_CHANNELS = notification_channels
 
-# ##########
+NOTIFICATION_CHANNELS = notification_channels
 
 USER_POLITICS_STATUS = YAML.load_file(Rails.root.join("config","config.yml"))["user_politics_status"]
 USER_ID_TYPE = YAML.load_file(Rails.root.join("config","config.yml"))["user_id_type"]
@@ -78,4 +49,10 @@ SKIN = YAML.load_file(Rails.root.join("config","config.yml"))["skin"]
 
 # 系统更新记录
 RELEASE_NOTES = YAML.load_file(Rails.root.join("config","release.yml"))["release_notes"]
+
+# 案件相关
+ANYOU = YAML.load_file(Rails.root.join("config","config.yml"))["anyou"]
+CASE_PROPERTY = YAML.load_file(Rails.root.join("config","config.yml"))["case_property"]
+ACCEPT_TYPE = YAML.load_file(Rails.root.join("config","config.yml"))["accept_type"]
+
 

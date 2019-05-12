@@ -78,9 +78,21 @@
       .col-lg.order-lg-first
         ul.nav.nav-tabs.border-0.flex-column.flex-lg-row
           li.nav-item
-            = link_to root_path, class: 'nav-link active'
+            = link_to main_cases_path, class: "#{top_bar_active_class(controller, 'main_cases', 'index')}"
               i.fe.fe-home
-              | 主页
+              | 我的案件
+          li.nav-item
+            = link_to root_path, class: 'nav-link'
+              i.fe.fe-home
+              | 本科室的案件
+          li.nav-item
+            = link_to root_path, class: 'nav-link'
+              i.fe.fe-home
+              | 本中心的案件
+          li.nav-item
+            = link_to root_path, class: 'nav-link'
+              i.fe.fe-home
+              | 本法院的案件
 / nav#top-bar.navbar.navbar-default.navbar-fixed-top
 /   .container-fuid
 /     .navbar-header
@@ -195,28 +207,4 @@
 /           li
 /             | 联系方式：
 /             a href="mailto:redouble@outlook.com" redouble@outlook.com
-javascript:
-  // $("#register-idea").click(function() {
-  //   // 截屏函数
-  //   html2canvas($('#content'), {
-  //     onrendered: function(canvas) {
-  //       image_url = canvas.toDataURL();
-  //       $("#cut_image").attr('src', image_url)
-  //       $("#step_picture").val(image_url)
-  //     },
-  //     // 这里可以设置截图的宽高
-  //     // width: 300,
-  //     // height: 300
-  //   });
-  //   $("#step_url").val(window.location.href);
-  //   $("#ideaModal").modal('show');
-  // });
-  // $("#show-about-desc").click(function() {
-  //   $("#aboutDesc").modal({show:true, backdrop:false, keyboard:true})
-  // })
-  /*
-  $("#show-register").click(function() {
-    $("#registerDesc").modal({show:true, backdrop:false, keyboard:true})
-  })
-  */
 

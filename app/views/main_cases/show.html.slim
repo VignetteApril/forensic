@@ -1,0 +1,113 @@
+.row
+  = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
+  .card
+    .card-header
+      h3.card-title 案件基本信息
+      .card-header-btn
+        = link_to(main_cases_path) do
+          i.fe.fe-x
+    .card-body
+      h4.card-title 委托方
+      .row
+        .col-md-4
+          label 所属地区：
+          span = @area_name
+        .col-md-4
+          label 委托方名称：
+          span = @main_case.organization_name
+        .col-md-4
+          label 委托方联系人：
+          span = @main_case.user_name
+      .row
+        .col-md-4
+          lable 联系电话：
+          span = @main_case.organization_phone
+        .col-md-4
+          lable 联系地址：
+          span = @main_case.organization_addr
+      hr
+
+      h4.card-title 委托鉴定事项
+      .row
+        .col-md-4
+          lable 案由：
+          span = @main_case.anyou
+        .col-md-4
+          lable 案件性质：
+          span = @main_case.case_property
+        .col-md-4
+          lable 委托日期：
+          span = @main_case.commission_date
+      .row
+        .col-md-4
+          lable 受委托科室：
+          span = @main_case.department.name
+        .col-md-4
+          lable 鉴定事项：
+          span = @main_case.matter
+      .row
+        .col-md-4
+          lable 鉴定事项及要求：
+          span = @main_case.matter_demand
+        .col-md-4
+          lable 基本案情：
+          span = @main_case.base_info
+      hr
+      h4.card-title 移交材料
+      .row
+        .col-sm-12
+          table.table.table-hover.table-condensed.table-striped
+            thead
+              tr
+                th 检材名称
+                th 类型
+                th 数量
+                th 单位
+                th 性状
+                th 保存状况
+                th 收到时间
+                th 条码
+            tbody
+              - @main_case.transfer_docs.each do |transfer_doc|
+                tr
+                  td = transfer_doc.name
+                  td = transfer_doc.doc_type
+                  td = transfer_doc.num
+                  td = transfer_doc.unit
+                  td = transfer_doc.traits
+                  td = transfer_doc.status
+                  td = transfer_doc.receive_date
+                  td = transfer_doc.barcode
+
+
+      hr
+      h4.card-title 被鉴定人
+      - if @main_case.appraised_unit.unit_type == :unit
+        .row
+          .col-md-4
+            label 单位名称：
+            span = @main_case.appraised_unit.name
+          .col-md-4
+            label 单位地址：
+            span = @main_case.appraised_unit.addr
+      - else
+        .row
+          .col-md-4
+            label 姓名：
+            span = @main_case.appraised_unit.name
+          .col-md-4
+            label 地址：
+            span = @main_case.appraised_unit.addr
+          .col-md-4
+            label 性别：
+            span = @main_case.appraised_unit.gender
+        .row
+          .col-md-4
+            label 生日：
+            span = @main_case.appraised_unit.birthday
+          .col-md-4
+            label 证件类型：
+            span = @main_case.appraised_unit.id_type
+          .col-md-4
+            label 证件号码：
+            span = @main_case.appraised_unit.id_num

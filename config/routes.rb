@@ -49,6 +49,10 @@ Rails.application.routes.draw do
 
   resources :organizations
   resources :doc_templates
+  resources :main_cases do
+    get :organization_and_user, on: :collection
+    get :matter_demands, on: :collection
+  end
 
   post 'areas/cities'
   post 'areas/districts'

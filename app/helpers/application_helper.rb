@@ -175,11 +175,21 @@ module ApplicationHelper
     end
   end
 
+  # side bar active class
   def active_class(controller, *controller_name)
       if controller_name.include?(controller.controller_name)
         return 'list-group-item list-group-item-action active'
       else
         return 'list-group-item list-group-item-action'
       end
+  end
+
+  # top bar active class
+  def top_bar_active_class(controller, controller_name, action_name)
+    if controller_name == controller.controller_name && action_name == controller.action_name
+      return 'nav-link active'
+    else
+      return 'nav-link'
+    end
   end
 end

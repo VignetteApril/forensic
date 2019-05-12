@@ -187,6 +187,27 @@ internal_tables:
 theme: '01'
 skin: '00'
 
+#案由
+anyou:
+  - 医疗纠纷
+  - 交通事故
+  - 经济纠纷
+  - 人身损害
+  - 其它
+
+# 案件性质
+case_property:
+  - 普通
+  - 疑难
+  - 复杂
+  - 重大
+
+#委托受理方式
+accept_type:
+  - 摇号
+  - 送达
+  - 自选
+
 # elasticsearch_host: 0.0.0.0:9200
 
 # 转换上传的OFFICE文档时用到

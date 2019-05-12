@@ -1,0 +1,41 @@
+<%= grid(@main_cases, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+  g.column name: '流水号', attribute: 'serial_no', ordering: false do |main_case|
+    main_case.serial_no
+  end
+
+  g.column name: '案件编号', attribute: 'case_no', ordering: false do |main_case|
+    main_case.case_no
+  end
+
+  g.column name: '委托人', attribute: 'user_name', ordering: false do |main_case|
+    main_case.user_name
+  end
+
+  g.column name: '受理日期', attribute: 'accept_date', ordering: false do |main_case|
+    main_case.accept_date
+  end
+
+  g.column name: '状态', attribute: 'case_stage', ordering: false do |main_case|
+    main_case.case_stage
+  end
+
+  g.column name: '结案倒计时', attribute: 'case_close_date', ordering: false do |main_case|
+    main_case.case_close_date
+  end
+
+  g.column name: '案件类型', attribute: 'case_type', ordering: false do |main_case|
+    main_case.case_type
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
+    link_to '查看', main_case, class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
+    link_to '编辑', edit_main_case_path(main_case), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
+    link_to '删除', main_case, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+  end
+end -%>

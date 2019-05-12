@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  doc_type: 1
+  num: 1
+  unit: MyString
+  traits: MyString
+  status: MyString
+  receive_date: 2019-05-12 15:59:21
+  barcode: MyString
+  main_case: one
+
+two:
+  name: MyString
+  doc_type: 1
+  num: 1
+  unit: MyString
+  traits: MyString
+  status: MyString
+  receive_date: 2019-05-12 15:59:21
+  barcode: MyString
+  main_case: two

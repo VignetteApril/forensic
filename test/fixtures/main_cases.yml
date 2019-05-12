@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  serial_no: MyString
+  case_no: MyString
+  user_id: 1
+  accept_date: 2019-05-09 17:14:00
+  case_stage: 1
+  case_close_date: 2019-05-09 17:14:00
+  case_type: 1
+
+two:
+  serial_no: MyString
+  case_no: MyString
+  user_id: 1
+  accept_date: 2019-05-09 17:14:00
+  case_stage: 1
+  case_close_date: 2019-05-09 17:14:00
+  case_type: 1

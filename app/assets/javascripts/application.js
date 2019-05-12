@@ -33,6 +33,10 @@
 //= require custom_js/doc_templates
 //= require custom_js/departments
 //= require custom_js/department_docs
+//= require custom_js/main_cases
+
+// nested form js
+//= require cocoon
 
 
 // 处理select2在turbolinks的bug

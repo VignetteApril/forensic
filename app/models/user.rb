@@ -19,16 +19,21 @@ class User < ApplicationRecord
   validate  :password_must_be_present
 
   # 关联
-  has_many :user_roles, dependent: :delete_all
-  has_many :roles, :through => :user_roles
-  has_many :notifications
-  has_many :sys_logs
-  has_many :favorites
+  has_many   :user_roles, dependent: :delete_all
+  has_many   :roles, :through => :user_roles
+  has_many   :notifications
+  has_many   :sys_logs
+  has_many   :favorites
+  has_one    :case_user
   belongs_to :department, required: false   # 每一个用户只能同时属于一个科室
   belongs_to :organization, required: false # 每一个用户只能同时属于一个机构
 
   # callbacks
   before_create :set_organization, if: :organization_empty?
+  before_save   :set_user_type, unless: :organization_empty?
+
+  # 用户类型【法院用户，鉴定中心用户】
+  enum user_type: [:court_user, :center_user]
 
   # 所有具有某一权限的用户集合
   def self.has_approval_role(action)
@@ -92,6 +97,15 @@ class User < ApplicationRecord
   # 判断当前机构是否为空
   def organization_empty?
     self.organization.nil?
+  end
+
+  def set_user_type
+    case self.organization.org_type.to_sym
+    when :court
+      self.user_type = :court_user
+    when :center
+      self.user_type = :center_user
+    end
   end
 
   private
