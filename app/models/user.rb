@@ -91,7 +91,10 @@ class User < ApplicationRecord
 
   # 通过当前部门设置机构
   def set_organization
-    self.organization = self.department.organization
+    # 只有非平台管理员用户才会设置部门
+    if self.login != 'admin'
+      self.organization = self.department.organization
+    end
   end
 
   # 判断当前机构是否为空
