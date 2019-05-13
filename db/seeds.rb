@@ -21,9 +21,6 @@ role = Role.find_or_create_by name: '系统管理员'
 puts "关联系统管理员角色和用户"
 UserRole.find_or_create_by user_id: user.id, role_id: role.id
 
-puts "关联系统管理员用户和根部门"
-user.update(department_id: department1.id)
-
 puts "初始化所有的系统功能"
 Feature.delete_all
 features = YAML.load_file(Rails.root.join("config","config.yml"))["features"]
