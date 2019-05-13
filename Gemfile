@@ -37,7 +37,6 @@ gem 'autoprefixer-rails',                   '9.5.1'
 gem 'puma',                                 '3.12.1'
 gem 'warbler',                              '2.0.5'
 gem 'bootsnap',                             '~> 1.3.0'
-gem 'webpacker',                            '>= 4.0.x'
 gem 'sdoc',                                 '0.4.1', group: :doc
 gem 'tabler-rubygem'
 gem 'selectize-rails'
