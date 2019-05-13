@@ -35,7 +35,7 @@ Feature.all.each do |f|
   role.role_features.find_or_create_by(feature_id: f.id)
 end
 
-put "初始化地区信息表"
+puts "初始化地区信息表"
 file = File.read(Rails.root.join("public", "geo/city_list.json"))
 data = JSON.parse(file)
 
