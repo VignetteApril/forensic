@@ -2,7 +2,9 @@
   .container
     .d-flex
       a.header-brand href="./index.html"
-        = image_tag("logo.png", class: 'header-brand-img', alt: "forensic logo")
+        page-title.text-center
+          = image_tag("logo.png", class: 'header-brand-img', alt: "forensic logo")
+          | 司法鉴定平台
       .d-flex.order-lg-2.ml-auto
         .dropdown.d-none.d-md-flex
           a class="nav-link icon" data-toggle="dropdown"
@@ -81,18 +83,18 @@
             = link_to main_cases_path, class: "#{top_bar_active_class(controller, 'main_cases', 'index')}"
               i.fe.fe-home
               | 我的案件
-          li.nav-item
-            = link_to root_path, class: 'nav-link'
-              i.fe.fe-home
-              | 本科室的案件
-          li.nav-item
-            = link_to root_path, class: 'nav-link'
-              i.fe.fe-home
-              | 本中心的案件
-          li.nav-item
-            = link_to root_path, class: 'nav-link'
-              i.fe.fe-home
-              | 本法院的案件
+          / li.nav-item
+          /   = link_to root_path, class: 'nav-link'
+          /     i.fe.fe-home
+          /     | 本科室的案件
+          / li.nav-item
+          /   = link_to root_path, class: 'nav-link'
+          /     i.fe.fe-home
+          /     | 本中心的案件
+          / li.nav-item
+          /   = link_to root_path, class: 'nav-link'
+          /     i.fe.fe-home
+          /     | 本法院的案件
 / nav#top-bar.navbar.navbar-default.navbar-fixed-top
 /   .container-fuid
 /     .navbar-header

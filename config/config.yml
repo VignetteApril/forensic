@@ -31,6 +31,9 @@ features:
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
   - [个人事务提醒,notifications,"index,show,edit",平台]
   - [机构管理, organizations,"index,new,edit,create,destroy",系统管理]
+  - [科室管理, departments, "index, new, edit, create, destroy", 科室管理]
+  - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 模板文档管理]
+  - [案件管理, main_cases, "index, new, edit, show, create, destroy, organization_and_user, matter_demands", 案件管理]
 apps:
   - name: 系统管理
     module_chain:

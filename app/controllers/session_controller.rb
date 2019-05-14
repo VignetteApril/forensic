@@ -24,7 +24,7 @@ class SessionController < ApplicationController
 
       session[:user_id] = user.id
       user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
-      redirect_to '/'
+      redirect_to main_cases_path
     else
       redirect_to :login, flash: { danger: '用户名或者密码输入错误' }
     end
