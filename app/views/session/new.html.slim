@@ -1,49 +1,62 @@
-.container-fluid
-  .page
-    .page-single
-      .container
-        .row
-          .col.col-login.mx-auto
-            .text-center.mb-6
-              = image_tag("logo.png", class: 'h-7')
-            = form_tag "/session", class: 'card' do
-              .card-body.p-6
-                .card-title
-                 | 登录您的账户
-                - flash.each do |message_type, message_value|
-                  div class="alert alert-icon alert-#{message_type}"
-                    i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
-                    = message_value
-                .form-group
-                  label.form-label
-                     | 电话号码
-                  = text_field_tag :login, params[:login], class: "form-control", \
-                                                     placeholder: "请输入用户的登录名", "aria-describedby" => "login-status"
-                .form-group
-                  .form-label
-                    | 密码
-                    a href="./forgot-password.html" class="float-right small"
-                      | 忘记密码
-                  = password_field_tag :password, params[:password], class: "form-control", \
-                                                    placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
-                .form-group
-                  label.custom-control.custom-checkbox
-                    input type="checkbox" class="custom-control-input"
-                    span.custom-control-label
-                       | 记住我
-                .form-footer
-                  button type="submit" class="btn btn-success btn-block"
-                   | 登 录
-            .text-center.text-muted
-              | 还有没有账户?
-              a href="./register.html"
-               | 注册
-  .row
-    .col-sm-12.text-center.help-block style="color:DarkGray;padding-top:20px;"
-      = PROVIDER
-      br
-      | version:&nbsp;
-      = AVERSION
+#login-page
+  .container-fluid
+    .page
+      .page-single
+        .container
+          .row
+            page-header
+              h1.page-title.text-center
+                = image_tag("logo.png", class: 'h-7')
+                span 司法鉴定平台
+          .row.mt-8
+            .col-md-4.offset-1
+              form class="input-icon my-3 my-lg-0"
+                input type="search" class="form-control header-search" placeholder="司法鉴定意见书查询" tabindex="1"
+                div class="input-icon-addon"
+                  i class="fe fe-search"
+            .col.col-login.offset-md-3
+              = form_tag "/session", class: 'card' do
+                .card-body.p-6
+                  .card-title
+                   | 登录您的账户
+                  - flash.each do |message_type, message_value|
+                    div class="alert alert-icon alert-#{message_type}"
+                      i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
+                      = message_value
+                  .form-group
+                    label.form-label
+                       | 用户名
+                    = text_field_tag :login, params[:login], class: "form-control", \
+                                                       placeholder: "请输入用户的用户名", "aria-describedby" => "login-status"
+                  .form-group
+                    .form-label
+                      | 密码
+                      a href="./forgot-password.html" class="float-right small"
+                        | 忘记密码
+                    = password_field_tag :password, params[:password], class: "form-control", \
+                                                      placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
+                  .form-group
+                    label.custom-control.custom-checkbox
+                      input type="checkbox" class="custom-control-input"
+                      span.custom-control-label
+                         | 记住我
+                  .form-footer
+                    button type="submit" class="btn btn-primary btn-block"
+                     | 登 录
+              .text-center.text-muted
+                | 还有没有账户?
+                a href="./register.html"
+                 | 注册
+          .row
+            .col-md-12.text-center
+              h3.page-title.text-white — 司法鉴定委托机关、鉴定机构管理、主管部门监管、综合管理平台
+    .row
+      .col-sm-12.text-center.help-block style="color:DarkGray;padding-top:20px;"
+        = PROVIDER
+        br
+        | 备案号：京ICP备19018544号-1
+        br
+        | 版权所有：北京旌正科技有限公司
 javascript:
   $(document).ready(function() {
     $('#login-form').addClass('animated zoomIn');
