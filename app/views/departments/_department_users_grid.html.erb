@@ -15,7 +15,7 @@
   <div class="col-sm-12">
     <%= grid(users, hide_submit_button: true, hide_reset_button: true, html: {style: "table-layout:fixed;"}) do |g|
       g.column name: '真实姓名', attribute: 'name', ordering: false do |user|
-        link_to user.name, user_path(user)
+        user.name
       end
       g.column name: '移动电话', attribute: 'mobile_phone' do |user|
         user.mobile_phone

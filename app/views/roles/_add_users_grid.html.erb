@@ -8,7 +8,7 @@
   end
 
   g.column name: '真实姓名', attribute: 'name', ordering: false do |user|
-    link_to user.name, user_path(user)
+    user.name
   end
 
   # 平台管理员只关注用户的机构级别的信息

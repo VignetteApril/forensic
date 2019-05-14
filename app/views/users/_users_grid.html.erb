@@ -3,7 +3,7 @@
     user.login
   end
   g.column name: '真实姓名', attribute: 'name', ordering: false, in_csv: false do |user|
-    link_to user.name, user_path(user)
+    user.name
   end
 
   g.column name: '真实姓名', attribute: 'name', in_html: false do |user|
