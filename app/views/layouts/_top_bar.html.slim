@@ -4,7 +4,12 @@
       = link_to main_cases_path, class: 'header-brand'
         page-title.text-center
           = image_tag("logo.png", class: 'header-brand-img', alt: "forensic logo")
-          span 司法鉴定管理平台
+          span 智慧司法云服务平台
+      .page-title style="font-size: 15px"
+        a.ml-2 href="" 案件
+        a.ml-2 href="" 鉴定中心管理
+        a.ml-2 href="" 统计
+        a.ml-2 href="" 快递管理
       .d-flex.order-lg-2.ml-auto
         .dropdown.d-none.d-md-flex
           a class="nav-link icon" data-toggle="dropdown"
@@ -15,29 +20,13 @@
               = image_tag "homepage/avatar.jpg", class: "avatar mr-3 align-self-center"
               div
                 strong
-                  | Nathan
-                | pushed new commit: Fix page load performance issue.
+                  | 张杰
+                | 案件立案成功
                 .small.text-muted
                   | 10 minutes ago
-            a href="#" class="dropdown-item d-flex"
-              = image_tag "homepage/avatar.jpg", class: "avatar mr-3 align-self-center"
-              div
-                strong
-                  | Alice
-                | started new task: Tabler UI design.
-                .small.text-muted
-                  | 1 hour ago
-            a href="#" class="dropdown-item d-flex"
-              = image_tag "homepage/avatar.jpg", class: "avatar mr-3 align-self-center"
-              div
-                strong
-                  | Rose
-                | deployed new version of NodeJS REST Api V3
-                .small.text-muted
-                  | 2 hours ago
             .dropdown-divider
             a href="#" class="dropdown-item text-center"
-              | Mark all as read
+              | 全部已阅读
         .dropdown
           a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown"
             = image_tag "homepage/avatar.jpg", class: "avatar"
@@ -47,28 +36,28 @@
               small.text-muted.d-block.mt-1
                = @current_user.roles.first.name if @current_user.roles
           .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
-            a.dropdown-item href="#"
-              i.dropdown-icon.fe.fe-user
-              | Profile
+            / a.dropdown-item href="#"
+            /   i.dropdown-icon.fe.fe-user
+            /   | Profile
             = link_to(edit_password_user_path(@current_user), class: "dropdown-item") do
               i.dropdown-icon.fe.fe-edit
               | 修改密码
             = link_to(organizations_path, class: "dropdown-item") do
               i.dropdown-icon.fe.fe-settings
               | 系统管理
-            a.dropdown-item href="#"
-              span.float-right
-                span.badge.badge-primary
-                  | 6
-              i.dropdown-icon.fe.fe-mail
-              | Inbox
-            a.dropdown-item href="#"
-              i.dropdown-icon.fe.fe-send
-              | Message
-            .dropdown-divider
-            a.dropdown-item href="#"
-              i.dropdown-icon.fe.fe-help-circle
-              | Need help?
+            / a.dropdown-item href="#"
+            /   span.float-right
+            /     span.badge.badge-primary
+            /       | 6
+            /   i.dropdown-icon.fe.fe-mail
+            /   | Inbox
+            / a.dropdown-item href="#"
+            /   i.dropdown-icon.fe.fe-send
+            /   | Message
+            / .dropdown-divider
+            / a.dropdown-item href="#"
+            /   i.dropdown-icon.fe.fe-help-circle
+            /   | Need help?
             = link_to(logout_path, class: "dropdown-item") do
               i.dropdown-icon.fe.fe-log-out
               | 登出

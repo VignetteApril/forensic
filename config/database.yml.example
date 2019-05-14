@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: forensic
+  password: forensic
+  host: localhost
+  port: 5432
+  collation: zh_CN.UTF-8
+  template: template0
+
+development:
+  <<: *default
+  database: forensic_development
+
+test:
+  <<: *default
+  database: forensic_test
+
+production:
+  <<: *default
+  database: forensic_production

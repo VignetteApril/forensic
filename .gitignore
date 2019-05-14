@@ -72,3 +72,6 @@ yarn-debug.log*
 # Ignore files in local file system
 .idea/
 .Ds_store
+
+# Ignore config files
+config/database.yml
