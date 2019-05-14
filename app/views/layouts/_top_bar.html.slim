@@ -1,7 +1,7 @@
 .header.py-4
   .container
     .d-flex
-      a.header-brand href="./index.html"
+      = link_to main_cases_path, class: 'header-brand'
         page-title.text-center
           = image_tag("logo.png", class: 'header-brand-img', alt: "forensic logo")
           | 司法鉴定平台
