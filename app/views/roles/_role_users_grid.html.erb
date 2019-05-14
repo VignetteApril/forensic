@@ -10,7 +10,8 @@
       <button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='role_features'>清除过滤条件</button>
     </div>
     <span>
-      <%- if can?("roles", "add_users") && can_sys?(role) %>
+      <%#- if can?("roles", "add_users") && can_sys?(role) %>
+      <%- if can?("roles", "add_users") %>
         <%= link_to '增加人员', add_users_role_path(role), class: "btn btn-primary btn-sm pull-right" %>
       <%- end %>
     </span>

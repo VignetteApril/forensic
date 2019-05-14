@@ -14,6 +14,16 @@ class MainCase < ApplicationRecord
   # 财务状态：未付款、未付清、已付清、已退款
   enum case_stage: [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
   enum financial_stage: [:unpaid, :not_fully_paid, :paid, :refunded]
+  CASE_STAGE_MAP = {
+      pending: '待立案',
+      add_material: '待补充材料',
+      filed: '立案',
+      rejected: '退案',
+      executing: '执行中',
+      executed: '执行完成',
+      apply_filing: '申请归档',
+      close: '结案'
+  }
 
   aasm(:case, column: :case_stage, enum: true) do
     state :pending, initial: true

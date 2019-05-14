@@ -16,7 +16,7 @@
   end
 
   g.column name: '状态', attribute: 'case_stage', ordering: false do |main_case|
-    main_case.case_stage
+    MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
   end
 
   g.column name: '结案倒计时', attribute: 'case_close_date', ordering: false do |main_case|
