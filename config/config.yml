@@ -32,6 +32,7 @@ features:
   - [个人事务提醒,notifications,"index,show,edit",平台]
   - [机构管理, organizations,"index,new,edit,create,destroy",系统管理]
   - [科室管理, departments, "index, new, edit, create, destroy", 科室管理]
+  - [科室模板管理, department_docs, "index, new, edit, create, destroy", 科室模板管理]
   - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 模板文档管理]
   - [案件管理, main_cases, "index, new, edit, show, create, destroy, organization_and_user, matter_demands", 案件管理]
 apps:
@@ -45,6 +46,8 @@ apps:
       - { controller: 'features', action: }
 #      - { controller: 'sys_logs', action: }
       - { controller: 'organizations', action: }
+      - { controller: 'doc_templates', action: }
+      - { controller: 'main_cases', action: }
 
 # 关于User属性设置的各种选项
 user_politics_status: [中共党员,预备党员,共青团员,民革党员,民盟党员,民建党员,民进党员,农工党员,致公党员,九三学社,台盟党员,群众]

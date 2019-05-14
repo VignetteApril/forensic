@@ -1,13 +1,17 @@
 #login-page
+  .header.py-4
+    .container
+      .d-flex
+        .row
+          = image_tag("logo.png", class: 'h-7')
+          page-header
+            page-title.text-center
+              span style="font-size: 35px; font-weight: 700; color: rgb(61,116,200)" 司法鉴定管理平台
+          span.tag.tag-red.ml-2 style='height: 25px; margin-top: 5px;' 测试版
   .container-fluid
     .page
       .page-single
         .container
-          .row
-            page-header
-              h1.page-title.text-center
-                = image_tag("logo.png", class: 'h-7')
-                span 司法鉴定平台
           .row.mt-8
             .col-md-4.offset-1
               form class="input-icon my-3 my-lg-0"
@@ -31,8 +35,8 @@
                   .form-group
                     .form-label
                       | 密码
-                      a href="./forgot-password.html" class="float-right small"
-                        | 忘记密码
+                      / a href="./forgot-password.html" class="float-right small"
+                      /   | 忘记密码
                     = password_field_tag :password, params[:password], class: "form-control", \
                                                       placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
                   .form-group
@@ -43,20 +47,18 @@
                   .form-footer
                     button type="submit" class="btn btn-primary btn-block"
                      | 登 录
-              .text-center.text-muted
-                | 还有没有账户?
-                a href="./register.html"
-                 | 注册
+              / .text-center.text-muted
+              /   | 还有没有账户?
+              /   a href="./register.html"
+              /    | 注册
           .row
-            .col-md-12.text-center
-              h3.page-title.text-white — 司法鉴定委托机关、鉴定机构管理、主管部门监管、综合管理平台
-    .row
-      .col-sm-12.text-center.help-block style="color:DarkGray;padding-top:20px;"
-        = PROVIDER
-        br
-        | 备案号：京ICP备19018544号-1
-        br
-        | 版权所有：北京旌正科技有限公司
+            .col-md-12.text-center.mt-9
+              h3.page-title.text-white — 司法鉴定委托机关、鉴定机构管理、主管部门监管综合管理平台
+footer.footer.bg-dark.mb-0
+  container
+    .row.align-items-center.flex-row-reverse.mr-0
+      .col-12.text-center
+        | 北京旌正科技有限公司 Copyright © 2019 All rights reserved. 京ICP备19018544号-1
 javascript:
   $(document).ready(function() {
     $('#login-form').addClass('animated zoomIn');
