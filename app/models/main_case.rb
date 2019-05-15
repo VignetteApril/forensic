@@ -39,7 +39,7 @@ class MainCase < ApplicationRecord
   # 设置流水号
   before_create :set_serial_no
   # 设置案件编号
-  # before_create :set_case_no
+  before_create :set_case_no
   # 把科室的模板文件复制到当前的案件中
   after_save :create_case_docs
 
@@ -50,6 +50,18 @@ class MainCase < ApplicationRecord
   # 鉴定中心简称 + '司鉴' + [年度] + '鉴字第' + 科室内部编号 + '号'
   def set_case_no
     center = self.department.organization
+    org_abbreviation = center.abbreviation
+    begining_of_year = Date.today.beginning_of_year
+    end_of_year = Date.today.end_of_year
+    # 找到当前年份 当前科室 所有的案件 按照案件的编号排序
+    main_cases = MainCase.where(created_at: begining_of_year..end_of_year, department_id: self.department.id ).order(:case_no)
+    if main_cases.empty?
+      self.case_no = 1
+    else
+      last_case =  main_cases.last
+      self.case_no = last_case.case_no + 1
+    end
+    self.case_no_display = org_abbreviation + '司鉴' + "#{Date.today.year}" + '鉴字第' + "#{self.case_no}" + '号'
   end
 
   def create_case_docs

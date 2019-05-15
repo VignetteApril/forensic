@@ -52,7 +52,7 @@
           .col-md-6
             = f.association :department, label: '受委托科室'
           .col-md-6
-            = f.input :matter, label: '鉴定事项', collection: []
+            = f.input :matter, label: '鉴定事项', collection: @department_matters, selected: @department_matters.map(&:first), include_hidden: false, input_html: { multiple: true }
         .row
           .col-md-6
             = f.input :matter_demand, label: '鉴定事项及要求', as: :text, :input_html => {:rows => 5}

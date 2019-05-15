@@ -11,6 +11,10 @@
     organization.code
   end
 
+  g.column name: '机构缩写', attribute: 'abbreviation', ordering: false do |organization|
+    organization.abbreviation
+  end
+
   g.column name: '机构简介', attribute: 'desc', ordering: false do |organization|
     organization.desc
   end

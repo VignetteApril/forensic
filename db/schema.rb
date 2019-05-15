@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_12_154747) do
+ActiveRecord::Schema.define(version: 2019_05_15_143256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_154747) do
 
   create_table "main_cases", force: :cascade do |t|
     t.string "serial_no"
-    t.string "case_no"
+    t.string "case_no_display"
     t.integer "user_id"
     t.datetime "accept_date"
     t.integer "case_stage"
@@ -158,7 +158,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_154747) do
     t.string "organization_phone"
     t.string "organization_addr"
     t.bigint "department_id"
-    t.string "matter"
+    t.text "matter"
     t.text "matter_demand"
     t.text "base_info"
     t.integer "pass_user"
@@ -167,6 +167,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_154747) do
     t.string "case_property"
     t.datetime "commission_date"
     t.integer "financial_stage"
+    t.integer "case_no"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
@@ -194,6 +195,7 @@ ActiveRecord::Schema.define(version: 2019_05_12_154747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "ancestry"
+    t.string "abbreviation"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end

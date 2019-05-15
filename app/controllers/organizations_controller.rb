@@ -85,7 +85,8 @@ class OrganizationsController < ApplicationController
                                            :org_type,
                                            :province_id,
                                            :city_id,
-                                           :district_id)
+                                           :district_id,
+                                           :abbreviation)
     end
 
     def set_provinces

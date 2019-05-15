@@ -3,6 +3,7 @@ class MainCasesController < ApplicationController
   before_action :set_provinces, only: [:new, :edit, :organization_and_user, :create]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
+  before_action :set_department_matters, only: [:edit, :update]
 
   # GET /main_cases
   # GET /main_cases.json
@@ -163,7 +164,7 @@ class MainCasesController < ApplicationController
                                         :anyou,
                                         :case_property,
                                         :commission_date,
-                                        :matter,
+                                        { matter: [] },
                                         :matter_demand,
                                         :base_info,
                                         transfer_docs_attributes: [:name,
@@ -195,5 +196,10 @@ class MainCasesController < ApplicationController
     def set_anyou_and_case_property
       @anyou = ANYOU.map { |anyou| [ anyou, anyou ] }
       @case_property = CASE_PROPERTY.map{ |case_property| [case_property, case_property] }
+    end
+
+    def set_department_matters
+      return false if @main_case.matter.nil?
+      @department_matters = JSON.parse(@main_case.matter).map { |matter| [matter, matter] }
     end
 end
