@@ -201,5 +201,10 @@ class MainCasesController < ApplicationController
     def set_department_matters
       return false if @main_case.matter.nil?
       @department_matters = JSON.parse(@main_case.matter).map { |matter| [matter, matter] }
+      @selected_matters = if @department_matters.nil?
+                            []
+                          else
+                            @department_matters.map(&:first)
+                          end
     end
 end
