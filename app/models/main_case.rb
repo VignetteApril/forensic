@@ -43,6 +43,9 @@ class MainCase < ApplicationRecord
   # 把科室的模板文件复制到当前的案件中
   after_save :create_case_docs
 
+  validates :matter, presence: { message: '不能为空' }
+
+
   def set_serial_no
     self.serial_no = Time.now.strftime('%Y%m%d%H%M%S')
   end
