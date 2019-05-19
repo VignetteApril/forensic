@@ -1,30 +1,29 @@
-.list-group.list-group-transparent.mb-0
-  a href="#{organizations_path}" class="#{active_class(controller, 'organizations')}"
-    span class="icon mr-3"
-      i class="fe fe-flag"
-    | 机构管理
-.list-group.list-group-transparent.mb-0
-  a href="#{users_path}" class="#{active_class(controller, 'users')}"
-    span class="icon mr-3"
-      i class="fe fe-user"
-    | 用户管理
-.list-group.list-group-transparent.mb-0
-  a href="#{features_path}" class="#{active_class(controller, 'features')}"
-    span class="icon mr-3"
-      i class="fe fe-shield"
-    | 角色权限管理
-.list-group.list-group-transparent.mb-0
-  a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
-    span class="icon mr-3"
-      i class="fe fe-users"
-    | 用户角色管理
-.list-group.list-group-transparent.mb-0
-  a href="#{departments_path}" class="#{active_class(controller, 'departments', 'department_docs')}"
-    span class="icon mr-3"
-      i class="fe fe-codepen"
-    | 科室管理
-.list-group.list-group-transparent.mb-0
-  a href="#{doc_templates_path}" class="#{active_class(controller, 'doc_templates')}"
-    span class="icon mr-3"
-      i class="fe fe-folder"
-    | 模板文档管理
+.app-sidebar__overlay data-toggle="sidebar"
+aside.app-sidebar
+  .app-sidebar__user
+    img class="app-sidebar__user-avatar" src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg" alt="User Image"
+    div
+      p.app-sidebar__user-name = @current_user.name
+      - unless @current_user.roles.empty?
+        p.app-sidebar__user-designation = @current_user.roles.first.name
+  ul.app-menu
+    li
+      a href="#{organizations_path}" class="#{active_class(controller, 'organizations')}"
+        i.app-menu__icon.fa.fa-building-o
+        span.app-menu__label 机构管理
+    li
+      a href="#{users_path}" class="#{active_class(controller, 'users')}"
+        i.app-menu__icon.fa.fa-user-o
+        span.app-menu__label 用户管理
+    li
+      a href="#{features_path}" class="#{active_class(controller, 'features')}"
+        i.app-menu__icon.fa.fa-hdd-o
+        span.app-menu__label 角色权限管理
+    li
+      a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
+        i.app-menu__icon.fa.fa-flag-o
+        span.app-menu__label 用户角色管理
+    li
+      a href="#{doc_templates_path}" class="#{active_class(controller, 'doc_templates')}"
+        i.app-menu__icon.fa.fa-folder-o
+        span.app-menu__label 模板文档管理

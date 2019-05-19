@@ -1,32 +1,29 @@
-.row
-  .card
-    .card-header
-      h3.card-title 用户角色管理
-      - if can?("roles", "new")
-        = link_to '新建角色', new_role_path, class: "btn btn-primary", style: 'margin-left: auto'
-    .card-body
-      .row
-        .col-md-6
-          .table-responsive
-            table.table-hover.table-outline.table-vcenter.text-nowrap.card-table
-              thead
-                tr
-                  th 角色名称
-                  th 角色描述
-                  th
-              tbody
-                - @roles.each do |role|
-                  tr id="role-#{role.id}" class="#{'info' if role == @role}"
-                    td style="width: 120px"
-                      = role.name
-                    td
-                      = h(role.description)
-                    td.text-center
-                      - if can?("roles", "index")
-                        = link_to '查看', roles_path(role_id: role.id), class: 'btn btn-secondary btn-sm mr-1'
-                      - if can?("roles", "edit") && can_sys?(role)
-                        = link_to '编辑', edit_role_path(role), class: 'btn btn-secondary btn-sm mr-1'
-                      - if can?("roles", "destroy") && can_sys?(role)
-                        = link_to '删除', role, method: :delete, data: {confirm: '您确认删除吗？该角色所拥有的用户也同时失去与该角色的关联(用户本身并不删除)。'}, class: 'btn btn-danger btn-sm mr-1'
-        .col-sm-6
-          = render partial: "role_users_grid", :locals => {role: @role, users: @users}
+.row.no-gutters
+  .col-12.no-gutters
+    - if can?("roles", "new")
+      = link_to '新建角色', new_role_path, class: "btn btn-primary pull-right"
+.row.no-gutters
+  .col-md-4
+    .table-responsive
+      table.table-hover.table-outline.table-vcenter.text-nowrap.card-table
+        thead
+          tr
+            th 角色名称
+            / th 角色描述
+            th
+        tbody
+          - @roles.each do |role|
+            tr id="role-#{role.id}" class="#{'info' if role == @role}"
+              td style="width: 120px"
+                = role.name
+              / td
+              /   = h(role.description)
+              td.text-center
+                - if can?("roles", "index")
+                  = link_to '查看', roles_path(role_id: role.id), class: 'btn btn-secondary btn-sm mr-1'
+                - if can?("roles", "edit") && can_sys?(role)
+                  = link_to '编辑', edit_role_path(role), class: 'btn btn-secondary btn-sm mr-1'
+                - if can?("roles", "destroy") && can_sys?(role)
+                  = link_to '删除', role, method: :delete, data: {confirm: '您确认删除吗？该角色所拥有的用户也同时失去与该角色的关联(用户本身并不删除)。'}, class: 'btn btn-danger btn-sm mr-1'
+  .col-md-8
+    = render partial: "role_users_grid", :locals => {role: @role, users: @users}

@@ -1,201 +1,37 @@
-.header.py-4
-  .container
-    .d-flex
-      = link_to main_cases_path, class: 'header-brand'
-        page-title.text-center
-          = image_tag("logo.png", class: 'header-brand-img', alt: "forensic logo")
-          span 智慧司法云服务平台
-      .page-title style="font-size: 15px"
-        a.ml-2 href="" 案件
-        a.ml-2 href="" 鉴定中心管理
-        a.ml-2 href="" 统计
-        a.ml-2 href="" 快递管理
-      .d-flex.order-lg-2.ml-auto
-        .dropdown.d-none.d-md-flex
-          a class="nav-link icon" data-toggle="dropdown"
-            i class="fe fe-bell"
-            span class="nav-unread"
-          .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
-            a href="#" class="dropdown-item d-flex"
-              = image_tag "homepage/avatar.jpg", class: "avatar mr-3 align-self-center"
+header class="app-header"
+  = link_to main_cases_path, class: 'app-header__logo'
+    = image_tag("logo.png", alt: "forensic logo", style: 'height: 30px; width: auto;')
+    span 智慧司法云服务平台
+  a.app-sidebar__toggle href="#" data-toggle="sidebar" aria-label="Hide Sidebar"
+  // Navbar Right Menu
+  ul.app-nav
+    // Notification Menu
+    li class="dropdown"
+      a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"
+        i class="fa fa-bell-o fa-lg"
+      ul.app-notification.dropdown-menu.dropdown-menu-right
+        li.app-notification__title 您有 1 条新的消息
+        .app-notification__content
+          li
+            a.app-notification__item href="javascript:;"
+              span.app-notification__icon
+                span.fa-stack.fa-lg
+                  i.fa.fa-circle.fa-stack-2x.text-primary
+                  i.fa.fa-envelope.fa-stack-1x.fa-inverse
               div
-                strong
-                  | 张杰
-                | 案件立案成功
-                .small.text-muted
-                  | 10 minutes ago
-            .dropdown-divider
-            a href="#" class="dropdown-item text-center"
-              | 全部已阅读
-        .dropdown
-          a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown"
-            = image_tag "homepage/avatar.jpg", class: "avatar"
-            span.ml-2.d-none.d-lg-block
-              span.text-default
-               = @current_user.name
-              small.text-muted.d-block.mt-1
-               = @current_user.roles.first.name if @current_user.roles
-          .dropdown-menu.dropdown-menu-right.dropdown-menu-arrow
-            / a.dropdown-item href="#"
-            /   i.dropdown-icon.fe.fe-user
-            /   | Profile
-            = link_to(edit_password_user_path(@current_user), class: "dropdown-item") do
-              i.dropdown-icon.fe.fe-edit
-              | 修改密码
-            = link_to(organizations_path, class: "dropdown-item") do
-              i.dropdown-icon.fe.fe-settings
-              | 系统管理
-            / a.dropdown-item href="#"
-            /   span.float-right
-            /     span.badge.badge-primary
-            /       | 6
-            /   i.dropdown-icon.fe.fe-mail
-            /   | Inbox
-            / a.dropdown-item href="#"
-            /   i.dropdown-icon.fe.fe-send
-            /   | Message
-            / .dropdown-divider
-            / a.dropdown-item href="#"
-            /   i.dropdown-icon.fe.fe-help-circle
-            /   | Need help?
-            = link_to(logout_path, class: "dropdown-item") do
-              i.dropdown-icon.fe.fe-log-out
-              | 登出
-      a href="#" class="header-toggler d-lg-none ml-3 ml-lg-0" data-toggle="collapse" data-target="#headerMenuCollapse"
-        span class="header-toggler-icon"
-.header.collapse.d-lg-flex.p-0 id="headerMenuCollapse"
-  .container
-    .row.align-items-center
-      .col-lg.order-lg-first
-        ul.nav.nav-tabs.border-0.flex-column.flex-lg-row
-          li.nav-item
-            = link_to main_cases_path, class: "#{top_bar_active_class(controller, 'main_cases', 'index')}"
-              i.fe.fe-home
-              | 我的案件
-          / li.nav-item
-          /   = link_to root_path, class: 'nav-link'
-          /     i.fe.fe-home
-          /     | 本科室的案件
-          / li.nav-item
-          /   = link_to root_path, class: 'nav-link'
-          /     i.fe.fe-home
-          /     | 本中心的案件
-          / li.nav-item
-          /   = link_to root_path, class: 'nav-link'
-          /     i.fe.fe-home
-          /     | 本法院的案件
-/ nav#top-bar.navbar.navbar-default.navbar-fixed-top
-/   .container-fuid
-/     .navbar-header
-/       a.navbar-brand href="/" style="margin-top:-4px;"
-/         span.h4 style="color:darkred;"
-/           / = image_tag("logo.png", :height=>"24px", style: "margin-top:-4px;")
-/           = image_tag(SysConfig.sys_logo, :height=>"24px", style: "margin-top:-4px;")
-/           / i.fa.fa-share-alt-square
-/         span &nbsp;&nbsp;
-/         span.h4 style="letter-spacing:2px;"
-/           = SysConfig.sys_title
-/         span.h5 style="letter-spacing:2px;"
-/           | ——
-/           = SysConfig.sys_subtitle
-/     .collapse.navbar-collapse
-/       ul.nav.navbar-nav.navbar-right
-/         / - if get_license_type == 'platform'
-/         li
-/           p.navbar-text
-/             | 欢迎登录！
-/             = @current_user.name
-/             / = User.find_by_id(session[:user_id]).name
-/         li.dropdown role="presentation"
-/           / class="#{'hidden-md hidden-lg'}"
-/           a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-/             / span.glyphicon.glyphicon-bell aria-hidden="true"
-/             i.fa.fa-bell
-/             | 个人提醒
-/             - if @my_notifications and @my_notifications.size > 0
-/               span.badge style="font-size:9px;vertical-align:top;"
-/                 = @my_notifications.size
-/           ul.dropdown-menu
-/             - if @my_notifications and @my_notifications.size > 0
-/               - @my_notifications.each do |n|
-/                 li
-/                   = link_to main_app.notification_path(n) do
-/                     - if cur_notification_channel(n.channel)
-/                       span.label.label-default style="background-color:#{cur_notification_channel(n.channel)['color']}"
-/                         = raw("<i class='fa fa-#{cur_notification_channel(n.channel)['icon_str']}'></i>")
-/                       | &nbsp;&nbsp;
-/                     = n.title
-/             - else
-/               li
-/                 = link_to "暂时没有需要处理的个人事务", "#", style: "color:gray;"
-/             li.divider role="separator"
-/             li
-/               = link_to "查看所有个人事务提醒 >>", main_app.notifications_path
-/         li#favorite-list.dropdown role="presentation"
-/           = render partial: "favorites/list"
-/         li.dropdown role="presentation"
-/           a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-/             / span.glyphicon.glyphicon-menu-hamburger aria-hidden="true"
-/             i.fa.fa-bars
-/           ul.dropdown-menu
-/             / - if get_license_type == 'platform'
-/             li
-/               / = link_to "更改密码", main_app.edit_password_user_path(User.find_by(:id => session[:user_id]))
-/               = link_to "更改密码", main_app.edit_password_user_path(@current_user)
-/             li
-/               = link_to "个人API键值", main_app.show_api_key_user_path(@current_user)
-/             li.divider role="separator"
-/             - if !@current_user.is_org_of?('被审计单位')
-/               li
-/                 = link_to main_app.delayed_jobs_path() do
-/                   i.fa.fa-cog
-/                   | &nbsp;
-/                   | 系统管理
-/               li.divider role="separator"
-/               li
-/                 = link_to "/s_license/codes", id: "show-register" do
-/                   i.fa.fa-key
-/                   | &nbsp;
-/                   | 授权登记
-/             li
-/               = link_to "https://shimo.im/docs/VJeGnoASg7cAzosq", target: "_blank" do
-/                 i.fa.fa-question-circle
-/                 | &nbsp;
-/                 | 帮助
-/             li
-/               = link_to "关于", "#", id: "show-about-desc"
-/             / - if get_license_type == 'platform'
-/             li.divider role="separator"
-/             li
-/               = link_to main_app.logout_path do
-/                 i.fa.fa-sign-out
-/                 | &nbsp;
-/                 | 注销
-/         li
-/           p.navbar-text &nbsp;
-/ #aboutDesc.modal.fade tabindex="-1" role="dialog" style="margin-top:36px; background-color: rgba(0,0,0,0.5);"
-/   .modal-dialog role="document"
-/     .modal-content
-/       .modal-header
-/         button.close type="button" data-dismiss="modal" aria-label="Close"
-/           span aria-hidden="true" &times;
-/         h4.modal-title
-/           = image_tag("logo.png", :height=>"24px", style: "margin-top:-4px;")
-/           | 关于我们
-/       .modal-body
-/         ul style="list-style-type:circle;"
-/           li 产品名称：石刻
-/           li
-/             | 版本号：
-/             = AVERSION
-/           li
-/             | 发布日期：
-/             = AVERSION.split('.')[0].to_i+2017
-/             | 年
-/             = AVERSION.split('.')[1]
-/             | 月
-/           li 产品设计人员：董震，李崇森，张杰等
-/           li
-/             | 联系方式：
-/             a href="mailto:redouble@outlook.com" redouble@outlook.com
-
+                p.app-notification__message 立案成功
+                p.app-notification__meta 2 分前
+        li.app-notification__footer
+          a href="#" 标记全部已读
+    // User Menu
+    li.dropdown
+      a.app-nav__item href="#" data-toggle="dropdown" aria-label="Open Profile Menu"
+        i.fa.fa-user.fa-lg
+      ul class="dropdown-menu settings-menu dropdown-menu-right"
+        li
+          = link_to(edit_password_user_path(@current_user), class: "dropdown-item") do
+            i.dropdown-icon.fa.fa-pencil-square-o
+            | 修改密码
+          = link_to(logout_path, class: "dropdown-item") do
+            i.dropdown-icon.fa.fa-sign-out
+            | 登出

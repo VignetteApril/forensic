@@ -10,26 +10,22 @@
 // @import "bootswatch/flatly/bootswatch";
 // @import "bootswatch/lumen/bootswatch";
 
-// tabler
-@import "tabler/variables";
 @import "bootstrap";
-@import "tabler";
-@import "tabler.plugins"; // optional
-@import "tabler.icons"; // optional includes [browser, flag, payments]
-
-@import "animate";
-@import "wice_grid";
+@import "third_party_css/animate";
+@import "third_party_css/wice_grid";
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "bootstrap-datepicker3";
 @import "select2";
 @import "select2-bootstrap";
-@import "select2totree";
+@import "third_party_css/select2totree";
+// selectize
+@import 'selectize';
+@import 'selectize.bootstrap3';
+// valid-admin
+@import "third_party_css/valid_admin";
 
 // 导入自定义的scss
 @import "custom_css/global";
 @import "custom_css/direct_uploads";
-
-// selectize
-@import 'selectize';
-@import 'selectize.bootstrap3';
+@import "custom_css/main_page";

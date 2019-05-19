@@ -1,10 +1,4 @@
-.row
-  .card
-    .card-header
-      h3.card-title 我的案件
-      = link_to '新建案件', new_main_case_path, class: 'btn btn-primary', style: 'margin-left: auto;'
-    .card-body
-      .table-responsive
-        = render 'main_cases_grid'
+= link_to '新建案件', new_main_case_path, class: 'btn btn-primary mb-2', style: 'margin-left: auto;'
+= render 'main_cases_grid'
 
 

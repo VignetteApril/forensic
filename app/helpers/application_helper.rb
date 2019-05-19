@@ -178,9 +178,9 @@ module ApplicationHelper
   # side bar active class
   def active_class(controller, *controller_name)
       if controller_name.include?(controller.controller_name)
-        return 'list-group-item list-group-item-action active'
+        return 'app-menu__item active'
       else
-        return 'list-group-item list-group-item-action'
+        return 'app-menu__item'
       end
   end
 

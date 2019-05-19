@@ -1,64 +1,60 @@
 #login-page
-  .header.py-4
+  .login-header.py-1 style="background-color: white;"
     .container
-      .d-flex
-        .row
-          = image_tag("logo.png", class: 'h-7')
-          page-header
-            page-title.text-center
-              span style="font-size: 35px; font-weight: 700; color: rgb(61,116,200)" 智慧司法云服务平台
-          span.tag.tag-red.ml-2 style='height: 25px; margin-top: 5px;' 测试版
-  .container-fluid
-    .page
-      .page-single
-        .container
-          .row.mt-8
-            .col-md-4.offset-1
-              form class="input-icon my-3 my-lg-0"
-                input type="search" class="form-control header-search" placeholder="司法鉴定意见书查询" tabindex="1"
-                div class="input-icon-addon"
-                  i class="fe fe-search"
-            .col.col-login.offset-md-3
-              = form_tag "/session", class: 'card' do
-                .card-body.p-6
-                  .card-title
-                   | 登录您的账户
-                  - flash.each do |message_type, message_value|
-                    div class="alert alert-icon alert-#{message_type}"
-                      i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
-                      = message_value
-                  .form-group
-                    label.form-label
-                       | 用户名
-                    = text_field_tag :login, params[:login], class: "form-control", \
-                                                       placeholder: "请输入用户的用户名", "aria-describedby" => "login-status"
-                  .form-group
-                    .form-label
-                      | 密码
-                      / a href="./forgot-password.html" class="float-right small"
-                      /   | 忘记密码
-                    = password_field_tag :password, params[:password], class: "form-control", \
-                                                      placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
-                  .form-group
-                    label.custom-control.custom-checkbox
-                      input type="checkbox" class="custom-control-input"
-                      span.custom-control-label
-                         | 记住我
-                  .form-footer
-                    button type="submit" class="btn btn-primary btn-block"
-                     | 登 录
-              / .text-center.text-muted
-              /   | 还有没有账户?
-              /   a href="./register.html"
-              /    | 注册
-          .row
-            .col-md-12.text-center.mt-9
-              h3.page-title.text-white —— 响应式司法委托追溯、高效的司法鉴定全流程管理、数据云存储，大数据分析处理中心。
-footer.footer.bg-dark.mb-0
-  container
-    .row.align-items-center.flex-row-reverse.mr-0
+      .row
+        = image_tag("logo.png", class: 'h-7', style: 'height: 60px; width: auto;')
+        page-header
+          page-title.text-center
+            span style="font-size: 35px; font-weight: 700; color: rgb(61,116,200)" 智慧司法云服务平台
+        badge.badge-danger style='height: 25px; margin-top: 10px;' 测试版
+  .container-fluid.pt-5
+    .container
+      .row
+        .col-md-4.offset-1
+          form class="input-icon my-3 my-lg-0"
+            input type="search" class="form-control header-search" placeholder="司法鉴定意见书查询" tabindex="1"
+            div class="input-icon-addon"
+              i class="fe fe-search"
+        .col.col-login.offset-md-3
+          = form_tag "/session", class: 'card' do
+            .card-body.p-6
+              .card-title
+               | 登录您的账户
+              - flash.each do |message_type, message_value|
+                div class="alert alert-icon alert-#{message_type}"
+                  i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
+                  = message_value
+              .form-group
+                label.form-label
+                   | 用户名
+                = text_field_tag :login, params[:login], class: "form-control", \
+                                                   placeholder: "请输入用户的用户名", "aria-describedby" => "login-status"
+              .form-group
+                .form-label
+                  | 密码
+                  / a href="./forgot-password.html" class="float-right small"
+                  /   | 忘记密码
+                = password_field_tag :password, params[:password], class: "form-control", \
+                                                  placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
+              .form-group
+                label.custom-control.custom-checkbox
+                  input type="checkbox" class="custom-control-input"
+                  span.custom-control-label
+                     | 记住我
+              .form-footer
+                button type="submit" class="btn btn-primary btn-block"
+                 | 登 录
+          / .text-center.text-muted
+          /   | 还有没有账户?
+          /   a href="./register.html"
+          /    | 注册
+      .row style='margin-top: 150px'
+        .col-md-12.text-center
+          h3.page-title.text-white —— 响应式司法委托追溯、高效的司法鉴定全流程管理、数据云存储，大数据分析处理中心。
+  .footer.bg-dark
+    container
       .col-12.text-center
-        | 北京旌正科技有限公司 Copyright © 2019 All rights reserved. 京ICP备19018544号-1
+        span style='color: gray' 北京旌正科技有限公司 Copyright © 2019 All rights reserved. 京ICP备19018544号-1
 javascript:
   $(document).ready(function() {
     $('#login-form').addClass('animated zoomIn');

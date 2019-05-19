@@ -253,8 +253,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    tabler-rubygem (0.1.4)
-      autoprefixer-rails (>= 6.0.3)
     temple (0.8.1)
     thor (0.20.3)
     thread_safe (0.3.6-java)
@@ -323,7 +321,6 @@ DEPENDENCIES
   selectize-rails
   simple_form (= 4.1.0)
   slim-rails (= 3.2.0)
-  tabler-rubygem
   turbolinks (= 5.2.0)
   uglifier (= 2.7.2)
   warbler (= 2.0.5)

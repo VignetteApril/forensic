@@ -1,26 +1,21 @@
-.row
-  .card
-    .card-header
-      h3.card-title 角色权限管理
-    .card-body
-      .row
-        .col-md-5
-          .table-responsive
-            table.table-hover.table-outline.table-vcenter.text-nowrap.card-table
-              thead
-                tr
-                  th style="width:150px;" 名称
-                  th 角色描述
-                  th style="width:30px;"
-              tbody
-                - @roles.each do |role|
-                  tr id="role-#{role.id}" class="#{'info' if role == @role}"
-                    td
-                      = role.name
-                    td
-                      = h(role.description)
-                    td
-                      = link_to '查看权限',features_path(role_id: role.id), class: 'btn btn-secondary btn-sm'
-        .col-md-7
-          .table-responsive
-            = render partial: "role_features_grid", :locals => {role: @role, features: @features}
+.row.no-gutters
+  .col-md-5
+    .table-responsive
+      table.table-hover.table-outline.table-vcenter.text-nowrap.card-table
+        thead
+          tr
+            th style="width:150px;" 名称
+            th 角色描述
+            th style="width:30px;"
+        tbody
+          - @roles.each do |role|
+            tr id="role-#{role.id}" class="#{'info' if role == @role}"
+              td
+                = role.name
+              td
+                = h(role.description)
+              td
+                = link_to '查看权限',features_path(role_id: role.id), class: 'btn btn-secondary btn-sm ml-5'
+  .col-md-7
+    .table-responsive
+      = render partial: "role_features_grid", :locals => {role: @role, features: @features}

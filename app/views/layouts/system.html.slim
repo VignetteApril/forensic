@@ -6,15 +6,35 @@ html
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application',               'data-turbolinks-track' => true
     = csrf_meta_tags
-  body data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
-    .page
-      .flex-fill
-        = render 'layouts/top_bar'
-        .my-3.my-md-5
-          .container
-            = render "layouts/flash_message"
-            .row
-              .col-lg-2.order-lg-1.mb-4
-                = render 'layouts/sidebar'
-              .col-lg-10
-                == yield
+  body.app.sidebar-mini.rtl data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
+    = render 'layouts/top_bar'
+    = render "layouts/flash_message"
+    = render 'layouts/sidebar'
+    main.app-content
+      == yield
+
+javascript:
+    "use strict";
+
+    var treeviewMenu = $('.app-menu');
+
+    // Toggle Sidebar
+    $('[data-toggle="sidebar"]').click(function (event) {
+        event.preventDefault();
+        $('.app').toggleClass('sidenav-toggled');
+    });
+
+    // Activate sidebar treeview toggle
+    $("[data-toggle='treeview']").click(function (event) {
+        event.preventDefault();
+        if (!$(this).parent().hasClass('is-expanded')) {
+            treeviewMenu.find("[data-toggle='treeview']").parent().removeClass('is-expanded');
+        }
+        $(this).parent().toggleClass('is-expanded');
+    });
+
+    // Set initial active toggle
+    $("[data-toggle='treeview.'].is-expanded").parent().toggleClass('is-expanded');
+
+    //Activate bootstrip tooltips
+    $("[data-toggle='tooltip']").tooltip();

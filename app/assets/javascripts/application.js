@@ -12,21 +12,20 @@
 //
 //= require jquery3
 //= require popper
-//= require bootstrap
 //= require jquery_ujs
 //= require jquery-ui
+//= require bootstrap
 //= require turbolinks
 //= require wice_grid
 //= require bootstrap-datepicker
 //= require select2
 //= require select2_locale_zh-CN
-//= require select2totree
-//= require papaparse
-//= require bootstrap.file-input
-//= require tabler/tabler
-//= require tabler/vendors/circle-progress.min
-//= require tabler/core
 //= require selectize
+//= require third_party_js/select2totree
+//= require third_party_js/papaparse
+//= require third_party_js/bootstrap.file-input
+//= require third_party_js/valid_admin
+
 
 //= require custom_js/organizations
 //= require custom_js/direct_uploads
@@ -88,3 +87,4 @@ function appendDataToSelect2(request_url, selected_id, target_select, column_nam
         target_select.empty().trigger('change');
     }
 } // appendDataToSelect2
+

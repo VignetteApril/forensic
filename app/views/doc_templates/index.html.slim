@@ -1,8 +1,5 @@
-.row
-  .card
-    .card-header
-      h3.card-title 文档模板管理
-      = link_to '新建模板', new_doc_template_path, class: 'btn btn-primary', style: 'margin-left: auto'
-    .card-body
-      .responsive-table
-        = render 'doc_templates_grid'
+.row.mb-2.no-gutters
+  .col-md-12
+    = link_to '新建模板', new_doc_template_path, class: 'btn btn-primary pull-right'
+.row.no-gutters
+  = render 'doc_templates_grid'

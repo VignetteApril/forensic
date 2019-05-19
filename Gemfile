@@ -38,7 +38,6 @@ gem 'puma',                                 '3.12.1'
 gem 'warbler',                              '2.0.5'
 gem 'bootsnap',                             '~> 1.3.0'
 gem 'sdoc',                                 '0.4.1', group: :doc
-gem 'tabler-rubygem'
 gem 'selectize-rails'
 gem 'cocoon'
 gem 'aasm'
