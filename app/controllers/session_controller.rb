@@ -66,4 +66,15 @@ class SessionController < ApplicationController
     @base_date = SysLog.where(user_id: @current_user.id).order("log_date DESC") # .first.log_date
     make_log(@current_user) if @base_date && !@base_date.empty? && @base_date.first.log_date < RELEASE_NOTES.last['date']
   end
+
+  #记住用户,持久性存储登录信息(存cookie)
+  #1.创建记忆令牌把未加密的存储到cookie把记忆令牌加密更新到数据库
+  #2.把用户设置为当前登录用户
+  def remember(user)
+    remember_token = User.new_remember_token
+    user.remember(remember_token)
+    cookies.permanent[:remember_token] = remember_token #permanent自动将过期时间设置为20年之后
+    cookies.permanent.signed[:user_id] = user.id #signed设置存入浏览器前安全加密cookie中的用户ID
+    self.current_user = user
+  end
 end

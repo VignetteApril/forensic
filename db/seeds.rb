@@ -16,7 +16,7 @@ else
 end
 
 puts "设置系统管理员角色"
-role = Role.find_or_create_by name: '系统管理员'
+role = Role.find_or_create_by name: '系统管理员', r_type: :platform
 
 puts "关联系统管理员角色和用户"
 UserRole.find_or_create_by user_id: user.id, role_id: role.id

@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class RolesController < ApplicationController
-  layout 'system'
   before_action :set_role, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_role]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_role]
 
@@ -8,7 +7,7 @@ class RolesController < ApplicationController
   # 系统在角色列表页面还需要显示“新建角色”按钮，同时针对每一个已有的角色，系统还需要显示“人员”链接和“编辑角色”、“删除角色”按钮。
   def index
     if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      @roles = Role.where(orgnization_name: [@current_user.orgnization_name, '系统'])
+      @roles = Role.where(r_type: @current_user.organization.org_type.to_sym )
     else
       @roles = Role.all
     end
@@ -69,8 +68,7 @@ class RolesController < ApplicationController
   # 管理员在角色人员列表页面中，点击 “加入”按钮,系统显示所有人员的列表
   def add_users
     if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      @users = initialize_grid( User, per_page: 50,
-                                conditions: { orgnization_name: @current_user.orgnization_name },
+      @users = initialize_grid( @current_user.organization.users, per_page: 50,
                                 order: 'sort_no', order_direction: 'asc',
                                 name: 'users' )
     else
@@ -111,6 +109,6 @@ class RolesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def role_params
-    params.require(:role).permit(:name, :description)
+    params.require(:role).permit(:name, :description, :r_type)
   end
 end

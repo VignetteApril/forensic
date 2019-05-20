@@ -1,26 +1,25 @@
-.row
-  = link_to '返回', roles_path, class: "btn btn-primary mb-2"
-  .card
-    .card-header
-      h3.card-title 为角色增加用户
-    .card-body
-      = form_tag "/roles/#{@role.id}/add_users_submit", method: :get do |f|
-        .row
-          .col-sm-12
-            .btn-group.btn-group-sm role="group" aria-label="..."
-              button.wg-external-submit-button.btn.btn-primary data-grid-name="users" 过滤
-              button.wg-external-reset-button.btn.btn-secondary data-grid-name="users" 清除过滤条件
-            | &nbsp;
-            .btn-group.btn-group-sm role="group" aria-label="..."
-              - if can?("roles", "add_users_submit")
-                = submit_tag '增加所选用户', class: "btn btn-primary btn-sm"
-            | &nbsp;
-            span.h5
-              | 当前角色：
-              = @role.name
-        br
-        .row
-          .col-sm-12
-            .table-responsive
-              = render "add_users_grid"
+= link_to '返回', roles_path, class: "btn btn-primary mb-2"
+.card
+  .card-header
+    h3.card-title 为角色增加用户
+  .card-body
+    = form_tag "/roles/#{@role.id}/add_users_submit", method: :get do |f|
+      .row
+        .col-sm-12
+          .btn-group.btn-group-sm role="group" aria-label="..."
+            button.wg-external-submit-button.btn.btn-primary data-grid-name="users" 过滤
+            button.wg-external-reset-button.btn.btn-secondary data-grid-name="users" 清除过滤条件
+          | &nbsp;
+          .btn-group.btn-group-sm role="group" aria-label="..."
+            - if can?("roles", "add_users_submit")
+              = submit_tag '增加所选用户', class: "btn btn-primary btn-sm"
+          | &nbsp;
+          span.h5
+            | 当前角色：
+            = @role.name
+      br
+      .row
+        .col-sm-12
+          .table-responsive
+            = render "add_users_grid"
 

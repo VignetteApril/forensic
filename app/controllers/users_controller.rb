@@ -1,7 +1,5 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
-  layout 'system', except: [:edit_password]
-
   skip_before_action :can, only: [:edit_password, :update_password]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]

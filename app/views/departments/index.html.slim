@@ -1,13 +1,8 @@
-.row
-  .card
-    .card-header
-      h3.card-title 科室管理
-      = link_to '新建科室', new_department_path, class: 'btn btn-primary', style: 'margin-left: auto'
-    .card-body
-      .row
-        .btn-group.btn-group-sm role="group" aria-label="..."
-          button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='departments_grid' 过滤
-          button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='departments_grid' 清除过滤条件
-      .row
-        .table-responsive
-          = render partial: "departments_grid"
+.row.mb-2.no-gutters
+  .col-md-12
+    .btn-group.btn-group-sm role="group" aria-label="..."
+      button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='departments_grid' 过滤
+      button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='departments_grid' 清除过滤条件
+    = link_to '新建科室', new_department_path, class: 'btn btn-primary pull-right'
+.row.no-gutters
+  = render partial: "departments_grid"

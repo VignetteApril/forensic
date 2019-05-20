@@ -7,23 +7,33 @@ aside.app-sidebar
       - unless @current_user.roles.empty?
         p.app-sidebar__user-designation = @current_user.roles.first.name
   ul.app-menu
-    li
-      a href="#{organizations_path}" class="#{active_class(controller, 'organizations')}"
-        i.app-menu__icon.fa.fa-building-o
-        span.app-menu__label 机构管理
-    li
-      a href="#{users_path}" class="#{active_class(controller, 'users')}"
-        i.app-menu__icon.fa.fa-user-o
-        span.app-menu__label 用户管理
-    li
-      a href="#{features_path}" class="#{active_class(controller, 'features')}"
-        i.app-menu__icon.fa.fa-hdd-o
-        span.app-menu__label 角色权限管理
-    li
-      a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
-        i.app-menu__icon.fa.fa-flag-o
-        span.app-menu__label 用户角色管理
-    li
-      a href="#{doc_templates_path}" class="#{active_class(controller, 'doc_templates')}"
-        i.app-menu__icon.fa.fa-folder-o
-        span.app-menu__label 模板文档管理
+    - if can?('organizations', 'index')
+      li
+        a href="#{organizations_path}" class="#{active_class(controller, 'organizations')}"
+          i.app-menu__icon.fa.fa-building-o
+          span.app-menu__label 机构管理
+    - if can?('departments', 'index') && !admin?
+      li
+        a href="#{departments_path}" class="#{active_class(controller, 'departments')}"
+          i.app-menu__icon.fa.fa-building-o
+          span.app-menu__label 机构管理
+    - if can?('users', 'index')
+      li
+        a href="#{users_path}" class="#{active_class(controller, 'users')}"
+          i.app-menu__icon.fa.fa-user-o
+          span.app-menu__label 用户管理
+    - if can?('features', 'index')
+      li
+        a href="#{features_path}" class="#{active_class(controller, 'features')}"
+          i.app-menu__icon.fa.fa-hdd-o
+          span.app-menu__label 角色权限管理
+    - if can?('roles', 'index')
+      li
+        a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
+          i.app-menu__icon.fa.fa-flag-o
+          span.app-menu__label 用户角色管理
+    - if can?('doc_templates', 'index')
+      li
+        a href="#{doc_templates_path}" class="#{active_class(controller, 'doc_templates')}"
+          i.app-menu__icon.fa.fa-folder-o
+          span.app-menu__label 模板文档管理

@@ -3,13 +3,14 @@
     #error_explanation.alert.alert-warning
       h4
         | 该角色保存时出错：
-        = pluralize(@user.errors.count, "个错误")
+        = pluralize(@role.errors.count, "个错误")
       ul
-        - @user.errors.full_messages.each do |message|
+        - @role.errors.full_messages.each do |message|
           li
             = message
   .form-inputs
     = f.input :name, label: '角色名称'
+    = f.input :r_type, label: '角色类型', collection: Role.collection_select_arr, include_blank: false
     = f.input :description, label: '角色描述', as: :text, :input_html => {:rows => 5}
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
