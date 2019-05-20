@@ -96,11 +96,19 @@ class ApplicationController < ActionController::Base
 
   # 用户登录验证
   def authorize
-    if session[:user_id].blank?
+    if session[:user_id]
+      @current_user ||= User.find_by_id(session[:user_id])
+    elsif cookies.signed[:user_id]
+      user = User.find_by(id: cookies.signed[:user_id])
+      if user && user.authenticated?(cookies[:remember_token])
+        session[:user_id] = user.id
+        @current_user = user
+      end
+    else
       redirect_to main_app.login_url, notice: ("请您先登录系统" unless (controller_name == 'session' && action_name == 'index'))
       return
     end
-    @current_user = User.find_by_id(session[:user_id])
+
     if @current_user.blank?
       redirect_to main_app.login_url, notice: ("请您先登录系统" unless (controller_name == 'session' && action_name == 'index'))
       return
@@ -115,7 +123,7 @@ class ApplicationController < ActionController::Base
       # session['cas']['extra_attributes'] = { id: @current_user.id, session_id: @current_user.session_id, name: @current_user.name }
       redirect_to main_app.edit_password_user_path(@current_user), notice: "您初次登录系统（或者刚刚初始化过密码），所以必须先修改密码才能继续使用。"
       return
-    end  
+    end
   end
 
   # 用户权限验证

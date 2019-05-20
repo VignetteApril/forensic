@@ -41,6 +41,7 @@ gem 'sdoc',                                 '0.4.1', group: :doc
 gem 'selectize-rails'
 gem 'cocoon'
 gem 'aasm'
+gem 'bcrypt',                                '~> 3.1.7'
 
 group :development, :test do
   gem 'minitest-rails'

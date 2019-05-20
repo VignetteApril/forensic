@@ -37,10 +37,8 @@
                 = password_field_tag :password, params[:password], class: "form-control", \
                                                   placeholder: "默认的密码是：123456@Shike", "aria-describedby" => "password-status"
               .form-group
-                label.custom-control.custom-checkbox
-                  input type="checkbox" class="custom-control-input"
-                  span.custom-control-label
-                     | 记住我
+                = check_box_tag :remember_me, params[:remember_me]
+                .form-label.d-inline-block 记住我
               .form-footer
                 button type="submit" class="btn btn-primary btn-block"
                  | 登 录

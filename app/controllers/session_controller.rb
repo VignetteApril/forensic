@@ -23,6 +23,13 @@ class SessionController < ApplicationController
       redirect_to :login, flash: { danger: '用户被锁定，请联系管理员' } if user.is_locked == true
 
       session[:user_id] = user.id
+
+      if params[:remember_me] == 'on'
+        remember(user)
+      else
+        forget(user)
+      end
+
       user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
       redirect_to main_cases_path
     else
@@ -32,7 +39,13 @@ class SessionController < ApplicationController
   
   # 用户注销
   def destroy
-    # @current_user.update(session_id: nil) if FORBID_SHADOW_LOGIN
+    # 忘记永久记住的用户
+    current_user = User.find(session[:user_id])
+    current_user.forget
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
+
+    # 登出
     session[:user_id] = nil
     redirect_to :login, flash: { success: '您已经从系统中注销了' }
   end
@@ -68,13 +81,16 @@ class SessionController < ApplicationController
   end
 
   #记住用户,持久性存储登录信息(存cookie)
-  #1.创建记忆令牌把未加密的存储到cookie把记忆令牌加密更新到数据库
-  #2.把用户设置为当前登录用户
   def remember(user)
-    remember_token = User.new_remember_token
-    user.remember(remember_token)
-    cookies.permanent[:remember_token] = remember_token #permanent自动将过期时间设置为20年之后
-    cookies.permanent.signed[:user_id] = user.id #signed设置存入浏览器前安全加密cookie中的用户ID
-    self.current_user = user
+    user.remember
+    cookies.permanent.signed[:user_id] = user.id
+    cookies.permanent[:remember_token] = user.remember_token
+  end
+
+  # 忘记持久会话
+  def forget(user)
+    user.forget
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
   end
 end

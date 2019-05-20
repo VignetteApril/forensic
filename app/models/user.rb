@@ -1,10 +1,12 @@
 # -*- encoding : utf-8 -*-
 require 'digest/sha2'
+require 'bcrypt'
 
 class User < ApplicationRecord
   # 宏
   attr_accessor :password_confirmation
   attr_reader   :password
+  attr_accessor :remember_token
 
   # 验证
   validates :login, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 50}
@@ -108,6 +110,35 @@ class User < ApplicationRecord
       self.user_type = :court_user
     when :center
       self.user_type = :center_user
+    end
+  end
+
+  def remember
+    self.remember_token = User.new_token
+    update_attribute(:remember_digest, User.digest(remember_token))
+  end
+
+  # 如果指定的令牌和摘要匹配，返回 true
+  def authenticated?(remember_token)
+    BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  end
+
+  # 忘记用户
+  def forget
+    update_attribute(:remember_digest, nil)
+  end
+
+  class << self
+    # 生成新的token
+    def new_token
+      SecureRandom.urlsafe_base64
+    end
+
+    # 返回指定字符串的哈希摘要
+    def digest(string)
+      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+                 BCrypt::Engine.cost
+      BCrypt::Password.create(string, cost: cost)
     end
   end
 

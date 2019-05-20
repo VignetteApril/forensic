@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_20_150914) do
+ActiveRecord::Schema.define(version: 2019_05_20_152729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -292,6 +292,7 @@ ActiveRecord::Schema.define(version: 2019_05_20_150914) do
     t.bigint "organization_id"
     t.boolean "is_locked", default: false
     t.integer "user_type"
+    t.string "remember_digest"
     t.index ["department_id"], name: "index_users_on_department_id"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
