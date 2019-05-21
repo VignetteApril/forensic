@@ -6,8 +6,8 @@ class SessionController < ApplicationController
   
   # 显示系统登录之后的首页
   def index
-    session[:bread] = [ { "title" => '主页',  "url_str" => root_path() } ]
-    session[:bread_clear] = [ root_path() ]
+    # session[:bread] = [ { "title" => '主页',  "url_str" => root_path() } ]
+    # session[:bread_clear] = [ root_path() ]
     
     @base_date = SysLog.where(user_id: @current_user.id).order("log_date DESC") # .first.log_date
     make_log(@current_user) if @base_date && !@base_date.empty? && @base_date.first.log_date < RELEASE_NOTES.last['date']
@@ -15,6 +15,12 @@ class SessionController < ApplicationController
   
   # 显示系统用户登录页面
   def new
+    if cookies.signed[:user_id]
+      user = User.find_by(id: cookies.signed[:user_id])
+      if user && user.authenticated?(cookies[:remember_token])
+        redirect_to acceptable_url('main_cases', 'index')
+      end
+    end
   end
   
   # 用户登录信息提交，用户身份验证，成功之后转向系统首页
@@ -47,6 +53,7 @@ class SessionController < ApplicationController
 
     # 登出
     session[:user_id] = nil
+    current_user.update(session_id: nil)
     redirect_to :login, flash: { success: '您已经从系统中注销了' }
   end
 

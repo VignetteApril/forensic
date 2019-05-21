@@ -102,6 +102,7 @@ class ApplicationController < ActionController::Base
       user = User.find_by(id: cookies.signed[:user_id])
       if user && user.authenticated?(cookies[:remember_token])
         session[:user_id] = user.id
+        user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
         @current_user = user
       end
     else
