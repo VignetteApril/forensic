@@ -4,6 +4,7 @@ class MainCasesController < ApplicationController
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]
+  before_action :set_case_types, only: [:edit, :update]
 
   # GET /main_cases
   # GET /main_cases.json
@@ -22,6 +23,12 @@ class MainCasesController < ApplicationController
     @main_case = MainCase.new
     @main_case.transfer_docs.build
     @main_case.build_appraised_unit
+
+    # 设置鉴定事项
+    set_department_matters
+
+    # 设定案件类型
+    set_case_types
   end
 
   # GET /main_cases/1/edit
@@ -125,7 +132,7 @@ class MainCasesController < ApplicationController
     end
   end
 
-  def matter_demands
+  def matter_demands_and_case_types
     department = Department.find(params[:department_id])
     if department.matter
       matters = department.matter.split(',').map { |matter| { text: matter, id: matter } }
@@ -133,8 +140,14 @@ class MainCasesController < ApplicationController
       matters = []
     end
 
+    if department.case_types
+      case_types = department.case_types.split(',').map { |case_type| { text: case_type , id: case_type } }
+    else
+      case_types = []
+    end
+
     respond_to do |format|
-      format.json { render json: { matters: matters } }
+      format.json { render json: { matters: matters, case_types: case_types } }
     end
   end
 
@@ -209,6 +222,15 @@ class MainCasesController < ApplicationController
                             else
                               @department_matters.map(&:first)
                             end
+      end
+    end
+
+    def set_case_types
+      case_type = @main_case.case_type
+      @selected_case_type = [case_type, case_type]
+      @collection_case_types = []
+      if @main_case.department && !@main_case.department.case_types.blank?
+        @collection_case_types = @main_case.department.case_types.split(',').map { |case_type| [case_type, case_type] }
       end
     end
 end

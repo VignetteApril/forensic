@@ -13,6 +13,7 @@
     = f.input :code, label: '科室编号'
     = f.input :organization_id, label: '所属机构', collection: organization_collection, include_blank: false
     = f.input :matter, label: '鉴定事项', type: :text, :input_html => { id: 'matter-tags' }
+    = f.input :case_types, label: '案件类型', type: :text, :input_html => {id: 'case-types'}
     = f.input :description, label: '科室描述', as: :text, :input_html => {:rows => 5}
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
@@ -20,6 +21,17 @@
 javascript:
     $(document).ready(function () {
         $('#matter-tags').selectize({
+            delimiter: ',',
+            persist: false,
+            create: function (input) {
+                return {
+                    value: input,
+                    text: input
+                }
+            }
+        });
+
+        $('#case-types').selectize({
             delimiter: ',',
             persist: false,
             create: function (input) {

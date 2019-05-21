@@ -66,7 +66,8 @@ $(document).on('turbolinks:load', function() {
             // 科室和鉴定事项select2联动
             var department_select2 = $('#main_case_department_id');
             var main_case_matter_select2 = $('#main_case_matter');
-            var request_url_matters = window.location.origin + '/main_cases/matter_demands.json';
+            var main_case_case_type_select2 =  $('#main_case_case_type');
+            var request_url_matters = window.location.origin + '/main_cases/matter_demands_and_case_types.json';
             department_select2.on("select2:select", function(e){
                 $.ajax({
                     url: request_url_matters,
@@ -79,7 +80,12 @@ $(document).on('turbolinks:load', function() {
                         main_case_matter_select2.empty();
                         main_case_matter_select2.select2({
                             data: data.matters
-                        })
+                        });
+
+                        main_case_case_type_select2.empty();
+                        main_case_case_type_select2.select2({
+                            data: data.case_types
+                        });
                     }
                 });
             });

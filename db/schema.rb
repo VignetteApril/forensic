@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_20_152729) do
+ActiveRecord::Schema.define(version: 2019_05_21_151541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2019_05_20_152729) do
     t.datetime "updated_at", null: false
     t.bigint "organization_id"
     t.string "matter"
+    t.string "case_types"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -147,7 +148,7 @@ ActiveRecord::Schema.define(version: 2019_05_20_152729) do
     t.datetime "accept_date"
     t.integer "case_stage"
     t.datetime "case_close_date"
-    t.integer "case_type"
+    t.string "case_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "user_name"
@@ -250,7 +251,6 @@ ActiveRecord::Schema.define(version: 2019_05_20_152729) do
     t.string "name"
     t.integer "doc_type"
     t.integer "num"
-    t.string "unit"
     t.string "traits"
     t.string "status"
     t.datetime "receive_date"
@@ -258,6 +258,7 @@ ActiveRecord::Schema.define(version: 2019_05_20_152729) do
     t.bigint "main_case_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "unit"
     t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
   end
 

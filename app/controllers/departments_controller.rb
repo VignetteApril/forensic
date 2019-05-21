@@ -98,6 +98,7 @@ class DepartmentsController < ApplicationController
                                         :code,
                                         :sort_no,
                                         :organization_id,
-                                        :matter)
+                                        :matter,
+                                        :case_types)
   end
 end
