@@ -1,4 +1,5 @@
 class OrganizationsController < ApplicationController
+  layout 'system'
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_provinces, only: [:new, :edit]
 

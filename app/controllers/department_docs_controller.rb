@@ -1,4 +1,5 @@
 class DepartmentDocsController < ApplicationController
+  layout 'system'
   before_action :set_department_doc, only: [:show, :edit, :update, :destroy]
   before_action :set_department, only: [:index, :show, :new, :edit, :create, :update, :destroy]
 

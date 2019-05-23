@@ -13502,6 +13502,14 @@ be a descendant of the grid when it is being dragged.
   transition: margin-left 0.3s ease;
 }
 
+.main-app-content {
+  min-height: calc(100vh - 50px);
+  padding: 60px 30px 30px 30px;
+  -webkit-transition: margin-left 0.3s ease;
+  -o-transition: margin-left 0.3s ease;
+  transition: margin-left 0.3s ease;
+}
+
 @media (min-width: 768px) {
   .app-content {
     margin-left: 230px;

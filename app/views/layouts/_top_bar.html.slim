@@ -3,6 +3,16 @@ header class="app-header"
     = image_tag("logo.png", alt: "forensic logo", style: 'height: 30px; width: auto;')
     span 智慧司法云服务平台
   a.app-sidebar__toggle href="#" data-toggle="sidebar" aria-label="Hide Sidebar"
+  .row.mt-3.ml-2
+    - unless admin?
+      - if can?('departments', 'index')
+        = link_to '机构管理', organizations_path, class: 'mr-2', style: 'color: white;'
+    = link_to '案件', main_cases_path, class: 'mr-2', style: 'color: white;'
+    = link_to '委托单', '#', class: 'mr-2', style: 'color: white;'
+    = link_to '统计', '#', class: 'mr-2', style: 'color: white;'
+    = link_to '财务', '#', class: 'mr-2', style: 'color: white;'
+    = link_to '快递单', '#', class: 'mr-2', style: 'color: white;'
+
   // Navbar Right Menu
   ul.app-nav
     // Notification Menu
@@ -32,6 +42,10 @@ header class="app-header"
           = link_to(edit_password_user_path(@current_user), class: "dropdown-item") do
             i.dropdown-icon.fa.fa-pencil-square-o
             | 修改密码
+          - if admin?
+            = link_to(organizations_path, class: "dropdown-item") do
+              i.dropdown-icon.fa.fa-cog
+              | 系统管理
           = link_to(logout_path, class: "dropdown-item") do
             i.dropdown-icon.fa.fa-sign-out
             | 登出

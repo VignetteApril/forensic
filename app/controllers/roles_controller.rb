@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 class RolesController < ApplicationController
+  layout 'system'
   before_action :set_role, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_role]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_role]
 

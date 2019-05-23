@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title 
+    title
       = SysConfig.sys_title
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application',               'data-turbolinks-track' => true
@@ -10,7 +10,8 @@ html
   body.app.sidebar-mini.rtl data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
     = render 'layouts/top_bar'
     = render "layouts/flash_message"
-    main.main-app-content
+    = render 'layouts/sidebar'
+    main.app-content
       == yield
 
 javascript:

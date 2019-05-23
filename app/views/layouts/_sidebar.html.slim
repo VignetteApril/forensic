@@ -16,7 +16,7 @@ aside.app-sidebar
       li
         a href="#{departments_path}" class="#{active_class(controller, 'departments')}"
           i.app-menu__icon.fa.fa-building-o
-          span.app-menu__label 机构管理
+          span.app-menu__label 科室管理
     - if can?('users', 'index')
       li
         a href="#{users_path}" class="#{active_class(controller, 'users')}"
