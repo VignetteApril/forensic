@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   resources :main_cases do
     get :organization_and_user, on: :collection
     get :matter_demands_and_case_types, on: :collection
+    get :generate_case_no, on: :member
   end
 
   post 'areas/cities'

@@ -1,5 +1,5 @@
 class MainCasesController < ApplicationController
-  before_action :set_main_case, only: [:show, :edit, :update, :destroy]
+  before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no]
   before_action :set_provinces, only: [:new, :edit, :organization_and_user, :create]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
@@ -149,6 +149,12 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       format.json { render json: { matters: matters, case_types: case_types } }
     end
+  end
+
+  def generate_case_no
+    @main_case.set_case_no
+
+    redirect_to @main_case
   end
 
   private
