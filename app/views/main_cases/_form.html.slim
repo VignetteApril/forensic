@@ -23,9 +23,9 @@
           .col-md-4
             = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
           .col-md-4
-            = f.input :city_id, collection: [], label: '市', include_blank: false
+            = f.input :city_id, collection: @cities, label: '市', include_blank: true
           .col-md-4
-            = f.input :district_id, collection: [], label: '区县', include_blank: false
+            = f.input :district_id, collection: @districts, label: '区县', include_blank: true
         .row
           .col-md-6
             = f.input :organization_name, label: '委托方名称'
@@ -79,7 +79,7 @@
           .row
             .col-md-12
               = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
-                      collection: AppraisedUnit.unit_types_arr, checked: 'user'
+                      collection: AppraisedUnit.unit_types_arr, checked: 'user', :item_wrapper_class => 'form-check form-check-inline'
           .row
             .col-md-4
               = appraised_unit.input :name, label: '名称'

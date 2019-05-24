@@ -1,7 +1,7 @@
 class MainCase < ApplicationRecord
   include AASM
 
-  attr_accessor :province_id, :city_id, :district_id
+  # attr_accessor :province_id, :city_id, :district_id
 
   belongs_to :department
   has_many :case_users, dependent: :destroy # 机构中有很多

@@ -3,20 +3,31 @@
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
   .form-inputs
-    = f.input :name, label: '机构名称'
-    = f.input :org_type, label: '机构类型', collection: Organization.collection_select_arr
-    = f.input :code, label: '机构编码'
-    = f.input :abbreviation, label: '机构缩写'
-    = f.input :desc, label: '机构简介'
     .row
       .col-md-4
         = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
       .col-md-4
-        = f.input :city_id, collection: [], label: '市', include_blank: false
+        = f.input :city_id, collection: @cities, label: '市', include_blank: true
       .col-md-4
-        = f.input :district_id, collection: [], label: '区县', include_blank: false
-    = f.input :addr, label: '机构地址'
-    = f.input :phone, label: '机构电话'
-    = f.input :wechat_id, label: '机构微信号'
+        = f.input :district_id, collection: @districts, label: '区县', include_blank: true
+    .row
+      .col-md-4
+        = f.input :name, label: '机构名称'
+      .col-md-4
+        = f.input :org_type, label: '机构类型', collection: Organization.collection_select_arr
+      .col-md-4
+        = f.input :code, label: '机构编码'
+    .row
+      .col-md-4
+        = f.input :abbreviation, label: '机构缩写'
+      .col-md-8
+        = f.input :desc, label: '机构简介'
+    .row
+      .col-md-4
+        = f.input :addr, label: '机构地址'
+      .col-md-4
+        = f.input :phone, label: '机构电话'
+      .col-md-4
+        = f.input :wechat_id, label: '机构微信号'
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_151541) do
+ActiveRecord::Schema.define(version: 2019_05_24_144832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,9 @@ ActiveRecord::Schema.define(version: 2019_05_21_151541) do
     t.datetime "commission_date"
     t.integer "financial_stage"
     t.integer "case_no"
+    t.integer "province_id"
+    t.integer "city_id"
+    t.integer "district_id"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
@@ -197,6 +200,9 @@ ActiveRecord::Schema.define(version: 2019_05_21_151541) do
     t.datetime "updated_at", null: false
     t.string "ancestry"
     t.string "abbreviation"
+    t.integer "province_id"
+    t.integer "city_id"
+    t.integer "district_id"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end

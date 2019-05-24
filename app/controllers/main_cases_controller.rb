@@ -1,6 +1,7 @@
 class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no]
-  before_action :set_provinces, only: [:new, :edit, :organization_and_user, :create]
+  before_action :set_new_areas, only: [:new, :organization_and_user, :create]
+  before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]
@@ -204,8 +205,18 @@ class MainCasesController < ApplicationController
                                                                     :id_num])
     end
 
-    def set_provinces
+    def set_new_areas
       @provinces = Area.roots
+      @cities = @provinces.first.children
+      @districts = []
+    end
+
+    def set_edit_areas
+      province_id = @main_case.province_id
+      city_id = @main_case.city_id
+      @provinces = Area.roots
+      @cities = province_id.nil? ? @provinces.first.children : Area.find(province_id).children
+      @districts = city_id.nil? ? [] : Area.find(city_id).children
     end
 
     def set_court_users
@@ -223,11 +234,7 @@ class MainCasesController < ApplicationController
         @selected_matters = []
       else
         @department_matters = JSON.parse(@main_case.matter).map { |matter| [matter, matter] }
-        @selected_matters = if @department_matters.nil?
-                              []
-                            else
-                              @department_matters.map(&:first)
-                            end
+        @selected_matters = @department_matters.nil? ? [] : @department_matters.map(&:first)
       end
     end
 

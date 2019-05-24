@@ -8,14 +8,11 @@
       = f.input :num, label: '数量'
     .col-md-1
       = f.input :unit, label: '单位', collection: TransferDoc.collection_select_arr
-    .col-md-1
+    .col-md-2
       = f.input :traits, label: '性状'
-    .col-md-1
+    .col-md-2
       = f.input :status, label: '状况'
     .col-md-2
       = f.input :receive_date, as: :date, label: '收到时间', html5: true
-    .col-md-2
-      .attachment_upload
-        = f.input :attachment, label: '上传', as: :file, input_html: {direct_upload: true}
     .col-md-1
-      = link_to_remove_association "移除", f, class: 'btn btn-danger mt-3'
+      = link_to_remove_association "移除", f, class: 'btn btn-danger mt-4'

@@ -33,7 +33,7 @@ features:
   - [机构管理, organizations,"index,new,edit,create,destroy",系统管理]
   - [科室模板管理, department_docs, "index, new, edit, create, destroy", 科室模板管理]
   - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 模板文档管理]
-  - [案件管理, main_cases, "index, new, edit, show, create, destroy, organization_and_user, matter_demands, generate_case_no", 案件管理]
+  - [案件管理, main_cases, "index, new, edit, show, create, destroy, organization_and_user, matter_demands, generate_case_no, matter_demands_and_case_types", 案件管理]
 apps:
   - name: 系统管理
     module_chain:

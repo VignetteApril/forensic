@@ -1,7 +1,8 @@
 class OrganizationsController < ApplicationController
   layout 'system'
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
-  before_action :set_provinces, only: [:new, :edit]
+  before_action :set_new_areas, only: [:new, :create]
+  before_action :set_edit_areas, only: [:edit, :update]
 
   # GET /organizations
   # GET /organizations.json
@@ -89,7 +90,17 @@ class OrganizationsController < ApplicationController
                                            :abbreviation)
     end
 
-    def set_provinces
+    def set_new_areas
       @provinces = Area.roots
+      @cities = @provinces.first.children
+      @districts = []
+    end
+
+    def set_edit_areas
+      province_id = @organization.province_id
+      city_id = @organization.city_id
+      @provinces = Area.roots
+      @cities = province_id.nil? ? @provinces.first.children : Area.find(province_id).children
+      @districts = city_id.nil? ? [] : Area.find(city_id).children
     end
 end
