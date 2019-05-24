@@ -46,7 +46,7 @@ html, body, #login-page {
 }
 
 #login-page {
-  background: url("login_bg.png") no-repeat center center;
+  background: asset_url("login_bg.png") no-repeat center center;
   background-size: cover;
   background-attachment:fixed;
   overflow: hidden;
