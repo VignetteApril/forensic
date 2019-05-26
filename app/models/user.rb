@@ -31,7 +31,6 @@ class User < ApplicationRecord
   belongs_to :organization, required: false # 每一个用户只能同时属于一个机构
 
   # callbacks
-  before_create :set_organization, if: :organization_empty?
   before_save   :set_user_type, unless: :organization_empty?
   before_save   :set_department_names
 
@@ -89,14 +88,6 @@ class User < ApplicationRecord
       true
     else
       false
-    end
-  end
-
-  # 通过当前部门设置机构
-  def set_organization
-    # 只有非平台管理员用户才会设置部门
-    if self.login != 'admin'
-      self.organization = self.department.organization
     end
   end
 

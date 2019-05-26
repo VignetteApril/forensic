@@ -43,6 +43,8 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params.merge({:password => '123456@Shike', :password_confirmation => '123456@Shike'}))
     @user.departments = user_params[:departments].join(',') unless user_params[:departments].blank?
+    @user.organization = @current_user.organization unless admin?
+
     respond_to do |format|
       if @user.save
         format.html { redirect_to users_url, notice: '新建用户成功啦，默认密码是 123456@Shike' }

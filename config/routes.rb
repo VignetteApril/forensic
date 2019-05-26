@@ -65,5 +65,7 @@ Rails.application.routes.draw do
   get 'login' => 'session#new', as: :login
   get 'logout' => 'session#destroy', as: :logout
 
-  root 'main_cases#index'
+  # root 'main_cases#index'
+  root 'session#index'
 end
+
