@@ -52,7 +52,7 @@
   end
 
   g.column name: '结案倒计时', attribute: 'commission_date', ordering: false do |main_case|
-    distance_of_time_in_words(Date.today, main_case.commission_date)
+    distance_of_time_in_words(Date.today, main_case.commission_date) if main_case.commission_date
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
