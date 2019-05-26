@@ -25,6 +25,13 @@ class MainCase < ApplicationRecord
       close: '结案'
   }
 
+  FINANCIAL_STAGE_MAP = {
+      unpaid: '未支付',
+      not_fully_paid: '未完全支付',
+      paid: '已支付',
+      refunded: '已退款'
+  }
+
   aasm(:case, column: :case_stage, enum: true) do
     state :pending, initial: true
     state :add_material, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
