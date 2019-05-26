@@ -122,7 +122,7 @@ class UsersController < ApplicationController
   end
 
   def set_selected_departments
-    if @user.departments.blank? || @user.nil?
+    if  @user.nil? || @user.departments.blank?
       @departments_selected = []
     else
       @departments_selected = Department.where(id: @user.departments.split(',')).map { |department| department.id }
