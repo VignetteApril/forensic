@@ -1,7 +1,6 @@
-.row
-  = link_to '返回', department_department_docs_path(@department), class: 'btn btn-primary mb-2'
-  .card
-    .card-header
-      h3.card-title 新建科室模板文档
-    .card-body
-      == render 'form'
+= link_to '返回', department_department_docs_path(@department), class: 'btn btn-primary mb-2'
+.card
+  .card-header
+    h3.card-title 新建科室模板文档
+  .card-body
+    == render 'form'
