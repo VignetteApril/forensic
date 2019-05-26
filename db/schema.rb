@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_24_144832) do
+ActiveRecord::Schema.define(version: 2019_05_26_104904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -284,7 +284,6 @@ ActiveRecord::Schema.define(version: 2019_05_24_144832) do
     t.string "mobile_phone", limit: 100
     t.string "hashed_password"
     t.string "salt"
-    t.integer "department_id"
     t.integer "sort_no"
     t.string "gender", limit: 10
     t.string "address"
@@ -300,7 +299,8 @@ ActiveRecord::Schema.define(version: 2019_05_24_144832) do
     t.boolean "is_locked", default: false
     t.integer "user_type"
     t.string "remember_digest"
-    t.index ["department_id"], name: "index_users_on_department_id"
+    t.string "departments"
+    t.string "department_names"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end

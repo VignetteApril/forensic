@@ -4,7 +4,6 @@ class Department < ApplicationRecord
   validates :code, :presence => true, :length => {:maximum => 20}, uniqueness: { message: '该编号已经被占用' }
 
   has_ancestry
-  has_many :users, dependent: :destroy # 机构中有很多
   has_many :department_docs
   belongs_to :organization
 end

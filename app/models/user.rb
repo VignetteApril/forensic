@@ -33,6 +33,7 @@ class User < ApplicationRecord
   # callbacks
   before_create :set_organization, if: :organization_empty?
   before_save   :set_user_type, unless: :organization_empty?
+  before_save   :set_department_names
 
   # 用户类型【法院用户，鉴定中心用户】
   enum user_type: [:court_user, :center_user]
@@ -97,6 +98,10 @@ class User < ApplicationRecord
     if self.login != 'admin'
       self.organization = self.department.organization
     end
+  end
+
+  def set_department_names
+    self.department_names = Department.where(id: self.departments.split(',')).pluck(:name).join(',') unless self.departments.blank?
   end
 
   # 判断当前机构是否为空

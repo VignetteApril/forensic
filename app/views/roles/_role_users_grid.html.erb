@@ -38,9 +38,9 @@
             end
           else
           # 机构管理员只关注用户的科室级别的信息
-            g.column name: '所属科室', attribute: 'department_id', ordering: false,
+            g.column name: '所属科室', attribute: 'department_names', ordering: false,
                      custom_filter: @current_user.organization.departments.map{ |department| [department.name, department.id] }, allow_multiple_selection: false do |a|
-              a.department.name if a.department
+              a.department_names
             end
           end
 

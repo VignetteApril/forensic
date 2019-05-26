@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   skip_before_action :can, only: [:edit_password, :update_password]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
+  before_action :set_selected_departments, only: [:edit, :update, :new, :create]
 
   # 管理员进入“用户管理”功能，系统显示用户查询列表页面。
   # 管理员可以输入关键字进行搜索，可与对列表进行排序，列表应该进行分页显示。
@@ -41,7 +42,7 @@ class UsersController < ApplicationController
   # 管理员填写新用户之后点击“提交”按钮，系统保存新用户信息并返回用户列表页面。
   def create
     @user = User.new(user_params.merge({:password => '123456@Shike', :password_confirmation => '123456@Shike'}))
-
+    @user.departments = user_params[:departments].join(',') unless user_params[:departments].blank?
     respond_to do |format|
       if @user.save
         format.html { redirect_to users_url, notice: '新建用户成功啦，默认密码是 123456@Shike' }
@@ -55,6 +56,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
+        @user.update(departments: user_params[:departments].join(',')) unless user_params[:departments].blank?
         format.html { redirect_to users_url, notice: '用户信息已经成功保存了' }
       else
         format.html { render :edit }
@@ -112,10 +114,18 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:login, :name, :email,
                                  :hashed_password, :password, :password_confirmation,
-                                 :department_id,
+                                 { departments: [] },
                                  :sort_no,
                                  :gender,
                                  :mobile_phone,
                                  :organization_id)
+  end
+
+  def set_selected_departments
+    if @user.departments.blank?
+      @departments_selected = []
+    else
+      @departments_selected = Department.where(id: @user.departments.split(',')).map { |department| department.id }
+    end
   end
 end
