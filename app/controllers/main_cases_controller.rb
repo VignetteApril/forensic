@@ -34,6 +34,7 @@ class MainCasesController < ApplicationController
 
   # GET /main_cases/1/edit
   def edit
+    @main_case.transfer_docs.build if @main_case.transfer_docs.empty?
   end
 
   # POST /main_cases

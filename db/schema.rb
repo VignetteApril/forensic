@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_26_104904) do
+ActiveRecord::Schema.define(version: 2019_05_27_144758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_05_26_104904) do
   end
 
   create_table "appraised_units", force: :cascade do |t|
-    t.integer "unit_type"
+    t.string "unit_type"
     t.string "name"
     t.integer "gender"
     t.datetime "birthday"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 2019_05_26_104904) do
     t.bigint "organization_id"
     t.string "matter"
     t.string "case_types"
+    t.string "abbreviation"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -255,7 +256,6 @@ ActiveRecord::Schema.define(version: 2019_05_26_104904) do
 
   create_table "transfer_docs", force: :cascade do |t|
     t.string "name"
-    t.integer "doc_type"
     t.integer "num"
     t.string "traits"
     t.string "status"
@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 2019_05_26_104904) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "unit"
+    t.string "doc_type"
     t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
   end
 

@@ -1,4 +1,4 @@
-<%= grid(@main_cases, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+<%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
   g.column name: '流水号', attribute: 'serial_no', ordering: false do |main_case|
     main_case.serial_no
   end
@@ -7,7 +7,7 @@
     main_case.case_no_display
   end
 
-  g.column name: '委托方', attribute: 'organization_name', ordering: false do |main_case|
+  g.column name: '委托方', attribute: 'organization_name', detach_with_id: :organization_name_filter, ordering: false do |main_case|
     main_case.organization_name
   end
 
@@ -27,15 +27,15 @@
     JSON.parse(main_case.matter).join(',') unless main_case.matter.blank?
   end
 
-  g.column name: '受委托部门', attribute: 'name', assoc: :department, ordering: false do |main_case|
+  g.column name: '受委托部门', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter, ordering: false do |main_case|
     main_case.department.name
   end
 
-  g.column name: '受理状态', attribute: 'case_stage', ordering: false do |main_case|
+  g.column name: '受理状态', attribute: 'case_stage', detach_with_id: :case_stage_filter, ordering: false do |main_case|
     MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
   end
 
-  g.column name: '付款状态', attribute: 'financial_stage', ordering: false do |main_case|
+  g.column name: '付款状态', attribute: 'financial_stage', detach_with_id: :financial_stage_filter, ordering: false do |main_case|
     MainCase::FINANCIAL_STAGE_MAP[main_case.financial_stage.to_sym]
   end
 
@@ -43,7 +43,7 @@
     MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
   end
 
-  g.column name: '经办人', attribute: 'pass_user', ordering: false do |main_case|
+  g.column name: '经办人', attribute: 'pass_user',  detach_with_id: :pass_user_filter, ordering: false do |main_case|
     main_case.pass_user
   end
 

@@ -100,6 +100,7 @@ class DepartmentsController < ApplicationController
                                         :sort_no,
                                         :organization_id,
                                         :matter,
-                                        :case_types)
+                                        :case_types,
+                                        :abbreviation)
   end
 end

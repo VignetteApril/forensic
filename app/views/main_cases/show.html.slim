@@ -1,9 +1,12 @@
-= link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
-= link_to '生成案号', generate_case_no_main_case_path(@main_case), class: 'btn btn-primary mb-2 pull-right'
+.row.no-gutters
+  .col-md-2
+    = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
+  .col-md-10
+    = link_to '生成案号', generate_case_no_main_case_path(@main_case), class: 'btn btn-primary mb-2 pull-right'
+    span.pull-right.mr-2.mt-2.h6 = "案件编号：#{@main_case.case_no_display}"
 .card
   .card-header
     h3.card-title 案件基本信息
-    h5 = "案件编号：#{@main_case.case_no_display}"
     .card-header-btn
       = link_to(main_cases_path) do
         i.fe.fe-x
@@ -74,13 +77,11 @@
                 td = transfer_doc.name
                 td = transfer_doc.doc_type
                 td = transfer_doc.num
-                td = transfer_doc.unit
+                td = TransferDoc::UNIT_MAP[transfer_doc.unit.to_sym]
                 td = transfer_doc.traits
                 td = transfer_doc.status
                 td = transfer_doc.receive_date
                 td = transfer_doc.barcode
-
-
     hr
     h4.card-title 被鉴定人
     - if @main_case.appraised_unit.unit_type == :unit

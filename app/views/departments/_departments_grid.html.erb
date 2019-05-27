@@ -7,6 +7,10 @@
     department.code
   end
 
+  g.column name: '科室简称', attribute: 'abbreviation', ordering: false do |department|
+    department.abbreviation
+  end
+
   g.column name: '科室简介', attribute: 'description', ordering: false do |department|
     department.description
   end
