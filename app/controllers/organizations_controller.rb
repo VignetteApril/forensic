@@ -22,6 +22,8 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/1/edit
   def edit
+    # 当用户不是超级用户，切要去编辑其他机构信息时，提示用户没有权限
+    redirect_to acceptable_url('main_cases', 'index') if !admin? && @current_user.organization.id != @organization.id
   end
 
   # POST /organizations

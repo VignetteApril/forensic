@@ -7,6 +7,17 @@ aside.app-sidebar
       - unless @current_user.roles.empty?
         p.app-sidebar__user-designation = @current_user.roles.first.name
   ul.app-menu
+    - if can?('organizations', 'edit')
+      li
+        a href="#{identification_cycles_path}" class="#{active_class(controller, 'identification_cycles')}"
+          i.app-menu__icon.fa.fa-building-o
+          span.app-menu__label 鉴定周期管理
+
+    - if can?('organizations', 'edit') && !admin?
+      li
+        a href="#{edit_organization_path(@current_user.organization.id)}" class="#{active_class(controller, 'organizations')}"
+          i.app-menu__icon.fa.fa-building-o
+          span.app-menu__label 机构信息编辑
     - if can?('organizations', 'index')
       li
         a href="#{organizations_path}" class="#{active_class(controller, 'organizations')}"

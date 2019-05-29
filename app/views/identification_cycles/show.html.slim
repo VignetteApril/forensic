@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Day:
+  = @identification_cycle.day
+p
+  strong Organization:
+  = @identification_cycle.organization
+
+=> link_to 'Edit', edit_identification_cycle_path(@identification_cycle)
+'|
+=< link_to 'Back', identification_cycles_path

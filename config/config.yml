@@ -30,10 +30,12 @@ features:
   - [任务管理,delayed_jobs,"index",系统管理]
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
   - [个人事务提醒,notifications,"index,show,edit",平台]
-  - [机构管理, organizations,"index,new,edit,create,destroy",系统管理]
-  - [科室模板管理, department_docs, "index, new, edit, create, destroy", 科室模板管理]
-  - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 模板文档管理]
+  - [机构管理, organizations,"index, new, edit, create, destroy, update",系统管理]
+  - [编辑机构, organizations, 'edit, update', 机构]
+  - [科室模板管理, department_docs, "index, new, edit, create, destroy", 机构]
+  - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 平台]
   - [案件管理, main_cases, "index, new, edit, update, show, create, destroy, organization_and_user, matter_demands, generate_case_no, matter_demands_and_case_types", 案件管理]
+  - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 机构]
 apps:
   - name: 系统管理
     module_chain:

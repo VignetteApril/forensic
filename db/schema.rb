@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_144758) do
+ActiveRecord::Schema.define(version: 2019_05_29_142105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_144758) do
   end
 
   create_table "appraised_units", force: :cascade do |t|
-    t.string "unit_type"
+    t.integer "unit_type"
     t.string "name"
     t.integer "gender"
     t.datetime "birthday"
@@ -140,6 +140,14 @@ ActiveRecord::Schema.define(version: 2019_05_27_144758) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controller_name"], name: "index_features_on_controller_name"
+  end
+
+  create_table "identification_cycles", force: :cascade do |t|
+    t.integer "day"
+    t.bigint "organization_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_identification_cycles_on_organization_id"
   end
 
   create_table "main_cases", force: :cascade do |t|
@@ -312,6 +320,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_144758) do
   add_foreign_key "case_users", "users"
   add_foreign_key "department_docs", "departments"
   add_foreign_key "departments", "organizations"
+  add_foreign_key "identification_cycles", "organizations"
   add_foreign_key "main_cases", "departments"
   add_foreign_key "organizations", "areas"
   add_foreign_key "transfer_docs", "main_cases"
