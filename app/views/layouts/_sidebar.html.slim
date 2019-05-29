@@ -7,7 +7,7 @@ aside.app-sidebar
       - unless @current_user.roles.empty?
         p.app-sidebar__user-designation = @current_user.roles.first.name
   ul.app-menu
-    - if can?('organizations', 'edit')
+    - if can?('identification_cycles', 'index') && !admin?
       li
         a href="#{identification_cycles_path}" class="#{active_class(controller, 'identification_cycles')}"
           i.app-menu__icon.fa.fa-building-o
