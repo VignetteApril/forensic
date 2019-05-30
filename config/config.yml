@@ -36,6 +36,7 @@ features:
   - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 平台]
   - [案件管理, main_cases, "index, new, edit, update, show, create, destroy, organization_and_user, matter_demands, generate_case_no, matter_demands_and_case_types", 案件管理]
   - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 机构]
+  - [补充材料周期管理, material_cycles, 'index, new, edit, update, show, create, destroy', 机构]
 apps:
   - name: 系统管理
     module_chain:

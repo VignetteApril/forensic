@@ -1,0 +1,13 @@
+= simple_form_for(@material_cycle) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    .row
+      .col-md-6
+        = f.input :day, label: '天'
+      .col-md-6
+        = f.input :organization_id, label: '所属机构', collection: organization_collection, include_blank: false
+
+  .form-actions
+    = f.button :submit, '确认', class: 'btn btn-success'

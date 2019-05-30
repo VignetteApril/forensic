@@ -1,0 +1,13 @@
+<%= grid(@material_cycles, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
+  g.column name: '天数', attribute: 'day', ordering: false do |material_cycle|
+    material_cycle.day
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |material_cycle|
+    link_to '编辑', edit_material_cycle_path(material_cycle), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |material_cycle|
+    link_to '删除', material_cycle, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+  end
+end -%>

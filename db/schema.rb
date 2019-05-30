@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_29_142105) do
+ActiveRecord::Schema.define(version: 2019_05_30_133017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,6 +184,14 @@ ActiveRecord::Schema.define(version: 2019_05_29_142105) do
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
+  create_table "material_cycles", force: :cascade do |t|
+    t.integer "day"
+    t.bigint "organization_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_material_cycles_on_organization_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.string "channel"
     t.string "title"
@@ -322,6 +330,7 @@ ActiveRecord::Schema.define(version: 2019_05_29_142105) do
   add_foreign_key "departments", "organizations"
   add_foreign_key "identification_cycles", "organizations"
   add_foreign_key "main_cases", "departments"
+  add_foreign_key "material_cycles", "organizations"
   add_foreign_key "organizations", "areas"
   add_foreign_key "transfer_docs", "main_cases"
   add_foreign_key "users", "organizations"

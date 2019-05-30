@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Day:
+  = @material_cycle.day
+p
+  strong Organization:
+  = @material_cycle.organization
+
+=> link_to 'Edit', edit_material_cycle_path(@material_cycle)
+'|
+=< link_to 'Back', material_cycles_path

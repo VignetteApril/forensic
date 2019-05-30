@@ -58,7 +58,7 @@ class IdentificationCyclesController < ApplicationController
   def destroy
     @identification_cycle.destroy
     respond_to do |format|
-      format.html { redirect_to identification_cycles_url, notice: 'Identification cycle was successfully destroyed.' }
+      format.html { redirect_to identification_cycles_url, notice: '鉴定周期已经被成功删除了！' }
       format.json { head :no_content }
     end
   end
