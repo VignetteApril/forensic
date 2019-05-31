@@ -3,10 +3,40 @@
   .col-md-4
     .row.no-gutters.mb-2
       .col-md-2
-        span 委托方:
+        span 流水号:
       .col-md-9
-        = grid_filter @main_cases, :organization_name_filter
+        = grid_filter @main_cases, :serial_no_filter
     .row.no-gutters
+      .col-md-2
+        span 案件号:
+      .col-md-9
+        = grid_filter @main_cases, :case_no_display_filter
+  .col-md-4
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 委托联系人:
+      .col-md-9
+        = grid_filter @main_cases, :user_name_filter
+    .row.no-gutters
+      .col-md-2
+        span 被鉴定人:
+      .col-md-9
+        = grid_filter @main_cases, :appraised_unit_name_filter
+  .col-md-4
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 案件状态:
+      .col-md-9
+        = grid_filter @main_cases, :case_stage_filter
+    .row.no-gutters
+      .col-md-2
+        span 所属科室:
+      .col-md-9
+        = grid_filter @main_cases, :department_name_filter
+
+.row.no-gutters
+  .col-md-4
+    .row.no-gutters.mb-2
       .col-md-2
         span 付款状态:
       .col-md-9
@@ -14,19 +44,8 @@
   .col-md-4
     .row.no-gutters.mb-2
       .col-md-2
-        span 部门名称:
-      .col-md-9
-        = grid_filter @main_cases, :department_name_filter
-    .row.no-gutters
-      .col-md-2
-        span 受理状态:
-      .col-md-9
-        = grid_filter @main_cases, :case_stage_filter
-  .col-md-4
-    .row.no-gutters
-      .col-md-3
         span 经办人姓名:
-      .col-md-8
+      .col-md-9
         = grid_filter @main_cases, :pass_user_filter
 .row.no-gutters.mt-2
   .external-buttons

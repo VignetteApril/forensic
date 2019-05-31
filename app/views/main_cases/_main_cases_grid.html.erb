@@ -1,9 +1,9 @@
-<%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
-  g.column name: '流水号', attribute: 'serial_no', ordering: false do |main_case|
+<%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true) do |g|
+  g.column name: '流水号', attribute: 'serial_no', detach_with_id: :serial_no_filter, ordering: false do |main_case|
     main_case.serial_no
   end
 
-  g.column name: '案号', attribute: 'case_no_display', ordering: false do |main_case|
+  g.column name: '案号', attribute: 'case_no_display', detach_with_id: :case_no_display_filter, ordering: false do |main_case|
     main_case.case_no_display
   end
 
@@ -11,7 +11,7 @@
     main_case.organization_name
   end
 
-  g.column name: '联系人', attribute: 'user_name', ordering: false do |main_case|
+  g.column name: '联系人', attribute: 'user_name', detach_with_id: :user_name_filter, ordering: false do |main_case|
     main_case.user_name
   end
 
@@ -19,7 +19,7 @@
     main_case.organization_phone
   end
 
-  g.column name: '被鉴定人', attribute: 'name', assoc: :appraised_unit, ordering: false do |main_case|
+  g.column name: '被鉴定人', attribute: 'name', assoc: :appraised_unit, detach_with_id: :appraised_unit_name_filter, ordering: false do |main_case|
     main_case.appraised_unit.name
   end
 
@@ -27,20 +27,19 @@
     JSON.parse(main_case.matter).join(',') unless main_case.matter.blank?
   end
 
-  g.column name: '受委托部门', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter, ordering: false do |main_case|
+  g.column name: '受委托部门', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
+  custom_filter: department_collection, allow_multiple_selection: false, ordering: false do |main_case|
     main_case.department.name
   end
 
-  g.column name: '受理状态', attribute: 'case_stage', detach_with_id: :case_stage_filter, ordering: false do |main_case|
+  g.column name: '案件状态', attribute: 'case_stage', detach_with_id: :case_stage_filter, custom_filter: case_stages_collection,
+  allow_multiple_selection: false, ordering: false do |main_case|
     MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
   end
 
-  g.column name: '付款状态', attribute: 'financial_stage', detach_with_id: :financial_stage_filter, ordering: false do |main_case|
+  g.column name: '付款状态', attribute: 'financial_stage', detach_with_id: :financial_stage_filter, custom_filter: financial_stage_collection,
+   allow_multiple_selection: false, ordering: false do |main_case|
     MainCase::FINANCIAL_STAGE_MAP[main_case.financial_stage.to_sym]
-  end
-
-  g.column name: '案件状态', attribute: 'case_stage', ordering: false do |main_case|
-    MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
   end
 
   g.column name: '经办人', attribute: 'pass_user',  detach_with_id: :pass_user_filter, ordering: false do |main_case|
