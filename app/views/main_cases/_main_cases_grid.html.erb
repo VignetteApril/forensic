@@ -15,7 +15,7 @@
     main_case.user_name
   end
 
-  g.column name: '联系方式', attribute: 'organization_phone', ordering: false do |main_case|
+  g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
     main_case.organization_phone
   end
 
@@ -23,7 +23,7 @@
     main_case.appraised_unit.name
   end
 
-  g.column name: '鉴定事项', attribute: 'matter', ordering: false do |main_case|
+  g.column name: '鉴定事项', attribute: 'matter', filter: false, ordering: false do |main_case|
     JSON.parse(main_case.matter).join(',') unless main_case.matter.blank?
   end
 
@@ -46,7 +46,7 @@
     main_case.pass_user
   end
 
-  g.column name: '结案倒计时', attribute: 'commission_date', ordering: false do |main_case|
+  g.column name: '结案倒计时', attribute: 'commission_date', filter: false, ordering: false do |main_case|
     distance_of_time_in_words(Date.today, main_case.commission_date) if main_case.commission_date
   end
 
