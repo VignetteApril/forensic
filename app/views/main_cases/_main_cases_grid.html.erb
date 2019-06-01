@@ -51,10 +51,6 @@
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
-    link_to '查看', main_case, class: 'btn btn-secondary btn-sm'
-  end
-
-  g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
     link_to '编辑', edit_main_case_path(main_case), class: 'btn btn-secondary btn-sm'
   end
 

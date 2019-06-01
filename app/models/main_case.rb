@@ -58,7 +58,12 @@ class MainCase < ApplicationRecord
   end
 
   # 鉴定中心简称 + '司鉴' + [年度] + '鉴字第' + 科室内部编号 + '号'
-  def set_case_no
+  def set_case_no()
+    self.case_no_display = get_case_no
+    self.save!
+  end
+
+  def get_case_no
     center = self.department.organization
     dep_abbreviation = self.department.abbreviation
     org_abbreviation = center.abbreviation
@@ -67,13 +72,14 @@ class MainCase < ApplicationRecord
     # 找到当前年份 当前科室 所有的案件 按照案件的编号排序
     main_cases = MainCase.where.not(id: self.id).where(created_at: beginning_of_year..end_of_year, department_id: self.department.id ).order(:case_no)
     if main_cases.empty?
-      self.case_no = 1
+      self.case_no = self.department.case_start_no.nil? ? 1 : self.department.case_start_no
     else
       last_case =  main_cases.last
       self.case_no = last_case.case_no + 1
     end
-    self.case_no_display = org_abbreviation + '司鉴' + "#{Date.today.year}" + dep_abbreviation + '鉴字第' + "#{self.case_no}" + '号'
-    self.save!
+    case_no_display = org_abbreviation + '司鉴' + "[#{Date.today.year}]" + dep_abbreviation + '鉴字第' + "#{self.case_no}" + '号'
+
+    case_no_display
   end
 
   def create_case_docs

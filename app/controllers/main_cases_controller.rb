@@ -46,7 +46,7 @@ class MainCasesController < ApplicationController
                                   main_case_params[:district_id])
     respond_to do |format|
       if @main_case.save
-        format.html { redirect_to @main_case, notice: 'Main case was successfully created.' }
+        format.html { redirect_to main_cases_url, notice: 'Main case was successfully created.' }
         format.json { render :show, status: :created, location: @main_case }
       else
         format.html { render :new }
@@ -64,7 +64,7 @@ class MainCasesController < ApplicationController
 
     respond_to do |format|
       if @main_case.update(main_case_params)
-        format.html { redirect_to @main_case, notice: 'Main case was successfully updated.' }
+        format.html { redirect_to main_cases_url, notice: 'Main case was successfully updated.' }
         format.json { render :show, status: :ok, location: @main_case }
       else
         format.html { render :edit }
@@ -156,7 +156,7 @@ class MainCasesController < ApplicationController
   def generate_case_no
     @main_case.set_case_no
 
-    redirect_to @main_case
+    redirect_to edit_main_case_url(@main_case)
   end
 
   private
