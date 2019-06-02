@@ -55,6 +55,10 @@ Rails.application.routes.draw do
     get :organization_and_user, on: :collection
     get :matter_demands_and_case_types, on: :collection
     get :generate_case_no, on: :member
+    get :filing_info, on: :member
+    patch :update_add_material, on: :member
+    patch :update_filing, on: :member
+    patch :update_reject, on: :member
   end
 
   post 'areas/cities'

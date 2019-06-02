@@ -1,0 +1,10 @@
+.row
+  .col-md-6
+    = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
+    span.h5.ml-3 = "#{'案件流水号：' + @main_case.serial_no}"
+
+= render 'nav_bar'
+
+.card
+  .card-body
+    = render 'filing_info_form'

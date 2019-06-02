@@ -1,5 +1,6 @@
 class MainCasesController < ApplicationController
-  before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no]
+  before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
+                                       :filing_info, :update_add_material, :update_filing, :update_reject]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -157,6 +158,56 @@ class MainCasesController < ApplicationController
     @main_case.set_case_no
 
     redirect_to edit_main_case_url(@main_case)
+  end
+
+  # 案件审查
+  def filing_info
+    @material_cycles = @current_user.organization.material_cycles.map(&:day)
+    @identification_cycles = @current_user.organization.identification_cycles.map(&:day)
+    @users = @main_case.department.user_array.map { |user| [user.name, user.id] }
+    @select_ident_users = @main_case.ident_users.nil? ? [] : @current_user.organization.users.where(id: @main_case.ident_users.split(',')).map(&:id)
+  end
+
+  # 立案信息中补充材料表单提交的位置
+  def update_add_material
+    respond_to do |format|
+      if @main_case.update(material_cycle:  params[:main_case][:material_cycle], case_stage: :add_material)
+        format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入补充材料阶段' }
+        format.json { render :show, status: :ok, location: @main_case }
+      else
+        format.html { redirect_to filing_info_main_case_url(@main_case), notice: '保存出错，请重新输入相关信息！' }
+        format.json { render json: @main_case.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # 案件审查中立案信息表达提交的位置
+  def update_filing
+    respond_to do |format|
+      if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
+                           pass_user: params[:main_case][:pass_user],
+                           sign_user: params[:main_case][:sign_user],
+                           ident_users: params[:main_case][:ident_users].join(','), case_stage: :filed)
+        format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
+        format.json { render :show, status: :ok, location: @main_case }
+      else
+        format.html { redirect_to filing_info_main_case_url(@main_case), notice: '保存出错，请重新输入相关信息！' }
+        format.json { render json: @main_case.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # 案件审查中推案提交的位置
+  def update_reject
+    respond_to do |format|
+      if @main_case.update(case_stage: :rejected)
+        format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已退案！' }
+        format.json { render :show, status: :ok, location: @main_case }
+      else
+        format.html { redirect_to filing_info_main_case_url(@main_case), notice: '保存出错，请重新输入相关信息！' }
+        format.json { render json: @main_case.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private

@@ -1,8 +1,6 @@
 class MainCase < ApplicationRecord
   include AASM
 
-  # attr_accessor :province_id, :city_id, :district_id
-
   belongs_to :department
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多
@@ -48,7 +46,7 @@ class MainCase < ApplicationRecord
   # 设置案件编号
   # before_create :set_case_no
   # 把科室的模板文件复制到当前的案件中
-  after_save :create_case_docs
+  # after_save :create_case_docs
 
   validates :matter, presence: { message: '不能为空' }
 
@@ -58,7 +56,7 @@ class MainCase < ApplicationRecord
   end
 
   # 鉴定中心简称 + '司鉴' + [年度] + '鉴字第' + 科室内部编号 + '号'
-  def set_case_no()
+  def set_case_no
     self.case_no_display = get_case_no
     self.save!
   end
@@ -80,9 +78,5 @@ class MainCase < ApplicationRecord
     case_no_display = org_abbreviation + '司鉴' + "[#{Date.today.year}]" + dep_abbreviation + '鉴字第' + "#{self.case_no}" + '号'
 
     case_no_display
-  end
-
-  def create_case_docs
-    
   end
 end

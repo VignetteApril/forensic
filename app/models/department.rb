@@ -7,4 +7,13 @@ class Department < ApplicationRecord
   has_ancestry
   has_many :department_docs
   belongs_to :organization
+
+  def user_array
+    rs_arr = []
+    self.organization.users.each do |user|
+      next if user.departments.nil?
+      rs_arr << user if user.departments.split(',').include? self.id.to_s
+    end
+    rs_arr
+  end
 end

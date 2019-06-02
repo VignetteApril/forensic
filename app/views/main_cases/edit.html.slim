@@ -6,9 +6,10 @@
   .col-md-10
     button type="button" class="btn btn-primary mb-2 pull-right" data-toggle="modal" data-target="#case_no_modal" 生成案号
     span.pull-right.mr-2.mt-2.h6 = "案件编号：#{@main_case.case_no_display}"
+
+= render 'nav_bar'
+
 .card
-  .card-header
-    h3.card-title 编辑案件
   .card-body
     .table-responsive
       == render 'form'

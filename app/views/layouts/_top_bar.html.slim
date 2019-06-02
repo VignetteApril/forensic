@@ -6,7 +6,7 @@ header class="app-header"
   .row.mt-3.ml-2
     - unless admin?
       - if can?('departments', 'index')
-        = link_to '机构管理', organizations_path, class: 'mr-2', style: 'color: white;'
+        = link_to '机构管理', departments_path, class: 'mr-2', style: 'color: white;'
     = link_to '案件', main_cases_path, class: 'mr-2', style: 'color: white;'
     = link_to '委托单', '#', class: 'mr-2', style: 'color: white;'
     = link_to '统计', '#', class: 'mr-2', style: 'color: white;'

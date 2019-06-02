@@ -1,0 +1,59 @@
+= simple_form_for(@main_case, method: :patch, url: update_add_material_main_case_path) do |f|
+  .form-inputs
+    = f.input :user_id, :as => :hidden
+    // 委托方card
+    .card.gray-card
+      .card-header
+        h4.card-title 补充材料
+      .card-body.principal
+        .row
+          .col-md-4
+            = f.input :material_cycle, collection: @material_cycles, label: '补充材料周期（天）', include_blank: false
+          .col-md-8
+            = f.button :submit, '保存', class: 'btn btn-success pull-right mt-4'
+        .row
+          .col-md-12
+            - @main_case.department.department_docs.where(case_stage: :add_materials).each do |doc|
+              span.ml-2 = doc.name
+
+= simple_form_for(@main_case, method: :patch, url: update_filing_main_case_path) do |f|
+  .form-inputs
+    = f.input :user_id, :as => :hidden
+    // 委托方card
+    .card.gray-card
+      .card-header
+        h4.card-title 立案
+      .card-body.principal
+        .row
+          .col-md-4
+            = f.input :identification_cycle, collection: @identification_cycles, label: '鉴定周期（天）', include_blank: false
+          .col-md-4
+            = f.input :pass_user, collection: @users, label: '经办人', include_blank: false
+          .col-md-4
+            = f.button :submit, '保存', class: 'btn btn-success pull-right mt-4'
+        .row
+          .col-md-4
+            = f.input :sign_user, collection: @users, label: '授权签字人', include_blank: false
+          .col-md-4
+            = f.input :ident_users, collection: @users, label: '指定鉴定人', include_blank: false, selected: @select_ident_users,
+                                    include_hidden: false, input_html: { multiple: true }
+        .row
+          .col-md-12
+            - @main_case.department.department_docs.where(case_stage: :pending_case).each do |doc|
+              span.ml-2 = doc.name
+
+= simple_form_for(@main_case, method: :patch, url: update_reject_main_case_path) do |f|
+  .form-inputs
+    = f.input :user_id, :as => :hidden
+    // 委托方card
+    .card.gray-card
+      .card-header
+        h4.card-title 退案
+      .card-body.principal
+        .row
+          .col-md-12
+            = f.button :submit, '保存', class: 'btn btn-success pull-right mt-4'
+        .row
+          .col-md-12
+            - @main_case.department.department_docs.where(case_stage: :reject_case).each do |doc|
+              span.ml-2 = doc.name

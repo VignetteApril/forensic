@@ -12,21 +12,28 @@
     .row
       .col-md-4
         = f.input :name, label: '科室名称'
-      .col-md-4
-        = f.input :abbreviation, label: '科室简称'
-      .col-md-4
-        = f.input :case_start_no, label: '案件起始编号'
+      .col-md-8
+        = f.input :organization_id, label: '所属机构', collection: organization_collection, include_blank: false
     .row
       .col-md-4
         = f.input :code, label: '科室编号'
       .col-md-4
-        = f.input :organization_id, label: '所属机构', collection: organization_collection, include_blank: false
+        = f.input :case_start_no, label: '案件起始编号'
       .col-md-4
         = f.input :matter, label: '鉴定事项', type: :text, :input_html => { id: 'matter-tags' }
     .row
       .col-md-4
         = f.input :case_types, label: '案件类型', type: :text, :input_html => {id: 'case-types'}
       .col-md-8
+        .row style="padding-top: 25px"
+          .col-md-2.mt-2
+            = "#{@department.organization.abbreviation}司鉴[#{Date.today.year}]"
+          .col-md-2
+            = f.input :abbreviation, label: false
+          .col-md-2.mt-2
+            | 鉴字第0001号
+    .row
+      .col-md-12
         = f.input :description, label: '科室描述', as: :text
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
