@@ -41,6 +41,7 @@ gem 'selectize-rails'
 gem 'cocoon'
 gem 'aasm'
 gem 'bcrypt',                                '~> 3.1.7'
+gem 'chunky_png'
 gem 'barby'
 
 group :development, :test do
