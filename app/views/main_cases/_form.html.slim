@@ -65,9 +65,27 @@
       .card-header
         h4.card-title 移交材料
       .card-body
-        .links
-          = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary pull-right',
-                  data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append }
+        .row.mb-1
+          .col-md-2
+            span 检材名称
+          .col-md-1
+            span 类型
+          .col-md-1
+            span 数量
+          .col-md-1
+            span 单位
+          .col-md-1
+            span 性状
+          .col-md-2
+            span 状况
+          .col-md-2
+            span 收到时间
+          .col-md-1
+            span 条码
+          .col-md-1 style= 'margin-left: auto;'
+            .links
+              = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary',
+                      data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append }
         #transfer_docs
           = f.simple_fields_for :transfer_docs do |transfer_doc|
             = render 'transfer_doc_fields', f: transfer_doc, render_options: { wrapper: 'bootstrap' }

@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     get :matter_demands_and_case_types, on: :collection
     get :generate_case_no, on: :member
     get :filing_info, on: :member
+    get :open_barcode_image, on: :collection
     patch :update_add_material, on: :member
     patch :update_filing, on: :member
     patch :update_reject, on: :member

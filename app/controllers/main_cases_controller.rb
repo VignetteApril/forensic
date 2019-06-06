@@ -210,6 +210,22 @@ class MainCasesController < ApplicationController
     end
   end
 
+  # 打开条码的modal的方法，因为传递图片的地址进去
+  # respond to only js
+  def open_barcode_image
+    if params[:transfer_doc_id]
+      transfer_doc = TransferDoc.find(params[:transfer_doc_id])
+      @barcode_image = transfer_doc.barcode_image
+    elsif params[:main_case_id]
+      main_case = MainCase.find(params[:main_case_id])
+      @barcode_image = main_case.barcode_image
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case

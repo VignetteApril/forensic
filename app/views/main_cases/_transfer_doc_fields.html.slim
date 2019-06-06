@@ -1,18 +1,22 @@
 .nested-fields
   .row
     .col-md-2
-      = f.input :name, label: '检材名称'
+      = f.input :name, label: false
     .col-md-1
-      = f.input :doc_type, label: '类型'
+      = f.input :doc_type, label: false
     .col-md-1
-      = f.input :num, label: '数量'
+      = f.input :num, label: false
     .col-md-1
-      = f.input :unit, label: '单位', collection: TransferDoc.collection_select_arr
+      = f.input :unit, label: false, collection: TransferDoc.collection_select_arr
+    .col-md-1
+      = f.input :traits, label: false
     .col-md-2
-      = f.input :traits, label: '性状'
+      = f.input :status, label: false
     .col-md-2
-      = f.input :status, label: '状况'
-    .col-md-2
-      = f.input :receive_date, as: :date, label: '收到时间', html5: true
+      = f.input :receive_date, as: :date, label: false, html5: true
     .col-md-1
-      = link_to_remove_association "移除", f, class: 'btn btn-danger mt-4'
+      - if f.object.barcode_image.attached?
+        = link_to open_barcode_image_main_cases_path(transfer_doc_id: f.object.id), remote: true
+          = image_tag("barcode.png", alt: "条码", style: 'height: 35px; width: auto;')
+    .col-md-1
+      = link_to_remove_association "移除", f, class: 'btn btn-danger'

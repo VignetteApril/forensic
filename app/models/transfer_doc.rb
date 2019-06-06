@@ -3,11 +3,11 @@ require 'barby/barcode/code_128'
 require 'barby/outputter/png_outputter'
 
 class TransferDoc < ApplicationRecord
-  has_one_attached :barcode_png
+  has_one_attached :barcode_image
   belongs_to :main_case
 
   before_create :set_barcode_hex
-  after_destroy :purge_barcode_png
+  after_destroy :purge_barcode_image
 
   enum unit: [ :piece,
                :meter,
@@ -28,14 +28,14 @@ class TransferDoc < ApplicationRecord
     self.barcode = SecureRandom.hex 10
     barcode = Barby::Code128B.new(self.barcode)
     blob = Barby::PngOutputter.new(barcode).to_png
-    self.barcode_png.attach io: StringIO.new(blob),
+    self.barcode_image.attach io: StringIO.new(blob),
                             filename: self.barcode + '.png',
                             content_type: 'image/png'
   end
 
   # 当移交资料删除时，对应二维码文件也要删除
-  def purge_barcode_png
-    self.barcode_png.purge
+  def purge_barcode_image
+    self.barcode_image.purge
   end
 
   class << self
