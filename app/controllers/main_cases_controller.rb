@@ -239,7 +239,8 @@ class MainCasesController < ApplicationController
                                         { matter: [] },
                                         :matter_demand,
                                         :base_info,
-                                        transfer_docs_attributes: [:name,
+                                        transfer_docs_attributes: [:id,
+                                                                   :name,
                                                                    :doc_type,
                                                                    :num,
                                                                    :unit,
@@ -247,14 +248,17 @@ class MainCasesController < ApplicationController
                                                                    :status,
                                                                    :receive_date,
                                                                    :barcode,
-                                                                   :attachment],
-                                        appraised_unit_attributes: [:unit_type,
+                                                                   :attachment,
+                                                                   :_destroy],
+                                        appraised_unit_attributes: [:id,
+                                                                    :unit_type,
                                                                     :name,
                                                                     :addr,
                                                                     :gender,
                                                                     :birthday,
                                                                     :id_type,
-                                                                    :id_num])
+                                                                    :id_num,
+                                                                    :_destroy])
     end
 
     def set_new_areas

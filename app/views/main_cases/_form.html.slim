@@ -65,11 +65,13 @@
       .card-header
         h4.card-title 移交材料
       .card-body
+        .links
+          = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary pull-right',
+                  data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append }
         #transfer_docs
           = f.simple_fields_for :transfer_docs do |transfer_doc|
             = render 'transfer_doc_fields', f: transfer_doc, render_options: { wrapper: 'bootstrap' }
-            .links
-            = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary'
+
     // 被鉴定人card
     .card.gray-card
       .card-header
