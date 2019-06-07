@@ -23,7 +23,6 @@ class ApisController < ApplicationController
 		end
 	end
 
-
 	def login
 		user = User.authenticate(params["name"], params["password"])
 		json = {"code":"0","msg":"login_success","token":""}
@@ -40,10 +39,8 @@ class ApisController < ApplicationController
             respond_to do |format|
 				format.json { render json:json.to_json }
 			end
-		end
-		
+		end		
 	end
-
 
 	def get_user_infos
 		#TODO MainCase enum?
@@ -53,7 +50,6 @@ class ApisController < ApplicationController
 			format.json { render json:user.to_json }
 	    end
 	end
-
 
 	def updata_user_infos
 		#TODO 地域 单位 email 新加字段等问题  
@@ -74,11 +70,21 @@ class ApisController < ApplicationController
 	end
 
 	def get_notice_list
+		#TODO 通知模型
 		decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-
 		binding.pry
+	end
+
+	def get_case_list
 
 	end
 
+	def get_case_detail_progress
+
+	end
+
+    def get_case_talk
+    	
+    end 
 end
