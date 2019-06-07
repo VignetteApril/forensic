@@ -118,6 +118,7 @@ GEM
     jruby-jars (9.2.6.0)
     jruby-rack (1.1.21)
     json (1.8.3-java)
+    jwt (2.2.1)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -307,6 +308,7 @@ DEPENDENCIES
   jquery-ui-rails (= 5.0.5)
   jruby-jars (= 9.2.6.0)
   json (= 1.8.3)
+  jwt
   kaminari (= 1.1.1)
   libreconv (= 0.9.1)
   listen

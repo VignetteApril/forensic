@@ -75,3 +75,5 @@ yarn-debug.log*
 
 # Ignore config files
 config/database.yml
+
+Gemfile.lock

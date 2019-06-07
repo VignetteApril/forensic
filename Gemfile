@@ -42,6 +42,7 @@ gem 'cocoon'
 gem 'aasm'
 gem 'bcrypt',                                '~> 3.1.7'
 gem 'barby'
+gem 'jwt'
 
 group :development, :test do
   gem 'minitest-rails'
