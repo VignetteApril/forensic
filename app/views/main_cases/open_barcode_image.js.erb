@@ -1,0 +1,4 @@
+// barcode modal
+$("#barcode_modal_container").html("<%= escape_javascript(render partial: 'barcode_modal', locals: { barcode_image: @barcode_image } ) %>");
+// render modal
+$('#barcode_modal').modal('show');

@@ -1,4 +1,12 @@
 <%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true) do |g|
+  g.column name: '条码' do |main_case|
+    if main_case.barcode_image.attached?
+      link_to open_barcode_image_main_cases_path(main_case_id: main_case.id), remote: true do
+        image_tag("barcode.png", alt: "条码", style: 'height: 35px; width: auto;')
+      end
+    end
+  end
+
   g.column name: '流水号', attribute: 'serial_no', detach_with_id: :serial_no_filter, ordering: false do |main_case|
     main_case.serial_no
   end
@@ -43,11 +51,53 @@
   end
 
   g.column name: '经办人', attribute: 'pass_user',  detach_with_id: :pass_user_filter, ordering: false do |main_case|
-    main_case.pass_user
+    if main_case.pass_user
+      User.find(main_case.pass_user).name
+    end
   end
 
-  g.column name: '结案倒计时', attribute: 'commission_date', filter: false, ordering: false do |main_case|
-    distance_of_time_in_words(Date.today, main_case.commission_date) if main_case.commission_date
+  g.column name: '倒计时', attribute: 'commission_date', filter: false, ordering: false do |main_case|
+    case main_case.case_stage.to_sym
+    when :pending
+      content_tag :div, class: "text-success" do
+        '已过' + distance_of_time_in_words(Date.today, main_case.created_at, scope: 'datetime.distance_in_words')
+      end
+    when :add_material
+      if main_case.identification_cycle.nil?
+        '请选择补充材料周期'
+      else
+        date_bool = Date.today <=> (main_case.created_at + main_case.material_cycle.days)
+        date_pre_str = date_bool ? '还剩' : '已过'
+        date_distance = distance_of_time_in_words(Date.today, main_case.created_at + main_case.material_cycle.days, scope: 'datetime.distance_in_words')
+        if date_bool
+          content_tag :div, class: "text-warning" do
+            date_pre_str + date_distance
+          end
+        else
+          content_tag :div, class: "text-muted" do
+            date_pre_str + date_distance
+          end
+        end
+      end
+    when :filed
+      if main_case.identification_cycle.nil?
+        '请选择鉴定周期'
+      else
+        date_bool = Date.today <=> (main_case.acceptance_date + main_case.identification_cycle.days)
+        date_pre_str = date_bool ? '还剩' : '已过'
+        date_distance = distance_of_time_in_words(Date.today, main_case.acceptance_date + main_case.identification_cycle.days, scope: 'datetime.distance_in_words')
+        if date_bool
+          content_tag :div, class: "text-danger" do
+            date_pre_str + date_distance
+          end
+        else
+          content_tag :div, class: "text-muted" do
+            date_pre_str + date_distance
+          end
+        end
+      end
+    when :close
+    end
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|

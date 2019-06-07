@@ -1,0 +1,12 @@
+.modal.fade id="barcode_modal" tabindex="-1" role="dialog" aria-labelledby="barcode_modal" aria-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" 条码预览
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-body.text-center
+        = image_tag url_for(barcode_image)
+      .modal-footer
+        .d-inline-block = link_to '下载条码', rails_blob_path(barcode_image, disposition: "attachment"), class: 'btn btn-success'
+        button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭

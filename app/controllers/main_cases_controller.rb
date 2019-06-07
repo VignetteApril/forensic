@@ -162,10 +162,11 @@ class MainCasesController < ApplicationController
 
   # 案件审查
   def filing_info
-    @material_cycles = @current_user.organization.material_cycles.map(&:day)
-    @identification_cycles = @current_user.organization.identification_cycles.map(&:day)
+    current_org = @main_case.department.organization
+    @material_cycles =  current_org.material_cycles.map(&:day)
+    @identification_cycles = current_org.identification_cycles.map(&:day)
     @users = @main_case.department.user_array.map { |user| [user.name, user.id] }
-    @select_ident_users = @main_case.ident_users.nil? ? [] : @current_user.organization.users.where(id: @main_case.ident_users.split(',')).map(&:id)
+    @select_ident_users = @main_case.ident_users.nil? ? [] : current_org.users.where(id: @main_case.ident_users.split(',')).map(&:id)
   end
 
   # 立案信息中补充材料表单提交的位置
@@ -182,12 +183,16 @@ class MainCasesController < ApplicationController
   end
 
   # 案件审查中立案信息表达提交的位置
+  # 案件这变为立案的状态
+  # 并设置受理日期
   def update_filing
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
                            pass_user: params[:main_case][:pass_user],
                            sign_user: params[:main_case][:sign_user],
-                           ident_users: params[:main_case][:ident_users].join(','), case_stage: :filed)
+                           ident_users: params[:main_case][:ident_users].join(','),
+                           case_stage: :filed,
+                           acceptance_date: Date.today)
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -207,6 +212,22 @@ class MainCasesController < ApplicationController
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '保存出错，请重新输入相关信息！' }
         format.json { render json: @main_case.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  # 打开条码的modal的方法，因为传递图片的地址进去
+  # respond to only js
+  def open_barcode_image
+    if params[:transfer_doc_id]
+      transfer_doc = TransferDoc.find(params[:transfer_doc_id])
+      @barcode_image = transfer_doc.barcode_image
+    elsif params[:main_case_id]
+      main_case = MainCase.find(params[:main_case_id])
+      @barcode_image = main_case.barcode_image
+    end
+
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -239,7 +260,8 @@ class MainCasesController < ApplicationController
                                         { matter: [] },
                                         :matter_demand,
                                         :base_info,
-                                        transfer_docs_attributes: [:name,
+                                        transfer_docs_attributes: [:id,
+                                                                   :name,
                                                                    :doc_type,
                                                                    :num,
                                                                    :unit,
@@ -247,14 +269,17 @@ class MainCasesController < ApplicationController
                                                                    :status,
                                                                    :receive_date,
                                                                    :barcode,
-                                                                   :attachment],
-                                        appraised_unit_attributes: [:unit_type,
+                                                                   :attachment,
+                                                                   :_destroy],
+                                        appraised_unit_attributes: [:id,
+                                                                    :unit_type,
                                                                     :name,
                                                                     :addr,
                                                                     :gender,
                                                                     :birthday,
                                                                     :id_type,
-                                                                    :id_num])
+                                                                    :id_num,
+                                                                    :_destroy])
     end
 
     def set_new_areas
