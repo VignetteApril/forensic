@@ -162,10 +162,11 @@ class MainCasesController < ApplicationController
 
   # 案件审查
   def filing_info
-    @material_cycles = @current_user.organization.material_cycles.map(&:day)
-    @identification_cycles = @current_user.organization.identification_cycles.map(&:day)
+    current_org = @main_case.department.organization
+    @material_cycles =  current_org.material_cycles.map(&:day)
+    @identification_cycles = current_org.identification_cycles.map(&:day)
     @users = @main_case.department.user_array.map { |user| [user.name, user.id] }
-    @select_ident_users = @main_case.ident_users.nil? ? [] : @current_user.organization.users.where(id: @main_case.ident_users.split(',')).map(&:id)
+    @select_ident_users = @main_case.ident_users.nil? ? [] : current_org.users.where(id: @main_case.ident_users.split(',')).map(&:id)
   end
 
   # 立案信息中补充材料表单提交的位置
@@ -182,12 +183,16 @@ class MainCasesController < ApplicationController
   end
 
   # 案件审查中立案信息表达提交的位置
+  # 案件这变为立案的状态
+  # 并设置受理日期
   def update_filing
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
                            pass_user: params[:main_case][:pass_user],
                            sign_user: params[:main_case][:sign_user],
-                           ident_users: params[:main_case][:ident_users].join(','), case_stage: :filed)
+                           ident_users: params[:main_case][:ident_users].join(','),
+                           case_stage: :filed,
+                           acceptance_date: Date.today)
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
