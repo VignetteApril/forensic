@@ -160,7 +160,7 @@ class MainCasesController < ApplicationController
     redirect_to edit_main_case_url(@main_case)
   end
 
-  # 案件审查
+  # 案件审查主页面
   def filing_info
     current_org = @main_case.department.organization
     @material_cycles =  current_org.material_cycles.map(&:day)
@@ -172,7 +172,8 @@ class MainCasesController < ApplicationController
   # 立案信息中补充材料表单提交的位置
   def update_add_material
     respond_to do |format|
-      if @main_case.update(material_cycle:  params[:main_case][:material_cycle], case_stage: :add_material)
+      if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
+        @main_case.turn_add_material
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入补充材料阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -193,6 +194,7 @@ class MainCasesController < ApplicationController
                            ident_users: params[:main_case][:ident_users].join(','),
                            case_stage: :filed,
                            acceptance_date: Date.today)
+        @main_case.turn_filed
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -205,7 +207,7 @@ class MainCasesController < ApplicationController
   # 案件审查中推案提交的位置
   def update_reject
     respond_to do |format|
-      if @main_case.update(case_stage: :rejected)
+      if @main_case.turn_rejected
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已退案！' }
         format.json { render :show, status: :ok, location: @main_case }
       else
