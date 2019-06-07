@@ -27,7 +27,7 @@
       .col-md-8
         .row style="padding-top: 25px"
           .col-md-2.mt-2
-            = "#{@department.organization.abbreviation}司鉴[#{Date.today.year}]"
+            = "#{@current_user.organization.abbreviation}司鉴[#{Date.today.year}]"
           .col-md-2
             = f.input :abbreviation, label: false
           .col-md-2.mt-2
