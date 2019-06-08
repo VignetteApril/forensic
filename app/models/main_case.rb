@@ -9,6 +9,7 @@ class MainCase < ApplicationRecord
   belongs_to :department
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多
+  has_many :case_process_records # 案件中改变状态时的记录
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有很多
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
@@ -38,7 +39,22 @@ class MainCase < ApplicationRecord
 
   aasm(:case, column: :case_stage, enum: true) do
     state :pending, initial: true
-    state :add_material, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
+    state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
+
+    # 立案动作，可以从状态 待立案 和 待补充材料 和 退案 转换到 立案状态
+    event :turn_filed, after: :record_case_process do
+      transitions from: [:pending, :add_material, :rejected, :filed], to: :filed
+    end
+
+    # 把案件状态变为 待补充材料，可以从立案，待立案，结案转换
+    event :turn_add_material, after: :record_case_process do
+      transitions from: [:filed, :pending, :rejected, :add_material], to: :add_material
+    end
+
+    # 结案动作，可以从状态 立案 和 待立案 和 待补充材料 转换到 退案状态
+    event :turn_rejected, after: :record_case_process do
+      transitions from: [:filed, :pending, :add_material, :rejected], to: :rejected
+    end
   end
 
   aasm(:financial, column: :financial_stage, enum: true) do
@@ -87,5 +103,10 @@ class MainCase < ApplicationRecord
     case_no_display = org_abbreviation + '司鉴' + "[#{Date.today.year}]" + dep_abbreviation + '鉴字第' + "#{self.case_no}" + '号'
 
     case_no_display
+  end
+
+  # 记录案件状态改变的信息
+  def record_case_process
+    self.case_process_records.create(detail: '案件进入' + CASE_STAGE_MAP[self.case_stage.to_sym] + '状态')
   end
 end

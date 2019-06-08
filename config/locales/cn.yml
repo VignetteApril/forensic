@@ -244,6 +244,7 @@ cn:
       department: "部门"
       role: "角色"
       notification: "个人事务提醒"
+      organization: '机构'
     attributes:
       user:
         login: "登录名"
@@ -296,3 +297,7 @@ cn:
         url: 入口地址
         status: 状态
         user_id: 被提醒人
+      organization:
+        payee: '收款人'
+        open_account_bank: '开户行'
+        account_number: '收款人账号'

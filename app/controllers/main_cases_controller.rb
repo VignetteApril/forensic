@@ -1,12 +1,15 @@
 class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
-                                       :filing_info, :update_add_material, :update_filing, :update_reject]
+                                       :filing_info, :update_add_material, :update_filing,
+                                       :update_reject, :payment]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
+  skip_before_action :authorize, only: :payment
+  skip_before_action :can, only: :payment
 
   # GET /main_cases
   # GET /main_cases.json
@@ -160,7 +163,7 @@ class MainCasesController < ApplicationController
     redirect_to edit_main_case_url(@main_case)
   end
 
-  # 案件审查
+  # 案件审查主页面
   def filing_info
     current_org = @main_case.department.organization
     @material_cycles =  current_org.material_cycles.map(&:day)
@@ -172,7 +175,8 @@ class MainCasesController < ApplicationController
   # 立案信息中补充材料表单提交的位置
   def update_add_material
     respond_to do |format|
-      if @main_case.update(material_cycle:  params[:main_case][:material_cycle], case_stage: :add_material)
+      if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
+        @main_case.turn_add_material
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入补充材料阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -193,6 +197,7 @@ class MainCasesController < ApplicationController
                            ident_users: params[:main_case][:ident_users].join(','),
                            case_stage: :filed,
                            acceptance_date: Date.today)
+        @main_case.turn_filed
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -205,7 +210,7 @@ class MainCasesController < ApplicationController
   # 案件审查中推案提交的位置
   def update_reject
     respond_to do |format|
-      if @main_case.update(case_stage: :rejected)
+      if @main_case.turn_rejected
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已退案！' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -229,6 +234,15 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  # TODO: 静态的付款页面，里面包含机构的【收款人名称】、【开户行】、【银行账号】
+  # TODO: 该页面可能会被费用管理部分的付款页面取代
+  # 付款页面
+  def payment
+    @organization = @main_case.department.organization
+
+    render layout: false
   end
 
   private

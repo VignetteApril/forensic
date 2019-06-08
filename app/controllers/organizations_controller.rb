@@ -89,7 +89,10 @@ class OrganizationsController < ApplicationController
                                            :province_id,
                                            :city_id,
                                            :district_id,
-                                           :abbreviation)
+                                           :abbreviation,
+                                           :payee,
+                                           :open_account_bank,
+                                           :account_number)
     end
 
     def set_new_areas

@@ -60,6 +60,14 @@ ActiveRecord::Schema.define(version: 2019_06_08_080632) do
     t.index ["ancestry"], name: "index_areas_on_ancestry"
   end
 
+  create_table "case_process_records", force: :cascade do |t|
+    t.bigint "main_case_id"
+    t.string "detail"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["main_case_id"], name: "index_case_process_records_on_main_case_id"
+  end
+
   create_table "case_users", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "main_case_id"
@@ -227,6 +235,9 @@ ActiveRecord::Schema.define(version: 2019_06_08_080632) do
     t.integer "province_id"
     t.integer "city_id"
     t.integer "district_id"
+    t.string "payee"
+    t.string "open_account_bank"
+    t.string "account_number"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end
@@ -335,6 +346,7 @@ ActiveRecord::Schema.define(version: 2019_06_08_080632) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appraised_units", "main_cases"
+  add_foreign_key "case_process_records", "main_cases"
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
   add_foreign_key "department_docs", "departments"
