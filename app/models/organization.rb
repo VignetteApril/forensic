@@ -6,13 +6,18 @@ class Organization < ApplicationRecord
   has_many :identification_cycles, dependent: :destroy # 每个机构中很有多个鉴定周期，当机构被删除时，则鉴定周期也无意义
   has_many :material_cycles, dependent: :destroy # 每个机构中有很多个补充材料周期
 
+  validates :org_type, presence: { message: '不能为空' }
   validates :abbreviation, presence: { message: '不能为空' }
-
+  validates :payee, :open_account_bank, :account_number, presence: { message: '不能为空' }, unless: :is_court?
 
   # 组织类型对照表
   ORG_TYPE_MAP = { court: '法院',
                    center: '鉴定中心'}
   enum org_type: [:court, :center]
+
+  def is_court?
+    self.org_type.to_sym == :court
+  end
 
   class << self
     # 为前端的显示的方法

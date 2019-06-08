@@ -29,5 +29,13 @@
         = f.input :phone, label: '机构电话'
       .col-md-4
         = f.input :wechat_id, label: '机构微信号'
+    - unless @organization.is_court?
+      .row
+        .col-md-4
+          = f.input :payee, label: '收款人姓名'
+        .col-md-4
+          = f.input :open_account_bank, label: '开户行'
+        .col-md-4
+          = f.input :account_number, label: '收款人账号'
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'

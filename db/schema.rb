@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_095347) do
+ActiveRecord::Schema.define(version: 2019_06_08_061710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -233,6 +233,9 @@ ActiveRecord::Schema.define(version: 2019_06_07_095347) do
     t.integer "province_id"
     t.integer "city_id"
     t.integer "district_id"
+    t.string "payee"
+    t.string "open_account_bank"
+    t.string "account_number"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end

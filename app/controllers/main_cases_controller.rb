@@ -1,12 +1,15 @@
 class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
-                                       :filing_info, :update_add_material, :update_filing, :update_reject]
+                                       :filing_info, :update_add_material, :update_filing,
+                                       :update_reject, :payment]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
+  skip_before_action :authorize, only: :payment
+  skip_before_action :can, only: :payment
 
   # GET /main_cases
   # GET /main_cases.json
@@ -231,6 +234,15 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  # TODO: 静态的付款页面，里面包含机构的【收款人名称】、【开户行】、【银行账号】
+  # TODO: 该页面可能会被费用管理部分的付款页面取代
+  # 付款页面
+  def payment
+    @organization = @main_case.department.organization
+
+    render layout: false
   end
 
   private
