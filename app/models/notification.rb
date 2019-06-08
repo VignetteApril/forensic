@@ -14,7 +14,7 @@ class Notification < ApplicationRecord
       :apply_bill=>'申请发票',
       :bill_made=>'发票已开',
       :add_case_tip=>'案件新增便签'
-  }
+    }
 
     def infos_for_api
     	{

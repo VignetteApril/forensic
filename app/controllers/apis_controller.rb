@@ -149,14 +149,50 @@ class ApisController < ApplicationController
 	end
 
 	def get_case_list
+		# decoded_token = JWT.decode params[:token], nil, false
+		# user = User.find_by(:id=>decoded_token[0]["id"])	
+		cases = MainCase.where(:organization_name => params["organization"] , :case_stage => params["case_stage"] )
+	    # cases = MainCase.where(:case_stage => params["case_stage"])
+	    data = cases.map{|e| {"id": e.id, "time": e.created_at.strftime('%Y/%m/%d'), "anyou":e.anyou,"appraised_unit": e.appraised_unit}}
 
+		json = {"code": "0","messages":"请求成功","data": data}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+	    end	
 	end
 
 	def get_case_detail_progress
+		# decoded_token = JWT.decode params[:token], nil, false
+		# user = User.find_by(:id=>decoded_token[0]["id"])
+		e = MainCase.find_by(:id=>params[:caseid])
+		case_data = {
+			"id": e.id,
+			"matter":e.matter,
+			"time": e.created_at.strftime('%Y/%m/%d'),
+			"anyou":e.anyou,
+			"appraised_unit":e.appraised_unit,
+			"principal_people"=>User.find_by(:id => e.wtr_id).name,
+			"organization_name"=>e.organization_name,
+			"organization_phone"=>e.organization_phone
+		}
 
+		procress_data = e.case_process_records.map{|record| {"detail":record.detail,"created_at":record.created_at.strftime('%Y/%m/%d')}}
+		json = {"code": "0","messages":"请求成功","data": {"case_data":case_data,"procress_data":procress_data}}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+	    end			
 	end
 
     def get_case_talk
-    	
+		decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+		talks = MainCase.find_by(:id=>params["caseid"]).case_talks.map do |talk|
+			is_me = (talk.user == user)? true : false
+			{"time":talk.created_at.strftime('%Y/%m/%d'),"detail": talk.detail,"is_me":is_me}
+		end
+		json = {"code": "0","messages":"请求成功","data": talks}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+	    end	    	
     end 
 end

@@ -23,6 +23,7 @@ class User < ApplicationRecord
   validates :district_id, :presence => true
 
   # 关联
+  has_many   :case_talks
   has_many   :user_roles, dependent: :delete_all
   has_many   :roles, :through => :user_roles
   has_many   :notifications
