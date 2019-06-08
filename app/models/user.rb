@@ -19,6 +19,8 @@ class User < ApplicationRecord
   validates :password, format: { with: /(?![0-9a-z]+$)(?![a-zA-Z]+$)(?![0-9A-Z]+$)[\S]{8,}/ }, allow_nil: true
   validates :department_id, :presence => false
   validate  :password_must_be_present
+  validates :city_id, :presence => true
+  validates :district_id, :presence => true
 
   # 关联
   has_many   :user_roles, dependent: :delete_all
@@ -27,12 +29,19 @@ class User < ApplicationRecord
   has_many   :sys_logs
   has_many   :favorites
   has_one    :case_user
-  belongs_to :department, required: false   # 每一个用户只能同时属于一个科室
+  belongs_to :department, required: false   
   belongs_to :organization, required: false # 每一个用户只能同时属于一个机构
+  has_one_attached :positive #证件正面
+  has_one_attached :negative #证件反面
 
   # callbacks
   before_save   :set_user_type, unless: :organization_empty?
   before_save   :set_department_names
+  before_save   :set_area_relation
+
+  def set_area_relation
+    #TODO api请求来的数据只有 城市id和区域id 需要设置字段省的id  并且让user belongs to Area里的区域id
+  end
 
   # 用户类型【法院用户，鉴定中心用户】
   enum user_type: [:court_user, :center_user]

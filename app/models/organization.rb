@@ -6,7 +6,12 @@ class Organization < ApplicationRecord
   has_many :identification_cycles, dependent: :destroy # 每个机构中很有多个鉴定周期，当机构被删除时，则鉴定周期也无意义
   has_many :material_cycles, dependent: :destroy # 每个机构中有很多个补充材料周期
 
-  validates :abbreviation, presence: { message: '不能为空' }
+  validates :name,:uniqueness => true #机构名称唯一
+  validates :abbreviation, presence: { message: '不能为空' }, unless: :is_court?
+
+  def is_court?
+    self.org_type == 'court'
+  end
 
 
   # 组织类型对照表

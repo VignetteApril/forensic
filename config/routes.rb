@@ -74,7 +74,7 @@ Rails.application.routes.draw do
 
   post 'apis/register'
   post 'apis/login'
-  post 'apis/updata_user_infos'
+  patch 'apis/update_user_infos'
   get 'apis/get_user_infos'
 
   get 'apis/get_city_list'

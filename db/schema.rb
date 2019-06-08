@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_06_114240) do
+ActiveRecord::Schema.define(version: 2019_06_08_080632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,6 +186,7 @@ ActiveRecord::Schema.define(version: 2019_06_06_114240) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
@@ -198,13 +199,14 @@ ActiveRecord::Schema.define(version: 2019_06_06_114240) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.string "channel"
     t.string "title"
-    t.string "status"
     t.string "url"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "channel"
+    t.boolean "status"
+    t.text "description"
     t.index ["created_at"], name: "index_notifications_on_created_at"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
@@ -323,6 +325,10 @@ ActiveRecord::Schema.define(version: 2019_06_06_114240) do
     t.string "remember_digest"
     t.string "departments"
     t.string "department_names"
+    t.string "landline"
+    t.integer "province_id"
+    t.integer "city_id"
+    t.integer "district_id"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end

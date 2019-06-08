@@ -5,8 +5,25 @@ class ApisController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
 	def register 
-	#TODO 地域 单位 email 新加字段等问题  
-        user = User.new(:login=>params['name'],:password => params['password'], :password_confirmation => params['password'],:email=>params['email'])
+		province_id = Area.find(params["city_id"]).parent.id
+        user = User.new(:login=>params['name'],:password => params['password'], :password_confirmation => params['password'],:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:mobile_phone=>params['phone'],:landline=>params['landline'])
+
+        org = Organization.where(:name=>params["organization"]).try(:first)
+        if org.nil?
+        	org = Organization.create(:name=>params["organization"],:org_type=>:court,:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:area_id=>params['district_id'].to_i)
+        	p "没找到机构#{params["organization"]} 创建----#{org.save}"
+        end        
+        user.organization = org
+
+        dep = org.departments.where(:name=>params["department"]).try(:first)
+        if dep.nil?
+        	dep = org.departments.create(:name=>params["department"])
+        	p "没找到#{org.name}下的部门#{params["department"]} 创建----#{dep.save}"
+        end
+        user.departments = dep.id.to_s
+
+        user.positive.attach params["positive"]
+        user.negative.attach params["negative"]
 
 		json = {"code":"0","msg":"register_success","errors":{}}
 		if user.save
@@ -43,37 +60,92 @@ class ApisController < ApplicationController
 	end
 
 	def get_user_infos
-		#TODO MainCase enum?
 		decoded_token = JWT.decode params[:token], nil, false
-		user = User.find_by(:id=>decoded_token[0]["id"])
+		user  = User.find_by(:id=>decoded_token[0]["id"])
+
+		total_count = MainCase.where(:wtr_id=>user.id).count
+		executing_count = MainCase.where(:wtr_id=>user.id,:case_stage=>:executing).count
+		close_count = MainCase.where(:wtr_id=>user.id,:case_stage=>:close).count
+		rejected_count = MainCase.where(:wtr_id=>user.id,:case_stage=>:rejected).count
+
+		json = {
+			"code": "0",
+    		"message": "成功",
+		    "data":{
+		    	"name":user.name,  
+			    "organization":user.organization,
+			    "department":user.department_names, 
+			    "phone":user.mobile_phone,  
+			    "landline":user.landline,
+			    "address":user.address, 
+			    "caseProgressNumber":total_count, 
+			    "caseFinishNumber":close_count,  
+			    "caseLoadingNumber":executing_count, 
+		    	"casePCancleNumber":rejected_count
+			}
+		}
+
 		respond_to do |format|
-			format.json { render json:user.to_json }
+			format.json { render json:json.to_json }
 	    end
 	end
 
-	def updata_user_infos
-		#TODO 地域 单位 email 新加字段等问题  
+	def update_user_infos
+		decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+
+		org = Organization.where(:name=>params["organization"]).try(:first)
+		if org.nil?
+			org = Organization.create(:name=>params["organization"],:org_type=>:court,:province_id=>user.organization.province_id,:city_id=>user.organization.city_id,:district_id=>user.organization.district_id,:area_id=>user.organization.area_id)
+		end
+		user.organization = org
+
+		dep = org.departments.where(:name=>params["department"]).try(:first)
+        if dep.nil?
+        	dep = org.departments.create(:name=>params["department"])
+        end
+        user.departments = dep.id.to_s
+        user.name = params["name"]
+        user.mobile_phone = params["phone"]
+        user.landline = params["landline"]
+        user.address = params["address"]
+
+		json = {"code":"0","msg":"update_success","errors":{}}
+		if user.save
+			respond_to do |format|
+				format.json { render json:json.to_json }
+			end
+		else
+			json["code"] = "1"
+			json["msg"] = "update_failed"
+			json["errors"] = user.errors.messages
+			respond_to do |format|
+				format.json { render json:json.to_json }
+			end
+		end	
 	end
 
 	def get_city_list
-		json = {"code": "0","messages":"请求成功","data":Area.roots.map(&:children).flatten.map(&:name)}
+		json = {"code": "0","messages":"请求成功","data":Area.roots.map(&:children).flatten.map{|e| {"id":e.id,"name":e.name}}}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 	    end
 	end
 
 	def get_district_list
-		json = {"code": "0","messages":"请求成功","data":Area.where(:name=> params['city'],:area_type=>"city").first.children.map(&:name)}
+		json = {"code": "0","messages":"请求成功","data":Area.where(:name=> params['city'],:area_type=>"city").first.children.map{|e| {"id":e.id,"name":e.name}}}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 	    end		
 	end
 
 	def get_notice_list
-		#TODO 通知模型
 		decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-		binding.pry
+		json = {"code": "0","messages":"请求成功","data":user.notifications.map(&:infos_for_api)}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+	    end				
 	end
 
 	def get_case_list
