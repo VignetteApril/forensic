@@ -24,7 +24,7 @@ aside.app-sidebar
         a href="#{center_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'center_cases')}"
           i.app-menu__icon.fa.fa-building-o
           span.app-menu__label 本中心案件
-    - if can?('main_cases', 'filed_unpaid_cases' && !admin?
+    - if can?('main_cases', 'filed_unpaid_cases') && !admin?
       li
         a href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
           i.app-menu__icon.fa.fa-building-o
