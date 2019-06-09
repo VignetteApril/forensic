@@ -103,7 +103,7 @@ class ApplicationController < ActionController::Base
       user = User.find_by(id: cookies.signed[:user_id])
       if user && user.authenticated?(cookies[:remember_token])
         session[:user_id] = user.id
-        user.update(session_id: session.id) if FORBID_SHADOW_LOGIN
+        user.update_columns(session_id: session.id) if FORBID_SHADOW_LOGIN
         @current_user = user
       end
     else
@@ -116,11 +116,11 @@ class ApplicationController < ActionController::Base
       return
     end
   
-    # if @current_user.session_id != session.id and FORBID_SHADOW_LOGIN
-    #   # session[:user_id] = nil
-    #   redirect_to main_app.login_url, notice: ("您的账号在其它位置登录过，请您重新登录" unless (controller_name == 'session' && action_name == 'index'))
-    #   return
-    # end
+    if @current_user.session_id != session.id and FORBID_SHADOW_LOGIN
+      # session[:user_id] = nil
+      redirect_to main_app.login_url, notice: ("您的账号在其它位置登录过，请您重新登录" unless (controller_name == 'session' && action_name == 'index'))
+      return
+    end
     if !@current_user.changed_password && !(controller_name == "users" && (action_name == "edit_password" || action_name == "update_password"))
       # session['cas']['user'] = @current_user.login
       # session['cas']['extra_attributes'] = { id: @current_user.id, session_id: @current_user.session_id, name: @current_user.name }

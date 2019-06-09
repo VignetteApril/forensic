@@ -58,6 +58,10 @@ Rails.application.routes.draw do
     get :filing_info, on: :member
     get :open_barcode_image, on: :collection
     get :payment, on: :member
+    get :department_cases, on: :collection
+    get :organization_cases, on: :collection
+    get :filed_unpaid_cases, on: :collection
+    post :create_case_doc, on: :member
     patch :update_add_material, on: :member
     patch :update_filing, on: :member
     patch :update_reject, on: :member

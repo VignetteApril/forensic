@@ -2,10 +2,10 @@
 class Organization < ApplicationRecord
   belongs_to :area
   has_many :departments, dependent: :destroy # 每个机构有很多科室，当机构删除时，科室理应被删除
+  has_many :main_cases, through: :departments # 机构通过部门获取到案件信息
   has_many :users, dependent: :destroy      # 每个机构中有很多个用户，当机构被删除时，用户理应被删除
   has_many :identification_cycles, dependent: :destroy # 每个机构中很有多个鉴定周期，当机构被删除时，则鉴定周期也无意义
   has_many :material_cycles, dependent: :destroy # 每个机构中有很多个补充材料周期
-
 
   validates :name,:uniqueness => true #机构名称唯一
   validates :abbreviation, presence: { message: '不能为空' }, unless: :is_court?

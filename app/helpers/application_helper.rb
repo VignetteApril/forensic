@@ -175,13 +175,22 @@ module ApplicationHelper
     end
   end
 
-  # side bar active class
+  # system side bar active class
   def active_class(controller, *controller_name)
-      if controller_name.include?(controller.controller_name)
-        return 'app-menu__item active'
-      else
-        return 'app-menu__item'
-      end
+    if controller_name.include?(controller.controller_name)
+      return 'app-menu__item active'
+    else
+      return 'app-menu__item'
+    end
+  end
+
+  # application side bar active class
+  def active_class_with_action(controller, controller_name, action_name)
+    if controller_name == controller.controller_name && action_name == controller.action_name
+      return 'app-menu__item active'
+    else
+      return 'app-menu__item'
+    end
   end
 
   # top bar active class

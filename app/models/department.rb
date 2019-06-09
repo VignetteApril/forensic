@@ -9,7 +9,8 @@ class Department < ApplicationRecord
   end
 
   has_ancestry
-  has_many :department_docs
+  has_many :department_docs, as: :docable
+  has_many :main_cases
   belongs_to :organization
 
   def user_array

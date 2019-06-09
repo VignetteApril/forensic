@@ -5,6 +5,8 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create]
+  before_action :set_new_areas, only: [:new, :create]
+  before_action :set_edit_areas, only: [:edit, :update]
 
   # 管理员进入“用户管理”功能，系统显示用户查询列表页面。
   # 管理员可以输入关键字进行搜索，可与对列表进行排序，列表应该进行分页显示。
@@ -129,5 +131,16 @@ class UsersController < ApplicationController
     else
       @departments_selected = Department.where(id: @user.departments.split(',')).map { |department| department.id }
     end
+  end
+
+  def set_new_areas
+    @cities = Area.where(area_type: 'city')
+    @districts = @cities.first.children
+  end
+
+  def set_edit_areas
+    city_id = @user.city_id
+    @cities = Area.where(area_type: 'city')
+    @districts = city_id.nil? ? [] : Area.find(city_id).children
   end
 end

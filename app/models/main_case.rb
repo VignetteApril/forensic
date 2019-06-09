@@ -10,33 +10,42 @@ class MainCase < ApplicationRecord
   has_many :case_talks
   has_many :payment_orders
   has_many :case_users, dependent: :destroy # 机构中有很多
-  has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多
+  has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】
   has_many :case_process_records # 案件中改变状态时的记录
+  has_many :case_docs, class_name: 'DepartmentDoc',as: :docable
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
-  has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有很多
+  has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
   has_one_attached :barcode_image
+
+  validates :matter, presence: { message: '不能为空' }
+
+  # 将科室内部的所有文档都拷贝到当前的案件下
+  after_create :create_case_docs
+
+  # 设置流水号
+  before_create :set_serial_no
 
   # 案件状态：待立案、待补充材料、立案、退案、执行中、执行完成、申请归档、结案
   # 财务状态：未付款、未付清、已付清、已退款
   enum case_stage: [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
   enum financial_stage: [:unpaid, :not_fully_paid, :paid, :refunded]
   CASE_STAGE_MAP = {
-      pending: '待立案',
-      add_material: '待补充材料',
-      filed: '立案',
-      rejected: '退案',
-      executing: '执行中',
-      executed: '执行完成',
-      apply_filing: '申请归档',
-      close: '结案'
+    pending: '待立案',
+    add_material: '待补充材料',
+    filed: '立案',
+    rejected: '退案',
+    executing: '执行中',
+    executed: '执行完成',
+    apply_filing: '申请归档',
+    close: '结案'
   }
 
   FINANCIAL_STAGE_MAP = {
-      unpaid: '未支付',
-      not_fully_paid: '未完全支付',
-      paid: '已支付',
-      refunded: '已退款'
+    unpaid: '未支付',
+    not_fully_paid: '未完全支付',
+    paid: '已支付',
+    refunded: '已退款'
   }
 
   aasm(:case, column: :case_stage, enum: true) do
@@ -63,13 +72,6 @@ class MainCase < ApplicationRecord
     state :unpaid, initial: true
     state :not_fully_paid, :paid, :refunded
   end
-
-  # callbacks
-  # 设置流水号
-  before_create :set_serial_no
-  # after_save :create_case_docs
-
-  validates :matter, presence: { message: '不能为空' }
 
   # 设置案件的顺序号
   def set_serial_no
@@ -110,5 +112,21 @@ class MainCase < ApplicationRecord
   # 记录案件状态改变的信息
   def record_case_process
     self.case_process_records.create(detail: '案件进入' + CASE_STAGE_MAP[self.case_stage.to_sym] + '状态')
+  end
+
+  # 从科室的模板中拷贝文档
+  def create_case_docs
+    if self.department.department_docs
+      self.department.department_docs.each do |department_doc|
+        # 将department doc中的信息复制到新创建的case doc中
+        case_doc = self.case_docs.create(department_doc.attributes.except('id', 'docable_id', 'docable_type'))
+
+        # 将department doc中对应的文件复制到新创建的case doc中
+        case_doc.attachment.attach io: StringIO.new(department_doc.attachment.download),
+                                          filename: department_doc.attachment.filename,
+                                          content_type: department_doc.attachment.content_type
+        case_doc.update(filename: department_doc.attachment.filename)
+      end
+    end
   end
 end

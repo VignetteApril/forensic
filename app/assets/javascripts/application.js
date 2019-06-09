@@ -21,11 +21,11 @@
 //= require select2
 //= require select2_locale_zh-CN
 //= require selectize
+//= require activestorage
 //= require third_party_js/select2totree
 //= require third_party_js/papaparse
 //= require third_party_js/bootstrap.file-input
 //= require third_party_js/valid_admin
-
 
 //= require custom_js/organizations
 //= require custom_js/direct_uploads
@@ -33,6 +33,7 @@
 //= require custom_js/departments
 //= require custom_js/department_docs
 //= require custom_js/main_cases
+//= require custom_js/users
 
 // nested form js
 //= require cocoon

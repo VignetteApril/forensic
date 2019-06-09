@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 2019_06_09_075322) do
 
   # These are extensions that must be enabled in order to support this database
@@ -121,9 +122,9 @@ ActiveRecord::Schema.define(version: 2019_06_09_075322) do
     t.integer "check_archived_no"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "department_id"
     t.integer "doc_template_id"
-    t.index ["department_id"], name: "index_department_docs_on_department_id"
+    t.integer "docable_id"
+    t.string "docable_type"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -213,7 +214,10 @@ ActiveRecord::Schema.define(version: 2019_06_09_075322) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.string "payer"
+    t.string "payer_phone"
     t.integer "wtr_id"
+    t.integer "amount"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
@@ -408,7 +412,6 @@ ActiveRecord::Schema.define(version: 2019_06_09_075322) do
   add_foreign_key "case_process_records", "main_cases"
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
-  add_foreign_key "department_docs", "departments"
   add_foreign_key "departments", "organizations"
   add_foreign_key "identification_cycles", "organizations"
   add_foreign_key "main_cases", "departments"
