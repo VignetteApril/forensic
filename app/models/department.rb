@@ -1,8 +1,12 @@
 # 科室
 class Department < ApplicationRecord
-  validates :name, :presence => true, :length => {:maximum => 200}, uniqueness: { message: '该科室名称已经被占用！' }
-  validates :code, :presence => true, :length => {:maximum => 20}, uniqueness: { message: '该编号已经被占用' }
-  validates :abbreviation, :presence => true
+  validates :name, :presence => true, :length => {:maximum => 200}
+  validates :code, :presence => true, :length => {:maximum => 20}
+  validates :abbreviation, :presence => true, unless: :org_is_court?
+
+  def org_is_court?
+    self.organization.is_court?
+  end
 
   has_ancestry
   has_many :department_docs, as: :docable
