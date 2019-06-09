@@ -3,6 +3,9 @@ class PaymentOrder < ApplicationRecord
 	has_many :refund_orders
 	has_one :bill
 
+	has_many :refund_orders
+	accepts_nested_attributes_for :refund_orders, reject_if: :all_blank, allow_destroy: true
+
 	enum payment_type: [:cash, :card, :remit, :check]
   PAYMENT_TYPE_MAP = {
       cash: '现金',
@@ -17,4 +20,22 @@ class PaymentOrder < ApplicationRecord
       roll1: '摇号1'
   }
 
+
+	class << self
+		def payment_type_collection
+			rs = []
+			payment_types.each do |key, value|
+				rs << [PAYMENT_TYPE_MAP[key.to_sym], key]
+			end
+			rs
+		end
+
+		def payment_accept_type_collection
+			rs = []
+			payment_accept_types.each do |key, value|
+				rs << [PAYMENT_ACCEPT_MAP[key.to_sym], key]
+			end
+			rs
+		end
+	end
 end

@@ -1,0 +1,74 @@
+.nested-fields
+  .card.gray-card
+    .card-header
+      h4.card-title 缴费单
+      - if f.object.persisted?
+        .links
+          = link_to_add_association '增加退费单', f, :refund_orders, class: 'btn btn-primary mb-2 pull-right',
+                  data: {association_insertion_node: '#refund_orders', association_insertion_method: :append}
+    .card-body
+      .row
+        .col-md-4
+          = f.input :payer, label: '交款人'
+        .col-md-4
+          = f.input :payer_contacts, label: '交款联系人'
+        .col-md-4
+          = f.input :payer_contacts_phone, label: '交款联系人电话'
+      .row
+        .col-md-4
+          = f.input :consigner, label: '委托人'
+        .col-md-4
+          = f.input :consiggner_contacts, label: '委托人联系人'
+        .col-md-4
+          = f.input :consiggner_contacts_phone, label: '委托人联系人电话'
+      .row
+        .col-md-4
+          span = "案由：#{@main_case.anyou}"
+        .col-md-4
+          span = "鉴定类型：#{@main_case.case_type}"
+        .col-md-4
+          span = "案件编号：#{@main_case.case_no}"
+      .row
+        .col-md-4
+          span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
+      .row
+        .col-md-2
+          = f.input :appraisal_cost, label: '鉴定费'
+        .col-md-2
+          = f.input :business_cost, label: '差旅费'
+        .col-md-2
+          = f.input :appear_court_cost, label: '出庭费'
+        .col-md-2
+          = f.input :investigation_cost, label: '调查费'
+        .col-md-2
+          = f.input :consult_cost, label: '咨询费'
+        .col-md-2
+          = f.input :other_cost, label: '其他'
+      .row
+        .col-md-4
+          = f.input :total_cost, label: '缴费合计'
+        .col-md-4
+          = f.input :payment_in_advance, label: '预付金额'
+      .row
+        .col-md-4
+          span 大写金额
+        .col-md-4
+          span 大写金额
+      .row
+        .col-md-4
+          = f.input :payment_type, label: '缴费类别', collection: PaymentOrder.payment_type_collection
+        .col-md-4
+          = f.input :payment_date, label: '回款日期', as: :date, html5: true
+        .col-md-4
+          = f.input :payment_people, label: '汇款人'
+      .row
+        .col-md-4
+          = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection
+      .row
+        .col-md-2
+          = link_to_remove_association "移除", f, class: 'btn btn-danger'
+      .row
+        // 缴费单
+        #refund_orders
+          = f.simple_fields_for :refund_orders do |refund_order|
+            = render 'refund_order_fields', f: refund_order, render_options: {wrapper: 'bootstrap'}

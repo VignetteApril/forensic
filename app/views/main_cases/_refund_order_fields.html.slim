@@ -1,0 +1,21 @@
+.nested-fields style="padding: 30px"
+  .card.gray-card
+    .card-header
+      h4.card-title 退费单
+    .card-body
+      .row
+        .col-md-2
+          = f.input :appraisal_cost, label: '鉴定费'
+        .col-md-2
+          = f.input :business_cost, label: '差旅费'
+        .col-md-2
+          = f.input :appear_court_cost, label: '出庭费'
+        .col-md-2
+          = f.input :investigation_cost, label: '调查费'
+        .col-md-2
+          = f.input :consult_cost, label: '咨询费'
+        .col-md-2
+          = f.input :other_cost, label: '其他'
+      .row
+        .col-md-2
+          = link_to_remove_association "移除", f, class: 'btn btn-danger'

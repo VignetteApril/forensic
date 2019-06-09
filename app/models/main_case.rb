@@ -8,7 +8,6 @@ class MainCase < ApplicationRecord
 
   belongs_to :department
   has_many :case_talks
-  has_many :payment_orders
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】
   has_many :case_process_records # 案件中改变状态时的记录
@@ -16,6 +15,8 @@ class MainCase < ApplicationRecord
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
+  has_many :payment_orders
+  accepts_nested_attributes_for :payment_orders, reject_if: :all_blank, allow_destroy: true
   has_one_attached :barcode_image
 
   validates :matter, presence: { message: '不能为空' }
