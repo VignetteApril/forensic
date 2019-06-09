@@ -38,6 +38,10 @@ features:
                            organization_and_user, matter_demands, generate_case_no,
                            matter_demands_and_case_types, filing_info, update_add_material,
                            update_filing, update_reject, open_barcode_image, create_case_doc", 案件管理]
+  - [我的案件, main_cases, "index, open_barcode_image", 机构]
+  - [本科室案件, main_cases, "department_cases, open_barcode_image", 机构]
+  - [本机构的案件, main_cases, "organization_cases, open_barcode_image", 机构]
+  - [已立案待付款案件, main_cases, "filed_unpaid_cases, open_barcode_image", 机构]
   - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 机构]
   - [补充材料周期管理, material_cycles, 'index, new, edit, update, show, create, destroy', 机构]
 apps:

@@ -33,6 +33,7 @@
 //= require custom_js/departments
 //= require custom_js/department_docs
 //= require custom_js/main_cases
+//= require custom_js/users
 
 // nested form js
 //= require cocoon

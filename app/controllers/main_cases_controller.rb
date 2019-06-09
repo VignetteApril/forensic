@@ -11,10 +11,61 @@ class MainCasesController < ApplicationController
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
 
+  # 我的案件页面
   # GET /main_cases
   # GET /main_cases.json
+  # admin用户可以看到全部case的信息
+  # 没有机构的用户调到首页，告诉用户去设置对应的机构
+  # 通过用户的机构类型看如果是法院的话，就说明该用户为委托人，委托人的话只能看跟自己相关的case
+  # 除去以上所有情况，剩下的用户都为鉴定中心的用，鉴定中心的用户在该action里
   def index
-    @main_cases = initialize_grid(MainCase, per_page: 20, name: 'main_cases_grid')
+    if admin?
+      data = MainCase
+    elsif @current_user.organization.nil?
+      redirect_to acceptable_url('sessions', 'index'), notice: '请您关联对应的机构'
+    elsif @current_user.organization.org_type.to_sym == :court
+      data = MainCase.where(wtr_id: @current_user.id)
+    else
+      current_org_cases = @current_user.organization.main_cases
+      case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? &&
+                                                                     main_case.ident_users.split(',').include?(@current_user.id) }
+      data = MainCase.where(id: case_ids)
+    end
+
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+  end
+
+  # 本科室案件页面
+  # 本页面不为管理员和委托人这两种角色设计，请不要在这两个角色下添加该功能
+  # 委托人没有这个页面
+  # 鉴定中心的人所在科室下的所有案件
+  # 针对本中心的人没有权限
+  def department_cases
+    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.department.nil?
+
+    data = @current_user.department.main_cases
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+  end
+
+  # 本中心案件页面
+  # 本页面不为管理员和委托人这两种角色设计，请不要在这两个角色下添加该功能
+  # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
+  def center_cases
+    redirect_to root_path, notice: '请您关联相关鉴定中心' and return if @current_user.organization.nil?
+
+    data = @current_user.organization.main_cases
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+  end
+
+  # 已付款待立案页面
+  # 通过财务状态：【已付款】和案件状态：【待立案】，筛选本中心的所有案件
+  # 本页面属于角色为立案人
+  def filed_unpaid_cases
+    redirect_to root_path, notice: '请您关联相关鉴定中心' and return if @current_user.organization.nil?
+    current_org_cases = @current_user.organization.main_cases
+    data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
+
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
   end
 
   # GET /main_cases/1

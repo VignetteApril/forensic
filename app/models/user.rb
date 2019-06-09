@@ -31,7 +31,7 @@ class User < ApplicationRecord
   has_many   :favorites
   has_one    :case_user
   belongs_to :department, required: false   
-  belongs_to :organization, required: false # 每一个用户只能同时属于一个机构
+  belongs_to :organization # 每一个用户只能同时属于一个机构
   has_one_attached :positive #证件正面
   has_one_attached :negative #证件反面
 
