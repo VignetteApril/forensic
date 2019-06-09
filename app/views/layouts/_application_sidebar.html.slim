@@ -14,17 +14,17 @@ aside.app-sidebar
         a href="#{main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'index')}"
           i.app-menu__icon.fa.fa-building-o
           span.app-menu__label 我的案件
-    - if can?('main_cases', 'department_cases')
+    - if can?('main_cases', 'department_cases') && !admin?
       li
         a href="#{department_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'department_cases')}"
           i.app-menu__icon.fa.fa-building-o
           span.app-menu__label 本科室案件
-    - if can?('main_cases', 'organization_cases')
+    - if can?('main_cases', 'center_cases') && !admin?
       li
-        a href="#{organization_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'organization_cases')}"
+        a href="#{center_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'center_cases')}"
           i.app-menu__icon.fa.fa-building-o
           span.app-menu__label 本中心案件
-    - if can?('main_cases', 'filed_unpaid_cases')
+    - if can?('main_cases', 'filed_unpaid_cases' && !admin?
       li
         a href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
           i.app-menu__icon.fa.fa-building-o

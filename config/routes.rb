@@ -59,7 +59,7 @@ Rails.application.routes.draw do
     get :open_barcode_image, on: :collection
     get :payment, on: :member
     get :department_cases, on: :collection
-    get :organization_cases, on: :collection
+    get :center_cases, on: :collection
     get :filed_unpaid_cases, on: :collection
     get :payment_order_management, on: :member
     post :create_case_doc, on: :member
