@@ -6,6 +6,8 @@ aside.app-sidebar
       p.app-sidebar__user-name = @current_user.name
       - unless @current_user.roles.empty?
         p.app-sidebar__user-designation = @current_user.roles.first.name
+      - if @current_user.organization
+        p.app-sidebar__user-designation = @current_user.organization.name
   ul.app-menu
     - if can?('organizations', 'index')
       li

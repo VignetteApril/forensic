@@ -1,5 +1,5 @@
 class DepartmentDoc < ApplicationRecord
-  belongs_to :department
+  belongs_to :docable, polymorphic: true
   has_one_attached :attachment
 
   validates :name, presence: { message: '名称不能为空' }
@@ -10,7 +10,7 @@ class DepartmentDoc < ApplicationRecord
 
   enum case_stage: [ :base_info,
                      :add_materials,
-                     :pending_case,
+                     :filed,
                      :reject_case,
                      :financial,
                      :executing,
@@ -18,7 +18,7 @@ class DepartmentDoc < ApplicationRecord
 
   CASE_STAGE_MAP = { base_info: '基本信息',
                      add_materials: '补充材料',
-                     pending_case: '立案',
+                     filed: '立案',
                      reject_case: '退案',
                      financial: '财务管理',
                      executing: '鉴定执行',
@@ -26,6 +26,10 @@ class DepartmentDoc < ApplicationRecord
 
   def case_stage_cn_name
     CASE_STAGE_MAP[self.case_stage.to_sym]
+  end
+
+  def is_case_doc?
+    self.docable_type.to_sym == :main_case
   end
 
   class << self

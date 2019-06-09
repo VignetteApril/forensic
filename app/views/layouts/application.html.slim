@@ -10,7 +10,8 @@ html
   body.app.sidebar-mini.rtl data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
     = render 'layouts/top_bar'
     main.main-app-content
-      = render "layouts/flash_message"
+      #flash
+        = render "layouts/flash_message"
       == yield
 
 javascript:

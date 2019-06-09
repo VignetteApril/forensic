@@ -1,0 +1,25 @@
+= simple_form_for(@main_case.case_docs.new, remote: true, method: :post, url: create_case_doc_main_case_path + '.js', authenticity_token: true ) do |f|
+  .modal.fade id="case_doc_modal" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+    .modal-dialog role="document"
+      .modal-content
+        .modal-header
+          h5 class="modal-title" id="case_doc_main_case_label" 请输入文档信息
+          button type="button" class="close" data-dismiss="modal" aria-label="Close"
+            span aria-hidden="true" &times;
+        .modal-body.text-center
+          .form-inputs.text-left
+            = f.input :name, label: '文档名称'
+            = f.input :doc_code, label: '文件编码'
+            = f.input :check_archived, label: '是否归档检查'
+            = f.input :check_archived_no, label: '归档检查顺序号'
+            .attachment_upload
+              = f.input :attachment, label: '上传文件', as: :file, input_html: {direct_upload: true}
+        .modal-footer
+          .form-actions
+            = f.button :submit, '确认', class: 'btn btn-success', id: 'case_doc_submit'
+          button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+
+javascript:
+  $('#case_doc_submit').click(function (){
+      $('#case_doc_modal').modal('hide');
+  });

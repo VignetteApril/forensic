@@ -11,7 +11,8 @@ html
     = render 'layouts/top_bar'
     = render 'layouts/sidebar'
     main.app-content
-      = render "layouts/flash_message"
+      #flash
+        = render "layouts/flash_message"
       == yield
 
 javascript:

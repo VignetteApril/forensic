@@ -1,7 +1,7 @@
 class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
-                                       :update_reject, :payment]
+                                       :update_reject, :payment, :create_case_doc]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -54,7 +54,7 @@ class MainCasesController < ApplicationController
         format.json { render :show, status: :created, location: @main_case }
       else
         format.html { render :new }
-        format.json { render json: @main_case.errors, status: :unprocessable_entity }
+        # format.json { render json: @main_case.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -195,6 +195,8 @@ class MainCasesController < ApplicationController
                            pass_user: params[:main_case][:pass_user],
                            sign_user: params[:main_case][:sign_user],
                            ident_users: params[:main_case][:ident_users].join(','),
+                           payer: params[:main_case][:payer],
+                           payer_phone: params[:main_case][:payer_phone],
                            case_stage: :filed,
                            acceptance_date: Date.today)
         @main_case.turn_filed
@@ -243,6 +245,21 @@ class MainCasesController < ApplicationController
     @organization = @main_case.department.organization
 
     render layout: false
+  end
+
+  # 在立案信息的立案表单部分，用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
+  # 创建完毕后使用ajax的方式刷新当前页面显示文档的部分
+  def create_case_doc
+    case_doc = @main_case.case_docs.new(case_doc_params.merge({ case_stage: :filed }))
+
+    respond_to do |format|
+      if case_doc.save
+        format.js
+      else
+        flash[:warning] = "文件上传失败，请重新上传！"
+        format.js { render 'layouts/display_flash' }
+      end
+    end
   end
 
   private
@@ -294,6 +311,14 @@ class MainCasesController < ApplicationController
                                                                     :id_type,
                                                                     :id_num,
                                                                     :_destroy])
+    end
+
+    def case_doc_params
+      params.require(:department_doc).permit(:name,
+                                             :doc_code,
+                                             :check_archived,
+                                             :check_archived_no,
+                                             :attachment)
     end
 
     def set_new_areas
