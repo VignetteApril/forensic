@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_08_105316) do
+ActiveRecord::Schema.define(version: 2019_06_09_075322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,17 @@ ActiveRecord::Schema.define(version: 2019_06_08_105316) do
     t.datetime "updated_at", null: false
     t.string "ancestry"
     t.index ["ancestry"], name: "index_areas_on_ancestry"
+  end
+
+  create_table "bills", force: :cascade do |t|
+    t.bigint "payment_order_id"
+    t.string "type"
+    t.string "organization"
+    t.string "address"
+    t.string "code"
+    t.string "bank"
+    t.string "phone"
+    t.index ["payment_order_id"], name: "index_bills_on_payment_order_id"
   end
 
   create_table "case_process_records", force: :cascade do |t|
@@ -250,6 +261,45 @@ ActiveRecord::Schema.define(version: 2019_06_08_105316) do
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end
 
+  create_table "payment_orders", force: :cascade do |t|
+    t.bigint "main_case_id"
+    t.string "payer"
+    t.string "payer_contacts"
+    t.string "payer_contacts_phone"
+    t.string "consigner"
+    t.string "consiggner_contacts"
+    t.string "consiggner_contacts_phone"
+    t.float "appraisal_cost"
+    t.float "business_cost"
+    t.float "appear_court_cost"
+    t.float "investigation_cost"
+    t.float "other_cost"
+    t.float "payment_in_advance"
+    t.integer "payment_type"
+    t.string "payment_date"
+    t.string "payment_people"
+    t.integer "payment_accept_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "consult_cost"
+    t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
+  end
+
+  create_table "refund_orders", force: :cascade do |t|
+    t.bigint "payment_order_id"
+    t.float "appraisal_cost"
+    t.float "business_cost"
+    t.float "appear_court_cost"
+    t.float "investigation_cost"
+    t.float "consult_cost"
+    t.float "other_cost"
+    t.float "refund_cost"
+    t.integer "payee_id"
+    t.integer "refund_dealer_id"
+    t.integer "refund_checker_id"
+    t.index ["payment_order_id"], name: "index_refund_orders_on_payment_order_id"
+  end
+
   create_table "role_features", force: :cascade do |t|
     t.integer "role_id", null: false
     t.integer "feature_id", null: false
@@ -354,6 +404,7 @@ ActiveRecord::Schema.define(version: 2019_06_08_105316) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appraised_units", "main_cases"
+  add_foreign_key "bills", "payment_orders"
   add_foreign_key "case_process_records", "main_cases"
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
@@ -363,6 +414,8 @@ ActiveRecord::Schema.define(version: 2019_06_08_105316) do
   add_foreign_key "main_cases", "departments"
   add_foreign_key "material_cycles", "organizations"
   add_foreign_key "organizations", "areas"
+  add_foreign_key "payment_orders", "main_cases"
+  add_foreign_key "refund_orders", "payment_orders"
   add_foreign_key "transfer_docs", "main_cases"
   add_foreign_key "users", "organizations"
 end

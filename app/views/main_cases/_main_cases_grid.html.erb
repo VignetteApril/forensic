@@ -28,7 +28,7 @@
   end
 
   g.column name: '被鉴定人', attribute: 'name', assoc: :appraised_unit, detach_with_id: :appraised_unit_name_filter, ordering: false do |main_case|
-    main_case.appraised_unit.name
+    main_case.appraised_unit.try(:name)
   end
 
   g.column name: '鉴定事项', attribute: 'matter', filter: false, ordering: false do |main_case|
