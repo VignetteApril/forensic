@@ -1,7 +1,8 @@
 class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
-                                       :update_reject, :payment, :create_case_doc]
+                                       :update_reject, :payment, :create_case_doc, :payment_order_management,
+                                       :save_payment_order]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -313,6 +314,23 @@ class MainCasesController < ApplicationController
     end
   end
 
+  # 费用管理页面
+  def payment_order_management
+  end
+
+  # 保存费用管理页面
+  def save_payment_order
+    respond_to do |format|
+      if @main_case.update(payment_order_params)
+        format.html { redirect_to payment_order_management_main_case_url(@main_case), notice: 'Main case was successfully updated.' }
+        format.json { render :show, status: :ok, location: @main_case }
+      else
+        format.html { render :edit }
+        format.json { render json: @main_case.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -370,6 +388,40 @@ class MainCasesController < ApplicationController
                                              :check_archived,
                                              :check_archived_no,
                                              :attachment)
+    end
+
+    def payment_order_params
+      params.require(:main_case).permit(payment_orders_attributes: [ :payer,
+                                                                     :payer_contacts,
+                                                                     :payer_contacts_phone,
+                                                                     :consigner,
+                                                                     :consiggner_contacts,
+                                                                     :consiggner_contacts_phone,
+                                                                     :appraisal_cost,
+                                                                     :business_cost,
+                                                                     :appear_court_cost,
+                                                                     :investigation_cost,
+                                                                     :other_cost,
+                                                                     :consult_cost,
+                                                                     :total_cost,
+                                                                     :payment_type,
+                                                                     :payment_date,
+                                                                     :payment_people,
+                                                                     :payment_in_advance,
+                                                                     :payment_accept_type,
+                                                                     :id,
+                                                                     :_destroy, refund_orders_attributes: [ :id,
+                                                                                                            :_destroy,
+                                                                                                            :appraisal_cost,
+                                                                                                            :business_cost,
+                                                                                                            :appear_court_cost,
+                                                                                                            :investigation_cost,
+                                                                                                            :other_cost,
+                                                                                                            :consult_cost,
+                                                                                                            :refund_cost,
+                                                                                                            :payee_id,
+                                                                                                            :refund_dealer_id,
+                                                                                                            :refund_checker_id ] ])
     end
 
     def set_new_areas

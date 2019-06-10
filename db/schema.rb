@@ -11,7 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
-ActiveRecord::Schema.define(version: 2019_06_09_075322) do
+ActiveRecord::Schema.define(version: 2019_06_09_120044) do
+
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -217,7 +218,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_075322) do
     t.string "payer"
     t.string "payer_phone"
     t.integer "wtr_id"
-    t.integer "amount"
+    t.float "amount"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
 
@@ -280,12 +281,13 @@ ActiveRecord::Schema.define(version: 2019_06_09_075322) do
     t.float "other_cost"
     t.float "payment_in_advance"
     t.integer "payment_type"
-    t.string "payment_date"
     t.string "payment_people"
     t.integer "payment_accept_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "consult_cost"
+    t.datetime "payment_date"
+    t.float "total_cost"
     t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
   end
 

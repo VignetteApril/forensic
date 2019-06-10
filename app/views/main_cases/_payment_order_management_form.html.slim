@@ -1,0 +1,24 @@
+= simple_form_for(@main_case, method: :patch, url: save_payment_order_main_case_path) do |f|
+  - if @main_case.errors.any?
+    #error_explanation.alert.alert-warning
+      h4
+        | 该模板文档保存时出错：
+        = pluralize(@main_case.errors.count, "个错误")
+      ul
+        - @main_case.errors.full_messages.each do |message|
+          li
+            = message
+  .form-inputs
+    .row
+      .col-md-12
+        .links
+          = link_to_add_association '增缴费单', f, :payment_orders, class: 'btn btn-primary mb-2 pull-right',
+                  data: {association_insertion_node: '#payment_orders', association_insertion_method: :append}
+    .row
+      // 缴费单
+      #payment_orders
+        = f.simple_fields_for :payment_orders do |payment_order|
+          = render 'payment_order_fields', f: payment_order, render_options: {wrapper: 'bootstrap'}
+  .form-actions
+    .row
+      = f.button :submit, '提交', class: 'btn btn-success'
