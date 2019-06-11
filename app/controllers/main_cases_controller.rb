@@ -331,6 +331,29 @@ class MainCasesController < ApplicationController
     end
   end
 
+  # ajax获取发票信息
+  def request_bill 
+    if PaymentOrder.find_by(:id=>params['payment_order']).bill.blank?
+      render json: {:type=>"",:organization=>"",:address=>"",:code=>"",:bank=>"",:phone=>""}.to_json
+    else
+      bill = Bill.where(:payment_order_id=>params['payment_order']).first
+      render json: {:type=>bill.bill_type,:organization=>bill.organization,:address=>bill.address,:code=>bill.code,:bank=>bill.bank,:phone=>bill.phone}.to_json
+    end
+  end
+
+  # ajax更新发票信息
+  def update_bill 
+    bill = Bill.where(:payment_order_id=>params['payment_order']).try(:first)
+    if bill.nil?
+      Bill.create(:payment_order_id=>params['payment_order'],:bill_type=>params['type'],:organization=>params['orgnization'],:address=>params['address'],:code=>params['code'],:bank=>params['bank'],:phone=>params['phone'])
+    else
+      bill.update(:payment_order_id=>params['payment_order'],:bill_type=>params['type'],:organization=>params['orgnization'],:address=>params['address'],:code=>params['code'],:bank=>params['bank'],:phone=>params['phone'])
+    end
+
+    render json: {:msg=>"发表已更新"}.to_json
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -391,7 +414,8 @@ class MainCasesController < ApplicationController
     end
 
     def payment_order_params
-      params.require(:main_case).permit(payment_orders_attributes: [ :payer,
+      params.require(:main_case).permit(:case_stage,
+                                        payment_orders_attributes: [ :payer,
                                                                      :payer_contacts,
                                                                      :payer_contacts_phone,
                                                                      :consigner,
@@ -409,6 +433,7 @@ class MainCasesController < ApplicationController
                                                                      :payment_people,
                                                                      :payment_in_advance,
                                                                      :payment_accept_type,
+                                                                     :take_bill,
                                                                      :id,
                                                                      :_destroy, refund_orders_attributes: [ :id,
                                                                                                             :_destroy,

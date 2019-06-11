@@ -6,7 +6,7 @@ class ApisController < ApplicationController
 
 	def register 
 		province_id = Area.find(params["city_id"]).parent.id
-        user = User.new(:login=>params['name'],:password => params['password'], :password_confirmation => params['password'],:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:mobile_phone=>params['phone'],:landline=>params['landline'])
+        user = User.new(:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:mobile_phone=>params['phone'],:landline=>params['landline'])
 
         org = Organization.where(:name=>params["organization"]).try(:first)
         if org.nil?
@@ -41,7 +41,7 @@ class ApisController < ApplicationController
 	end
 
 	def login
-		user = User.authenticate(params["name"], params["password"])
+		user = User.authenticate(params["login"], params["password"])
 		json = {"code":"0","msg":"login_success","token":""}
 		if user.nil?
 			json["msg"] = "login_failed"
