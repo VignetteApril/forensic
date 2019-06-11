@@ -1,5 +1,4 @@
 # workers 数改成实际 CPU 数，可通过 grep -c processor /proc/cpuinfo 查询
-workers 2
 threads 1, 6
 daemonize true
 rails_env = ENV['RAILS_ENV'] || "production"
@@ -10,6 +9,7 @@ bind "unix://#{shared_dir}/sockets/puma.sock"
 stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
 pidfile "#{shared_dir}/pids/puma.pid"
 state_path "#{shared_dir}/pids/puma.state"
+port 30000
 
 on_worker_boot do
   require "active_record"

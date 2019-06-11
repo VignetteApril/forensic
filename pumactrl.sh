@@ -6,7 +6,7 @@ case "$1" in
         ;;
     start)
         echo -n "starting puma..."
-        RAILS_ENV=production bundle exec puma -d -p 30000
+        RAILS_ENV=production bundle exec puma -C config/puma.rb
         ;;
     stop)
         echo "stoping puma..."
