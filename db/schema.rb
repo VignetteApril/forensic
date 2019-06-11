@@ -213,9 +213,9 @@ ActiveRecord::Schema.define(version: 2019_06_09_120044) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
-    t.integer "wtr_id"
     t.float "amount"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
   end
