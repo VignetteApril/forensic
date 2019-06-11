@@ -5,7 +5,6 @@ daemonize true
 rails_env = ENV['RAILS_ENV'] || "production"
 environment rails_env
 app_dir = File.expand_path("../..", __FILE__)
-binding.pry
 shared_dir = "#{app_dir}/shared"
 bind "unix://#{shared_dir}/sockets/puma.sock"
 stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
