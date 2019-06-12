@@ -46,6 +46,8 @@ class MainCasesController < ApplicationController
 
     data = @current_user.department.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 本中心案件页面
@@ -56,6 +58,8 @@ class MainCasesController < ApplicationController
 
     data = @current_user.organization.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 已付款待立案页面
@@ -67,6 +71,8 @@ class MainCasesController < ApplicationController
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
 
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # GET /main_cases/1
@@ -225,6 +231,8 @@ class MainCasesController < ApplicationController
   end
 
   # 立案信息中补充材料表单提交的位置
+  # method patch
+  # 参数 :material_cycle 补充材料周期
   def update_add_material
     respond_to do |format|
       if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
@@ -241,6 +249,7 @@ class MainCasesController < ApplicationController
   # 案件审查中立案信息表达提交的位置
   # 案件这变为立案的状态
   # 并设置受理日期
+  # method patch
   def update_filing
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
@@ -262,6 +271,7 @@ class MainCasesController < ApplicationController
   end
 
   # 案件审查中推案提交的位置
+  # method patch
   def update_reject
     respond_to do |format|
       if @main_case.turn_rejected
@@ -302,7 +312,7 @@ class MainCasesController < ApplicationController
   # 在立案信息的立案表单部分，用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
   # 创建完毕后使用ajax的方式刷新当前页面显示文档的部分
   def create_case_doc
-    case_doc = @main_case.case_docs.new(case_doc_params.merge({ case_stage: :filed }))
+    case_doc = @main_case.case_docs.new(case_doc_params)
 
     respond_to do |format|
       if case_doc.save
@@ -410,7 +420,8 @@ class MainCasesController < ApplicationController
                                              :doc_code,
                                              :check_archived,
                                              :check_archived_no,
-                                             :attachment)
+                                             :attachment,
+                                             :case_stage)
     end
 
     def payment_order_params

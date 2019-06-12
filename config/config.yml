@@ -37,7 +37,8 @@ features:
   - [案件管理, main_cases, "index, new, edit, update, show, create, destroy,
                            organization_and_user, matter_demands, generate_case_no,
                            matter_demands_and_case_types, filing_info, update_add_material,
-                           update_filing, update_reject, open_barcode_image, create_case_doc", 案件管理]
+                           update_filing, update_reject, open_barcode_image, create_case_doc,
+                           payment_order_management", 案件管理]
   - [我的案件, main_cases, "index, open_barcode_image", 机构]
   - [本科室案件, main_cases, "department_cases, open_barcode_image", 机构]
   - [本机构的案件, main_cases, "center_cases, open_barcode_image", 机构]

@@ -15,9 +15,16 @@
   .card-body
     = render 'payment_order_management_form'
 
+.row.mt-2
+  .col-md-4
+  .col-md-4
+  .col-md-4
+    ul.pull-right
+      - @main_case.case_docs.where(case_stage: :financial).each do |doc|
+        li = doc.name
 javascript:
   $(".open-bill-modal").bind("click",function(e){
-    console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
+    // console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
     //请求数据设置模态框
     $.get("/main_cases/request_bill?payment_order="+$(e.target).attr("data-id"),function(data,status){
     	$(".bill-paymentorder-id").val($(e.target).attr("data-id"))
@@ -27,6 +34,5 @@ javascript:
     	$(".bill-address").val(data['address'])
     	$(".bill-tel").val(data['phone'])
     	$(".bill-bank").val(data['bank'])
-    
   	});
   });       

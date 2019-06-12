@@ -8,6 +8,7 @@
             span aria-hidden="true" &times;
         .modal-body.text-center
           .form-inputs.text-left
+            = f.input :case_stage, as: :hidden, input_html: { value: "#{case_stage}" }
             = f.input :name, label: '文档名称'
             = f.input :doc_code, label: '文件编码'
             = f.input :check_archived, label: '是否归档检查'
