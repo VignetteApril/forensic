@@ -49,6 +49,16 @@ class MainCase < ApplicationRecord
     refunded: '已退款'
   }
 
+  class << self
+    def case_stage_collection
+      rs = []
+      case_stages.each do |key, value|
+        rs << [CASE_STAGE_MAP[key.to_sym], key]
+      end
+      rs
+    end
+  end
+
   aasm(:case, column: :case_stage, enum: true) do
     state :pending, initial: true
     state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_09_120044) do
+ActiveRecord::Schema.define(version: 2019_06_11_000241) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_120044) do
 
   create_table "bills", force: :cascade do |t|
     t.bigint "payment_order_id"
-    t.string "type"
+    t.string "bill_type"
     t.string "organization"
     t.string "address"
     t.string "code"
@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(version: 2019_06_09_120044) do
     t.float "consult_cost"
     t.datetime "payment_date"
     t.float "total_cost"
+    t.boolean "take_bill"
     t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
   end
 

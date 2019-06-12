@@ -1,0 +1,61 @@
+.modal.fade id="bill_modal" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+    .modal-dialog role="document"
+      .modal-content
+        .modal-header 发票信息
+        .modal-body.text-center
+          .row style='display:none'
+            input class="form-control string optional  bill-paymentorder-id" 
+          .row style='padding-top:20px'
+            .col-md-3 类型：
+            .col-md-6
+              input class="form-control string optional bill-type" 
+          .row style='padding-top:20px'    
+            .col-md-3 单位：
+            .col-md-6
+              input class="form-control string optional bill-org"
+          .row style='padding-top:20px'    
+            .col-md-3 税号：
+            .col-md-6
+              input class="form-control string optional bill-code"       
+          .row style='padding-top:20px'          
+            .col-md-3 地址：
+            .col-md-6
+              input class="form-control string optional bill-address"
+          .row style='padding-top:20px'          
+            .col-md-3 电话：
+            .col-md-6
+              input class="form-control string optional bill-tel"
+          .row style='padding-top:20px'          
+            .col-md-3 开户行：
+            .col-md-6
+              input class="form-control string optional bill-bank"                            
+        .modal-footer
+          .form-actions
+          button type="button" class="btn btn-success" id="bill_submit" 保存
+          button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+
+javascript:
+  $('#bill_submit').click(function (){
+    data ={}
+    data['payment_order'] = $('.bill-paymentorder-id').val()
+    data['type'] = $('.bill-type').val()
+    data['orgnization'] = $('.bill-org').val()
+    data['code'] = $('.bill-code').val()
+    data['address'] = $('.bill-address').val()
+    data['phone'] = $('.bill-tel').val()
+    data['bank'] = $('.bill-bank').val()
+
+    $.ajax({
+    type : 'POST',
+    url : '/main_cases/update_bill',
+    data: data,
+    error : function() {
+        alert('更新失败 ');
+    },
+    success : function(data) {
+     $('#bill_modal').modal('hide');
+    }
+    });
+
+   
+  });

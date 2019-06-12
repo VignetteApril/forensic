@@ -67,6 +67,8 @@ Rails.application.routes.draw do
     patch :update_filing, on: :member
     patch :update_reject, on: :member
     patch :save_payment_order, on: :member
+    get :request_bill, on: :collection
+    post :update_bill, on: :collection
   end
 
   post 'areas/cities'
