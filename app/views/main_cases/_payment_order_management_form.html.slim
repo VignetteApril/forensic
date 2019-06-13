@@ -1,3 +1,5 @@
+= render partial: 'case_doc_modal', locals: {main_case: @main_case, case_stage: :financial}
+
 = simple_form_for(@main_case, method: :patch, url: save_payment_order_main_case_path) do |f|
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
@@ -10,9 +12,11 @@
             = message
   .form-inputs
     .row
-      .col-md-12
+      .col-md-10
+        button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#case_doc_modal" 上传文件
+      .col-md-2
         .links
-          = link_to_add_association '增缴费单', f, :payment_orders, class: 'btn btn-primary mb-2 pull-right',
+          = link_to_add_association '增加缴费单', f, :payment_orders, class: 'btn btn-primary mb-2 pull-right',
                   data: {association_insertion_node: '#payment_orders', association_insertion_method: :append}
     .row
       // 缴费单

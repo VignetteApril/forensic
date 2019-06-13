@@ -64,11 +64,26 @@
       .row
         .col-md-4
           = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection
+      - if f.object.persisted?    
+        .row
+          .col-md-4
+          .col-md-2          
+            button type="button" class="btn btn-primary open-bill-modal" data-id=f.object.id data-toggle="modal" data-target="#bill_modal" 查看发票信息
+          .col-md-4 
+            span  发票状态:
+            = f.input :take_bill, label: false, collection: PaymentOrder.take_bill_collection, wrapper_html: { style: 'width:70%;height:100%;display:inline-block' }
+          .col-md-2
+            = f.button :submit, '更改', class: 'btn btn-success'
+
       .row
         .col-md-2
           = link_to_remove_association "移除", f, class: 'btn btn-danger'
+
       .row
         // 缴费单
         #refund_orders
           = f.simple_fields_for :refund_orders do |refund_order|
             = render 'refund_order_fields', f: refund_order, render_options: {wrapper: 'bootstrap'}
+     
+
+

@@ -22,6 +22,9 @@ class PaymentOrder < ApplicationRecord
 
 
 	class << self
+		def take_bill_collection
+			[['已开',true],['未开',false]]
+		end
 		def payment_type_collection
 			rs = []
 			payment_types.each do |key, value|

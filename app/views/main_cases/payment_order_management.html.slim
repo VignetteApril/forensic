@@ -1,9 +1,38 @@
 .row
   .col-md-6
     = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
+    span.h5.ml-3 = "#{'案件流水号：' + @main_case.serial_no}"
+  .col-md-4 
+    = simple_form_for(@main_case, method: :patch, url: save_payment_order_main_case_path) do |f|
+    	span 案件状态：
+    	= f.input :case_stage, label: false, collection: MainCase.case_stage_collection, wrapper_html: { style: 'width:50%;display:inline-block;padding:10px' }
+    	= f.button :submit, '提交', class: 'btn btn-success'
 
 = render 'nav_bar'
+= render 'bill_modal'
 
 .card
   .card-body
     = render 'payment_order_management_form'
+
+.row.mt-2
+  .col-md-4
+  .col-md-4
+  .col-md-4
+    ul.pull-right
+      - @main_case.case_docs.where(case_stage: :financial).each do |doc|
+        li = doc.name
+javascript:
+  $(".open-bill-modal").bind("click",function(e){
+    // console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
+    //请求数据设置模态框
+    $.get("/main_cases/request_bill?payment_order="+$(e.target).attr("data-id"),function(data,status){
+    	$(".bill-paymentorder-id").val($(e.target).attr("data-id"))
+    	$(".bill-type").val(data['type'])
+    	$(".bill-org").val(data['organization'])
+    	$(".bill-code").val(data['code'])
+    	$(".bill-address").val(data['address'])
+    	$(".bill-tel").val(data['phone'])
+    	$(".bill-bank").val(data['bank'])
+  	});
+  });       

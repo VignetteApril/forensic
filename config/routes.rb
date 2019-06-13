@@ -67,32 +67,28 @@ Rails.application.routes.draw do
     patch :update_filing, on: :member
     patch :update_reject, on: :member
     patch :save_payment_order, on: :member
+    get :request_bill, on: :collection
+    post :update_bill, on: :collection
   end
 
   post 'areas/cities'
   post 'areas/districts'
 
-  get 'aologin' => 'session#aologin'
-  get 'aosignin' => 'session#aosignin'
-  get 'ao' => 'session#ao'
-
   get 'login' => 'session#new', as: :login
   get 'logout' => 'session#destroy', as: :logout
 
+  # 小程序后台API
   post 'apis/register'
   post 'apis/login'
   patch 'apis/update_user_infos'
   get 'apis/get_user_infos'
-
   get 'apis/get_city_list'
   get 'apis/get_district_list'
-
   get 'apis/get_notice_list'
   get 'apis/get_case_list'
   get 'apis/get_case_detail_progress'
   get 'apis/get_case_talk'
 
-  # root 'main_cases#index'
   root 'session#index'
 end
 

@@ -76,4 +76,7 @@ yarn-debug.log*
 # Ignore config files
 config/database.yml
 
+# Ignore shared file
+/shared/*
+
 Gemfile.lock

@@ -46,6 +46,8 @@ class MainCasesController < ApplicationController
 
     data = @current_user.department.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 本中心案件页面
@@ -56,6 +58,8 @@ class MainCasesController < ApplicationController
 
     data = @current_user.organization.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 已付款待立案页面
@@ -67,6 +71,8 @@ class MainCasesController < ApplicationController
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
 
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # GET /main_cases/1
@@ -225,6 +231,8 @@ class MainCasesController < ApplicationController
   end
 
   # 立案信息中补充材料表单提交的位置
+  # method patch
+  # 参数 :material_cycle 补充材料周期
   def update_add_material
     respond_to do |format|
       if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
@@ -241,6 +249,7 @@ class MainCasesController < ApplicationController
   # 案件审查中立案信息表达提交的位置
   # 案件这变为立案的状态
   # 并设置受理日期
+  # method patch
   def update_filing
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
@@ -262,7 +271,8 @@ class MainCasesController < ApplicationController
     end
   end
 
-  # 案件审查中退案提交的位置
+  # 案件审查中推案提交的位置
+  # method patch
   def update_reject
     respond_to do |format|
       if @main_case.turn_rejected
@@ -303,7 +313,7 @@ class MainCasesController < ApplicationController
   # 在立案信息的立案表单部分，用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
   # 创建完毕后使用ajax的方式刷新当前页面显示文档的部分
   def create_case_doc
-    case_doc = @main_case.case_docs.new(case_doc_params.merge({ case_stage: :filed }))
+    case_doc = @main_case.case_docs.new(case_doc_params)
 
     respond_to do |format|
       if case_doc.save
@@ -331,6 +341,29 @@ class MainCasesController < ApplicationController
         format.json { render json: @main_case.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # ajax获取发票信息
+  def request_bill 
+    if PaymentOrder.find_by(:id=>params['payment_order']).bill.blank?
+      render json: {:type=>"",:organization=>"",:address=>"",:code=>"",:bank=>"",:phone=>""}.to_json
+    else
+      bill = Bill.where(:payment_order_id=>params['payment_order']).first
+      render json: {:type=>bill.bill_type,:organization=>bill.organization,:address=>bill.address,:code=>bill.code,:bank=>bill.bank,:phone=>bill.phone}.to_json
+    end
+  end
+
+  # ajax更新发票信息
+  def update_bill 
+    bill = Bill.where(:payment_order_id=>params['payment_order']).try(:first)
+    if bill.nil?
+      Bill.create(:payment_order_id=>params['payment_order'],:bill_type=>params['type'],:organization=>params['orgnization'],:address=>params['address'],:code=>params['code'],:bank=>params['bank'],:phone=>params['phone'])
+    else
+      bill.update(:payment_order_id=>params['payment_order'],:bill_type=>params['type'],:organization=>params['orgnization'],:address=>params['address'],:code=>params['code'],:bank=>params['bank'],:phone=>params['phone'])
+    end
+
+    render json: {:msg=>"发表已更新"}.to_json
+
   end
 
   private
@@ -389,11 +422,13 @@ class MainCasesController < ApplicationController
                                              :doc_code,
                                              :check_archived,
                                              :check_archived_no,
-                                             :attachment)
+                                             :attachment,
+                                             :case_stage)
     end
 
     def payment_order_params
-      params.require(:main_case).permit(payment_orders_attributes: [ :payer,
+      params.require(:main_case).permit(:case_stage,
+                                        payment_orders_attributes: [ :payer,
                                                                      :payer_contacts,
                                                                      :payer_contacts_phone,
                                                                      :consigner,
@@ -411,6 +446,7 @@ class MainCasesController < ApplicationController
                                                                      :payment_people,
                                                                      :payment_in_advance,
                                                                      :payment_accept_type,
+                                                                     :take_bill,
                                                                      :id,
                                                                      :_destroy, refund_orders_attributes: [ :id,
                                                                                                             :_destroy,
