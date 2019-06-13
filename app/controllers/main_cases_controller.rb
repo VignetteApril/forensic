@@ -249,6 +249,7 @@ class MainCasesController < ApplicationController
                            ident_users: params[:main_case][:ident_users].join(','),
                            payer: params[:main_case][:payer],
                            payer_phone: params[:main_case][:payer_phone],
+                           amount: params[:main_case][:amount],
                            case_stage: :filed,
                            acceptance_date: Date.today)
         @main_case.turn_filed
@@ -261,7 +262,7 @@ class MainCasesController < ApplicationController
     end
   end
 
-  # 案件审查中推案提交的位置
+  # 案件审查中退案提交的位置
   def update_reject
     respond_to do |format|
       if @main_case.turn_rejected
@@ -319,6 +320,7 @@ class MainCasesController < ApplicationController
   end
 
   # 保存费用管理页面
+  # method patch
   def save_payment_order
     respond_to do |format|
       if @main_case.update(payment_order_params)
