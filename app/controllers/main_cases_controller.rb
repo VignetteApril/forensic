@@ -251,11 +251,12 @@ class MainCasesController < ApplicationController
   # 并设置受理日期
   # method patch
   def update_filing
+    ident_users = params[:main_case][:ident_users].blank? ? "" : params[:main_case][:ident_users].join(',')
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
                            pass_user: params[:main_case][:pass_user],
                            sign_user: params[:main_case][:sign_user],
-                           ident_users: params[:main_case][:ident_users].join(','),
+                           ident_users: ident_users,
                            payer: params[:main_case][:payer],
                            payer_phone: params[:main_case][:payer_phone],
                            amount: params[:main_case][:amount],
@@ -363,7 +364,18 @@ class MainCasesController < ApplicationController
     end
 
     render json: {:msg=>"发表已更新"}.to_json
+  end
 
+  # 案件信息页面的用户搜索
+  # method get
+  # 参数 user_name 用户姓名
+  # 模糊搜索
+  def user_search
+    user_name = params[:user_name]
+
+    res = User.includes(:organization).where('name like ?', "%#{user_name}%")
+
+    render json: { users: res }
   end
 
   private

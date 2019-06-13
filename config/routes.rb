@@ -62,13 +62,14 @@ Rails.application.routes.draw do
     get :center_cases, on: :collection
     get :filed_unpaid_cases, on: :collection
     get :payment_order_management, on: :member
+    get :request_bill, on: :collection
+    post :user_search, on: :collection
     post :create_case_doc, on: :member
+    post :update_bill, on: :collection
     patch :update_add_material, on: :member
     patch :update_filing, on: :member
     patch :update_reject, on: :member
     patch :save_payment_order, on: :member
-    get :request_bill, on: :collection
-    post :update_bill, on: :collection
   end
 
   post 'areas/cities'
