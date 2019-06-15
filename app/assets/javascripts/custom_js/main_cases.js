@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function() {
     if ($('body').attr('data-controller') === 'main_cases') {
-        if ($('body').attr('data-action') === 'edit' || $('body').attr('data-action') === 'new' || $('body').attr('data-action') === 'create' ) {
+        if ($('body').attr('data-action') === 'edit' || $('body').attr('data-action') === 'new' || $('body').attr('data-action') === 'create' || $('body').attr('data-action') === 'update') {
             // select2
             var province_select2 = $("#main_case_province_id");
             var city_select2 = $("#main_case_city_id");
@@ -23,11 +23,11 @@ $(document).on('turbolinks:load', function() {
             var request_url_org_and_user = window.location.origin + '/main_cases/organization_and_user.json';
             var organization_name = $('#main_case_organization_name');
             var user_name = $('#main_case_user_name');
-            var organization_phone = $('#main_case_organization_phone');
+            var wtr_phone = $('#main_case_wtr_phone');
             var organization_addr = $('#main_case_organization_addr');
             var user_id = $('#main_case_user_id');
             $('#import_user').click(function () {
-                var user_select2 = $('#court_user_id');
+                var user_select2 = $('#user_select');
                 $.ajax({
                     url: request_url_org_and_user,
                     type: "GET",
@@ -39,7 +39,7 @@ $(document).on('turbolinks:load', function() {
                         organization_name.val(data.organization_name);
                         user_name.val(data.user_name);
                         user_id.val(data.user_id);
-                        organization_phone.val(data.organization_phone);
+                        wtr_phone.val(data.wtr_phone);
                         organization_addr.val(data.organization_addr);
 
                         province_select2.empty();
@@ -61,6 +61,26 @@ $(document).on('turbolinks:load', function() {
                         district_select2.val(data.current_district.id).trigger('change');
                     }
                 });
+            });
+
+            // 根据用户填写的委托方信息和委托人信息
+            var request_create_org_user = window.location.origin + '/main_cases/create_organization_and_user';
+            $('#create_org_user').click(function () {
+                $.ajax({
+                    url: request_create_org_user,
+                    type: 'POST',
+                    data: {
+                        wtr_phone: wtr_phone.val(),
+                        user_name: user_name.val(),
+                        organization_name: organization_name.val(),
+                        organization_addr: organization_addr.val(),
+                        province_id: province_select2.val(),
+                        city_id: city_select2.val(),
+                        district_id: district_select2.val()
+                    },
+                    dataType: 'script'
+                })
+                return;
             });
 
             // 科室和鉴定事项select2联动

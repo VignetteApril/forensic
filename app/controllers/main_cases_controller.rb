@@ -46,6 +46,8 @@ class MainCasesController < ApplicationController
 
     data = @current_user.department.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 本中心案件页面
@@ -56,6 +58,8 @@ class MainCasesController < ApplicationController
 
     data = @current_user.organization.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 已付款待立案页面
@@ -67,6 +71,8 @@ class MainCasesController < ApplicationController
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
 
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # GET /main_cases/1
@@ -164,7 +170,7 @@ class MainCasesController < ApplicationController
     end
 
     @organization_name = user.organization.name
-    @organization_phone = user.organization.phone
+    @wtr_phone = user.mobile_phone
     @organization_addr = user.organization.addr
     @user_name = user.name
 
@@ -184,7 +190,7 @@ class MainCasesController < ApplicationController
                                    provinces: rs_provinces,
                                    organization_name: @organization_name,
                                    organization_addr: @organization_addr,
-                                   organization_phone: @organization_phone,
+                                   wtr_phone: @wtr_phone,
                                    user_name: @user_name,
                                    user_id: user.id } }
     end
@@ -225,6 +231,8 @@ class MainCasesController < ApplicationController
   end
 
   # 立案信息中补充材料表单提交的位置
+  # method patch
+  # 参数 :material_cycle 补充材料周期
   def update_add_material
     respond_to do |format|
       if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
@@ -241,14 +249,17 @@ class MainCasesController < ApplicationController
   # 案件审查中立案信息表达提交的位置
   # 案件这变为立案的状态
   # 并设置受理日期
+  # method patch
   def update_filing
+    ident_users = params[:main_case][:ident_users].blank? ? "" : params[:main_case][:ident_users].join(',')
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
                            pass_user: params[:main_case][:pass_user],
                            sign_user: params[:main_case][:sign_user],
-                           ident_users: params[:main_case][:ident_users].join(','),
+                           ident_users: ident_users,
                            payer: params[:main_case][:payer],
                            payer_phone: params[:main_case][:payer_phone],
+                           amount: params[:main_case][:amount],
                            case_stage: :filed,
                            acceptance_date: Date.today)
         @main_case.turn_filed
@@ -262,6 +273,7 @@ class MainCasesController < ApplicationController
   end
 
   # 案件审查中推案提交的位置
+  # method patch
   def update_reject
     respond_to do |format|
       if @main_case.turn_rejected
@@ -302,11 +314,12 @@ class MainCasesController < ApplicationController
   # 在立案信息的立案表单部分，用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
   # 创建完毕后使用ajax的方式刷新当前页面显示文档的部分
   def create_case_doc
-    case_doc = @main_case.case_docs.new(case_doc_params.merge({ case_stage: :filed }))
+    case_doc = @main_case.case_docs.new(case_doc_params)
 
     respond_to do |format|
       if case_doc.save
-        format.js
+        flash[:notice] = "文件上传成功！"
+        format.js { render 'layouts/display_flash' }
       else
         flash[:warning] = "文件上传失败，请重新上传！"
         format.js { render 'layouts/display_flash' }
@@ -319,6 +332,7 @@ class MainCasesController < ApplicationController
   end
 
   # 保存费用管理页面
+  # method patch
   def save_payment_order
     respond_to do |format|
       if @main_case.update(payment_order_params)
@@ -351,7 +365,60 @@ class MainCasesController < ApplicationController
     end
 
     render json: {:msg=>"发表已更新"}.to_json
+  end
 
+  # 案件信息页面的用户搜索
+  # method get
+  # 参数 user_name 用户姓名
+  # 模糊搜索
+  def user_search
+    user_name = params[:user_name]
+
+    res = User.includes(:organization).where('name like ?', "%#{user_name}%")
+
+    render json: { users: res }
+  end
+
+  # 用户案件信息页面（编辑），选择了导入用户后或填写相关字段，可以点击新建委托人按钮
+  # 系统首先创建一个委托方（organization），然后再再该委托方(organization)下创建一个委托人(user)
+  # 系统会为该委托人创建系统用户，以用户的手机号作为login字段
+  # method POST
+  def create_organization_and_user
+    org_name, org_addr, wtr_phone, user_name = params[:organization_name],
+                                               params[:organization_addr],
+                                               params[:wtr_phone],
+                                               params[:user_name]
+    area = _area_id(params[:province_id],
+                    params[:city_id],
+                    params[:district_id])
+
+    org = Organization.new(name: org_name,
+                           org_type: :court,
+                           addr: org_addr,
+                           area_id: area,
+                           province_id: params[:province_id],
+                           city_id: params[:city_id],
+                           district_id: params[:district_id])
+    binding.pry
+    respond_to do |format|
+      if org.save
+        user = org.users.new(login: wtr_phone,
+                             name: user_name,
+                             email: "#{wtr_phone}@forensic.com",
+                             password: 'Fc123456',
+                             password_confirmation: 'Fc123456')
+        if user.save
+          flash[:success] = "委托方和委托人创建成功！请用户使用账号：#{wtr_phone}和密码：Fc123456 登录"
+          format.js { render 'layouts/display_flash' }
+        else
+          flash[:danger] = '委托人创建失败！请填写委托人电话字段，或您填写的电话已被占用！'
+          format.js { render 'layouts/display_flash' }
+        end
+      else
+        flash[:danger] = '委托方创建失败！请选择地区信息，或该委托方已经被创建了！'
+        format.js { render 'layouts/display_flash' }
+      end
+    end
   end
 
   private
@@ -374,6 +441,7 @@ class MainCasesController < ApplicationController
                                         :district_id,
                                         :organization_name,
                                         :user_name,
+                                        :wtr_phone,
                                         :organization_phone,
                                         :organization_addr,
                                         :department_id,
@@ -410,7 +478,8 @@ class MainCasesController < ApplicationController
                                              :doc_code,
                                              :check_archived,
                                              :check_archived_no,
-                                             :attachment)
+                                             :attachment,
+                                             :case_stage)
     end
 
     def payment_order_params

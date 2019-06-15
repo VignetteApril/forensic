@@ -13,14 +13,13 @@ class User < ApplicationRecord
   validates :name, :length => {:maximum => 20}
   validates :email, :length => {:maximum => 100}, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_nil: true, allow_blank: true
   validates :gender, :length => {:maximum => 10}
-  validates :mobile_phone, :length => {:maximum => 100}
+  validates :mobile_phone, :length => {:maximum => 100}, :uniqueness => true # 用户的手机号字段是唯一的，因为将来会跟小程序联动
   validates :password, :confirmation => true
   validates :password, :presence => true, on: :create
   validates :password, format: { with: /(?![0-9a-z]+$)(?![a-zA-Z]+$)(?![0-9A-Z]+$)[\S]{8,}/ }, allow_nil: true
-  validates :department_id, :presence => false
   validate  :password_must_be_present
-  validates :city_id, :presence => true
-  validates :district_id, :presence => true
+  # validates :city_id, :presence => true
+  # validates :district_id, :presence => true
 
   # 关联
   has_many   :case_talks
@@ -36,9 +35,10 @@ class User < ApplicationRecord
   has_one_attached :negative #证件反面
 
   # callbacks
-  before_save   :set_user_type, unless: :organization_empty?
-  before_save   :set_department_names
-  before_save   :set_area_relation
+  before_save  :set_user_type, unless: :organization_empty?
+  before_save  :set_user_organization_name, unless: :organization_empty?
+  before_save  :set_department_names
+  before_save  :set_area_relation
 
   def set_area_relation
     #TODO api请求来的数据只有 城市id和区域id 需要设置字段省的id  并且让user belongs to Area里的区域id
@@ -117,6 +117,12 @@ class User < ApplicationRecord
     when :center
       self.user_type = :center_user
     end
+  end
+
+  # 用户创建或者更新时更新用户的organization_name字段
+  # organization_name用于展示用户所属的机构名，为了提高速度而设置
+  def set_user_organization_name
+    self.organization_name = self.organization.name
   end
 
   def remember

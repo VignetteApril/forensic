@@ -53,11 +53,9 @@ html
           .card-header
             h4.my-0.font-weight-normal 收款人信息
           .card-body
-            // 付款金额
-            / h1.card-title.pricing-card-title
-            /   | $0
-            /   small.text-muted mo
-            // 收款人信息
+            / 付款金额
+            h4.card-title.pricing-card-title = "付款金额：#{ @main_case.amount } 元"
+            / 收款人信息
             ul.list-unstyled.mt-3.mb-4
               li.h5 = "收款人姓名：#{ @organization.payee }"
               li.h5 = "开户行：#{ @organization.open_account_bank }"

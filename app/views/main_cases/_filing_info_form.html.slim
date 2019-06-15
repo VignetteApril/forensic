@@ -1,4 +1,4 @@
-= render partial: 'case_doc_modal', locals: {main_case: @main_case}
+= render partial: 'case_doc_modal', locals: {main_case: @main_case, case_stage: :filed}
 
 = simple_form_for(@main_case, method: :patch, url: update_add_material_main_case_path) do |f|
   .form-inputs
@@ -46,6 +46,8 @@
             = f.input :payer, label: '付款人'
           .col-md-4
             = f.input :payer_phone, label: '付款人手机号'
+          .col-md-4
+            = f.input :amount, label: '付款金额'
         .row
           .col-md-12
             #filed_case_docs

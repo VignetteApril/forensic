@@ -15,6 +15,13 @@
   .card-body
     = render 'payment_order_management_form'
 
+.row.mt-2
+  .col-md-4
+  .col-md-4
+  .col-md-4
+    ul.pull-right
+      - @main_case.case_docs.where(case_stage: :financial).each do |doc|
+        li = doc.name
 javascript:
 
   var digitUppercase = function(n) {
