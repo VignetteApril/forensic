@@ -4,6 +4,32 @@
       h4.card-title 退费单
     .card-body
       .row
+        .col-md-4
+          span = "交款人：#{f.object.payment_order.payer}"
+        .col-md-4
+          span = "交款人联系人：#{f.object.payment_order.payer_contacts}"       
+        .col-md-4
+          span = "交款联系人电话：#{f.object.payment_order.payer_contacts_phone}"   
+      .row style = 'height:10px'
+      .row
+        .col-md-4
+          span = "委托人：#{f.object.payment_order.consigner}"
+        .col-md-4
+          span = "委托人联系人：#{f.object.payment_order.consiggner_contacts}"       
+        .col-md-4
+          span = "委托人联系人电话：#{f.object.payment_order.consiggner_contacts_phone}"     
+      .row style = 'height:10px'                  
+      .row
+        .col-md-4
+          span = "案由：#{@main_case.anyou}"
+        .col-md-4
+          span = "鉴定类型：#{@main_case.case_type}"
+        .col-md-4
+          span = "案件编号：#{@main_case.case_no}"
+      .row
+        .col-md-4
+          span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
+      .row
         .col-md-2
           = f.input :appraisal_cost, label: '鉴定费'
         .col-md-2
@@ -16,6 +42,31 @@
           = f.input :consult_cost, label: '咨询费'
         .col-md-2
           = f.input :other_cost, label: '其他'
+      .row
+        .col-md-4
+          = f.input :total_cost, label: '总计', input_html: { class: 'refund-total-cost-input' }
+        .col-md-4
+          span  = "预付金额:"
+          span class='refund-advance-span' #{f.object.payment_order.payment_in_advance}
+        .col-md-4
+          = f.input :refund_cost, label: '退费金额', input_html: { class: 'refund-cost-input' }   
+      .row
+        .col-md-4
+          span 大写金额：
+          span class='refund-total-cost' 
+        .col-md-4
+          span 大写金额：        
+          span class='refund-advance' 
+        .col-md-4
+          span 大写金额：        
+          span class='refund-cost' 
+      .row
+        .col-md-4
+          = f.input :payee_id, label: '领款人', collection: RefundOrder.take_department_user_id(f.object.payment_order)
+        .col-md-4
+          = f.input :refund_checker_id, label: '退费审核人', collection: RefundOrder.take_department_user_id(f.object.payment_order)
+        .col-md-4
+          = f.input :refund_dealer_id, label: '退费经办人', collection: RefundOrder.take_department_user_id(f.object.payment_order)             
       .row
         .col-md-2
           = link_to_remove_association "移除", f, class: 'btn btn-danger'

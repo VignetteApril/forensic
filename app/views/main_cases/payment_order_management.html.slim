@@ -16,17 +16,117 @@
     = render 'payment_order_management_form'
 
 javascript:
-  $(".open-bill-modal").bind("click",function(e){
-    console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
-    //请求数据设置模态框
-    $.get("/main_cases/request_bill?payment_order="+$(e.target).attr("data-id"),function(data,status){
-    	$(".bill-paymentorder-id").val($(e.target).attr("data-id"))
-    	$(".bill-type").val(data['type'])
-    	$(".bill-org").val(data['organization'])
-    	$(".bill-code").val(data['code'])
-    	$(".bill-address").val(data['address'])
-    	$(".bill-tel").val(data['phone'])
-    	$(".bill-bank").val(data['bank'])
-    
-  	});
-  });       
+
+  var digitUppercase = function(n) {
+    var fraction = ['角', '分'];
+    var digit = [
+        '零', '壹', '贰', '叁', '肆',
+        '伍', '陆', '柒', '捌', '玖'
+    ];
+    var unit = [
+        ['元', '万', '亿'],
+        ['', '拾', '佰', '仟']
+    ];
+    var head = n < 0 ? '欠' : '';
+    n = Math.abs(n);
+    var s = '';
+    for (var i = 0; i < fraction.length; i++) {
+        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+    }
+    s = s || '整';
+    n = Math.floor(n);
+    for (var i = 0; i < unit[0].length && n > 0; i++) {
+        var p = '';
+        for (var j = 0; j < unit[1].length && n > 0; j++) {
+            p = digit[n % 10] + unit[1][j] + p;
+            n = Math.floor(n / 10);
+        }
+        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+    }
+    return head + s.replace(/(零.)*零元/, '元')
+        .replace(/(零.)+/g, '零')
+        .replace(/^整$/, '零元整');
+    }
+
+  var deal_num_payment = function(){
+    //缴费单
+    for (i = 0; i < $('.payment-total-cost').length; i++) { 
+      var span_dom = $($('.payment-total-cost')[i])
+      var input = span_dom.parent().parent().parent().find('.payment-total-cost-input')
+      span_dom.text(digitUppercase(input.val()))
+
+      input.on('input',function(e){
+        $(e.target).parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($(e.target).val()))
+      })
+    }
+
+    for (i = 0; i < $('.payment-advance').length; i++) { 
+      var span_dom = $($('.payment-advance')[i])
+      var input = span_dom.parent().parent().parent().find('.payment-advance-input')
+      span_dom.text(digitUppercase(input.val()))
+
+      input.on('input',function(e){
+        $(e.target).parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($(e.target).val()))
+      })
+    }
+
+  }
+
+  var deal_num_refund = function(){
+    //退款单
+    for (i = 0; i < $('.refund-advance').length; i++) { 
+      var span_dom = $($('.refund-advance')[i])
+      var from_span_dom = span_dom.parent().parent().parent().find('.refund-advance-span')
+      span_dom.text(digitUppercase(from_span_dom.text()))
+    }    
+
+    for (i = 0; i < $('.refund-cost').length; i++) { 
+      var span_dom = $($('.refund-cost')[i])
+      var input = span_dom.parent().parent().parent().find('.refund-cost-input')
+      span_dom.text(digitUppercase(input.val()))
+
+      input.on('input',function(e){
+        $(e.target).parent().parent().parent().parent().find('.refund-cost').text(digitUppercase($(e.target).val()))
+      })
+    }
+
+    for (i = 0; i < $('.refund-total-cost').length; i++) { 
+      var span_dom = $($('.refund-total-cost')[i])
+      var input = span_dom.parent().parent().parent().find('.refund-total-cost-input')
+      span_dom.text(digitUppercase(input.val()))
+
+      input.on('input',function(e){
+        $(e.target).parent().parent().parent().parent().find('.refund-total-cost').text(digitUppercase($(e.target).val()))
+      })
+    }
+  
+  }
+
+  $(document).on('turbolinks:load', function() {
+    $(".open-bill-modal").bind("click",function(e){
+      console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
+      //请求数据设置模态框
+      $.get("/main_cases/request_bill?payment_order="+$(e.target).attr("data-id"),function(data,status){
+        $(".bill-paymentorder-id").val($(e.target).attr("data-id"))
+        $(".bill-type").val(data['type'])
+        $(".bill-org").val(data['organization'])
+        $(".bill-code").val(data['code'])
+        $(".bill-address").val(data['address'])
+        $(".bill-tel").val(data['phone'])
+        $(".bill-bank").val(data['bank'])
+      
+      });
+    });
+
+    deal_num_payment()
+    deal_num_refund()
+
+    // $(".add-payment").bind("click",function(e){
+    //   deal_num_payment()
+    // })
+    // $(".add-refund").bind("click",function(e){
+    //   deal_num_refund()
+    // })    
+  });
+
+   

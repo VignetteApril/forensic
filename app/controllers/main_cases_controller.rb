@@ -437,6 +437,7 @@ class MainCasesController < ApplicationController
                                                                      :id,
                                                                      :_destroy, refund_orders_attributes: [ :id,
                                                                                                             :_destroy,
+                                                                                                            :total_cost,
                                                                                                             :appraisal_cost,
                                                                                                             :business_cost,
                                                                                                             :appear_court_cost,

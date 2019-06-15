@@ -1,12 +1,15 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
   layout 'system'
-  skip_before_action :can, only: [:edit_password, :update_password]
+  layout 'login', only: [:new_consignor]
+  skip_before_action :can, only: [:edit_password, :update_password,:new_consignor]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create]
   before_action :set_new_areas, only: [:new, :create]
   before_action :set_edit_areas, only: [:edit, :update]
+  skip_before_action :authorize, only: [:new_consignor]
+  skip_before_action :verify_authenticity_token, only: [:new_consignor]
 
   # 管理员进入“用户管理”功能，系统显示用户查询列表页面。
   # 管理员可以输入关键字进行搜索，可与对列表进行排序，列表应该进行分页显示。
@@ -106,6 +109,11 @@ class UsersController < ApplicationController
     else
       render :edit_password
     end
+  end
+
+  #委托人注册
+  def new_consignor
+    @consignor_user = User.new
   end
 
   private

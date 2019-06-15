@@ -4,7 +4,7 @@
       h4.card-title 缴费单
       - if f.object.persisted?
         .links
-          = link_to_add_association '增加退费单', f, :refund_orders, class: 'btn btn-primary mb-2 pull-right',
+          = link_to_add_association '增加退费单', f, :refund_orders, class: 'btn btn-primary mb-2 pull-right add-refund',
                   data: {association_insertion_node: '#refund_orders', association_insertion_method: :append}
     .card-body
       .row
@@ -46,14 +46,16 @@
           = f.input :other_cost, label: '其他'
       .row
         .col-md-4
-          = f.input :total_cost, label: '缴费合计'
+          = f.input :total_cost, label: '缴费合计', input_html: { class: 'payment-total-cost-input' }
         .col-md-4
-          = f.input :payment_in_advance, label: '预付金额'
+          = f.input :payment_in_advance, label: '预付金额',input_html: { class: 'payment-advance-input'}
       .row
         .col-md-4
-          span 大写金额
+          span 大写金额:
+          span class='payment-total-cost'  
         .col-md-4
-          span 大写金额
+          span 大写金额:
+          span class='payment-advance' 
       .row
         .col-md-4
           = f.input :payment_type, label: '缴费类别', collection: PaymentOrder.payment_type_collection
@@ -84,6 +86,7 @@
         #refund_orders
           = f.simple_fields_for :refund_orders do |refund_order|
             = render 'refund_order_fields', f: refund_order, render_options: {wrapper: 'bootstrap'}
-     
+
+
 
 
