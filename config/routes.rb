@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     get :filed_unpaid_cases, on: :collection
     get :payment_order_management, on: :member
     get :request_bill, on: :collection
+    post :create_organization_and_user, on: :collection
     post :user_search, on: :collection
     post :create_case_doc, on: :member
     post :update_bill, on: :collection

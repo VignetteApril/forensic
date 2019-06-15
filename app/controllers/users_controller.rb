@@ -43,13 +43,13 @@ class UsersController < ApplicationController
 
   # 管理员填写新用户之后点击“提交”按钮，系统保存新用户信息并返回用户列表页面。
   def create
-    @user = User.new(user_params.merge({:password => '123456@Shike', :password_confirmation => '123456@Shike'}))
+    @user = User.new(user_params.merge({:password => 'Fc123456', :password_confirmation => 'Fc123456'}))
     @user.departments = user_params[:departments].join(',') unless user_params[:departments].blank?
     @user.organization = @current_user.organization unless admin?
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to users_url, notice: '新建用户成功啦，默认密码是 123456@Shike' }
+        format.html { redirect_to users_url, notice: '新建用户成功啦，默认密码是 Fc123456' }
       else
         format.html { render :new }
       end
@@ -80,8 +80,8 @@ class UsersController < ApplicationController
   # 管理员将用户的密码初始化成为123456
   def reset_password
     respond_to do |format|
-      if @user.update_attributes({:password => '123456@Shike', :password_confirmation => '123456@Shike', :changed_password => false})
-        format.html { redirect_to users_url, notice: '用户已经重置成为123456@Shike' }
+      if @user.update_attributes({:password => 'Fc123456', :password_confirmation => 'Fc123456', :changed_password => false})
+        format.html { redirect_to users_url, notice: '用户已经重置成为Fc123456' }
       else
         format.html { render :index }
       end
@@ -116,13 +116,20 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:login, :name, :email,
-                                 :hashed_password, :password, :password_confirmation,
+    params.require(:user).permit(:login,
+                                 :name,
+                                 :email,
+                                 :hashed_password,
+                                 :password,
+                                 :password_confirmation,
                                  { departments: [] },
                                  :sort_no,
                                  :gender,
                                  :mobile_phone,
-                                 :organization_id)
+                                 :organization_id,
+                                 :province_id,
+                                 :city_id,
+                                 :district_id)
   end
 
   def set_selected_departments

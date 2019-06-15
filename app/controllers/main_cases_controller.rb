@@ -170,7 +170,7 @@ class MainCasesController < ApplicationController
     end
 
     @organization_name = user.organization.name
-    @organization_phone = user.organization.phone
+    @wtr_phone = user.mobile_phone
     @organization_addr = user.organization.addr
     @user_name = user.name
 
@@ -190,7 +190,7 @@ class MainCasesController < ApplicationController
                                    provinces: rs_provinces,
                                    organization_name: @organization_name,
                                    organization_addr: @organization_addr,
-                                   organization_phone: @organization_phone,
+                                   wtr_phone: @wtr_phone,
                                    user_name: @user_name,
                                    user_id: user.id } }
     end
@@ -318,7 +318,8 @@ class MainCasesController < ApplicationController
 
     respond_to do |format|
       if case_doc.save
-        format.js
+        flash[:notice] = "文件上传成功！"
+        format.js { render 'layouts/display_flash' }
       else
         flash[:warning] = "文件上传失败，请重新上传！"
         format.js { render 'layouts/display_flash' }
@@ -378,6 +379,48 @@ class MainCasesController < ApplicationController
     render json: { users: res }
   end
 
+  # 用户案件信息页面（编辑），选择了导入用户后或填写相关字段，可以点击新建委托人按钮
+  # 系统首先创建一个委托方（organization），然后再再该委托方(organization)下创建一个委托人(user)
+  # 系统会为该委托人创建系统用户，以用户的手机号作为login字段
+  # method POST
+  def create_organization_and_user
+    org_name, org_addr, wtr_phone, user_name = params[:organization_name],
+                                               params[:organization_addr],
+                                               params[:wtr_phone],
+                                               params[:user_name]
+    area = _area_id(params[:province_id],
+                    params[:city_id],
+                    params[:district_id])
+
+    org = Organization.new(name: org_name,
+                           org_type: :court,
+                           addr: org_addr,
+                           area_id: area,
+                           province_id: params[:province_id],
+                           city_id: params[:city_id],
+                           district_id: params[:district_id])
+    binding.pry
+    respond_to do |format|
+      if org.save
+        user = org.users.new(login: wtr_phone,
+                             name: user_name,
+                             email: "#{wtr_phone}@forensic.com",
+                             password: 'Fc123456',
+                             password_confirmation: 'Fc123456')
+        if user.save
+          flash[:success] = "委托方和委托人创建成功！请用户使用账号：#{wtr_phone}和密码：Fc123456 登录"
+          format.js { render 'layouts/display_flash' }
+        else
+          flash[:danger] = '委托人创建失败！请填写委托人电话字段，或您填写的电话已被占用！'
+          format.js { render 'layouts/display_flash' }
+        end
+      else
+        flash[:danger] = '委托方创建失败！请选择地区信息，或该委托方已经被创建了！'
+        format.js { render 'layouts/display_flash' }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -398,6 +441,7 @@ class MainCasesController < ApplicationController
                                         :district_id,
                                         :organization_name,
                                         :user_name,
+                                        :wtr_phone,
                                         :organization_phone,
                                         :organization_addr,
                                         :department_id,

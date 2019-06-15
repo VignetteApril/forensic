@@ -15,9 +15,13 @@
       .card-header
         h4.card-title.d-inline-block 委托方
         .card-header-btn
-          #user_select
-          / span class='btn btn-primary' id='import_user' 导入
-          / = link_to '新建委托人', '#', class: 'btn btn-primary'
+          .row.no-gutters
+            .col-md-4
+              #user_select
+            .col-md-4
+              span.ml-2.mb-1 class='btn btn-primary' id='import_user' 导入
+              / 这里需要设置button的type因为默认的button type是submit，会自动提交表单
+              button#create_org_user.btn.btn-primary.mb-1.ml-2 type="button" 创建委托人
       .card-body.principal
         .row
           .col-md-4
@@ -28,14 +32,14 @@
             = f.input :district_id, collection: @districts, label: '区县', include_blank: true
         .row
           .col-md-6
-            = f.input :organization_name, label: '委托方名称'
+            = f.input :organization_name, label: '委托方名称（请书写委托方全称）'
           .col-md-6
-            = f.input :user_name, label: '委托方联系人'
+            = f.input :organization_addr, label: '委托方地址'
         .row
           .col-md-6
-            = f.input :organization_phone, label: '联系电话'
+            = f.input :user_name, label: '委托人'
           .col-md-6
-            = f.input :organization_addr, label: '联系地址'
+            = f.input :wtr_phone, label: '委托人电话'
     // 委托鉴定事项card
     .card.gray-card
       .card-header
@@ -125,13 +129,14 @@ javascript:
         valueField: 'id',
         labelField: 'name',
         searchField: 'name',
+        maxItems: 1,
         create: false,
         render: {
             option: function (item, escape) {
                 console.log(item);
                 return '<div>' +
-                         '<span>' + escape(item.name) + '</span>' +
-                         '<span>' + escape(item.orgnization_name) + '</span>' +
+                         '<span>' + escape(item.name) + '</span>' + '&nbsp;' +
+                         '<span>' + '所属法院：' + escape(item.organization_name) + '</span>' +
                        '</div>';
             }
         },

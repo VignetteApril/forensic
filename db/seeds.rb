@@ -10,7 +10,7 @@
 puts "设置系统管理员用户"
 if User.find_by_login('admin').nil?
   user = User.create login: 'admin', name: "系统管理员", email: 'admin@audit.gov.cn',
-                     password: '123456@Shike', password_confirmation: '123456@Shike'
+                     password: 'Fc123456', password_confirmation: 'Fc123456'
 else
   user = User.find_by_login('admin')
 end
