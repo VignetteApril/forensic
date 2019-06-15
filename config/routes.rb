@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   end
   resources :users do
     get :new_consignor, :on => :collection
+    post :create_consignor, :on => :collection
     get :reset_password, :on => :member
     get :edit_password, :on => :member
     post :update_password, :on => :member

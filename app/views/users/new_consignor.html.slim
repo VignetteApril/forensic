@@ -8,8 +8,8 @@
             span style="font-size: 35px; font-weight: 700; color: rgb(61,116,200)" 智慧司法云服务平台
         badge.badge-danger style='height: 25px; margin-top: 10px;' 测试版
   .container-fluid.pt-5
-    .container.card style="width: 50%;"
-      = simple_form_for(@consignor_user) do |f|
+    .container.card style="width: 30%;"
+      = simple_form_for(@consignor_user, url: :create_consignor_users,method: :post) do |f|
         - if @consignor_user.errors.any?
           #error_explanation.alert.alert-warning
             h4
@@ -19,39 +19,42 @@
               - @consignor_user.errors.full_messages.each do |message|
                 li
                   = message
-        .form-inputs
-          .row
-            .col-md-6 style="text-align:center;font-size:16pt"
+        .card-body.p-6
+          .row.card-title
+            .col-md-12 
               span 委托人注册
           .row
-            .
-            .col-md-2
-              .span 用户名:
             .col-md-4
+              .span 用户名:
+            .col-md-8
               = f.input :login, label: false
           .row
-            .col-md-2
+            .col-md-4
               .span 邮箱:
-            .col-md-4      
+            .col-md-8      
               = f.input :email, label: false
           .row
-            .col-md-2
-              .span 所属机构:
-            .col-md-4      
-              = f.input :orgnization_name, label: false
+            .col-md-4
+              .span 手机号码:
+            .col-md-8      
+              = f.input :mobile_phone, label: false              
           .row
-            .col-md-2
+            .col-md-4
+              .span 所属机构:
+            .col-md-8      
+              = f.input :organization_name, label: false
+          .row
+            .col-md-4
               .span 密码:
-            .col-md-4      
+            .col-md-8      
               = f.input :password, label: false
           .row
-            .col-md-2
+            .col-md-4
               .span 重复输入密码:
-            .col-md-4      
+            .col-md-8      
               = f.input :password_confirmation, label: false
-
-        .form-actions
-          = f.button :submit, '确认', class: 'btn btn-success'
+          .form-footer
+            = f.button :submit, '确认', class: "btn btn-primary btn-block"
   .footer.bg-dark
     container
       .col-12.text-center

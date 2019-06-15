@@ -2,14 +2,14 @@
 class UsersController < ApplicationController
   layout 'system'
   layout 'login', only: [:new_consignor]
-  skip_before_action :can, only: [:edit_password, :update_password,:new_consignor]
+  skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create]
   before_action :set_new_areas, only: [:new, :create]
   before_action :set_edit_areas, only: [:edit, :update]
-  skip_before_action :authorize, only: [:new_consignor]
-  skip_before_action :verify_authenticity_token, only: [:new_consignor]
+  skip_before_action :authorize, only: [:new_consignor,:create_consignor]
+  skip_before_action :verify_authenticity_token, only: [:new_consignor,:create_consignor]
 
   # 管理员进入“用户管理”功能，系统显示用户查询列表页面。
   # 管理员可以输入关键字进行搜索，可与对列表进行排序，列表应该进行分页显示。
@@ -114,6 +114,27 @@ class UsersController < ApplicationController
   #委托人注册
   def new_consignor
     @consignor_user = User.new
+  end
+  #委托人
+  def create_consignor
+    binding.pry
+    if !Organization.where(:name=>params["user"]["organization_name"]).exists?
+      #创建机构E和用户987654321
+    else
+      org = Organization.where(:name=>params["user"]["organization_name"]).first
+      if org.users.where(:login=>params["user"]["login"]).exists?
+        user = org.users.where(:login=>params["user"]["login"]).first
+        if user.update(:password=>params["user"]["password"],:password_confirmation=>params["user"]["login"])
+          redirect_to '/users/new_consignor' ,flash: { success: '系统已经找到同名用户并且重置密码' }
+        else
+          redirect_to '/users/new_consignor' ,flash: { danger: '系统已经找到同名用户重置密码失败' }
+        end
+      else
+        user = User.new(:login=>params["user"]["login"],:email=>params["user"]["email"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["login"])
+        binding.pry
+
+      end
+    end
   end
 
   private

@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 2019_06_14_130519) do
-
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,9 +213,9 @@ ActiveRecord::Schema.define(version: 2019_06_14_130519) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
-    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
