@@ -1,0 +1,4 @@
+.col-md-4.offset-8
+  ul.pull-right
+    - @main_case.case_docs.where(case_stage: :financial).each do |doc|
+      li = doc.name

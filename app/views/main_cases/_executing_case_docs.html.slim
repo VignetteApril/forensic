@@ -1,0 +1,5 @@
+- @main_case.case_docs.where(case_stage: :executing).each do |case_doc|
+  .col-md-4.mt-2
+    span = case_doc.name
+    - unless case_doc.attachment.attached?
+      span#upload_file.fa.fa-upload.ml-2

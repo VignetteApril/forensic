@@ -68,14 +68,11 @@
           = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection
       - if f.object.persisted?    
         .row
-          .col-md-4
-          .col-md-2          
+          .col-md-6.offset-6
             button type="button" class="btn btn-primary open-bill-modal" data-id=f.object.id data-toggle="modal" data-target="#bill_modal" 查看发票信息
-          .col-md-4 
             span  发票状态:
-            = f.input :take_bill, label: false, collection: PaymentOrder.take_bill_collection, wrapper_html: { style: 'width:70%;height:100%;display:inline-block' }
-          .col-md-2
-            = f.button :submit, '更改', class: 'btn btn-success'
+            = f.input :take_bill, label: false, collection: PaymentOrder.take_bill_collection, wrapper_html: { style: 'width:50%;display:inline-block' }
+            = f.button :submit, '更改', class: 'btn btn-success ml-2'
 
       .row
         .col-md-2

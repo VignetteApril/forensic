@@ -7,15 +7,15 @@ class MainCase < ApplicationRecord
   include AASM
 
   belongs_to :department
-  has_many :case_talks
+  has_many :case_talks, dependent: :destroy
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】
-  has_many :case_process_records # 案件中改变状态时的记录
-  has_many :case_docs, class_name: 'DepartmentDoc',as: :docable
+  has_many :case_process_records, dependent: :destroy # 案件中改变状态时的记录
+  has_many :case_docs, class_name: 'DepartmentDoc',as: :docable, dependent: :destroy
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
-  has_many :payment_orders
+  has_many :payment_orders, dependent: :destroy
   accepts_nested_attributes_for :payment_orders, reject_if: :all_blank, allow_destroy: true
   has_one_attached :barcode_image
   has_one_attached :entrust_doc # 案件下的委托书
@@ -64,25 +64,60 @@ class MainCase < ApplicationRecord
     state :pending, initial: true
     state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
 
-    # 立案动作，可以从状态 待立案 和 待补充材料 和 退案 转换到 立案状态
+    # 转换到 立案状态
     event :turn_filed, after: :record_case_process do
-      transitions from: [:pending, :add_material, :rejected, :filed], to: :filed
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :filed
     end
 
-    # 把案件状态变为 待补充材料，可以从立案，待立案，结案转换
+    # 转换到 结案
     event :turn_add_material, after: :record_case_process do
-      transitions from: [:filed, :pending, :rejected, :add_material], to: :add_material
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :add_material
     end
 
-    # 结案动作，可以从状态 立案 和 待立案 和 待补充材料 转换到 退案状态
+    # 转换到 退案状态
     event :turn_rejected, after: :record_case_process do
-      transitions from: [:filed, :pending, :add_material, :rejected], to: :rejected
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :rejected
+    end
+
+    # 转换到 执行中状态
+    event :turn_executing, after: :record_case_process do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :executing
+    end
+
+    # 转换到 执行完成状态
+    event :turn_executed, after: :record_case_process do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :executed
+    end
+
+    # 转换到 申请归档状态
+    event :turn_apply_filing, after: :record_case_process do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :apply_filing
+    end
+
+    # 转换到 结案状态
+    event :turn_apply_filing, after: :record_case_process do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :close
     end
   end
 
   aasm(:financial, column: :financial_stage, enum: true) do
     state :unpaid, initial: true
     state :not_fully_paid, :paid, :refunded
+
+    # 转换到 未完全支付状态
+    event :turn_not_fully_paid, after: :record_case_process do
+      transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :not_fully_paid
+    end
+
+    # 转换到 完全支付状态
+    event :turn_paid, after: :record_case_process do
+      transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :paid
+    end
+
+    # 转换到 已退款状态
+    event :turn_refunded, after: :record_case_process do
+      transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :refunded
+    end
   end
 
   # 设置案件的顺序号
@@ -110,6 +145,7 @@ class MainCase < ApplicationRecord
     end_of_year = Date.today.end_of_year
     # 找到当前年份 当前科室 所有的案件 按照案件的编号排序
     main_cases = MainCase.where.not(id: self.id).where(created_at: beginning_of_year..end_of_year, department_id: self.department.id ).order(:case_no)
+
     if main_cases.empty?
       self.case_no = self.department.case_start_no.nil? ? 1 : self.department.case_start_no
     else
@@ -131,12 +167,14 @@ class MainCase < ApplicationRecord
     if self.department.department_docs
       self.department.department_docs.each do |department_doc|
         # 将department doc中的信息复制到新创建的case doc中
-        case_doc = self.case_docs.create(department_doc.attributes.except('id', 'docable_id', 'docable_type'))
+        # 即便是没有文件要创建对应的实例作为占位
+        case_doc = self.case_docs.create(department_doc.attributes.except('id', 'docable_id', 'docable_type', 'created_at', 'updated_at'))
 
+        next unless department_doc.attachment.attached?
         # 将department doc中对应的文件复制到新创建的case doc中
         case_doc.attachment.attach io: StringIO.new(department_doc.attachment.download),
-                                          filename: department_doc.attachment.filename,
-                                          content_type: department_doc.attachment.content_type
+                                   filename: department_doc.attachment.filename,
+                                   content_type: department_doc.attachment.content_type
         case_doc.update(filename: department_doc.attachment.filename)
       end
     end

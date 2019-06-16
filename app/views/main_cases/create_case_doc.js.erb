@@ -1,1 +1,4 @@
-$('#filed_case_docs').html("<%= escape_javascript(render partial: 'filed_case_docs', locals: { main_case: @main_case }) %>")
+$("<%= @partial_name_element %>").html("<%= escape_javascript(render partial: "#{@partial_name}",
+                                                                 locals: { main_case: @main_case }) %>")
+
+$('#flash').html("<%= escape_javascript(render partial: 'layouts/flash_message') %>")

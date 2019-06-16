@@ -38,13 +38,22 @@
 // nested form js
 //= require cocoon
 
-
 // 处理select2在turbolinks的bug
+// 处理selectize在turbolinks中重复渲染的bug
 $(document).on("turbolinks:before-cache", function() {
+    $('.selectized').each(function(){
+        if (this.selectize != undefined) {
+            this.selectize.destroy()
+        }
+    });
+
     $('select.select2-hidden-accessible').select2('destroy');
 });
 
+// 处理组件在turbolinks中初始化中的bug
 $(document).on('turbolinks:load', function () {
+    $('.selectized').selectize();
+
     $('select').select2({
         theme: 'bootstrap'
     });

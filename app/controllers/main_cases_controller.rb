@@ -2,7 +2,7 @@ class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
-                                       :save_payment_order]
+                                       :save_payment_order, :case_executing, :update_case_stage, :update_case_stage]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -311,18 +311,50 @@ class MainCasesController < ApplicationController
     render layout: false
   end
 
-  # 在立案信息的立案表单部分，用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
+  # 用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
   # 创建完毕后使用ajax的方式刷新当前页面显示文档的部分
   def create_case_doc
     case_doc = @main_case.case_docs.new(case_doc_params)
+    @partial_name = params[:department_doc][:partial_name]
+    @partial_name_element = "##{@partial_name}"
 
     respond_to do |format|
       if case_doc.save
         flash[:notice] = "文件上传成功！"
-        format.js { render 'layouts/display_flash' }
+        format.js
       else
         flash[:warning] = "文件上传失败，请重新上传！"
-        format.js { render 'layouts/display_flash' }
+        format.js
+      end
+    end
+  end
+
+  # 更改案件状态响应的方法
+  # method patch
+  # params page_type String
+  # params case_stage String
+  # redirect to page_type => url 根据传过来的page_type返回到指定页面
+  def update_case_stage
+    page_type = params[:main_case][:page_type]
+    case_stage = params[:main_case][:case_stage]
+    # 这个是aasm的改变案件状态的方法名
+    # 因为该方法名是turn_{case_stage}的形式的，需要用到动态派发的技术
+    turn_case_stage_sym = "turn_#{case_stage}".to_sym
+
+    # 根据参数{page_type}来判断是要跳转到哪个页面
+    case page_type
+    when 'payment_order_management'
+      redirect_url = payment_order_management_main_case_url(@main_case)
+    when 'case_executing'
+      redirect_url = case_executing_management_main_case_url(@main_case)
+    end
+
+    respond_to do |format|
+      if @main_case.respond_to? turn_case_stage_sym
+        @main_case.send turn_case_stage_sym
+        format.html { redirect_to redirect_url, notice: '案件状态已经更新了！' }
+      else
+        format.html { redirect_to redirect_url, danger: '案件状态更新失败！' }
       end
     end
   end
@@ -337,12 +369,14 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       if @main_case.update(payment_order_params)
         format.html { redirect_to payment_order_management_main_case_url(@main_case), notice: '缴费单已经成功更新了！' }
-        format.json { render :show, status: :ok, location: @main_case }
       else
-        format.html { render :edit }
-        format.json { render json: @main_case.errors, status: :unprocessable_entity }
+        format.html { render :payment_order_management }
       end
     end
+  end
+
+  # 鉴定执行页面
+  def case_executing
   end
 
   # ajax获取发票信息

@@ -1,4 +1,4 @@
-= render partial: 'case_doc_modal', locals: {main_case: @main_case, case_stage: :filed}
+= render partial: 'case_doc_modal', locals: {case_doc: @main_case.case_docs.new, case_stage: :filed, partial_name: 'filed_case_docs'}
 
 = simple_form_for(@main_case, method: :patch, url: update_add_material_main_case_path) do |f|
   .form-inputs

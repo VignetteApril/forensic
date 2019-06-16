@@ -1,11 +1,15 @@
+= render partial: 'case_doc_modal', locals: {case_doc: @main_case.case_docs.new,
+                                             case_stage: :financial,
+                                             partial_name: 'financial_case_docs'}
 .row
   .col-md-6
     = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
     span.h5.ml-3 = "#{'案件流水号：' + @main_case.serial_no}"
-  .col-md-4 
-    = simple_form_for(@main_case, method: :patch, url: save_payment_order_main_case_path) do |f|
+  .col-md-6
+    = simple_form_for(@main_case, method: :patch, url: update_case_stage_main_case_path) do |f|
     	span 案件状态：
-    	= f.input :case_stage, label: false, collection: MainCase.case_stage_collection, wrapper_html: { style: 'width:50%;display:inline-block;padding:10px' }
+        = f.input :page_type, as: :hidden, input_html: { value: 'payment_order_management' }, wrapper_html: { style: 'width:1%; display:inline-block' }
+    	= f.input :case_stage, label: false, collection: MainCase.case_stage_collection, include_blank: false, wrapper_html: { style: 'width:50%;display:inline-block;padding:10px' }
     	= f.button :submit, '提交', class: 'btn btn-success'
 
 = render 'nav_bar'
@@ -15,10 +19,8 @@
   .card-body
     = render 'payment_order_management_form'
 
-.row.mt-2
-  .col-md-4
-  .col-md-4
-  .col-md-4
+#financial_case_docs.row.mt-2
+  .col-md-4.offset-8
     ul.pull-right
       - @main_case.case_docs.where(case_stage: :financial).each do |doc|
         li = doc.name
