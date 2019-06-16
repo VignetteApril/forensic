@@ -336,7 +336,7 @@ class MainCasesController < ApplicationController
   def save_payment_order
     respond_to do |format|
       if @main_case.update(payment_order_params)
-        format.html { redirect_to payment_order_management_main_case_url(@main_case), notice: 'Main case was successfully updated.' }
+        format.html { redirect_to payment_order_management_main_case_url(@main_case), notice: '缴费单已经成功更新了！' }
         format.json { render :show, status: :ok, location: @main_case }
       else
         format.html { render :edit }
@@ -399,7 +399,6 @@ class MainCasesController < ApplicationController
                            province_id: params[:province_id],
                            city_id: params[:city_id],
                            district_id: params[:district_id])
-    binding.pry
     respond_to do |format|
       if org.save
         user = org.users.new(login: wtr_phone,
@@ -448,6 +447,7 @@ class MainCasesController < ApplicationController
                                         :anyou,
                                         :case_property,
                                         :commission_date,
+                                        :entrust_doc,
                                         { matter: [] },
                                         :matter_demand,
                                         :base_info,

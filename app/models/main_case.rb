@@ -19,6 +19,7 @@ class MainCase < ApplicationRecord
   has_many :payment_orders
   accepts_nested_attributes_for :payment_orders, reject_if: :all_blank, allow_destroy: true
   has_one_attached :barcode_image
+  has_one_attached :entrust_doc # 案件下的委托书
 
   validates :matter, presence: { message: '不能为空' }
 

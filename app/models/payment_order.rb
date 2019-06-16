@@ -1,6 +1,5 @@
 class PaymentOrder < ApplicationRecord
 	belongs_to :main_case
-	has_many :refund_orders
 	has_one :bill
 
 	has_many :refund_orders
