@@ -20,7 +20,7 @@ $(document).on('turbolinks:load', function() {
             });
 
             // 导入用户
-            var request_url_org_and_user = window.location.origin + '/main_cases/organization_and_user.json';
+            var request_url_org_and_user = window.location.origin + '/main_cases/organization_and_user';
             var organization_name = $('#main_case_organization_name');
             var user_name = $('#main_case_user_name');
             var wtr_phone = $('#main_case_wtr_phone');
