@@ -1,0 +1,76 @@
+#new-entrustorder-page.card
+  .card-header
+    h3.card-title 新建委托单
+
+  = simple_form_for(@entrust_order) do |f|
+    - if @entrust_order.errors.any?
+      #error_explanation.alert.alert-warning
+        h4
+          | 该模板文档保存时出错：
+          = pluralize(@entrust_order.errors.count, "个错误")
+        ul
+          - @entrust_order.errors.full_messages.each do |message|
+            li
+              = message
+    .card-body.principal
+      .row
+        .col-md-2        
+          span 鉴定中心：
+        .col-md-2
+          = f.input :organization_id, label:false, collection: @center_collection
+        .col-md-5
+        .col-md-1
+          //button type="button" class="btn btn-success" 新建案件
+        .col-md-1
+          button type="button" class="btn btn-success" 上传附件
+        .col-md-1
+          = f.button :submit, '提交', class: 'btn btn-success'
+
+    .card.gray-card
+      .card-body
+        .row
+          .col-md-4
+            = f.input :anyou, label: '案由', collection: @anyou
+          .col-md-4
+            = f.input :case_property, label: '案件性质', collection: @case_property
+
+        .row
+          .col-md-6
+            = f.input :matter_demand, label: '鉴定事项及要求', as: :text, :input_html => {:rows => 5}
+          .col-md-6
+            = f.input :base_info, label: '基本案情', as: :text, :input_html => {:rows => 5}
+
+    .card.gray-card
+      .card-header
+        h4.card-title 被鉴定人
+      .card-body
+        = f.simple_fields_for :appraised_unit do |appraised_unit|
+          .row
+            .col-md-12
+              = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
+                      collection: AppraisedUnit.unit_types_arr, checked: 'user', :item_wrapper_class => 'form-check form-check-inline'
+          .row
+            .col-md-4
+              = appraised_unit.input :name, label: '名称'
+            .col-md-8
+              = appraised_unit.input :addr, label: '联系地址'
+          #hidden-fields
+            .row
+              .col-md-3
+                = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
+              .col-md-3
+                = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
+              .col-md-2
+                = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
+              .col-md-4
+                = appraised_unit.input :id_num, label: '证件号码'
+javascript:
+
+  $('input[type=radio][name="entrust_order[appraised_unit_attributes][unit_type]"]').change(function() {
+      if (this.value == 'unit') {
+          $('#hidden-fields').css('display','none');
+      }
+      else if (this.value == 'user') {
+          $('#hidden-fields').css('display','block');
+      }
+  });

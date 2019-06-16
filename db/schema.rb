@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_14_130519) do
+ActiveRecord::Schema.define(version: 2019_06_16_043427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,8 @@ ActiveRecord::Schema.define(version: 2019_06_14_130519) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "main_case_id"
+    t.bigint "entrust_order_id"
+    t.index ["entrust_order_id"], name: "index_appraised_units_on_entrust_order_id"
     t.index ["main_case_id"], name: "index_appraised_units_on_main_case_id"
   end
 
@@ -152,6 +154,21 @@ ActiveRecord::Schema.define(version: 2019_06_14_130519) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "entrust_orders", force: :cascade do |t|
+    t.bigint "main_case_id"
+    t.bigint "user_id"
+    t.string "case_property"
+    t.text "matter_demand"
+    t.text "base_info"
+    t.string "anyou"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "organization_id"
+    t.index ["main_case_id"], name: "index_entrust_orders_on_main_case_id"
+    t.index ["organization_id"], name: "index_entrust_orders_on_organization_id"
+    t.index ["user_id"], name: "index_entrust_orders_on_user_id"
+  end
+
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "title", null: false
@@ -213,9 +230,9 @@ ActiveRecord::Schema.define(version: 2019_06_14_130519) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
-    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
     t.index ["department_id"], name: "index_main_cases_on_department_id"

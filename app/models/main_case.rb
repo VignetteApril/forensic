@@ -7,6 +7,7 @@ class MainCase < ApplicationRecord
   include AASM
 
   belongs_to :department
+  has_one  :entrust_order
   has_many :case_talks, dependent: :destroy
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】

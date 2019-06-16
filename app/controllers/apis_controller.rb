@@ -46,17 +46,43 @@ class ApisController < ApplicationController
 		if user.nil?
 			json["msg"] = "login_failed"
 			json["code"] = "1"
-		    respond_to do |format|
+		  respond_to do |format|
 				format.json { render json:json.to_json }
 			end		
 		else
 			user_info = {"id":user.id,"login":user.login}
 			user_token = JWT.encode user_info, nil, 'none'
-            json["token"]= user_token
-            respond_to do |format|
+      json["token"]= user_token
+      respond_to do |format|
 				format.json { render json:json.to_json }
 			end
 		end		
+	end
+
+	def get_organization
+		condition = params['condition']
+		rasults = Organization.all
+
+		if !condition["province_id"].blank?
+			results = Organization.where(:province_id=>condition["province_id"]).all
+		end
+
+		if !condition["city_id"].blank?
+			results = results.where(:city_id=>condition["city_id"]).all
+		end
+
+		if !condition["district_id"].blank?
+			results = results.where(:district_id=>condition["district_id"]).all
+		end
+
+		if !condition["org_type"].blank?
+			results = results.where(:org_type=>condition["org_type"]).all
+		end
+
+		json = {"code":"0","result": results}
+	  respond_to do |format|
+			format.json { render json:json.to_json }
+		end	
 	end
 
 	def get_user_infos
@@ -153,7 +179,7 @@ class ApisController < ApplicationController
 		# user = User.find_by(:id=>decoded_token[0]["id"])	
 		cases = MainCase.where(:organization_name => params["organization"] , :case_stage => params["case_stage"] )
 	    # cases = MainCase.where(:case_stage => params["case_stage"])
-	    data = cases.map{|e| {"id": e.id, "time": e.created_at.strftime('%Y/%m/%d'), "anyou":e.anyou,"appraised_unit": e.appraised_unit}}
+	  data = cases.map{|e| {"id": e.id, "time": e.created_at.strftime('%Y/%m/%d'),"case_stage": e.case_stage,"organization_name": e.organization_name,"anyou":e.anyou,"appraised_unit": e.appraised_unit}}
 
 		json = {"code": "0","messages":"请求成功","data": data}
 		respond_to do |format|
@@ -165,13 +191,21 @@ class ApisController < ApplicationController
 		# decoded_token = JWT.decode params[:token], nil, false
 		# user = User.find_by(:id=>decoded_token[0]["id"])
 		e = MainCase.find_by(:id=>params[:caseid])
+		if e.blank?
+			json = {"code": "1","messages":"案件id错误"}
+			respond_to do |format|
+				format.json { render json:json.to_json }
+		  end
+		  return
+		end
+		#TODO entrust_people 已经消失 但是案件还在 是否有这种情况
 		case_data = {
 			"id": e.id,
 			"matter":e.matter,
 			"time": e.created_at.strftime('%Y/%m/%d'),
 			"anyou":e.anyou,
 			"appraised_unit":e.appraised_unit,
-			"principal_people"=>User.find_by(:id => e.wtr_id).name,
+			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name : "",
 			"organization_name"=>e.organization_name,
 			"organization_phone"=>e.organization_phone
 		}
@@ -180,19 +214,29 @@ class ApisController < ApplicationController
 		json = {"code": "0","messages":"请求成功","data": {"case_data":case_data,"procress_data":procress_data}}
 		respond_to do |format|
 			format.json { render json:json.to_json }
-	    end			
+	  end			
 	end
 
-    def get_case_talk
+  def get_case_talk
 		decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-		talks = MainCase.find_by(:id=>params["caseid"]).case_talks.map do |talk|
-			is_me = (talk.user == user)? true : false
-			{"time":talk.created_at.strftime('%Y/%m/%d'),"detail": talk.detail,"is_me":is_me}
+
+		cases = MainCase.find_by(:id=>params["caseid"])
+		if cases.blank?
+			json = {"code": "1","messages":"未找到case"}
+			respond_to do |format|
+				format.json { render json:json.to_json }
+		  end	
+		else
+			talks = cases.case_talks.map do |talk|
+				is_me = (talk.user == user)? true : false
+				{"time":talk.created_at.strftime('%Y/%m/%d'),"detail": talk.detail,"is_me":is_me,"talk_name":talk.user.name}
+			end
+			json = {"code": "0","messages":"请求成功","data": talks}
+			respond_to do |format|
+				format.json { render json:json.to_json }
+		  end	 
 		end
-		json = {"code": "0","messages":"请求成功","data": talks}
-		respond_to do |format|
-			format.json { render json:json.to_json }
-	    end	    	
-    end 
+   	
+  end 
 end

@@ -1,5 +1,5 @@
 class AppraisedUnit < ApplicationRecord
-  belongs_to :main_case
+  belongs_to :main_case,required:false
 
   enum unit_type: [ :unit, :user ]
   enum gender: [:male, :female]

@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :name, :length => {:maximum => 20}
   validates :email, :length => {:maximum => 100}, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_nil: true, allow_blank: true
   validates :gender, :length => {:maximum => 10}
-  validates :mobile_phone, :length => {:maximum => 100}, :uniqueness => true # 用户的手机号字段是唯一的，因为将来会跟小程序联动
+  validates :mobile_phone, :length => {:maximum => 100}, :uniqueness => true # 用户的手机号字段是唯一的，因为将来会跟小程序联动 #TODO(委托人注册)
   validates :password, :confirmation => true
   validates :password, :presence => true, on: :create
   validates :password, format: { with: /(?![0-9a-z]+$)(?![a-zA-Z]+$)(?![0-9A-Z]+$)[\S]{8,}/ }, allow_nil: true
@@ -22,6 +22,7 @@ class User < ApplicationRecord
   # validates :district_id, :presence => true
 
   # 关联
+  has_many   :entrust_orders
   has_many   :case_talks
   has_many   :user_roles, dependent: :delete_all
   has_many   :roles, :through => :user_roles
@@ -163,4 +164,5 @@ class User < ApplicationRecord
   def generate_salt
     self.salt = self.object_id.to_s + rand.to_s
   end
+
 end
