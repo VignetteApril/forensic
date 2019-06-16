@@ -191,13 +191,21 @@ class ApisController < ApplicationController
 		# decoded_token = JWT.decode params[:token], nil, false
 		# user = User.find_by(:id=>decoded_token[0]["id"])
 		e = MainCase.find_by(:id=>params[:caseid])
+		if e.blank?
+			json = {"code": "1","messages":"案件id错误"}
+			respond_to do |format|
+				format.json { render json:json.to_json }
+		  end
+		  return
+		end
+		#TODO entrust_people 已经消失 但是案件还在 是否有这种情况
 		case_data = {
 			"id": e.id,
 			"matter":e.matter,
 			"time": e.created_at.strftime('%Y/%m/%d'),
 			"anyou":e.anyou,
 			"appraised_unit":e.appraised_unit,
-			"principal_people"=>User.find_by(:id => e.wtr_id).name,
+			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name : "",
 			"organization_name"=>e.organization_name,
 			"organization_phone"=>e.organization_phone
 		}
@@ -206,7 +214,7 @@ class ApisController < ApplicationController
 		json = {"code": "0","messages":"请求成功","data": {"case_data":case_data,"procress_data":procress_data}}
 		respond_to do |format|
 			format.json { render json:json.to_json }
-	    end			
+	  end			
 	end
 
   def get_case_talk
