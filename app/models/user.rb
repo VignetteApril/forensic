@@ -22,6 +22,7 @@ class User < ApplicationRecord
   # validates :district_id, :presence => true
 
   # 关联
+  has_many   :entrust_orders
   has_many   :case_talks
   has_many   :user_roles, dependent: :delete_all
   has_many   :roles, :through => :user_roles
@@ -163,4 +164,5 @@ class User < ApplicationRecord
   def generate_salt
     self.salt = self.object_id.to_s + rand.to_s
   end
+
 end

@@ -117,22 +117,26 @@ class UsersController < ApplicationController
   end
   #委托人
   def create_consignor
-    binding.pry
     if !Organization.where(:name=>params["user"]["organization_name"]).exists?
       #创建机构E和用户987654321
+      # org = Organization.new(:name=>params["user"]["organization_name"],:org_type=>:court)
     else
       org = Organization.where(:name=>params["user"]["organization_name"]).first
       if org.users.where(:login=>params["user"]["login"]).exists?
         user = org.users.where(:login=>params["user"]["login"]).first
-        if user.update(:password=>params["user"]["password"],:password_confirmation=>params["user"]["login"])
-          redirect_to '/users/new_consignor' ,flash: { success: '系统已经找到同名用户并且重置密码' }
+        if user.update(:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+          redirect_to '/login' ,flash: { success: '系统已经找到同名委托人并且重置密码,请登录' }
         else
-          redirect_to '/users/new_consignor' ,flash: { danger: '系统已经找到同名用户重置密码失败' }
+          redirect_to '/users/new_consignor' ,flash: { danger: '系统已经找到同名委托人重置密码失败' }
         end
       else
-        user = User.new(:login=>params["user"]["login"],:email=>params["user"]["email"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["login"])
-        binding.pry
-
+        user = User.new(:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        user.organization = org
+        if user.save 
+          redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
+        else
+          redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.messages}" }
+        end
       end
     end
   end

@@ -75,6 +75,8 @@ Rails.application.routes.draw do
     patch :save_payment_order, on: :member
   end
 
+  resources :entrust_orders
+
   post 'areas/cities'
   post 'areas/districts'
 
@@ -92,6 +94,7 @@ Rails.application.routes.draw do
   get 'apis/get_case_list'
   get 'apis/get_case_detail_progress'
   get 'apis/get_case_talk'
+  get 'apis/get_organization'
 
   root 'session#index'
 end

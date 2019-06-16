@@ -10,19 +10,17 @@
   .container-fluid.pt-5
     .container.card style="width: 30%;"
       = simple_form_for(@consignor_user, url: :create_consignor_users,method: :post) do |f|
-        - if @consignor_user.errors.any?
-          #error_explanation.alert.alert-warning
-            h4
-              | 该角色保存时出错：
-              = pluralize(@consignor_user.errors.count, "个错误")
-            ul
-              - @consignor_user.errors.full_messages.each do |message|
-                li
-                  = message
+        .card-title
         .card-body.p-6
           .row.card-title
             .col-md-12 
               span 委托人注册
+          .row
+            .col-md-12
+              - flash.each do |message_type, message_value|
+                div class="alert alert-icon alert-#{message_type}"
+                  i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
+                  = message_value
           .row
             .col-md-4
               .span 用户名:
