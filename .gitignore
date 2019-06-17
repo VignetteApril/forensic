@@ -80,3 +80,5 @@ config/database.yml
 /shared/*
 
 Gemfile.lock
+
+/public/.well-known/*
