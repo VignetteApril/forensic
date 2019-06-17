@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create]
-  before_action :set_new_areas, only: [:new, :create]
+  before_action :set_new_areas, only: [:new, :create,:new_consignor]
   before_action :set_edit_areas, only: [:edit, :update]
   skip_before_action :authorize, only: [:new_consignor,:create_consignor]
   skip_before_action :verify_authenticity_token, only: [:new_consignor,:create_consignor]
@@ -113,11 +113,21 @@ class UsersController < ApplicationController
   def new_consignor
     @consignor_user = User.new
   end
-  #委托人
+
+  #委托人创建
   def create_consignor
     if !Organization.where(:name=>params["user"]["organization_name"]).exists?
-      #创建机构E和用户987654321
-      # org = Organization.new(:name=>params["user"]["organization_name"],:org_type=>:court)
+      org = Organization.new(:name=>params["user"]["organization_name"],:org_type=>:court,:province_id=>params['user']['province_id'],:city_id=>params['user']['city_id'],:district_id=>params['user']['district_id'],:area_id=>params['user']['district_id'])
+      if org.save
+        user = org.users.new(:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        if user.save
+          redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
+        else
+          redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.messages}" }
+        end
+      else
+        redirect_to '/users/new_consignor' ,flash: { danger: "创建单位失败，#{org.errors}"}
+      end
     else
       org = Organization.where(:name=>params["user"]["organization_name"]).first
       if org.users.where(:login=>params["user"]["login"]).exists?
@@ -172,6 +182,7 @@ class UsersController < ApplicationController
   end
 
   def set_new_areas
+    @provinces = Area.roots
     @cities = Area.where(area_type: 'city')
     @districts = @cities.first.children
   end
@@ -182,3 +193,4 @@ class UsersController < ApplicationController
     @districts = city_id.nil? ? [] : Area.find(city_id).children
   end
 end
+

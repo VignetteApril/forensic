@@ -1,5 +1,6 @@
 class AreasController < ApplicationController
   skip_before_action :can
+  skip_before_action :authorize
 
   def cities
     @cities = Area.find(params[:id]).children
