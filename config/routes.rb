@@ -88,7 +88,7 @@ Rails.application.routes.draw do
   # 小程序后台API
   post 'apis/register'
   post 'apis/login'
-  patch 'apis/update_user_infos'
+  put 'apis/update_user_infos'
   get 'apis/get_user_infos'
   get 'apis/get_city_list'
   get 'apis/get_district_list'
