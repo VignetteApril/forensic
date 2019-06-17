@@ -1,4 +1,4 @@
 $("<%= @partial_name_element %>").html("<%= escape_javascript(render partial: "#{@partial_name}",
-                                                                 locals: { main_case: @main_case }) %>")
+                                                                     locals: { main_case: @main_case }) %>")
 
 $('#flash').html("<%= escape_javascript(render partial: 'layouts/flash_message') %>")

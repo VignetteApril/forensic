@@ -2,4 +2,5 @@
   .col-md-4.mt-2
     span = case_doc.name
     - unless case_doc.attachment.attached?
-      span#upload_file.fa.fa-upload.ml-2
+      = link_to display_dynamic_file_modal_main_case_path(@main_case, case_doc_id: case_doc.id), remote: true, method: 'POST' do
+        span#upload_file.fa.fa-upload.ml-2

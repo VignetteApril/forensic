@@ -1,5 +1,5 @@
-= simple_form_for(case_doc, remote: true, method: :post, url: create_case_doc_main_case_path + '.js', authenticity_token: true ) do |f|
-  .modal.fade id="case_doc_modal" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+= simple_form_for(case_doc, remote: true, method: :post, url: create_case_doc_main_case_path, type: 'script', authenticity_token: true ) do |f|
+  .modal.fade id="#{case_modal_id}" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
     .modal-dialog role="document"
       .modal-content
         .modal-header
@@ -10,6 +10,8 @@
           .form-inputs.text-left
             = f.input :partial_name, as: :hidden, input_html: { value: "#{partial_name}" }
             = f.input :case_stage, as: :hidden, input_html: { value: "#{case_stage}" }
+            - if case_doc.persisted?
+              = f.input :case_doc_id, as: :hidden, input_html: { value: "#{case_doc.id}" }
             = f.input :name, label: '文档名称'
             = f.input :doc_code, label: '文件编码'
             = f.input :check_archived, label: '是否归档检查'
@@ -22,6 +24,7 @@
           button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
 
 javascript:
-  $('#case_doc_submit').click(function (){
-      $('#case_doc_modal').modal('hide');
+  // 当点击确定按钮后，关闭所有的modal
+  $(":submit").click(function () {
+      $('.modal').modal('hide');
   });

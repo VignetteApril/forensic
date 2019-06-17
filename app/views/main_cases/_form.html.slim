@@ -41,7 +41,7 @@
           .col-md-6
             = f.input :wtr_phone, label: '委托人电话'
         .row
-          .col-md-4
+          .col-md-4update_password
             .attachment_upload
               = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: { direct_upload: true }
               - if @main_case.entrust_doc.attached?
