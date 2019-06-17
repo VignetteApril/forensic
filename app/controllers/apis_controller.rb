@@ -61,7 +61,7 @@ class ApisController < ApplicationController
 
 	def get_organization
 		condition = params['condition']
-		rasults = Organization.all
+		results = Organization.all
 
 		if !condition["province_id"].blank?
 			results = Organization.where(:province_id=>condition["province_id"]).all

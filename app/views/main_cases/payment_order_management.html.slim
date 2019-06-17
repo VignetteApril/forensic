@@ -125,17 +125,22 @@ javascript:
         $(".bill-bank").val(data['bank'])
       
       });
+
+      deal_num_payment()
+      deal_num_refund()
     });
 
-    deal_num_payment()
-    deal_num_refund()
 
-    // $(".add-payment").bind("click",function(e){
-    //   deal_num_payment()
-    // })
-    // $(".add-refund").bind("click",function(e){
-    //   deal_num_refund()
-    // })    
+    $('#payment_orders')
+      .on('cocoon:after-insert', function(e, insertedItem) {
+        deal_num_payment()
+    })
+
+    $('#refund_orders')
+      .on('cocoon:after-insert', function(e, insertedItem) {
+        deal_num_refund()
+    })
+  
   });
 
    

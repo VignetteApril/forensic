@@ -35,7 +35,19 @@
             .col-md-4
               .span 手机号码:
             .col-md-8      
-              = f.input :mobile_phone, label: false              
+              = f.input :mobile_phone, label: false   
+          .row
+            .col-md-4 省：
+            .col-md-8
+              = f.input :province_id, collection: @provinces, label: false, include_blank: false
+          .row
+            .col-md-4 城市：
+            .col-md-8
+              = f.input :city_id, collection: @cities, label:false, include_blank: false
+          .row
+            .col-md-4 区县：
+            .col-md-8
+              = f.input :district_id, collection: @districts, label: false, include_blank: false            
           .row
             .col-md-4
               .span 所属机构:
@@ -51,9 +63,38 @@
               .span 重复输入密码:
             .col-md-8      
               = f.input :password_confirmation, label: false
+          .row style="padding-bottom:20px;"
+            .col-md-6
+            .col-md-6
+              span 已有账号？请前去   
+              a href="#{login_path}" style="display:inline;font-size:11pt" 登录
           .form-footer
             = f.button :submit, '确认', class: "btn btn-primary btn-block"
   .footer.bg-dark
     container
       .col-12.text-center
-        span style='color: gray' 北京旌正科技有限公司 Copyright © 2019 All rights reserved. 京ICP备19018544号-1          
+        span style='color: gray' 北京旌正科技有限公司 Copyright © 2019 All rights reserved. 京ICP备19018544号-1  
+
+
+javascript:
+  $(document).on('turbolinks:load', function() {
+    var province_select2 = $("#user_province_id");
+    var city_select2 = $("#user_city_id");
+    var district_select2 = $("#user_district_id");
+    var request_url_cities = window.location.origin + '/areas/cities.json';
+    var request_url_districts = window.location.origin + '/areas/districts.json';
+
+    // listening the select2 change method
+    province_select2.on("select2:select", function(e){
+        // refresh project select2 element
+        appendDataToSelect2(request_url_cities, e['currentTarget']['value'], city_select2, 'name', 'cities');
+        district_select2.empty().trigger('change');
+    });
+
+    city_select2.on("select2:select", function(e){
+        appendDataToSelect2(request_url_districts, e['currentTarget']['value'], district_select2, 'name', 'districts');
+    });
+  })
+
+
+
