@@ -20,8 +20,6 @@
               #user_select
             .col-md-4
               span.ml-2.mb-1 class='btn btn-primary' id='import_user' 导入
-              / 这里需要设置button的type因为默认的button type是submit，会自动提交表单
-              button#create_org_user.btn.btn-primary.mb-1.ml-2 type="button" 创建委托人
       .card-body.principal
         .row
           .col-md-4
@@ -31,17 +29,20 @@
           .col-md-4
             = f.input :district_id, collection: @districts, label: '区县', include_blank: true
         .row
-          .col-md-6
+          .col-md-4
             = f.input :organization_name, label: '委托方名称（请书写委托方全称）'
-          .col-md-6
-            = f.input :organization_addr, label: '委托方地址'
-        .row
-          .col-md-6
+          .col-md-4
             = f.input :user_name, label: '委托人'
-          .col-md-6
+          .col-md-4
             = f.input :wtr_phone, label: '委托人电话'
         .row
-          .col-md-4update_password
+          .col-md-8
+            = f.input :organization_addr, label: '委托方地址'
+          .col-md-4
+            / 这里需要设置button的type因为默认的button type是submit，会自动提交表单
+            button#create_org_user.btn.btn-primary.mt-4.pull-right type="button" 保存成常用联系人
+        .row.no-gutters
+          .col-md-4
             .attachment_upload
               = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: { direct_upload: true }
               - if @main_case.entrust_doc.attached?
@@ -111,19 +112,19 @@
               = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
                       collection: AppraisedUnit.unit_types_arr, checked: 'user', :item_wrapper_class => 'form-check form-check-inline'
           .row
-            .col-md-4
+            .col-md-2
               = appraised_unit.input :name, label: '名称'
-            .col-md-8
+            .col-md-10
               = appraised_unit.input :addr, label: '联系地址'
           #hidden-fields
             .row
-              .col-md-3
+              .col-md-2
                 = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
               .col-md-3
                 = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
               .col-md-2
                 = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
-              .col-md-4
+              .col-md-5
                 = appraised_unit.input :id_num, label: '证件号码'
   .form-actions
     .row.no-gutters

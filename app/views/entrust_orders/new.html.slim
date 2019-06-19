@@ -22,7 +22,10 @@
         .col-md-1
           //button type="button" class="btn btn-success" 新建案件
         .col-md-1
-          button type="button" class="btn btn-success" 上传附件
+          .attachment_upload
+            = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: {direct_upload: true}
+            - if @entrust_order.entrust_doc.attached?
+              span = "当前委托书：#{@entrust_order.entrust_doc.blob.filename}"
         .col-md-1
           = f.button :submit, '提交', class: 'btn btn-success'
 
