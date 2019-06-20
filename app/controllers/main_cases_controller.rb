@@ -20,6 +20,7 @@ class MainCasesController < ApplicationController
   # 没有机构的用户调到首页，告诉用户去设置对应的机构
   # 通过用户的机构类型看如果是法院的话，就说明该用户为委托人，委托人的话只能看跟自己相关的case
   # 除去以上所有情况，剩下的用户都为鉴定中心的用，鉴定中心的用户在该action里
+  # 鉴定中心人员只能看到自己作为鉴定人的案件
   def index
     if admin?
       data = MainCase
