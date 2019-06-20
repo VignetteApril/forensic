@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :entrust_orders
   resources :material_cycles
   resources :identification_cycles
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

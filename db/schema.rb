@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_16_043427) do
+ActiveRecord::Schema.define(version: 2019_06_19_130654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,9 +161,9 @@ ActiveRecord::Schema.define(version: 2019_06_16_043427) do
     t.text "matter_demand"
     t.text "base_info"
     t.string "anyou"
+    t.bigint "organization_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "organization_id"
     t.index ["main_case_id"], name: "index_entrust_orders_on_main_case_id"
     t.index ["organization_id"], name: "index_entrust_orders_on_organization_id"
     t.index ["user_id"], name: "index_entrust_orders_on_user_id"
@@ -434,6 +434,9 @@ ActiveRecord::Schema.define(version: 2019_06_16_043427) do
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
   add_foreign_key "departments", "organizations"
+  add_foreign_key "entrust_orders", "main_cases"
+  add_foreign_key "entrust_orders", "organizations"
+  add_foreign_key "entrust_orders", "users"
   add_foreign_key "identification_cycles", "organizations"
   add_foreign_key "main_cases", "departments"
   add_foreign_key "material_cycles", "organizations"

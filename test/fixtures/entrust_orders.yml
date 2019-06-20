@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  main_case: one
+  user: one
+  case_property: MyString
+  matter_demand: MyText
+  base_info: MyText
+  anyou: MyString
+  organization: one
+
+two:
+  main_case: two
+  user: two
+  case_property: MyString
+  matter_demand: MyText
+  base_info: MyText
+  anyou: MyString
+  organization: two

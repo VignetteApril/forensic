@@ -43,9 +43,8 @@ class MainCasesController < ApplicationController
   # 鉴定中心的人所在科室下的所有案件
   # 针对本中心的人没有权限
   def department_cases
-    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.department.nil?
-
-    data = @current_user.department.main_cases
+    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.departments.nil?
+    data = MainCase.where(department_id: @current_user.departments.split(','))
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
     render :index

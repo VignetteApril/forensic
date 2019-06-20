@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
   layout 'system'
-  layout 'login', only: [:new_consignor]
   skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
@@ -112,6 +111,7 @@ class UsersController < ApplicationController
   #委托人注册
   def new_consignor
     @consignor_user = User.new
+    render layout: 'login'
   end
 
   #委托人创建
