@@ -2,7 +2,8 @@ class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
-                                       :save_payment_order, :case_executing, :update_case_stage, :update_case_stage]
+                                       :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
+                                       :display_dynamic_file_modal]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -19,6 +20,7 @@ class MainCasesController < ApplicationController
   # 没有机构的用户调到首页，告诉用户去设置对应的机构
   # 通过用户的机构类型看如果是法院的话，就说明该用户为委托人，委托人的话只能看跟自己相关的case
   # 除去以上所有情况，剩下的用户都为鉴定中心的用，鉴定中心的用户在该action里
+  # 鉴定中心人员只能看到自己作为鉴定人的案件
   def index
     if admin?
       data = MainCase
@@ -42,9 +44,8 @@ class MainCasesController < ApplicationController
   # 鉴定中心的人所在科室下的所有案件
   # 针对本中心的人没有权限
   def department_cases
-    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.department.nil?
-
-    data = @current_user.department.main_cases
+    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.departments.nil?
+    data = MainCase.where(department_id: @current_user.departments.split(','))
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
     render :index
@@ -314,19 +315,33 @@ class MainCasesController < ApplicationController
   # 用户点击【添加文件】按钮，系统弹出模态框人用户填写相关信息，然后点击确认创建
   # 创建完毕后使用ajax的方式刷新当前页面显示文档的部分
   def create_case_doc
-    case_doc = @main_case.case_docs.new(case_doc_params)
     @partial_name = params[:department_doc][:partial_name]
     @partial_name_element = "##{@partial_name}"
-
-    respond_to do |format|
-      if case_doc.save
-        flash[:notice] = "文件上传成功！"
-        format.js
-      else
-        flash[:warning] = "文件上传失败，请重新上传！"
-        format.js
+    case_doc_id = params[:department_doc][:case_doc_id]
+    if case_doc_id.blank?
+      case_doc = @main_case.case_docs.new(case_doc_params)
+      respond_to do |format|
+        if case_doc.save
+          flash[:notice] = "文件上传成功！"
+          format.js
+        else
+          flash[:warning] = "文件上传失败，请重新上传！"
+          format.js
+        end
+      end
+    else
+      case_doc = DepartmentDoc.find(case_doc_id)
+      respond_to do |format|
+        if case_doc.update(case_doc_params)
+          flash[:notice] = "文件上传成功！"
+          format.js
+        else
+          flash[:warning] = "文件上传失败，请重新上传！"
+          format.js
+        end
       end
     end
+
   end
 
   # 更改案件状态响应的方法
@@ -451,6 +466,17 @@ class MainCasesController < ApplicationController
         flash[:danger] = '委托方创建失败！请选择地区信息，或该委托方已经被创建了！'
         format.js { render 'layouts/display_flash' }
       end
+    end
+  end
+
+  # 用户在鉴定执行页面点击文件名后的上传按钮，发送ajax请求到该方法
+  # 方法返回js，动态的渲染上传文件的表单modal
+  # 用户在表单modal中填写相关信息，并可以上传文件，完成文件的上传
+  def display_dynamic_file_modal
+    @case_doc = DepartmentDoc.find(params[:case_doc_id])
+
+    respond_to do |format|
+      format.js
     end
   end
 

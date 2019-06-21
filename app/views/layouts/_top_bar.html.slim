@@ -3,18 +3,15 @@ header class="app-header"
     = image_tag("logo.png", alt: "forensic logo", style: 'height: 30px; width: auto;')
     span 智慧司法云服务平台
   a.app-sidebar__toggle href="#" data-toggle="sidebar" aria-label="Hide Sidebar"
-  .row.mt-3.ml-2
-    - unless admin?
-      - if can?('departments', 'index')
-        = link_to '机构管理', departments_path, class: 'mr-2', style: 'color: white;'
-    = link_to '案件', main_cases_path, class: 'mr-2', style: 'color: white;'
-    = link_to '委托单', '#', class: 'mr-2', style: 'color: white;'
-    = link_to '统计', '#', class: 'mr-2', style: 'color: white;'
-    = link_to '财务', '#', class: 'mr-2', style: 'color: white;'
-    = link_to '快递单', '#', class: 'mr-2', style: 'color: white;'
-
   // Navbar Right Menu
   ul.app-nav
+    li
+      ul.text-white
+        li
+          span = '欢迎 ' + @current_user.name + ' 登录系统！'
+        li
+          - if @current_user.organization
+            span = @current_user.organization.name
     // Notification Menu
     li class="dropdown"
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"

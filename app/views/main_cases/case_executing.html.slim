@@ -1,5 +1,8 @@
-= render partial: 'case_doc_modal', locals: {case_doc: @main_case.case_docs.new, case_stage: :executing, partial_name: 'executing_case_docs'}
-
+= render partial: 'case_doc_modal', locals: { case_doc: @main_case.case_docs.new,
+                                              case_stage: :executing,
+                                              partial_name: 'executing_case_docs',
+                                              case_modal_id: 'case_doc_modal' }
+#dynamic_file_modal
 .row
   .col-md-6
     = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
@@ -16,10 +19,21 @@
 .card
   .card-body
     .row
-      button type="button" class="btn btn-primary pull-right ml-2" data-toggle="modal" data-target="#case_doc_modal" 上传文件
+      .col-md-12
+        button type="button" class="btn btn-primary pull-right ml-2" data-toggle="modal" data-target="#case_doc_modal" 上传文件
+        button#apply_close type="button" class="btn btn-primary pull-right " 申请结案
     .row#executing_case_docs.no-gutters
       - @main_case.case_docs.where(case_stage: :executing).each do |case_doc|
         .col-md-4.mt-2
-          span = case_doc.name
           - unless case_doc.attachment.attached?
-            span#upload_file.fa.fa-upload.ml-2
+            span data-toggle="tooltip" data-placement="right" title="未关联文件" = case_doc.name
+            = link_to display_dynamic_file_modal_main_case_path(@main_case, case_doc_id: case_doc.id), remote: true, method: 'POST' do
+              span#upload_file.fa.fa-upload.ml-2
+          - else
+            span data-toggle="tooltip" data-placement="right" title="#{case_doc.attachment.blob.filename}" = case_doc.name
+
+javascript:
+  $('#apply_close').click(function () {
+      var case_stage_select2 = $('#main_case_case_stage');
+      case_stage_select2.val('apply_filing').trigger('change');
+  });

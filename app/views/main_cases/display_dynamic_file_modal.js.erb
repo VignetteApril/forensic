@@ -1,0 +1,8 @@
+// 通过动态的方式渲染modal
+$('#dynamic_file_modal').html("<%= escape_javascript(render partial: 'case_doc_modal',
+                                                            locals: { case_doc: @case_doc,
+                                                                      partial_name: 'executing_case_docs',
+                                                                      case_stage: :executing,
+                                                                      case_modal_id: 'dyn_doc_modal' }) %>")
+// 启动对应的modal
+$('#dyn_doc_modal').modal('show');

@@ -1,7 +1,6 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
   layout 'system'
-  layout 'login', only: [:new_consignor]
   skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
@@ -98,15 +97,13 @@ class UsersController < ApplicationController
 
   # 用户填写原密码和新密码之后，提交，系统修改用户密码。
   def update_password
-    # byebug
     @searhc_user = User.authenticate(@user.login, params[:old_password])
-    # byebug
     if @searhc_user.nil?
       redirect_to edit_password_user_path, notice: '原始密码不正确'
     elsif @user.update_attributes({:password => params[:password], :password_confirmation => params[:password_confirmation], :changed_password => true})
-      # redirect_to edit_password_user_path, notice: '密码已经修改成功了'
       redirect_to "/", notice: "密码已经修改成功了！如果您是第一次登录本系统，请联系系统管理员要求给自己开通权限。"
     else
+      flash[:danger] = "#{@user.errors.messages}"
       render :edit_password
     end
   end
@@ -114,6 +111,7 @@ class UsersController < ApplicationController
   #委托人注册
   def new_consignor
     @consignor_user = User.new
+    render layout: 'login'
   end
 
   #委托人创建

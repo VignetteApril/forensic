@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Main case:
+  = @entrust_order.main_case
+p
+  strong User:
+  = @entrust_order.user
+p
+  strong Case property:
+  = @entrust_order.case_property
+p
+  strong Matter demand:
+  = @entrust_order.matter_demand
+p
+  strong Base info:
+  = @entrust_order.base_info
+p
+  strong Anyou:
+  = @entrust_order.anyou
+p
+  strong Organization:
+  = @entrust_order.organization
+
+=> link_to 'Edit', edit_entrust_order_path(@entrust_order)
+'|
+=< link_to 'Back', entrust_orders_path

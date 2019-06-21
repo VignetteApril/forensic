@@ -1,6 +1,6 @@
 class CreateEntrustOrder < ActiveRecord::Migration[5.2]
   def change
-    create_table :entrust_orders do |t|
+    create_table :__entrust_orders do |t|
     	t.belongs_to :main_case
     	t.belongs_to :user
     	t.string :case_type

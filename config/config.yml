@@ -41,13 +41,14 @@ features:
                            update_filing, update_reject, open_barcode_image, create_case_doc,
                            payment_order_management, user_search, create_organization_and_user,
                            save_payment_order, request_bill, update_bill, update_case_stage,
-                           case_executing", 案件管理]
+                           case_executing, display_dynamic_file_modal", 案件管理]
   - [我的案件, main_cases, "index, open_barcode_image", 机构]
   - [本科室案件, main_cases, "department_cases, open_barcode_image", 机构]
   - [本机构的案件, main_cases, "center_cases, open_barcode_image", 机构]
   - [已立案待付款案件, main_cases, "filed_unpaid_cases, open_barcode_image", 机构]
   - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 机构]
   - [补充材料周期管理, material_cycles, 'index, new, edit, update, show, create, destroy', 机构]
+  - [委托单管理, entrust_orders, 'index, new, edit, update, show, create, destroy', 机构]
 apps:
   - name: 系统管理
     module_chain:

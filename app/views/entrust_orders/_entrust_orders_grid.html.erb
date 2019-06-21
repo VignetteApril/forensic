@@ -1,0 +1,6 @@
+<%= grid(@entrust_orders, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+  g.column name:  '鉴定中心', attribute: 'name', assoc: :organization
+  g.column name:  '委托人', attribute: 'name', assoc: :user
+  g.column name:  '案件性质', attribute: 'case_property'
+  g.column name:  '案由', attribute: 'anyou'
+end -%>

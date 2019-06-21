@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :entrust_orders
   resources :material_cycles
   resources :identification_cycles
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
@@ -66,6 +67,7 @@ Rails.application.routes.draw do
     get :payment_order_management, on: :member
     get :request_bill, on: :collection
     get :case_executing, on: :member
+    post :display_dynamic_file_modal, on: :member
     post :create_organization_and_user, on: :collection
     post :user_search, on: :collection
     post :create_case_doc, on: :member
@@ -90,7 +92,7 @@ Rails.application.routes.draw do
   get 'apis/get_search_courts'
   get 'apis/get_search_centers'
   post 'apis/login'
-  patch 'apis/update_user_infos'
+  put 'apis/update_user_infos'
   get 'apis/get_user_infos'
   get 'apis/get_city_list'
   get 'apis/get_district_list'
