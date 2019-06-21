@@ -5,39 +5,63 @@ class ApisController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
 	def register 
-		province_id = Area.find(params["city_id"]).parent.id
-        user = User.new(:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:mobile_phone=>params['phone'],:landline=>params['landline'])
-
-        org = Organization.where(:name=>params["organization"]).try(:first)
-        if org.nil?
-        	org = Organization.create(:name=>params["organization"],:org_type=>:court,:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:area_id=>params['district_id'].to_i)
-        	p "没找到机构#{params["organization"]} 创建----#{org.save}"
-        end        
-        user.organization = org
-
-        dep = org.departments.where(:name=>params["department"]).try(:first)
-        if dep.nil?
-        	dep = org.departments.create(:name=>params["department"])
-        	p "没找到#{org.name}下的部门#{params["department"]} 创建----#{dep.save}"
-        end
-        user.departments = dep.id.to_s
-
-        user.positive.attach params["positive"]
-        user.negative.attach params["negative"]
-
-		json = {"code":"0","msg":"register_success","errors":{}}
-		if user.save
-			respond_to do |format|
-				format.json { render json:json.to_json }
+		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).exists?
+	    user = User.new(:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
+	    org = Organization.where(:name=>params["organization"]).try(:first)
+	    user.organization = org
+	    dep = org.departments.where(:name=>params["department"]).try(:first)
+	    if dep.nil?
+	    	dep = org.departments.create(:name=>params["department"])
+	    	p "没找到#{org.name}下的部门#{params["department"]} 创建----#{dep.save}"
+	    end
+	    user.departments = dep.id.to_s
+	    user.positive.attach params["positive"]
+			json = {"code":"0","msg":"注册并且上传正面相片成功","errors":{}}
+			if user.save
+				respond_to do |format|
+					format.json { render json:json.to_json }
+				end
+			else
+				json["code"] = "1"
+				json["msg"] = "注册并且上传正面相片失败"
+				json["errors"] = user.errors.messages
+				respond_to do |format|
+					format.json { render json:json.to_json }
+				end
 			end
 		else
-			json["code"] = "1"
-			json["msg"] = "register_failed"
-			json["errors"] = user.errors.messages
-			respond_to do |format|
-				format.json { render json:json.to_json }
-			end
+			user = User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).first
+			user.negative.attach params["negative"]
+			json = {"code":"0","msg":"上传背面相片成功,注册结束","errors":{}}
+			if user.save
+				respond_to do |format|
+					format.json { render json:json.to_json }
+				end
+			else
+				json["code"] = "1"
+				json["msg"] = "上传背面相片失败"
+				json["errors"] = user.errors.messages
+				respond_to do |format|
+					format.json { render json:json.to_json }
+				end
+			end			
 		end
+	end
+
+	def get_search_courts
+		name = params["name_str"]
+		json = {"courts": Organization.where('name like ?', "%#{name}%").all.select(:name)}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+		end		
+	end
+
+	def get_search_centers
+		name = params["name_str"]
+		json = {"centers": Organization.where('name like ?', "%#{name}%").all.select(:name)}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+		end				
 	end
 
 	def login
@@ -57,32 +81,6 @@ class ApisController < ApplicationController
 				format.json { render json:json.to_json }
 			end
 		end		
-	end
-
-	def get_organization
-		condition = params['condition']
-		results = Organization.all
-
-		if !condition["province_id"].blank?
-			results = Organization.where(:province_id=>condition["province_id"]).all
-		end
-
-		if !condition["city_id"].blank?
-			results = results.where(:city_id=>condition["city_id"]).all
-		end
-
-		if !condition["district_id"].blank?
-			results = results.where(:district_id=>condition["district_id"]).all
-		end
-
-		if !condition["org_type"].blank?
-			results = results.where(:org_type=>condition["org_type"]).all
-		end
-
-		json = {"code":"0","result": results}
-	  respond_to do |format|
-			format.json { render json:json.to_json }
-		end	
 	end
 
 	def get_user_infos
@@ -168,17 +166,45 @@ class ApisController < ApplicationController
 	def get_notice_list
 		decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-		json = {"code": "0","messages":"请求成功","data":user.notifications.map(&:infos_for_api)}
+		notifications = user.notifications
+		data = {}
+		data["true"] = []
+		data["false"] =[]
+		notifications.each do |n|
+			data["#{n.status}"].push(n.infos_for_api)
+		end
+		json = {"code": "0","messages":"请求成功","data":data}
 		respond_to do |format|
 			format.json { render json:json.to_json }
-	    end				
+	  end				
+	end
+
+	def change_notice_status
+		n = Notification.find_by(:id=>params[:id])
+		n.status = true
+		if n.save
+			respond_to do |format|
+				format.json { render json:{"code": "0","messages":"修改成功"}.to_json }
+		  end	
+		else
+			respond_to do |format|
+				format.json { render json:{"code": "1","messages":"修改失败"}.to_json }
+		  end	
+		end
 	end
 
 	def get_case_list
-		# decoded_token = JWT.decode params[:token], nil, false
-		# user = User.find_by(:id=>decoded_token[0]["id"])	
-		cases = MainCase.where(:organization_name => params["organization"] , :case_stage => params["case_stage"] )
-	    # cases = MainCase.where(:case_stage => params["case_stage"])
+		cases = MainCase.joins(:appraised_unit)
+		if params["name"].present?
+			cases = cases.where("name=?",params["name"])
+		end
+		if params["organization"].present?
+			cases = cases.where(:organization_name => params["organization"])
+		end
+		if params["case_stage"].present?
+			cases = cases.where(:case_stage => params["case_stage"])
+		end
+
 	  data = cases.map{|e| {"id": e.id, "time": e.created_at.strftime('%Y/%m/%d'),"case_stage": e.case_stage,"organization_name": e.organization_name,"anyou":e.anyou,"appraised_unit": e.appraised_unit}}
 
 		json = {"code": "0","messages":"请求成功","data": data}
@@ -188,8 +214,6 @@ class ApisController < ApplicationController
 	end
 
 	def get_case_detail_progress
-		# decoded_token = JWT.decode params[:token], nil, false
-		# user = User.find_by(:id=>decoded_token[0]["id"])
 		e = MainCase.find_by(:id=>params[:caseid])
 		if e.blank?
 			json = {"code": "1","messages":"案件id错误"}
@@ -198,14 +222,16 @@ class ApisController < ApplicationController
 		  end
 		  return
 		end
-		#TODO entrust_people 已经消失 但是案件还在 是否有这种情况
+
 		case_data = {
 			"id": e.id,
+			"case_no":e.case_no,
+			"case_stage":e.case_stage,
 			"matter":e.matter,
 			"time": e.created_at.strftime('%Y/%m/%d'),
 			"anyou":e.anyou,
 			"appraised_unit":e.appraised_unit,
-			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name : "",
+			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name: "",
 			"organization_name"=>e.organization_name,
 			"organization_phone"=>e.organization_phone
 		}

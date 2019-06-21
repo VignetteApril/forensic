@@ -87,11 +87,14 @@ Rails.application.routes.draw do
 
   # 小程序后台API
   post 'apis/register'
+  get 'apis/get_search_courts'
+  get 'apis/get_search_centers'
   post 'apis/login'
   patch 'apis/update_user_infos'
   get 'apis/get_user_infos'
   get 'apis/get_city_list'
   get 'apis/get_district_list'
+  put 'apis/change_notice_status'
   get 'apis/get_notice_list'
   get 'apis/get_case_list'
   get 'apis/get_case_detail_progress'
