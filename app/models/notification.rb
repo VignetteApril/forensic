@@ -24,8 +24,8 @@ class Notification < ApplicationRecord
     		"description":self.description,
     		"status": self.status ,
     		"created_at": self.created_at.strftime('%Y/%m/%d'),
-        "case_code": self.main_case.case_no,
-        "appraised_unit": self.main_case.appraised_unit.try(:name),
+        "case_code": self.main_case.try(:case_no),
+        "appraised_unit": self.main_case.try(:appraised_unit).try(:name),
         "center":Organization.find_by(self.main_case.organization_id).try(:name),
     		"type": Notification::CHANNEL_MAP[self.channel.to_sym]
     	}
