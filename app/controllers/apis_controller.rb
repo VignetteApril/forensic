@@ -303,7 +303,7 @@ class ApisController < ApplicationController
   	entrust_order.organization_id = params["organization_id"]
   	entrust_order.user = user 
   	entrust_order.entrust_doc.attach params["entrust_doc"]
-  	
+
     if entrust_order.save
 	    respond_to do |format|
 				format.json { render json:{"code": "0","messages":"创建委托单成功"}.to_json }
@@ -314,13 +314,18 @@ class ApisController < ApplicationController
 		  end	
 		end  	
   end
+
   #查看委托人下的所有案件的鉴定中心的集合
   def get_entrust_orgs
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		organization_ids = MainCase.where(:wtr_id=>user.id).select(:organization_id)
   end
-  #发送会话
+
+  #发送会话TODO
   def create_talk
+  	decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+		my_case = MainCase.find_by(:id=>params["caseid"])
   end
 end
