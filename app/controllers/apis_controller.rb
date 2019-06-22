@@ -322,10 +322,11 @@ class ApisController < ApplicationController
 		organization_ids = MainCase.where(:wtr_id=>user.id).select(:organization_id)
   end
 
-  #发送会话TODO
+  #发送会话
   def create_talk
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		my_case = MainCase.find_by(:id=>params["caseid"])
+		binding.pry
   end
 end
