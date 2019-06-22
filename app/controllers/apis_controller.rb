@@ -227,7 +227,7 @@ class ApisController < ApplicationController
 
 		case_data = {
 			"id": e.id,
-			"case_no":e.case_no,
+			"case_code":e.serial_no,
 			"case_stage":e.case_stage,
 			"matter":e.matter,
 			"time": e.created_at.strftime('%Y-%m-%d'),
@@ -310,10 +310,14 @@ class ApisController < ApplicationController
 		  end	
 		end  	
   end
-  #查看委托人的所有委托单
+  #查看委托人下的所有案件的鉴定中心的集合
   def get_entrust_orders
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
+
+  end
+  #发送会话
+  def create_talk
 
   end
 end
