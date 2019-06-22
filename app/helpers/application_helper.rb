@@ -201,4 +201,8 @@ module ApplicationHelper
       return 'nav-link'
     end
   end
+
+  def court_user?
+    @current_user.organization && @current_user.organization.org_type == 'court'
+  end
 end

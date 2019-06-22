@@ -131,6 +131,7 @@
       = f.button :submit, '提交', class: 'btn btn-success'
 
 javascript:
+    // 导入用户用到的事件
     $('#user_select').selectize({
         valueField: 'id',
         labelField: 'name',
@@ -160,4 +161,9 @@ javascript:
                 }
             });
         }
+    });
+
+    // 监听移交资料的插入事件
+    $('#transfer_docs').on('cocoon:before-insert', function (e, insertedItem, originalEvent) {
+       console.log(insertedItem)
     });

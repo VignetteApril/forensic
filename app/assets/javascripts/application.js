@@ -17,7 +17,6 @@
 //= require bootstrap
 //= require turbolinks
 //= require wice_grid
-//= require bootstrap-datepicker
 //= require select2
 //= require select2_locale_zh-CN
 //= require selectize
@@ -52,11 +51,11 @@ $(document).on("turbolinks:before-cache", function() {
 
 // 处理组件在turbolinks中初始化中的bug
 $(document).on('turbolinks:load', function () {
-    $('.selectized').selectize();
+    $('select').selectize();
 
-    $('select').select2({
-        theme: 'bootstrap'
-    });
+    // $('select').select2({
+    //     theme: 'bootstrap'
+    // });
 
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',

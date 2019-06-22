@@ -7,8 +7,8 @@
   .col-md-6
     = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
     span.h5.ml-3 = "#{'案件流水号：' + @main_case.serial_no}"
-  .col-md-6
-    = simple_form_for(@main_case, method: :patch, url: update_case_stage_main_case_path) do |f|
+  .col-md-6 style="display: flex; align-items: center; justify-content: center"
+    = simple_form_for(@main_case, method: :patch, url: update_case_stage_main_case_path, html: { width: '100%' }) do |f|
       span 案件状态：
       = f.input :page_type, as: :hidden, input_html: { value: 'case_executing' }, wrapper_html: { style: 'width:1%; display:inline-block' }
       = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, include_blank: false, wrapper_html: {style: 'width:50%;display:inline-block;padding:10px'}
@@ -34,6 +34,6 @@
 
 javascript:
   $('#apply_close').click(function () {
-      var case_stage_select2 = $('#main_case_case_stage');
-      case_stage_select2.val('apply_filing').trigger('change');
+      var case_stage_select = $('#main_case_case_stage').selectize();
+      case_stage_select[0].selectize.setValue('apply_filing');
   });

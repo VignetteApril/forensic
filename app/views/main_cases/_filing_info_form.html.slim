@@ -40,8 +40,9 @@
           .col-md-4
             = f.input :sign_user, collection: @users, label: '授权签字人', include_blank: false
           .col-md-4
-            = f.input :ident_users, collection: @users, label: '指定鉴定人', include_blank: false, selected: @select_ident_users,
-                                    include_hidden: false, input_html: { multiple: true }
+            = f.input :ident_users, collection: @users, label: '指定鉴定人', include_blank: false,
+                                    include_hidden: false, input_html: { multiple: true}
+            span id="passwordHelpBlock" class="form-text text-muted" = @ident_users
           .col-md-4
             button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#case_doc_modal" 上传文件
         .row
@@ -72,3 +73,14 @@
           .col-md-12
             - @main_case.case_docs.where(case_stage: :reject_case).each do |doc|
               span.ml-2 = doc.name
+
+javascript:
+  // 为了避免selectiz 的自动order机制需要手动的设置鉴定人的值
+  var values = #{raw @select_ident_users.to_json};
+  var $select = $('#main_case_ident_users').selectize();
+  $select[0].selectize.setValue(values);
+
+css:
+  .main_case_ident_users {
+    margin-bottom: 0px;
+  }

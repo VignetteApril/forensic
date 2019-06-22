@@ -228,7 +228,16 @@ class MainCasesController < ApplicationController
     @material_cycles =  current_org.material_cycles.map(&:day)
     @identification_cycles = current_org.identification_cycles.map(&:day)
     @users = @main_case.department.user_array.map { |user| [user.name, user.id] }
-    @select_ident_users = @main_case.ident_users.nil? ? [] : current_org.users.where(id: @main_case.ident_users.split(',')).map(&:id)
+    @select_ident_users = []
+    @ident_users = ''
+    if @main_case.ident_users
+      user_ids = @main_case.ident_users.split(',')
+      users = User.where(id: user_ids).pluck(:id, :name).to_h
+      user_ids.each_with_index do |id, index|
+        @ident_users << "##{index}#{users[id.to_i]}  "
+        @select_ident_users << id.to_i
+      end
+    end
   end
 
   # 立案信息中补充材料表单提交的位置
@@ -287,7 +296,7 @@ class MainCasesController < ApplicationController
     end
   end
 
-  # 打开条码的modal的方法，因为传递图片的地址进去
+  # 打开条码的modal的方法，传递图片的地址进去
   # respond to only js
   def open_barcode_image
     if params[:transfer_doc_id]

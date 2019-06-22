@@ -31,32 +31,28 @@ aside.app-sidebar
             a.treeview-item href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
               i.app-menu__icon.fa.fa-building-o
               span.app-menu__label 已立案待付款案件
-        / 只有委托人能看到以下的侧边栏
-        - if @current_user.organization && @current_user.organization.org_type == 'court'
-          - if can?('entrust_orders', 'index')
-            li
-              a.treeview-item href="#{entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'index')}"
-                i.app-menu__icon.fa.fa-building-o
-                span.app-menu__label 我的委托单
+    / 只有委托人能看到以下的侧边栏
+    - if court_user?
+      - if can?('entrust_orders', 'index')
+        li
+          a.app-menu__item href="#{entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'index')}"
+            i.app-menu__icon.fa.fa-laptop
+            span.app-menu__label 委托单
     - unless admin?
       - if can?('departments', 'index')
         li
           a.app-menu__item href="#{departments_path}"
-            i class="app-menu__icon fa fa-laptop"
-            span class="app-menu__label" 机构管理
+            i.app-menu__icon.fa.fa-laptop
+            span.app-menu__label 机构管理
     li
       a.app-menu__item href="#"
-        i class="app-menu__icon fa fa-laptop"
-        span class="app-menu__label" 委托单
+        i.app-menu__icon.fa.fa-laptop
+        span.app-menu__label 统计
     li
       a.app-menu__item href="#"
-        i class="app-menu__icon fa fa-laptop"
-        span class="app-menu__label" 统计
+        i.app-menu__icon.fa.fa-laptop
+        span.app-menu__label 财务
     li
       a.app-menu__item href="#"
-        i class="app-menu__icon fa fa-laptop"
-        span class="app-menu__label" 财务
-    li
-      a.app-menu__item href="#"
-        i class="app-menu__icon fa fa-laptop"
-        span class="app-menu__label" 快递单
+        i.app-menu__icon.fa.fa-laptop
+        span.app-menu__label 快递单

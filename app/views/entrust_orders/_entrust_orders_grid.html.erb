@@ -3,4 +3,14 @@
   g.column name:  '委托人', attribute: 'name', assoc: :user
   g.column name:  '案件性质', attribute: 'case_property'
   g.column name:  '案由', attribute: 'anyou'
-end -%>
+
+  if court_user?
+    g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+      link_to '编辑', edit_entrust_order_path(entrust_order), class: 'btn btn-secondary btn-sm'
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+      link_to '删除', entrust_order, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+    end
+  end
+end -%>案件状态：
