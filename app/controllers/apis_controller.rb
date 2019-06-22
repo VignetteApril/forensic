@@ -290,7 +290,7 @@ class ApisController < ApplicationController
   def get_appraised_unit
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])    
-    units = AppraisedUnit.where(:wtr_id=>user.id).all
+    units = AppraisedUnit.where(:wtr_id=>user.id).exists? ? AppraisedUnit.where(:wtr_id=>user.id) : []
   	respond_to do |format|
 			format.json { render json:{"code": "0","data"=>units}.to_json }
 	  end	
@@ -302,6 +302,8 @@ class ApisController < ApplicationController
   	entrust_order = EntrustOrder.new(:case_property=>params["case_property"],:matter_demand=>params["matter_demand"],:base_info=>params["base_info"],:anyou=>params["anyou"])
   	entrust_order.organization_id = params["organization_id"]
   	entrust_order.user = user 
+  	entrust_order.entrust_doc.attach params["entrust_doc"]
+  	
     if entrust_order.save
 	    respond_to do |format|
 				format.json { render json:{"code": "0","messages":"创建委托单成功"}.to_json }
