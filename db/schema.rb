@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_21_124139) do
+ActiveRecord::Schema.define(version: 2019_06_22_074250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 2019_06_21_124139) do
     t.datetime "updated_at", null: false
     t.bigint "main_case_id"
     t.bigint "entrust_order_id"
+    t.integer "wtr_id"
     t.index ["entrust_order_id"], name: "index_appraised_units_on_entrust_order_id"
     t.index ["main_case_id"], name: "index_appraised_units_on_main_case_id"
   end

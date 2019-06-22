@@ -50,7 +50,7 @@ class ApisController < ApplicationController
 
 	def get_search_courts
 		name = params["name_str"]
-		json = {"courts": Organization.where('name like ?', "%#{name}%").all.select(:name)}
+		json = {"courts": Organization.where('name like ?', "%#{name}%").all.select(:name,:id)}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 		end		
@@ -58,7 +58,7 @@ class ApisController < ApplicationController
 
 	def get_search_centers
 		name = params["name_str"]
-		json = {"centers": Organization.where('name like ?', "%#{name}%").all.select(:name)}
+		json = {"centers": Organization.where('name like ?', "%#{name}%").all.select(:name,:id)}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 		end				
@@ -108,7 +108,6 @@ class ApisController < ApplicationController
 		    	"casePCancleNumber":rejected_count
 			}
 		}
-
 		respond_to do |format|
 			format.json { render json:json.to_json }
 	    end
@@ -194,7 +193,10 @@ class ApisController < ApplicationController
 	end
 
 	def get_case_list
-		cases = MainCase.joins(:appraised_unit)
+		decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+
+		cases = MainCase.joins(:appraised_unit).where(:wtr_id=>user.id)
 		if params["name"].present?
 			cases = cases.where("name=?",params["name"])
 		end
@@ -210,7 +212,7 @@ class ApisController < ApplicationController
 		json = {"code": "0","messages":"请求成功","data": data}
 		respond_to do |format|
 			format.json { render json:json.to_json }
-	    end	
+	  end	
 	end
 
 	def get_case_detail_progress
@@ -228,7 +230,7 @@ class ApisController < ApplicationController
 			"case_no":e.case_no,
 			"case_stage":e.case_stage,
 			"matter":e.matter,
-			"time": e.created_at.strftime('%Y/%m/%d'),
+			"time": e.created_at.strftime('%Y-%m-%d'),
 			"anyou":e.anyou,
 			"appraised_unit":e.appraised_unit,
 			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name: "",
@@ -236,7 +238,7 @@ class ApisController < ApplicationController
 			"organization_phone"=>e.organization_phone
 		}
 
-		procress_data = e.case_process_records.map{|record| {"detail":record.detail,"created_at":record.created_at.strftime('%Y/%m/%d')}}
+		procress_data = e.case_process_records.map{|record| {"detail":record.detail,"created_at":record.created_at.strftime('%Y-%m-%d')}}
 		json = {"code": "0","messages":"请求成功","data": {"case_data":case_data,"procress_data":procress_data}}
 		respond_to do |format|
 			format.json { render json:json.to_json }
@@ -265,4 +267,53 @@ class ApisController < ApplicationController
 		end
    	
   end 
+
+  #创建被鉴定人
+  def create_appraised_unit
+  	decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+		unit = AppraisedUnit.new(:unit_type=>params["unit_type"],:name=>params["name"],:gender=>params["gender"],:birthday=>params["birthday"],:id_type=>params["id_type"],:id_num=>params["id_num"],:addr=>params["addr"])
+    unit.wtr_id = user.id
+    if unit.save
+	    respond_to do |format|
+				format.json { render json:{"code": "0","messages":"注册被鉴定人成功"}.to_json }
+		  end	
+		else
+			respond_to do |format|
+				format.json { render json:{"code": "1","messages":"注册被鉴定人失败"}.to_json }
+		  end	
+		end
+  end
+  #返回当前被鉴定人列表（当前委托人曾经建立的所有的被鉴定人列表）
+  def get_appraised_unit
+  	decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])    
+    units = AppraisedUnit.where(:wtr_id=>user.id).all
+  	respond_to do |format|
+			format.json { render json:{"code": "0","data"=>units}.to_json }
+	  end	
+  end
+  #创建委托单
+  def cerate_entrust_order
+  	decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])    	
+  	entrust_order = EntrustOrder.new(:case_property=>params["case_property"],:matter_demand=>params["matter_demand"],:base_info=>params["base_info"],:anyou=>params["anyou"])
+  	entrust_order.organization_id = params["organization_id"]
+  	entrust_order.user = user 
+    if entrust_order.save
+	    respond_to do |format|
+				format.json { render json:{"code": "0","messages":"创建委托单成功"}.to_json }
+		  end	
+		else
+			respond_to do |format|
+				format.json { render json:{"code": "1","messages":"创建委托单失败"}.to_json }
+		  end	
+		end  	
+  end
+  #查看委托人的所有委托单
+  def get_entrust_orders
+  	decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+
+  end
 end

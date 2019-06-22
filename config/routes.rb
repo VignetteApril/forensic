@@ -102,6 +102,10 @@ Rails.application.routes.draw do
   get 'apis/get_case_detail_progress'
   get 'apis/get_case_talk'
   get 'apis/get_organization'
+  post 'apis/create_appraised_unit'
+  get  'apis/get_appraised_unit'
+  post 'apis/cerate_entrust_order'
+  get  'apis/get_entrust_orders'
 
   root 'session#index'
 end

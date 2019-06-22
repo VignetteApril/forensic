@@ -20,10 +20,11 @@ class Notification < ApplicationRecord
     def infos_for_api
     	{
         "id":self.id,
+        "case_id":self.main_case.try(:id),
     		"titie": self.title,
     		"description":self.description,
     		"status": self.status ,
-    		"created_at": self.created_at.strftime('%Y/%m/%d'),
+    		"created_at": self.created_at.strftime('%Y-%m-%d'),
         "case_code": self.main_case.try(:case_no),
         "appraised_unit": self.main_case.try(:appraised_unit).try(:name),
         "center":Organization.find_by(self.main_case.try(:organization_id)).try(:name),
