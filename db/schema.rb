@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_19_130654) do
+ActiveRecord::Schema.define(version: 2019_06_22_074250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 2019_06_19_130654) do
     t.datetime "updated_at", null: false
     t.bigint "main_case_id"
     t.bigint "entrust_order_id"
+    t.integer "wtr_id"
     t.index ["entrust_order_id"], name: "index_appraised_units_on_entrust_order_id"
     t.index ["main_case_id"], name: "index_appraised_units_on_main_case_id"
   end
@@ -230,9 +231,9 @@ ActiveRecord::Schema.define(version: 2019_06_19_130654) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
-    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
@@ -255,7 +256,9 @@ ActiveRecord::Schema.define(version: 2019_06_19_130654) do
     t.integer "channel"
     t.boolean "status"
     t.text "description"
+    t.bigint "main_case_id"
     t.index ["created_at"], name: "index_notifications_on_created_at"
+    t.index ["main_case_id"], name: "index_notifications_on_main_case_id"
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
@@ -278,6 +281,7 @@ ActiveRecord::Schema.define(version: 2019_06_19_130654) do
     t.string "payee"
     t.string "open_account_bank"
     t.string "account_number"
+    t.string "level"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end

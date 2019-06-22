@@ -9,6 +9,7 @@ class MainCase < ApplicationRecord
   belongs_to :department
   has_one  :entrust_order
   has_many :case_talks, dependent: :destroy
+  has_many :notification, dependent: :destroy
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】
   has_many :case_process_records, dependent: :destroy # 案件中改变状态时的记录

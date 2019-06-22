@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 class Notification < ApplicationRecord
     belongs_to :user
+    belongs_to :main_case
 
     enum channel: [ :recived_order, :filed, :create_case, :change_case_status, :apply_filing, :case_online_pay,:apply_bill,:bill_made,:add_case_tip ]
 
@@ -18,10 +19,15 @@ class Notification < ApplicationRecord
 
     def infos_for_api
     	{
+        "id":self.id,
+        "case_id":self.main_case.try(:id),
     		"titie": self.title,
     		"description":self.description,
-    		"status": (self.status == true)? "已读" : "未读",
-    		"created_at": self.created_at.strftime('%Y/%m/%d'),
+    		"status": self.status ,
+    		"created_at": self.created_at.strftime('%Y-%m-%d'),
+        "case_code": self.main_case.try(:serial_no),
+        "appraised_unit": self.main_case.try(:appraised_unit).try(:name),
+        "center":Organization.find_by(self.main_case.try(:organization_id)).try(:name),
     		"type": Notification::CHANNEL_MAP[self.channel.to_sym]
     	}
    	end 
