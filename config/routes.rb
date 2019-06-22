@@ -105,7 +105,8 @@ Rails.application.routes.draw do
   post 'apis/create_appraised_unit'
   get  'apis/get_appraised_unit'
   post 'apis/cerate_entrust_order'
-  get  'apis/get_entrust_orders'
+  get  'apis/get_entrust_orgs'
+  post 'apis/create_talk'
 
   root 'session#index'
 end

@@ -200,8 +200,9 @@ class ApisController < ApplicationController
 		if params["name"].present?
 			cases = cases.where("name=?",params["name"])
 		end
-		if params["organization"].present?
-			cases = cases.where(:organization_name => params["organization"])
+		# 案件三重搜索里搜索鉴定中心为xxx的案件
+		if params["organization_id"].present?
+			cases = cases.where(:organization_id => params["organization_id"])
 		end
 		if params["case_stage"].present?
 			cases = cases.where(:case_stage => params["case_stage"])
@@ -272,7 +273,8 @@ class ApisController < ApplicationController
   def create_appraised_unit
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-		unit = AppraisedUnit.new(:unit_type=>params["unit_type"],:name=>params["name"],:gender=>params["gender"],:birthday=>params["birthday"],:id_type=>params["id_type"],:id_num=>params["id_num"],:addr=>params["addr"])
+		birthday = params["birthday"].blank? ? nil : Date.parse(params["birthday"])
+		unit = AppraisedUnit.new(:unit_type=>params["unit_type"],:name=>params["name"],:gender=>params["gender"],:birthday=>birthday,:id_type=>params["id_type"],:id_num=>params["id_num"],:addr=>params["addr"])
     unit.wtr_id = user.id
     if unit.save
 	    respond_to do |format|
@@ -296,7 +298,7 @@ class ApisController < ApplicationController
   #创建委托单
   def cerate_entrust_order
   	decoded_token = JWT.decode params[:token], nil, false
-		user = User.find_by(:id=>decoded_token[0]["id"])    	
+		user = User.find_by(:id=>decoded_token[0]["id"])  	
   	entrust_order = EntrustOrder.new(:case_property=>params["case_property"],:matter_demand=>params["matter_demand"],:base_info=>params["base_info"],:anyou=>params["anyou"])
   	entrust_order.organization_id = params["organization_id"]
   	entrust_order.user = user 
@@ -311,13 +313,12 @@ class ApisController < ApplicationController
 		end  	
   end
   #查看委托人下的所有案件的鉴定中心的集合
-  def get_entrust_orders
+  def get_entrust_orgs
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-
+		organization_ids = MainCase.where(:wtr_id=>user.id).select(:organization_id)
   end
   #发送会话
   def create_talk
-
   end
 end
