@@ -43,22 +43,22 @@ $(document).on('turbolinks:load', function() {
                         organization_addr.val(data.organization_addr);
 
                         province_select2.empty();
-                        province_select2.select2({
-                            data: data.provinces
+                        province_select2.selectize({
+                            items: data.provinces
                         });
-                        province_select2.val(data.current_province.id).trigger('change');
+                        province_select2[0].selectize.setValue(data.current_province.id);
 
                         city_select2.empty();
-                        city_select2.select2({
-                           data: data.cities
+                        city_select2.selectize({
+                            items: data.cities
                         });
-                        city_select2.val(data.current_city.id).trigger('change');
+                        city_select2[0].selectize.setValue(data.current_city.id);
 
                         district_select2.empty();
-                        district_select2.select2({
-                           data: data.districts
+                        district_select2.selectize({
+                           items: data.districts
                         });
-                        district_select2.val(data.current_district.id).trigger('change');
+                        district_select2[0].selectize.setValue(data.current_district.id);
                     }
                 });
             });
