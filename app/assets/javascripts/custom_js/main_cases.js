@@ -113,10 +113,20 @@ $(document).on('turbolinks:load', function() {
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {
                 if (this.value == 'unit') {
-                    $('#hidden-fields').css('display','none');
+                    $('.hidden-fields').css('display','none');
                 }
                 else if (this.value == 'user') {
-                    $('#hidden-fields').css('display','block');
+                    $('.hidden-fields').css('display','block');
+                }
+            });
+        } // if
+
+        if ($('body').attr('data-action') === 'index' || $('body').attr('data-action') === 'department_cases' || $('body').attr('data-action') === 'center_cases') {
+            $(".clickable-row").click(function (e) {
+                // 通过当前点击元素判断是否点击的是带有id的元素
+                // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
+                if (e.target.id == '') {
+                    window.location = $(this).data("href");
                 }
             });
         } // if

@@ -38,21 +38,28 @@ aside.app-sidebar
           a.app-menu__item href="#{entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'index')}"
             i.app-menu__icon.fa.fa-laptop
             span.app-menu__label 委托单
+    / 除了委托人以外的人，也就是鉴定中心能查看的委托单
+    - else
+      - if can?('entrust_orders', 'org_orders')
+        li
+          a.app-menu__item href="#{org_orders_entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'org_orders')}"
+            i.app-menu__icon.fa.fa-laptop
+            span.app-menu__label 委托单
+      li
+        a.app-menu__item href="#"
+          i.app-menu__icon.fa.fa-laptop
+          span.app-menu__label 统计
+      li
+        a.app-menu__item href="#"
+          i.app-menu__icon.fa.fa-laptop
+          span.app-menu__label 财务
+      li
+        a.app-menu__item href="#"
+          i.app-menu__icon.fa.fa-laptop
+          span.app-menu__label 快递单
     - unless admin?
       - if can?('departments', 'index')
         li
           a.app-menu__item href="#{departments_path}"
             i.app-menu__icon.fa.fa-laptop
             span.app-menu__label 机构管理
-    li
-      a.app-menu__item href="#"
-        i.app-menu__icon.fa.fa-laptop
-        span.app-menu__label 统计
-    li
-      a.app-menu__item href="#"
-        i.app-menu__icon.fa.fa-laptop
-        span.app-menu__label 财务
-    li
-      a.app-menu__item href="#"
-        i.app-menu__icon.fa.fa-laptop
-        span.app-menu__label 快递单

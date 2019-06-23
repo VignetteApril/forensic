@@ -1,7 +1,7 @@
 # 机构组织
 class Organization < ApplicationRecord
   belongs_to :area
-  has_many :entrust_orders, dependent: :destroy #机构下有一些委托单，有的还未创建maincase
+  has_many :entrust_orders, dependent: :destroy # 每个鉴定中心下有很多委托单，有的还未创建maincase
   has_many :departments, dependent: :destroy # 每个机构有很多科室，当机构删除时，科室理应被删除
   has_many :main_cases, through: :departments # 机构通过部门获取到案件信息
   has_many :users, dependent: :destroy      # 每个机构中有很多个用户，当机构被删除时，用户理应被删除

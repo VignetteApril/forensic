@@ -47,6 +47,8 @@
               = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: { direct_upload: true }
               - if @main_case.entrust_doc.attached?
                 span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
+          .col-md-4
+            = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
     // 委托鉴定事项card
     .card.gray-card
       .card-header
@@ -112,20 +114,20 @@
               = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
                       collection: AppraisedUnit.unit_types_arr, checked: 'user', :item_wrapper_class => 'form-check form-check-inline'
           .row
-            .col-md-2
+            .col-md-1
               = appraised_unit.input :name, label: '名称'
-            .col-md-10
+            .col-md-1.hidden-fields
+              = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
+            .col-md-3.hidden-fields
+              = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
+            .col-md-2.hidden-fields
+              = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
+            .col-md-5.hidden-fields
+              = appraised_unit.input :id_num, label: '证件号码'
+          .row
+            .col-md-12
               = appraised_unit.input :addr, label: '联系地址'
-          #hidden-fields
-            .row
-              .col-md-2
-                = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
-              .col-md-3
-                = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
-              .col-md-2
-                = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
-              .col-md-5
-                = appraised_unit.input :id_num, label: '证件号码'
+
   .form-actions
     .row.no-gutters
       = f.button :submit, '提交', class: 'btn btn-success'

@@ -6,8 +6,9 @@ require 'barby/outputter/png_outputter'
 class MainCase < ApplicationRecord
   include AASM
 
+  # 虚拟字段用户接受关联的委托单参数
   belongs_to :department
-  has_one  :entrust_order
+  belongs_to :entrust_order
   has_many :case_talks, dependent: :destroy
   has_many :notification, dependent: :destroy
   has_many :case_users, dependent: :destroy # 机构中有很多

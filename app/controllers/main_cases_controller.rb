@@ -10,6 +10,7 @@ class MainCasesController < ApplicationController
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
+  before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
 
@@ -109,7 +110,7 @@ class MainCasesController < ApplicationController
                                   main_case_params[:district_id])
     respond_to do |format|
       if @main_case.save
-        format.html { redirect_to main_cases_url, notice: 'Main case was successfully created.' }
+        format.html { redirect_to main_cases_url, notice: '案件已经成功创建了！' }
         format.json { render :show, status: :created, location: @main_case }
       else
         format.html { render :new }
@@ -127,7 +128,7 @@ class MainCasesController < ApplicationController
 
     respond_to do |format|
       if @main_case.update(main_case_params)
-        format.html { redirect_to main_cases_url, notice: 'Main case was successfully updated.' }
+        format.html { redirect_to main_cases_url, notice: '案件已经成功更新了！' }
         format.json { render :show, status: :ok, location: @main_case }
       else
         format.html { render :edit }
@@ -141,7 +142,7 @@ class MainCasesController < ApplicationController
   def destroy
     @main_case.destroy
     respond_to do |format|
-      format.html { redirect_to main_cases_url, notice: 'Main case was successfully destroyed.' }
+      format.html { redirect_to main_cases_url, notice: '案件已经成功的删除了！' }
       format.json { head :no_content }
     end
   end
@@ -520,6 +521,7 @@ class MainCasesController < ApplicationController
                                         { matter: [] },
                                         :matter_demand,
                                         :base_info,
+                                        :entrust_order_id,
                                         transfer_docs_attributes: [:id,
                                                                    :name,
                                                                    :doc_type,
@@ -627,6 +629,15 @@ class MainCasesController < ApplicationController
       @collection_case_types = []
       if @main_case.department && !@main_case.department.case_types.blank?
         @collection_case_types = @main_case.department.case_types.split(',').map { |case_type| [case_type, case_type] }
+      end
+    end
+
+    # 指定给当前机构的委托单
+    def set_entrust_orders
+      entrust_orders = @current_user.organization.entrust_orders
+      @entrust_orders = []
+      unless entrust_orders.empty?
+        @entrust_orders = entrust_orders.map { |order| [order.anyou + order.case_property, order.id] }
       end
     end
 end

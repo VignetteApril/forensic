@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_22_074250) do
+ActiveRecord::Schema.define(version: 2019_06_23_144539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,7 +156,6 @@ ActiveRecord::Schema.define(version: 2019_06_22_074250) do
   end
 
   create_table "entrust_orders", force: :cascade do |t|
-    t.bigint "main_case_id"
     t.bigint "user_id"
     t.string "case_property"
     t.text "matter_demand"
@@ -165,7 +164,6 @@ ActiveRecord::Schema.define(version: 2019_06_22_074250) do
     t.bigint "organization_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["main_case_id"], name: "index_entrust_orders_on_main_case_id"
     t.index ["organization_id"], name: "index_entrust_orders_on_organization_id"
     t.index ["user_id"], name: "index_entrust_orders_on_user_id"
   end
@@ -231,12 +229,14 @@ ActiveRecord::Schema.define(version: 2019_06_22_074250) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
-    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
+    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
+    t.bigint "entrust_order_id"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
+    t.index ["entrust_order_id"], name: "index_main_cases_on_entrust_order_id"
   end
 
   create_table "material_cycles", force: :cascade do |t|
@@ -438,11 +438,11 @@ ActiveRecord::Schema.define(version: 2019_06_22_074250) do
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
   add_foreign_key "departments", "organizations"
-  add_foreign_key "entrust_orders", "main_cases"
   add_foreign_key "entrust_orders", "organizations"
   add_foreign_key "entrust_orders", "users"
   add_foreign_key "identification_cycles", "organizations"
   add_foreign_key "main_cases", "departments"
+  add_foreign_key "main_cases", "entrust_orders"
   add_foreign_key "material_cycles", "organizations"
   add_foreign_key "organizations", "areas"
   add_foreign_key "payment_orders", "main_cases"

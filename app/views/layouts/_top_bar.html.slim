@@ -12,6 +12,8 @@ header class="app-header"
         li
           - if @current_user.organization
             span = @current_user.organization.name
+          - else
+            span 该用户尚未关联任何机构
     // Notification Menu
     li class="dropdown"
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"

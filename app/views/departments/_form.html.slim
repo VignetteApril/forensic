@@ -25,12 +25,12 @@
       .col-md-4
         = f.input :case_types, label: '案件类型', type: :text, :input_html => {id: 'case-types'}
       .col-md-8
-        .row style="padding-top: 25px"
-          .col-md-2.mt-2
+        .row.no-gutters style="padding-top: 25px"
+          .col-md-3.mt-2.no-gutters
             = "#{@current_user.organization.abbreviation}司鉴[#{Date.today.year}]"
-          .col-md-2
+          .col-md-2.no-gutters
             = f.input :abbreviation, label: false
-          .col-md-2.mt-2
+          .col-md-2.mt-2.no-gutters.ml-1
             | 鉴字第0001号
     .row
       .col-md-12
