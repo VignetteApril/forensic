@@ -50,7 +50,7 @@ class ApisController < ApplicationController
 
 	def get_search_courts
 		name = params["name_str"]
-		json = {"courts": Organization.where('name like ?', "%#{name}%").all.select(:name,:id)}
+		json = {"courts": Organization.where('name like ?', "%#{name}%").where(:org_type=>:court).all.select(:name,:id)}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 		end		
@@ -58,7 +58,7 @@ class ApisController < ApplicationController
 
 	def get_search_centers
 		name = params["name_str"]
-		json = {"centers": Organization.where('name like ?', "%#{name}%").all.select(:name,:id)}
+		json = {"centers": Organization.where('name like ?', "%#{name}%").where(:org_type=>:center).all.select(:name,:id)}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 		end				
@@ -328,7 +328,17 @@ class ApisController < ApplicationController
   def get_entrust_orgs
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-		organization_ids = MainCase.where(:wtr_id=>user.id).select(:organization_id)
+
+		organization_ids = MainCase.where(:wtr_id=>user.id).map{|e|e.organization_id}.compact
+		orgs_hash =[]
+		organization_ids.each do |id|
+			orgs_hash << {"center_name": Organization.find_by(:id=>id).name, "id":id}
+		end
+		binding.pry
+		respond_to do |format|
+			format.json { render json:{"code": "1","messages":"查询成功","data": orgs_hash}.to_json }
+	  end	
+
   end
 
   #发送会话
