@@ -5,7 +5,7 @@ class DepartmentsController < ApplicationController
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_department]
 
   def index
-    @departments = initialize_grid(Department, per_page: 20, name: 'departments_grid')
+    @departments = initialize_grid(@current_user.organization.departments, per_page: 20, name: 'departments_grid')
   end
     
   # 管理员点击部门列表页面中的“新增部门”按钮，系统显示“新增部门”表单页面。
