@@ -208,7 +208,7 @@ class ApisController < ApplicationController
 			cases = cases.where(:case_stage => params["case_stage"])
 		end
 
-	  data = cases.map{|e| {"id": e.id, "time": e.created_at.strftime('%Y/%m/%d'),"case_stage": e.case_stage,"organization_name": e.organization_name,"anyou":e.anyou,"appraised_unit": e.appraised_unit}}
+	  data = cases.map{|e| {"id": e.id, "time": e.created_at.strftime('%Y/%m/%d'),"case_stage": e.case_stage,"center_name": Organization.find_by(:id=>e.organization_id).try(:name),"anyou":e.anyou,"appraised_unit": e.appraised_unit}}
 
 		json = {"code": "0","messages":"请求成功","data": data}
 		respond_to do |format|
