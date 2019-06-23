@@ -1,0 +1,39 @@
+.modal.fade id="nested_modal" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+    .modal-dialog role="document"
+      .modal-content
+        .modal-header 移交材料
+        .modal-body.text-center
+          .row style='padding-top:20px'
+            .col-md-3 检材名称：
+            .col-md-6
+              input class="form-control string optional name-input" 
+          .row style='padding-top:20px'    
+            .col-md-3 类型：
+            .col-md-6
+              input class="form-control string optional doctype-input"
+          .row style='padding-top:20px'    
+            .col-md-3 数量：
+            .col-md-6
+              input class="form-control string optional num-input"   
+          .row style='padding-top:20px'          
+            .col-md-3 单位：
+            .col-md-6
+              input class="form-control string optional unit-input"                      
+          .row style='padding-top:20px'          
+            .col-md-3 性状：
+            .col-md-6
+              input class="form-control string optional traits-input"
+          .row style='padding-top:20px'          
+            .col-md-3 状况：
+            .col-md-6
+              input class="form-control string optional status-input"
+          .row style='padding-top:20px'          
+            .col-md-3 收到时间：
+            .col-md-6
+              input class="form-control string optional receivedate-input"                                         
+        .modal-footer
+          .form-actions
+          button type="button" class="btn btn-success" id="bill_submit" 保存
+          button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+
+javascript:
