@@ -249,22 +249,28 @@ class ApisController < ApplicationController
   def get_case_talk
 		decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
-
-		cases = MainCase.find_by(:id=>params["caseid"])
-		if cases.blank?
-			json = {"code": "1","messages":"未找到case"}
-			respond_to do |format|
-				format.json { render json:json.to_json }
-		  end	
-		else
-			talks = cases.case_talks.map do |talk|
-				is_me = (talk.user == user)? true : false
-				{"time":talk.created_at.strftime('%Y/%m/%d'),"detail": talk.detail,"is_me":is_me,"talk_name":talk.user.name}
-			end
-			json = {"code": "0","messages":"请求成功","data": talks}
+		if user.blank?
+			json = {"code": "1","messages":"根据token找不到用户"}
 			respond_to do |format|
 				format.json { render json:json.to_json }
 		  end	 
+		else
+			cases = MainCase.find_by(:id=>params["caseid"])
+			if cases.blank?
+				json = {"code": "1","messages":"未找到case"}
+				respond_to do |format|
+					format.json { render json:json.to_json }
+			  end	
+			else
+				talks = cases.case_talks.map do |talk|
+					is_me = (talk.user == user)? true : false
+					{"time":talk.created_at.strftime('%Y/%m/%d'),"detail": talk.detail,"is_me":is_me,"talk_name":talk.try(:user).try(:name)}
+				end
+				json = {"code": "0","messages":"请求成功","data": talks}
+				respond_to do |format|
+					format.json { render json:json.to_json }
+			  end	 
+			end
 		end
    	
   end 
@@ -303,6 +309,9 @@ class ApisController < ApplicationController
   	entrust_order.organization_id = params["organization_id"]
   	entrust_order.user = user 
   	entrust_order.entrust_doc.attach params["entrust_doc"]
+  	#必须要先save不然entrust_order.appraised_unit 使用 EntrustOrder.last.appraised_unit读取会发现没有持久化传入的被鉴定人却绑定了一个空的新的被鉴定人
+  	entrust_order.save
+  	entrust_order.appraised_unit = AppraisedUnit.find_by(:id=>params["appraised_unit_id"])
 
     if entrust_order.save
 	    respond_to do |format|
@@ -327,6 +336,16 @@ class ApisController < ApplicationController
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		my_case = MainCase.find_by(:id=>params["caseid"])
-		binding.pry
+		talk = my_case.case_talks.new(:detail=>params["detail"])
+		talk.user = user 
+    if talk.save
+	    respond_to do |format|
+				format.json { render json:{"code": "0","messages":"发送消息成功"}.to_json }
+		  end	
+		else
+			respond_to do |format|
+				format.json { render json:{"code": "1","messages":"发送消息失败"}.to_json }
+		  end	
+		end  			
   end
 end

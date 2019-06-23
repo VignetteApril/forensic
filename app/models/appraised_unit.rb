@@ -1,5 +1,6 @@
 class AppraisedUnit < ApplicationRecord
   belongs_to :main_case, required:false
+  # has_many :entrust_orders
 
   enum unit_type: [ :unit, :user ]
   enum gender: [:male, :female]
