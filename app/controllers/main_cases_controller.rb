@@ -643,6 +643,8 @@ class MainCasesController < ApplicationController
     end
 
     def forbid_admin_user
-      redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
+      if admin?
+        redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
+      end
     end
 end
