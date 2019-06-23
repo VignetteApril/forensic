@@ -334,7 +334,7 @@ class ApisController < ApplicationController
 		organization_ids.each do |id|
 			orgs_hash << {"center_name": Organization.find_by(:id=>id).name, "id":id}
 		end
-		binding.pry
+
 		respond_to do |format|
 			format.json { render json:{"code": "1","messages":"查询成功","data": orgs_hash}.to_json }
 	  end	
