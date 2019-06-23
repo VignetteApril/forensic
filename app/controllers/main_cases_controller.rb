@@ -1,4 +1,5 @@
 class MainCasesController < ApplicationController
+  before_action :forbid_admin_user
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
@@ -639,5 +640,9 @@ class MainCasesController < ApplicationController
       unless entrust_orders.empty?
         @entrust_orders = entrust_orders.map { |order| [order.anyou + order.case_property, order.id] }
       end
+    end
+
+    def forbid_admin_user
+      redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
     end
 end

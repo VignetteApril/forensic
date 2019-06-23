@@ -10,7 +10,7 @@ class User < ApplicationRecord
 
   # 验证
   validates :login, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 50}
-  validates :name, :length => {:maximum => 20}
+  validates :name, :presence => true, :length => {:maximum => 20}
   validates :email, :length => {:maximum => 100}, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_nil: true, allow_blank: true
   validates :gender, :length => {:maximum => 10}
   validates :mobile_phone, :length => {:maximum => 100}, :uniqueness => true # 用户的手机号字段是唯一的，因为将来会跟小程序联动 #TODO(委托人注册)
