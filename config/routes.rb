@@ -109,6 +109,7 @@ Rails.application.routes.draw do
   post 'apis/cerate_entrust_order'
   get  'apis/get_entrust_orgs'
   post 'apis/create_talk'
+  get  'apis/get_case_notice_list'
 
   root 'session#index'
 end
