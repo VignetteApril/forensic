@@ -8,5 +8,4 @@ class EntrustOrder < ApplicationRecord
 
   validates :anyou, :presence => true
   validates :case_property, :presence => true
-
 end

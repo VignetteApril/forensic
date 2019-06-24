@@ -638,7 +638,12 @@ class MainCasesController < ApplicationController
       entrust_orders = @current_user.organization.entrust_orders
       @entrust_orders = []
       unless entrust_orders.empty?
-        @entrust_orders = entrust_orders.map { |order| [order.anyou + order.case_property, order.id] }
+        @entrust_orders = entrust_orders.map do|order|
+          [order.user.try(:name) + ' ' +
+             order.appraised_unit.try(:name) + ' ' +
+             order.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+           order.id]
+        end
       end
     end
 

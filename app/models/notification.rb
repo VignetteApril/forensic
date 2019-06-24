@@ -3,7 +3,15 @@ class Notification < ApplicationRecord
     belongs_to :user
     belongs_to :main_case
 
-    enum channel: [ :recived_order, :filed, :create_case, :change_case_status, :apply_filing, :case_online_pay,:apply_bill,:bill_made,:add_case_tip ]
+    enum channel: [ :recived_order,
+					:filed,
+                    :create_case,
+                    :change_case_status,
+                    :apply_filing,
+                    :case_online_pay,
+                    :apply_bill,
+                    :bill_made,
+                    :add_case_tip ]
 
     CHANNEL_MAP = {
       :recived_order=>'收到委托单',
