@@ -1,22 +1,34 @@
-.nested-fields
+.nested-fields style="padding-top:15px"
   .row
-    .col-md-2
-      = f.input :name, label: false, input_html: { class: 'nested-name-input' }
     .col-md-1
-      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input' }
+      = f.input :name, label: false, input_html: { class: 'nested-name-input',style:"border:0px;"  }
+      / = f.object.name
     .col-md-1
-      = f.input :num, label: false, input_html: { class: 'nested-num-input' }
+      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input' ,style:"border:0px;"  }
+      / = f.object.doc_type
     .col-md-1
-      = f.input :unit, label: false, collection: TransferDoc.collection_select_arr, input_html: { class: 'nested-unit-input' }
+      = f.input :num, label: false, input_html: { class: 'nested-num-input',style:"border:0px;" }
+      / = f.object.num
     .col-md-1
-      = f.input :traits, label: false, input_html: { class: 'nested-traits-input' }
-    .col-md-2
-      = f.input :status, label: false, input_html: { class: 'nested-status-input' }
-    .col-md-2
-      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input' }
+      .dom style= "display:block;border:0px;"
+        = f.input :unit, label: false, collection: TransferDoc.collection_select_arr, input_html: { class: 'nested-unit-input',style:"border:0px;"  }
+      /失效 时间strifttime 同
+      / = TransferDoc::UNIT_MAP(f.object.unit)
+      / .dom style="padding-top:15px"
+      /   = f.object.unit 
+    .col-md-1
+      = f.input :traits, label: false, input_html: { class: 'nested-traits-input' ,style:"border:0px;" }
+      / = f.object.traits
+    .col-md-1
+      = f.input :status, label: false, input_html: { class: 'nested-status-input' ,style:"border:0px;"  }
+      / = f.object.status
+    .col-md-3
+      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input',style:"border:0px;"  }
+      / = f.object.receive_date
     .col-md-1
       - if f.object.barcode_image.attached?
         = link_to open_barcode_image_main_cases_path(transfer_doc_id: f.object.id), remote: true
           = image_tag("barcode.png", alt: "条码", style: 'height: 35px; width: auto;')
     .col-md-1
-      = link_to_remove_association "移除", f, class: 'btn btn-danger'
+      = link_to_remove_association "移除", f, class: 'btn btn-danger nested-fields-close'
+

@@ -18,7 +18,21 @@
           .row style='padding-top:20px'          
             .col-md-3 单位：
             .col-md-6
-              input class="form-control string optional unit-input"                      
+              /  原生写法的select 失效 页面实际上解析成了另一批组件dom
+              / select class="form-control string optional unit-select" style= "border: 2px solid #ced4da" 
+              /   | xxxxxx
+              /   - TransferDoc.collection_select_arr.each do |e|      
+              /     option class="option-unit" data="#{e[1]}"  #{e[0]}
+
+
+              .dropdown
+                button class="btn btn-default dropdown-toggle unit-btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style= "border: 2px solid #ced4da;width:100%" data=""
+                  | 
+                ul class="dropdown-menu" aria-labelledby="dropdownMenu1"
+                  - TransferDoc.collection_select_arr.each do |e|      
+                    li class="option-unit" data="#{e[1]}"  
+                      a #{e[0]}
+      
           .row style='padding-top:20px'          
             .col-md-3 性状：
             .col-md-6
@@ -30,10 +44,47 @@
           .row style='padding-top:20px'          
             .col-md-3 收到时间：
             .col-md-6
-              input class="form-control string optional receivedate-input"                                         
+              input class="form-control string optional receivedate-input"  type="date"                                       
         .modal-footer
           .form-actions
-          button type="button" class="btn btn-success" id="bill_submit" 保存
-          button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+          button type="button" class="btn btn-success" id="nested_submit" 保存
+          button type="button" class="btn btn-secondary" data-dismiss="modal" id="nested_close" 关闭
 
 javascript:
+  // select标签经过封装，原生的写法里的option已无法捕获
+
+  $('.option-unit').click(function (e){
+    $('.unit-btn').attr('data',($(e.target).closest('li').attr('data')))
+    $('.unit-btn').text($(e.target).text())
+  })
+  // 更新值到f.input
+  $('#nested_submit').click(function (){
+    var last_dom = $(document).find("#transfer_docs").find(".nested-fields").last()
+    var nested_modal = $(document).find("#nested_modal")
+    last_dom.find('.nested-name-input').val(nested_modal.find('.name-input').val())
+    last_dom.find('.nested-doctype-input').val(nested_modal.find('.doctype-input').val())
+    last_dom.find('.nested-num-input').val(nested_modal.find('.num-input').val())
+    last_dom.find('.nested-traits-input').val(nested_modal.find('.traits-input').val())
+    last_dom.find('.nested-status-input').val(nested_modal.find('.status-input').val())
+
+    last_dom.find('.nested-receivedate-input').attr('value',nested_modal.find('.receivedate-input').val())
+
+    var str = nested_modal.find('.unit-btn').attr('data')
+    last_dom.find('.nested-unit-input').find( "[value=" + str + "]").attr('selected','selected')
+
+    // select标签经过封装 无法直接设置value
+    //last_dom.find('.selectize-input.items').find('.item').text(nested_modal.find('.unit-btn').text())
+    //last_dom.find('.selectize-input.items').find('.item').attr('data-value',nested_modal.find('.unit-btn').attr('data'))
+
+    $('#nested_modal').modal('hide');
+  })
+  // 关闭新增f.input(如果是新增点入) TODO如果是编辑点入则不用管
+  $('#nested_close').click(function (){
+    $(document).find("#transfer_docs").find(".nested-fields").last().find('.nested-fields-close').click()
+  })
+
+
+
+
+
+

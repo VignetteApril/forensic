@@ -38,6 +38,10 @@ class TransferDoc < ApplicationRecord
     self.barcode_image.purge
   end
 
+  # def unit_str
+  #   self.unit+"单位"
+  # end
+
   class << self
     # 为前端的显示的方法
     def collection_select_arr
