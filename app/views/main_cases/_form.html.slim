@@ -77,9 +77,15 @@
     // 移交材料card
     .card.gray-card
       .card-header
-        h4.card-title 移交材料
-      .card-body
-        .row.mb-1
+        .row
+          .col-md-8
+            h4.card-title 移交材料
+          .col-md-4
+            = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary add-file pull-right', 
+                    data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append , toggle: "modal",
+                    target: "#nested_modal"}        
+      .card-body style="margin-bottom:15px;"
+        .row.mb-1 style="border:1px solid #6c757d"
           .col-md-1
             span 检材名称
           .col-md-1
@@ -92,17 +98,12 @@
             span 性状
           .col-md-1
             span 状况
-          .col-md-3
+          .col-md-3.text-center
             span 收到时间
-          .col-md-2
+          .col-md-1.text-center
             span 条码
-          .col-md-1.no-gutters style= 'margin-left: auto;'
-            .links
-              = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary add-file',
-                      data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append , toggle: "modal",
-                      target: "#nested_modal"}
 
-        #transfer_docs
+        #transfer_docs style="margin:-15px;position:relative;top:10px"
           = f.simple_fields_for :transfer_docs do |transfer_doc|
             = render 'transfer_doc_fields', f: transfer_doc, render_options: { wrapper: 'bootstrap' }
 
