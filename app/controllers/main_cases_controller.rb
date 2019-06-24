@@ -126,7 +126,6 @@ class MainCasesController < ApplicationController
     @main_case.area_id = _area_id(main_case_params[:province_id],
                                   main_case_params[:city_id],
                                   main_case_params[:district_id])
-
     respond_to do |format|
       if @main_case.update(main_case_params)
         format.html { redirect_to main_cases_url, notice: '案件已经成功更新了！' }

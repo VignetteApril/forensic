@@ -1,21 +1,21 @@
 .nested-fields.border-nest-field
   .row.pt-1
     .col-md-1.border-col
-      = f.input :id, label: false, input_html: {class: 'nested-name-input border-0', disabled: "disabled"}
+      span class= 'nested-name-input border-0 serial-no pl-4' readonly= "readonly" = f.object.id
     .col-md-1.border-col
-      = f.input :name, label: false, input_html: { class: 'nested-name-input border-0', disabled:"disabled"  }
+      = f.input :name, label: false, input_html: { class: 'nested-name-input border-0', readonly: "readonly" }
     .col-md-1.border-col
-      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input border-0', disabled:"disabled"  }
+      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input border-0', readonly: "readonly" }
     .col-md-1.border-col
-      = f.input :num, label: false, input_html: { class: 'nested-num-input border-0', disabled:"disabled"   }
+      = f.input :num, label: false, input_html: { class: 'nested-num-input border-0', readonly: "readonly" }
     .col-md-1.border-col
-      = f.input :unit, label: false,input_html: { class: 'nested-unit-input border-0', disabled:"disabled"   }
+      = f.input :unit, label: false,input_html: { class: 'nested-unit-input border-0', readonly: "readonly" }
     .col-md-1.border-col
-      = f.input :traits, label: false, input_html: { class: 'nested-traits-input border-0', disabled:"disabled"   }
+      = f.input :traits, label: false, input_html: { class: 'nested-traits-input border-0', readonly: "readonly" }
     .col-md-1.border-col
-      = f.input :status, label: false, input_html: { class: 'nested-status-input border-0', disabled:"disabled"   }
+      = f.input :status, label: false, input_html: { class: 'nested-status-input border-0', readonly: "readonly" }
     .col-md-3.border-col
-      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input border-0', disabled:"disabled"   }
+      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input border-0', readonly: "readonly" }
     .col-md-1.border-col
       - if f.object.barcode_image.attached?
         = link_to open_barcode_image_main_cases_path(transfer_doc_id: f.object.id), remote: true
@@ -24,7 +24,9 @@
       = link_to_remove_association "移除", f, class: 'btn btn-danger nested-fields-close'
 
 css:
-  .form-control:disabled{ background-color: #F5F7FB }
+  .form-control[readonly] {
+    background-color: #F5F7FB
+  }
 
   .border-col {
     border-right:1px solid #6c757d;
@@ -35,5 +37,10 @@ css:
     border-style: solid;
     border-width: 0px 1px 1px 1px;
     border-color:#6c757d;
+  }
+
+  .serial-no {
+    position: relative;
+    top: 9px;
   }
 
