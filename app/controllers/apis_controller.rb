@@ -295,7 +295,7 @@ class ApisController < ApplicationController
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		birthday = params["birthday"].blank? ? nil : Date.parse(params["birthday"])
-		unit = AppraisedUnit.new(:unit_type=>params["unit_type"],:unit_contact=>params["unit_contact"],:name=>params["name"],:gender=>params["gender"],:birthday=>birthday,:id_type=>params["id_type"],:id_num=>params["id_num"],:addr=>params["addr"])
+		unit = AppraisedUnit.new(:unit_type=>params["unit_type"],:mobile_phone=>params["mobile_phone"],:unit_contact=>params["unit_contact"],:name=>params["name"],:gender=>params["gender"],:birthday=>birthday,:id_type=>params["id_type"],:id_num=>params["id_num"],:addr=>params["addr"])
     unit.wtr_id = user.id
     if unit.save
 	    respond_to do |format|
