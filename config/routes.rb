@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  resources :entrust_orders
-  resources :material_cycles
-  resources :identification_cycles
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/delayed_job" => BetterDelayedJobWeb, :anchor => false, :via => [:get, :post]
 
@@ -79,7 +76,12 @@ Rails.application.routes.draw do
     patch :save_payment_order, on: :member
   end
 
-  resources :entrust_orders
+  resources :material_cycles
+  resources :identification_cycles
+
+  resources :entrust_orders do
+    get :org_orders, on: :collection
+  end
 
   post 'areas/cities'
   post 'areas/districts'

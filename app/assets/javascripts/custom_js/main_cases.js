@@ -43,22 +43,22 @@ $(document).on('turbolinks:load', function() {
                         organization_addr.val(data.organization_addr);
 
                         province_select2.empty();
-                        province_select2.select2({
-                            data: data.provinces
+                        province_select2.selectize({
+                            items: data.provinces
                         });
-                        province_select2.val(data.current_province.id).trigger('change');
+                        province_select2[0].selectize.setValue(data.current_province.id);
 
                         city_select2.empty();
-                        city_select2.select2({
-                           data: data.cities
+                        city_select2.selectize({
+                            items: data.cities
                         });
-                        city_select2.val(data.current_city.id).trigger('change');
+                        city_select2[0].selectize.setValue(data.current_city.id);
 
                         district_select2.empty();
-                        district_select2.select2({
-                           data: data.districts
+                        district_select2.selectize({
+                           items: data.districts
                         });
-                        district_select2.val(data.current_district.id).trigger('change');
+                        district_select2[0].selectize.setValue(data.current_district.id);
                     }
                 });
             });
@@ -113,10 +113,20 @@ $(document).on('turbolinks:load', function() {
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {
                 if (this.value == 'unit') {
-                    $('#hidden-fields').css('display','none');
+                    $('.hidden-fields').css('display','none');
                 }
                 else if (this.value == 'user') {
-                    $('#hidden-fields').css('display','block');
+                    $('.hidden-fields').css('display','block');
+                }
+            });
+        } // if
+
+        if ($('body').attr('data-action') === 'index' || $('body').attr('data-action') === 'department_cases' || $('body').attr('data-action') === 'center_cases') {
+            $(".clickable-row").click(function (e) {
+                // 通过当前点击元素判断是否点击的是带有id的元素
+                // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
+                if (e.target.id == '') {
+                    window.location = $(this).data("href");
                 }
             });
         } // if

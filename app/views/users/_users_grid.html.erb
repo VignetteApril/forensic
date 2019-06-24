@@ -29,20 +29,26 @@
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |user|
-    if can?("users", "edit") && can_sys?(user)
-      link_to '编辑', edit_user_path(user), class: 'btn btn-secondary btn-sm'
+    if user.login != 'admin'
+      if can?("users", "edit") && can_sys?(user)
+        link_to '编辑', edit_user_path(user), class: 'btn btn-secondary btn-sm'
+      end
     end
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |user|
-    if can?("users", "edit") && can_sys?(user)
-      link_to '重置', reset_password_user_path(user), data: {confirm: '您确认要重置该用户的密码为Fc123456吗？' }, class: 'btn btn-secondary btn-sm'
+    if user.login != 'admin'
+      if can?("users", "edit") && can_sys?(user)
+        link_to '重置', reset_password_user_path(user), data: {confirm: '您确认要重置该用户的密码为Fc123456吗？' }, class: 'btn btn-secondary btn-sm'
+      end
     end
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |user|
-    if can?("users", "destroy") && can_sys?(user)
-      link_to '删除', user, method: :delete, data: { confirm: '您确认删除吗？' }, class: 'btn btn-danger btn-sm'
-    end
+    if user.login != 'admin'
+      if can?("users", "destroy") && can_sys?(user)
+        link_to '删除', user, method: :delete, data: { confirm: '您确认删除吗？' }, class: 'btn btn-danger btn-sm'
+      end
+     end
   end
 end -%>
