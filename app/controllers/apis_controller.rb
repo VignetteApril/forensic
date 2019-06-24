@@ -166,6 +166,9 @@ class ApisController < ApplicationController
 		decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		notifications = user.notifications
+		if !params[:case_id].blank?
+			notifications = notifications.where(:main_case_id => params[:case_id])
+		end
 		data = {}
 		data["true"] = []
 		data["false"] =[]
