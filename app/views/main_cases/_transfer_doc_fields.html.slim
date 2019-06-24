@@ -1,6 +1,6 @@
-.nested-fields style="padding-top:15px"
+.nested-fields style="padding-top:15px;"
   .row
-    .col-md-1
+    .col-md-1 
       = f.input :name, label: false, input_html: { class: 'nested-name-input',style:"border:0px;"  }
       / = f.object.name
     .col-md-1
@@ -11,7 +11,7 @@
       / = f.object.num
     .col-md-1
       .dom style= "display:block;border:0px;"
-        = f.input :unit, label: false, collection: TransferDoc.collection_select_arr, input_html: { class: 'nested-unit-input',style:"border:0px;"  }
+        = f.input :unit, label: false,input_html: { class: 'nested-unit-input',style:"border:0px;"  }
       /失效 时间strifttime 同
       / = TransferDoc::UNIT_MAP(f.object.unit)
       / .dom style="padding-top:15px"

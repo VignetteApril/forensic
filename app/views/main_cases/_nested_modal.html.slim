@@ -24,7 +24,6 @@
               /   - TransferDoc.collection_select_arr.each do |e|      
               /     option class="option-unit" data="#{e[1]}"  #{e[0]}
 
-
               .dropdown
                 button class="btn btn-default dropdown-toggle unit-btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style= "border: 2px solid #ced4da;width:100%" data=""
                   | 
@@ -70,11 +69,8 @@ javascript:
     last_dom.find('.nested-receivedate-input').attr('value',nested_modal.find('.receivedate-input').val())
 
     var str = nested_modal.find('.unit-btn').attr('data')
-    last_dom.find('.nested-unit-input').find( "[value=" + str + "]").attr('selected','selected')
-
-    // select标签经过封装 无法直接设置value
-    //last_dom.find('.selectize-input.items').find('.item').text(nested_modal.find('.unit-btn').text())
-    //last_dom.find('.selectize-input.items').find('.item').attr('data-value',nested_modal.find('.unit-btn').attr('data'))
+    // last_dom.find('.nested-unit-input').find( "[value=" + str + "]").attr('selected','selected')
+    last_dom.find('.nested-unit-input').val(str)
 
     $('#nested_modal').modal('hide');
   })
