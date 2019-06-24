@@ -1,34 +1,37 @@
-.nested-fields style="padding-top:15px;"
-  .row
-    .col-md-1 
-      = f.input :name, label: false, input_html: { class: 'nested-name-input',style:"border:0px;"  }
+.nested-fields style="border-style: solid; border-width: 0px 1px 1px 1px;border-color:#6c757d;"
+  .row style="padding-top:1px"
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
+      = f.input :name, label: false, input_html: { class: 'nested-name-input',style:"border:0px;", disabled:"disabled"  }
       / = f.object.name
-    .col-md-1
-      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input' ,style:"border:0px;"  }
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
+      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input' ,style:"border:0px;" , disabled:"disabled"  }
       / = f.object.doc_type
-    .col-md-1
-      = f.input :num, label: false, input_html: { class: 'nested-num-input',style:"border:0px;" }
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
+      = f.input :num, label: false, input_html: { class: 'nested-num-input',style:"border:0px;", disabled:"disabled"   }
       / = f.object.num
-    .col-md-1
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
       .dom style= "display:block;border:0px;"
-        = f.input :unit, label: false,input_html: { class: 'nested-unit-input',style:"border:0px;"  }
+        = f.input :unit, label: false,input_html: { class: 'nested-unit-input',style:"border:0px;" , disabled:"disabled"   }
       /失效 时间strifttime 同
       / = TransferDoc::UNIT_MAP(f.object.unit)
       / .dom style="padding-top:15px"
       /   = f.object.unit 
-    .col-md-1
-      = f.input :traits, label: false, input_html: { class: 'nested-traits-input' ,style:"border:0px;" }
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
+      = f.input :traits, label: false, input_html: { class: 'nested-traits-input' ,style:"border:0px;", disabled:"disabled"   }
       / = f.object.traits
-    .col-md-1
-      = f.input :status, label: false, input_html: { class: 'nested-status-input' ,style:"border:0px;"  }
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
+      = f.input :status, label: false, input_html: { class: 'nested-status-input' ,style:"border:0px;" , disabled:"disabled"   }
       / = f.object.status
-    .col-md-3
-      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input',style:"border:0px;"  }
+    .col-md-3 style="border-right:1px solid #6c757d;padding-top:10px"
+      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input',style:"border:0px;" , disabled:"disabled"   }
       / = f.object.receive_date
-    .col-md-1
+    .col-md-1 style="border-right:1px solid #6c757d;padding-top:10px"
       - if f.object.barcode_image.attached?
         = link_to open_barcode_image_main_cases_path(transfer_doc_id: f.object.id), remote: true
           = image_tag("barcode.png", alt: "条码", style: 'height: 35px; width: auto;')
-    .col-md-1
+    .col-md-1 style="padding-top:10px"
       = link_to_remove_association "移除", f, class: 'btn btn-danger nested-fields-close'
+
+css:
+  .form-control:disabled{background-color:white} 
 
