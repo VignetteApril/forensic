@@ -9,14 +9,27 @@ $(document).on('turbolinks:load', function() {
             var request_url_districts = window.location.origin + '/areas/districts.json';
 
             // listening the select2 change method
-            province_select2.on("select2:select", function(e){
-                // refresh project select2 element
-                appendDataToSelect2(request_url_cities, e['currentTarget']['value'], city_select2, 'name', 'cities');
-                district_select2.empty().trigger('change');
+            province_select2.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                onChange: function(value) {
+                    appendDataToSelect2(request_url_cities, value, city_select2, 'name', 'cities');
+                    district_select2[0].selectize.clear();
+                    district_select2[0].selectize.clearOptions();
+                }
             });
 
-            city_select2.on("select2:select", function(e){
-                appendDataToSelect2(request_url_districts, e['currentTarget']['value'], district_select2, 'name', 'districts');
+            city_select2.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                onChange: function(value) {
+                    appendDataToSelect2(request_url_districts, value, district_select2, 'name', 'districts');
+                }
+            });
+
+            district_select2.selectize({
+                valueField: 'id',
+                labelField: 'name'
             });
 
             // 导入用户
@@ -42,23 +55,9 @@ $(document).on('turbolinks:load', function() {
                         wtr_phone.val(data.wtr_phone);
                         organization_addr.val(data.organization_addr);
 
-                        province_select2.empty();
-                        province_select2.selectize({
-                            items: data.provinces
-                        });
-                        province_select2[0].selectize.setValue(data.current_province.id);
-
-                        city_select2.empty();
-                        city_select2.selectize({
-                            items: data.cities
-                        });
-                        city_select2[0].selectize.setValue(data.current_city.id);
-
-                        district_select2.empty();
-                        district_select2.selectize({
-                           items: data.districts
-                        });
-                        district_select2[0].selectize.setValue(data.current_district.id);
+                        reloadSelectize(province_select2, data.provinces, data.current_province.id);
+                        reloadSelectize(city_select2, data.cities, data.current_city.id);
+                        reloadSelectize(district_select2, data.districts, data.current_district.id);
                     }
                 });
             });

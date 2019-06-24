@@ -53,10 +53,6 @@ $(document).on("turbolinks:before-cache", function() {
 $(document).on('turbolinks:load', function () {
     $('select').selectize();
 
-    // $('select').select2({
-    //     theme: 'bootstrap'
-    // });
-
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',
         language: 'zh-CN',
@@ -80,20 +76,18 @@ function appendDataToSelect2(request_url, selected_id, target_select, column_nam
                 id: selected_id,
             },
             function(data, status){
-                // empty projects select2 element
-                target_select.empty().trigger('change');
-                // append empty option element to select2
-                target_select.append(document.createElement("option"));
-                // append date to the empty select2 element
-                $.each(data[target_hash_key],  function(i, value){
-                    var tempOption = document.createElement("option");
-                    tempOption.value = value.id;
-                    tempOption.innerHTML = value[column_name];
-                    target_select.append(tempOption);
-                }); // each
+                reloadSelectize(target_select, data[target_hash_key])
             }); // post
     } else {
-        target_select.empty().trigger('change');
+        target_select.empty();
     }
 } // appendDataToSelect2
+
+function reloadSelectize(select_elm, dataset, default_select_id = '') {
+    var control = select_elm[0].selectize;
+    control.clear();
+    control.clearOptions();
+    control.addOption(dataset);
+    control.setValue(default_select_id);
+}
 

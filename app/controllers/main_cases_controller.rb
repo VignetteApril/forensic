@@ -177,12 +177,12 @@ class MainCasesController < ApplicationController
     @organization_addr = user.organization.addr
     @user_name = user.name
 
-    rs_current_province = { text: @current_province.name, id: @current_province.id }
-    rs_current_city = { text: @current_city.name, id: @current_city.id }
-    rs_current_district = { text: @current_district.name, id: @current_district.id }
-    rs_provinces = @provinces.map { |province| { text: province.name, id: province.id } }
-    rs_cities = @cites.map { |city| { text: city.name, id: city.id } }
-    rs_districts = @districts.map { |district| { text: district.name, id: district.id } }
+    rs_current_province = { name: @current_province.name, id: @current_province.id }
+    rs_current_city = { name: @current_city.name, id: @current_city.id }
+    rs_current_district = { name: @current_district.name, id: @current_district.id }
+    rs_provinces = @provinces.map { |province| { name: province.name, id: province.id } }
+    rs_cities = @cites.map { |city| { name: city.name, id: city.id } }
+    rs_districts = @districts.map { |district| { name: district.name, id: district.id } }
 
     respond_to do |format|
       format.json { render json: { current_province: rs_current_province,
@@ -236,7 +236,7 @@ class MainCasesController < ApplicationController
       user_ids = @main_case.ident_users.split(',')
       users = User.where(id: user_ids).pluck(:id, :name).to_h
       user_ids.each_with_index do |id, index|
-        @ident_users << "##{index}#{users[id.to_i]}  "
+        @ident_users << "##{index + 1}#{users[id.to_i]}  "
         @select_ident_users << id.to_i
       end
     end
