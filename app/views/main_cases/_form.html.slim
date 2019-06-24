@@ -80,7 +80,7 @@
         h4.card-title 移交材料
       .card-body
         .row.mb-1
-          .col-md-2
+          .col-md-1
             span 检材名称
           .col-md-1
             span 类型
@@ -90,11 +90,11 @@
             span 单位
           .col-md-1
             span 性状
-          .col-md-2
-            span 状况
-          .col-md-2
-            span 收到时间
           .col-md-1
+            span 状况
+          .col-md-3
+            span 收到时间
+          .col-md-2
             span 条码
           .col-md-1.no-gutters style= 'margin-left: auto;'
             .links
@@ -174,7 +174,9 @@ javascript:
     });
 
 
-    //新增模态框初始化input
+    //新增模态框初始化input btn
     $('.add-file').click(function (){
       $('#nested_modal').find('input').val("")
+      $('#nested_modal').find('.unit-btn').text("")
+      $('#nested_modal').find('.unit-btn').attr("data","")
     })

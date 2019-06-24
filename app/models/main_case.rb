@@ -8,7 +8,7 @@ class MainCase < ApplicationRecord
 
   # 虚拟字段用户接受关联的委托单参数
   belongs_to :department
-  belongs_to :entrust_order
+  belongs_to :entrust_order, required: false 
   has_many :case_talks, dependent: :destroy
   has_many :notification, dependent: :destroy
   has_many :case_users, dependent: :destroy # 机构中有很多

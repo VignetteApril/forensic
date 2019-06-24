@@ -9,19 +9,19 @@ class TransferDoc < ApplicationRecord
   before_create :set_barcode_hex
   after_destroy :purge_barcode_image
 
-  enum unit: [ :piece,
-               :meter,
-               :cm,
-               :liter,
-               :kilo,
-               :gram ]
+  # enum unit: [ :piece,
+  #              :meter,
+  #              :cm,
+  #              :liter,
+  #              :kilo,
+  #              :gram ]
 
-  UNIT_MAP = { piece: '个',
-               meter: '米',
-               cm: '厘米',
-               liter: '升',
-               kilo: '千克',
-               gram: '克' }
+  # UNIT_MAP = { piece: '个',
+  #              meter: '米',
+  #              cm: '厘米',
+  #              liter: '升',
+  #              kilo: '千克',
+  #              gram: '克' }
 
   # 设置条码，并且生成条码图片
   def set_barcode_hex
@@ -40,12 +40,16 @@ class TransferDoc < ApplicationRecord
 
   class << self
     # 为前端的显示的方法
+    # def collection_select_arr
+    #   rs = []
+    #   units.each do |key, value|
+    #     rs << [UNIT_MAP[key.to_sym], key]
+    #   end
+    #   rs
+    # end
+
     def collection_select_arr
-      rs = []
-      units.each do |key, value|
-        rs << [UNIT_MAP[key.to_sym], key]
-      end
-      rs
+      [['个', '个'], ['米' , '米'], ['厘米','厘米'], ['升','升'], ['千克','千克'], ['克','克']]
     end
   end
 end
