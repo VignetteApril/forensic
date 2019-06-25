@@ -85,9 +85,9 @@ function appendDataToSelect2(request_url, selected_id, target_select, column_nam
 
 function reloadSelectize(select_elm, dataset, default_select_id = '') {
     var control = select_elm[0].selectize;
-    control.clear();
-    control.clearOptions();
-    control.addOption(dataset);
-    control.setValue(default_select_id);
+    control.clear('silent');
+    control.clearOptions('silent');
+    control.addOption(dataset, 'silent');
+    control.setValue(default_select_id, 'silent');
 }
 
