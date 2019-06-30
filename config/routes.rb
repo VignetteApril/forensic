@@ -76,6 +76,8 @@ Rails.application.routes.draw do
     patch :update_filing, on: :member
     patch :update_reject, on: :member
     patch :save_payment_order, on: :member
+
+    resources :payment_orders
   end
 
   resources :material_cycles
