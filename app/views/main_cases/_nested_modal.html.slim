@@ -1,4 +1,5 @@
 .modal.fade id="nested_modal" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+  = simple_form_for(@main_case.transfer_docs.first, method: :get, url:'') do |f|
     .modal-dialog role="document"
       .modal-content
         .modal-header 移交材料
@@ -6,15 +7,19 @@
           .row style='padding-top:20px'
             .col-md-3 检材名称：
             .col-md-6
-              input class="form-control string optional name-input" 
+              / input class="form-control string optional name-input" 
+              = f.input :name, label: false, input_html: { class: 'form-control string optional name-input'}
           .row style='padding-top:20px'    
             .col-md-3 类型：
             .col-md-6
-              input class="form-control string optional doctype-input"
+              / input class="form-control string optional doctype-input"
+              = f.input :doc_type, label: false, input_html: { class: 'form-control string optional doctype-input'}
           .row style='padding-top:20px'    
             .col-md-3 数量：
             .col-md-6
-              input class="form-control string optional num-input"   
+              / input class="form-control string optional num-input" 
+              = f.input :num, label: false, input_html: { class: 'form-control string optional num-input'}
+            .col-md-3 class="num-input-warning" style="color:red"
           .row style='padding-top:20px'          
             .col-md-3 单位：
             .col-md-6
@@ -23,15 +28,8 @@
               /   | xxxxxx
               /   - TransferDoc.collection_select_arr.each do |e|      
               /     option class="option-unit" data="#{e[1]}"  #{e[0]}
-
-              .dropdown
-                button class="btn btn-default dropdown-toggle unit-btn" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style= "border: 2px solid #ced4da;width:100%" data=""
-                  | 
-                ul class="dropdown-menu" aria-labelledby="dropdownMenu1"
-                  - TransferDoc.collection_select_arr.each do |e|      
-                    li class="option-unit" data="#{e[1]}"  
-                      a #{e[0]}
-      
+              = f.input :unit, label: false, collection: TransferDoc.collection_select_arr,input_html: { class: 'form-control string optional unit-input', readonly: "readonly" }
+    
           .row style='padding-top:20px'          
             .col-md-3 性状：
             .col-md-6
@@ -51,7 +49,6 @@
 
 javascript:
   // select标签经过封装，原生的写法里的option已无法捕获
-
   $('.option-unit').click(function (e){
     $('.unit-btn').attr('data',($(e.target).closest('li').attr('data')))
     $('.unit-btn').text($(e.target).text())
@@ -68,16 +65,20 @@ javascript:
 
     last_dom.find('.nested-receivedate-input').attr('value',nested_modal.find('.receivedate-input').val())
 
-    var str = nested_modal.find('.unit-btn').attr('data')
+    // var str = nested_modal.find('.unit-btn').attr('data')
     // last_dom.find('.nested-unit-input').find( "[value=" + str + "]").attr('selected','selected')
+    var str = $('.unit-input').val()
+    console.log(str)
     last_dom.find('.nested-unit-input').val(str)
 
     $('#nested_modal').modal('hide');
   })
   // 关闭新增f.input(如果是新增点入) TODO如果是编辑点入则不用管
-  $('#nested_close').click(function (){
-    $(document).find("#transfer_docs").find(".nested-fields").last().find('.nested-fields-close').click()
-  })
+
+   $('#nested_close').click(function (){
+     $(document).find("#transfer_docs").find(".nested-fields").last().find('.nested-fields-close').click()
+   })
+
 
 
 

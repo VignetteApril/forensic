@@ -5,16 +5,32 @@ class ApisController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
 	def register 
+		# 分两次提交图片请求，通过params判断是不是一个user
 		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).exists?
 	    user = User.new(:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
-	    org = Organization.where(:name=>params["organization"]).try(:first)
+	    # 单位暂时不支持模糊搜索，目前需要直接存入（最早的通过地区筛选创建单位的模式也不采用）
+	    # org = Organization.where(:name=>params["organization"]).try(:first)
+	    if Organization.where(:name =>params["organization"]).exists?
+	    	org = Organization.where(:name =>params["organization"]).first
+	    else
+	    	org = Organization.new(name: params["organization"],area_id: 1,org_type: :court)
+	    	unless org.save
+	    		json = {"code":"0","msg":"关联新创建的法院失败"}				
+		    	respond_to do |format|
+						format.json { render json:json.to_json }
+					end
+	    	end
+	    end
+
 	    user.organization = org
+	    user.is_confirm = false
 	    dep = org.departments.where(:name=>params["department"]).try(:first)
 	    if dep.nil?
 	    	dep = org.departments.create(:name=>params["department"])
 	    	p "没找到#{org.name}下的部门#{params["department"]} 创建----#{dep.save}"
 	    end
 	    user.departments = dep.id.to_s
+
 	    user.positive.attach params["positive"]
 			json = {"code":"0","msg":"注册并且上传正面相片成功","errors":{}}
 			if user.save
@@ -23,7 +39,7 @@ class ApisController < ApplicationController
 				end
 			else
 				json["code"] = "1"
-				json["msg"] = "注册并且上传正面相片失败"
+				json["msg"] = "提交注册信息并且上传正面相片失败"
 				json["errors"] = user.errors.messages
 				respond_to do |format|
 					format.json { render json:json.to_json }
@@ -32,7 +48,7 @@ class ApisController < ApplicationController
 		else
 			user = User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).first
 			user.negative.attach params["negative"]
-			json = {"code":"0","msg":"上传背面相片成功,注册结束","errors":{}}
+			json = {"code":"0","msg":"上传背面相片成功,提交注册信息成功","errors":{}}
 			if user.save
 				respond_to do |format|
 					format.json { render json:json.to_json }
@@ -299,7 +315,7 @@ class ApisController < ApplicationController
     unit.wtr_id = user.id
     if unit.save
 	    respond_to do |format|
-				format.json { render json:{"code": "0","messages":"注册被鉴定人成功"}.to_json }
+				format.json { render json:{"code": "0","messages":"注册被鉴定人成功","unit_id":unit.id}.to_json }
 		  end	
 		else
 			respond_to do |format|

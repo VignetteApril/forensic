@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   resources :delayed_jobs
   resources :favorites
-  resources :notifications
+  resources :notifications do
+    post :all_readed, :on => :collection
+  end
   resources :sys_configs
   resources :sys_logs do
     get :search, on: :collection

@@ -246,9 +246,9 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
-    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
     t.bigint "entrust_order_id"
@@ -444,6 +444,7 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
     t.integer "city_id"
     t.integer "district_id"
     t.string "organization_name"
+    t.boolean "is_confirm"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end
