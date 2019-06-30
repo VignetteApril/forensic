@@ -11,8 +11,14 @@
   g.column name: '分类', attribute: 'channel', html: {style: "width:150px;"}, custom_filter: Notification.channel_map_reverse, allow_multiple_selection: false do |a|
     Notification::CHANNEL_MAP[a.channel.to_sym]
   end
+
+  g.column name: '通知内容', html: {style: "width:360px;"}, custom_filter: false, allow_multiple_selection: false do |a|
+     a.description
+  end
+
   g.column name: '标题', html: {style: "width:200px;"}, attribute: 'title' do |a|
-    link_to a.title.blank? ? "..." : a.title, notification_path(a)
+    # link_to a.title.blank? ? "..." : a.title, notification_path(a)
+    a.title
   end
   g.column name: '生成时间', attribute: 'created_at', filter: false, html: {style: "width:160px;"} do |a|
     distance_of_time_in_words_to_now(a.created_at, include_seconds: false) + "之前"

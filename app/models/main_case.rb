@@ -163,6 +163,13 @@ class MainCase < ApplicationRecord
   # 记录案件状态改变的信息
   def record_case_process
     self.case_process_records.create(detail: '案件进入' + CASE_STAGE_MAP[self.case_stage.to_sym] + '状态')
+
+    notification = User.find(:id=>self.wtr_id).notifications.new
+    notification.channel = :change_case_status
+    notification.title = "#案件{self.name}状态变更通知"
+    notification.description = "案件#{self.name}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{CASE_STAGE_MAP[self.case_stage.to_sym]}状态"
+    notification.main_case_id = self.id
+    notification.save
   end
 
   # 从科室的模板中拷贝文档

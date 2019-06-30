@@ -16,20 +16,26 @@ header class="app-header"
     li class="dropdown"
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"
         i class="fa fa-bell-o fa-lg"
+        - if @current_user.notifications.where(:status=>false).count > 0
+          span style="border-radius: 50%;    height: 20px;    width: 20px;    display: inline-block;    background: #DD4822;      vertical-align: top;" class= "notification-count-icon"
+            span style="display: block;    color: #FFFFFF;    height: 20px;    line-height: 20px;    text-align: center" =@current_user.notifications.where(:status=>false).count
+
       ul.app-notification.dropdown-menu.dropdown-menu-right
-        li.app-notification__title 您有 1 条新的消息
+        li.app-notification__title = "您有 #{@current_user.notifications.where(:status=>false).count} 条新的消息"
         .app-notification__content
-          li：
-            a.app-notification__item href="javascript:;"
-              span.app-notification__icon
-                span.fa-stack.fa-lg
-                  i.fa.fa-circle.fa-stack-2x.text-primary
-                  i.fa.fa-envelope.fa-stack-1x.fa-inverse
-              div
-                p.app-notification__message 立案成功
-                p.app-notification__meta 2 分前
+          - @current_user.notifications.where(:status=>false).each do |notice|
+            li
+              a.app-notification__item href="javascript:;"
+                span.app-notification__icon
+                  span.fa-stack.fa-lg
+                    i.fa.fa-circle.fa-stack-2x.text-primary
+                    i.fa.fa-envelope.fa-stack-1x.fa-inverse
+                div
+                  p.app-notification__message = notice.title
+                  p.app-notification__meta =distance_of_time_in_words_to_now(notice.created_at, include_seconds: false) + "之前"
+
         li.app-notification__footer
-          a href="#" 标记全部已读
+          a href="#" class='all-readed' 全部标记为已读
     // User Menu
     li.dropdown
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Open Profile Menu"
@@ -46,3 +52,25 @@ header class="app-header"
           = link_to(logout_path, class: "dropdown-item") do
             i.dropdown-icon.fa.fa-sign-out
             | 登出
+
+
+javascript:
+  $('.all-readed').click(function (){
+    var data = {}
+    $.ajax({
+    type : 'POST',
+    url : '/notifications/all_readed',
+    data: data,
+    error : function() {
+        alert('更新失败 ');
+    },
+    success : function(data) {
+     $('.app-notification__content').css('display','none')
+     $('.notification-count-icon').css('display','none')
+     
+    }
+    });
+
+   
+  });
+

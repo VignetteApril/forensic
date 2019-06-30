@@ -30,7 +30,7 @@ features:
   - [日志管理,sys_logs,"index,show,search",系统管理]
   - [任务管理,delayed_jobs,"index",系统管理]
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
-  - [个人事务提醒,notifications,"index,show,edit",平台]
+  - [个人事务提醒,notifications,"index,show,edit,all_readed",平台]
   - [机构管理, organizations,"index, new, edit, create, destroy, update",系统管理]
   - [编辑机构, organizations, 'edit, update', 机构]
   - [科室模板管理, department_docs, "index, new, edit, create, destroy", 机构]
