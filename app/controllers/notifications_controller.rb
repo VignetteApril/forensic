@@ -6,7 +6,7 @@ class NotificationsController < ApplicationController
     @notifications = initialize_grid( Notification.where(user_id: @current_user&.id),       
                               order: 'created_at',
                               order_direction: 'desc',
-                              per_page: 20, 
+                              per_page: 10, 
                               name: 'notifications')
   end
   
@@ -23,7 +23,7 @@ class NotificationsController < ApplicationController
   def edit
     @notification = Notification.find(params[:id])
     if @notification
-      @notification.update(status: "已读")
+      @notification.update(status: true)
       redirect_to notifications_path
     end
   end

@@ -4,7 +4,7 @@ class Notification < ApplicationRecord
     belongs_to :main_case
 
     enum channel: [ :recived_order,
-					:filed,
+					          :filed,
                     :create_case,
                     :change_case_status,
                     :apply_filing,
@@ -40,5 +40,23 @@ class Notification < ApplicationRecord
     	}
    	end 
 
+    def self.check_channel_enum_index(channel_word)
+      channel = [   :recived_order,
+                    :filed,
+                    :create_case,
+                    :change_case_status,
+                    :apply_filing,
+                    :case_online_pay,
+                    :apply_bill,
+                    :bill_made,
+                    :add_case_tip ]
+      return channel.rindex(channel_word)
+    end
+
+    def self.channel_map_reverse
+      hash = {}
+      Notification::CHANNEL_MAP.each{|k, v| hash["#{v}"]=Notification.check_channel_enum_index(k.to_sym) }
+      return hash
+    end
 
 end
