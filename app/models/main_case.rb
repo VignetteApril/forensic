@@ -18,8 +18,12 @@ class MainCase < ApplicationRecord
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
+
   has_many :payment_orders, dependent: :destroy
   accepts_nested_attributes_for :payment_orders, reject_if: :all_blank, allow_destroy: true
+  has_many :bills
+  has_many :refund_orders
+  
   has_one_attached :barcode_image
   has_one_attached :entrust_doc # 案件下的委托书
 

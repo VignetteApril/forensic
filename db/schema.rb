@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_30_113250) do
+ActiveRecord::Schema.define(version: 2019_06_30_191128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,14 +66,14 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
   end
 
   create_table "bills", force: :cascade do |t|
-    t.bigint "payment_order_id"
     t.string "bill_type"
     t.string "organization"
     t.string "address"
     t.string "code"
     t.string "bank"
     t.string "phone"
-    t.index ["payment_order_id"], name: "index_bills_on_payment_order_id"
+    t.bigint "main_case_id"
+    t.index ["main_case_id"], name: "index_bills_on_main_case_id"
   end
 
   create_table "case_process_records", force: :cascade do |t|
@@ -326,11 +326,18 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
     t.datetime "payment_date"
     t.float "total_cost"
     t.boolean "take_bill"
+    t.bigint "bill_id"
+    t.float "cash_pay"
+    t.float "check_pay"
+    t.string "check_num"
+    t.float "card_pay"
+    t.float "remit_pay"
+    t.integer "order_stage"
+    t.index ["bill_id"], name: "index_payment_orders_on_bill_id"
     t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
   end
 
   create_table "refund_orders", force: :cascade do |t|
-    t.bigint "payment_order_id"
     t.float "appraisal_cost"
     t.float "business_cost"
     t.float "appear_court_cost"
@@ -342,7 +349,8 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
     t.integer "refund_dealer_id"
     t.integer "refund_checker_id"
     t.float "total_cost"
-    t.index ["payment_order_id"], name: "index_refund_orders_on_payment_order_id"
+    t.bigint "main_case_id"
+    t.index ["main_case_id"], name: "index_refund_orders_on_main_case_id"
   end
 
   create_table "role_features", force: :cascade do |t|
@@ -451,7 +459,7 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appraised_units", "main_cases"
-  add_foreign_key "bills", "payment_orders"
+  add_foreign_key "bills", "main_cases"
   add_foreign_key "case_process_records", "main_cases"
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
@@ -465,8 +473,9 @@ ActiveRecord::Schema.define(version: 2019_06_30_113250) do
   add_foreign_key "main_cases", "entrust_orders"
   add_foreign_key "material_cycles", "organizations"
   add_foreign_key "organizations", "areas"
+  add_foreign_key "payment_orders", "bills"
   add_foreign_key "payment_orders", "main_cases"
-  add_foreign_key "refund_orders", "payment_orders"
+  add_foreign_key "refund_orders", "main_cases"
   add_foreign_key "transfer_docs", "main_cases"
   add_foreign_key "users", "organizations"
 end
