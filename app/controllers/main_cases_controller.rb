@@ -386,6 +386,11 @@ class MainCasesController < ApplicationController
 
   # 费用管理页面
   def payment_order_management
+    @payment_orders = initialize_grid(PaymentOrder.where(main_case_id: params[:id]),     
+                              order: 'created_at',
+                              order_direction: 'desc',
+                              per_page: 10, 
+                              name: 'payment_orders')
   end
 
   # 保存费用管理页面
