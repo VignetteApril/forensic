@@ -90,4 +90,3 @@ function reloadSelectize(select_elm, dataset, default_select_id = '') {
     control.addOption(dataset, 'silent');
     control.setValue(default_select_id, 'silent');
 }
-

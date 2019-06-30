@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    = javascript_include_tag 'weboffice'
+    
+javascript:
+    var pfile = '20161108144356.doc'; //word的文件名
+    var strOpenUrl = strRoot + "file/" + pfile; //取得打开路径和文件名
+    var strSaveUrl = strRoot + "file/" + pfile; //取得保存路径和文件名
+    strSmartUrl = "WebOffice://|Officectrl|" + window.location.href;//开启智能窗模式
+    function WebOpen() {
+        obj = document.getElementById('WebOffice');//获得控件对象
+        if (obj) setTimeout('OpenDocument()', 1000);//等待控件初始化完毕，时间可以根据网络速度设定。
+    }
+
+    function OpenDocument() {
+        try {
+            document.getElementById('WebOffice').Open(strOpenUrl, true, "Word.Document");
+        } catch (e) {
+            alert('请先下载安装WebOffice控件！');
+            location.href = strRoot + "WebOffice.rar";
+        }
+    }
