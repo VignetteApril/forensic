@@ -7,6 +7,7 @@ class Organization < ApplicationRecord
   has_many :users, dependent: :destroy      # 每个机构中有很多个用户，当机构被删除时，用户理应被删除
   has_many :identification_cycles, dependent: :destroy # 每个机构中很有多个鉴定周期，当机构被删除时，则鉴定周期也无意义
   has_many :material_cycles, dependent: :destroy # 每个机构中有很多个补充材料周期
+  has_many :incoming_records, dependent: :destroy #每个机构中有很多个到账记录
 
   validates :name, uniqueness: true, presence: true  #机构名称唯一，必填
   validates :abbreviation, presence: { message: '不能为空' }, unless: :is_court?

@@ -1,0 +1,13 @@
+.app-sidebar__overlay data-toggle="sidebar"
+aside.app-sidebar
+  ul.app-menu
+    // 财务管理模块的sidebar，只有具备财务管理功能的角色才能看到此模块
+    li.treeview.is-expanded
+      a.app-menu__item.text-white
+        i class="app-menu__icon fa fa-laptop"
+        span class="app-menu__label" 财务管理
+      ul.treeview-menu
+        li
+          a.treeview-item href="#{incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'index')}"
+            i.app-menu__icon.fa.fa-building-o
+            span.app-menu__label 到账记录管理

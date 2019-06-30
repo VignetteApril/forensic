@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_24_145219) do
+ActiveRecord::Schema.define(version: 2019_06_30_113250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -194,6 +194,21 @@ ActiveRecord::Schema.define(version: 2019_06_24_145219) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_identification_cycles_on_organization_id"
+  end
+
+  create_table "incoming_records", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.string "pay_account"
+    t.string "pay_person_name"
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "pay_date"
+    t.integer "pay_type"
+    t.bigint "payment_order_id"
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_incoming_records_on_organization_id"
+    t.index ["payment_order_id"], name: "index_incoming_records_on_payment_order_id"
   end
 
   create_table "main_cases", force: :cascade do |t|
@@ -443,6 +458,8 @@ ActiveRecord::Schema.define(version: 2019_06_24_145219) do
   add_foreign_key "entrust_orders", "organizations"
   add_foreign_key "entrust_orders", "users"
   add_foreign_key "identification_cycles", "organizations"
+  add_foreign_key "incoming_records", "organizations"
+  add_foreign_key "incoming_records", "payment_orders"
   add_foreign_key "main_cases", "departments"
   add_foreign_key "main_cases", "entrust_orders"
   add_foreign_key "material_cycles", "organizations"

@@ -1,0 +1,38 @@
+.row.pt-5
+  .col-md-4.offset-4
+    .card.text-center
+      .card-title
+        h5 到账记录信息
+      .card-body
+        .row
+          label.h6 对方付款人名称：
+          span = @incoming_record.pay_person_name
+        .row
+          label.h6 对方付款账号：
+          span = @incoming_record.pay_account
+        .row
+          label.h6 付款时间：
+          span = @incoming_record.pay_date.strftime('%Y-%m-%d')
+        .row
+          label.h6 付款金额：
+          span = @incoming_record.amount
+          span 元
+
+
+= simple_form_for(@incoming_record, url: claim_record_incoming_record_path) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+  .form-inputs
+    .row.mt-2
+      .col-md-1.offset-3
+        span 案件
+      .col-md-4
+        = select_tag 'main_case', options_from_collection_for_select(@main_cases, "id", "case_no_display")
+    .row
+      .col-md-1.offset-3
+        span 缴费单
+      .col-md-4
+        = f.input :payment_order_id, label: false, as: :select, collection: []
+    .row
+      .col-md-4.offset-4
+        = f.button :submit, '认领该到账记录', class: 'btn btn-success w-100'

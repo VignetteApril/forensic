@@ -1,6 +1,7 @@
 class PaymentOrder < ApplicationRecord
 	belongs_to :main_case
 	has_one :bill
+  has_one :incoming_record # 缴费单和到账记录一一对应
 
 	has_many :refund_orders
 	accepts_nested_attributes_for :refund_orders, reject_if: :all_blank, allow_destroy: true

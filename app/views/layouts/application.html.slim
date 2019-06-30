@@ -9,7 +9,13 @@ html
 
   body.app.sidebar-mini.rtl data-controller="#{controller.controller_path}" data-action="#{controller.action_name}"
     = render 'layouts/top_bar'
-    = render 'layouts/application_sidebar'
+    // 如果是财务人员则显示财务人员的侧边栏
+    // 通过user的相关权限判定是否是财务人员
+    - if can?('incoming_records', 'index') && can?('incoming_records', 'edit')
+      = render 'layouts/financial_sidebar'
+    // 其他人员的侧边栏
+    - else
+      = render 'layouts/application_sidebar'
     main.app-content
       #flash
         = render 'layouts/flash_message'
