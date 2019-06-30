@@ -196,6 +196,21 @@ ActiveRecord::Schema.define(version: 2019_06_30_191128) do
     t.index ["organization_id"], name: "index_identification_cycles_on_organization_id"
   end
 
+  create_table "incoming_records", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.string "pay_account"
+    t.string "pay_person_name"
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "pay_date"
+    t.integer "pay_type"
+    t.bigint "payment_order_id"
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_incoming_records_on_organization_id"
+    t.index ["payment_order_id"], name: "index_incoming_records_on_payment_order_id"
+  end
+
   create_table "main_cases", force: :cascade do |t|
     t.string "serial_no"
     t.string "case_no_display"
@@ -231,9 +246,9 @@ ActiveRecord::Schema.define(version: 2019_06_30_191128) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
-    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
+    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
     t.bigint "entrust_order_id"
@@ -452,6 +467,8 @@ ActiveRecord::Schema.define(version: 2019_06_30_191128) do
   add_foreign_key "entrust_orders", "organizations"
   add_foreign_key "entrust_orders", "users"
   add_foreign_key "identification_cycles", "organizations"
+  add_foreign_key "incoming_records", "organizations"
+  add_foreign_key "incoming_records", "payment_orders"
   add_foreign_key "main_cases", "departments"
   add_foreign_key "main_cases", "entrust_orders"
   add_foreign_key "material_cycles", "organizations"

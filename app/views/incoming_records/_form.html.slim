@@ -1,0 +1,21 @@
+= simple_form_for(@incoming_record) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    = f.input :organization_id, as: :hidden, input_html: {value: @current_user.organization.id}
+    .row
+      .col-md-4
+        = f.input :pay_type, collection: IncomingRecord.pay_type_select_arr, label: '支付方式', include_blank: false
+      .col-md-4
+        = f.input :pay_account, label: '对方付款账户名'
+      .col-md-4
+        = f.input :pay_person_name, label: '对方付款人名称'
+    .row
+      .col-md-4
+        = f.input :pay_date, label: '付款时间', as: :date, html5: true
+      .col-md-4
+        = f.input :amount, label: '付款金额'
+
+  .form-actions
+    = f.button :submit, '确认', class: 'btn btn-success'

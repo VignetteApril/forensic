@@ -87,6 +87,12 @@ Rails.application.routes.draw do
     get :org_orders, on: :collection
   end
 
+  resources :incoming_records do
+    get :claim_record_index, on: :member
+    post :get_payment_order, on: :collection
+    patch :claim_record, on: :member
+  end
+
   post 'areas/cities'
   post 'areas/districts'
 

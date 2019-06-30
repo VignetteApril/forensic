@@ -33,6 +33,7 @@
 //= require custom_js/department_docs
 //= require custom_js/main_cases
 //= require custom_js/users
+//= require custom_js/incoming_records
 
 // nested form js
 //= require cocoon
@@ -61,7 +62,7 @@ $(document).on('turbolinks:load', function () {
     });
 });
 
-// change select2 data via ajax, target select2 element data will refresh depend the change of orginal select2 element
+// change select2 data via ajax, target select2 element data will refresh depend the change of original select2 element
 // request_url:               the method will send the ajax post request to this url, and get data from the action
 // selected_id:               orginal select2 element selected option id
 // target_select:             the target select2 element, we will refresh the data of target select2 element
@@ -76,6 +77,8 @@ function appendDataToSelect2(request_url, selected_id, target_select, column_nam
                 id: selected_id,
             },
             function(data, status){
+                console.log(target_select)
+                console.log(data[target_hash_key])
                 reloadSelectize(target_select, data[target_hash_key])
             }); // post
     } else {

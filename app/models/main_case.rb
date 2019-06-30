@@ -174,6 +174,8 @@ class MainCase < ApplicationRecord
     notification.description = "案件#{self.name}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{CASE_STAGE_MAP[self.case_stage.to_sym]}状态"
     notification.main_case_id = self.id
     notification.save
+  rescue => ex
+    Rails.logger.info ex.to_s
   end
 
   # 从科室的模板中拷贝文档

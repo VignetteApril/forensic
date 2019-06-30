@@ -1,0 +1,44 @@
+<%= grid(@incoming_records, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
+
+    g.column name:  '对方付款人名称', attribute: 'pay_person_name'
+    g.column name:  '对方付款人账号', attribute: 'pay_account'
+    g.column name:  '付款时间', attribute: 'pay_date' do |incoming_record|
+      incoming_record.pay_date.strftime('%Y-%m-%d')
+    end
+    g.column name:  '付款金额', attribute: 'amount'
+    g.column name:  '支付方式', attribute: 'pay_type' do |incoming_record|
+      IncomingRecord::PAY_TYPE_MAP[incoming_record.pay_type.to_sym]
+    end
+    g.column name:  '认领状态', attribute: 'status' do |incoming_record|
+
+      case incoming_record.status.to_sym
+      when :unclaimed
+        content_tag :div, class: 'text-danger' do
+          IncomingRecord::STATUS_MAP[incoming_record.status.to_sym]
+        end
+      when :claimed
+        content_tag :div, class: 'text-success' do
+          IncomingRecord::STATUS_MAP[incoming_record.status.to_sym]
+        end
+      end
+
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |incoming_record|
+      if can?('incoming_records', 'claim_record_index') && incoming_record.unclaimed?
+        link_to '认领', claim_record_index_incoming_record_path(incoming_record), class: 'btn btn-secondary btn-sm'
+      end
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |incoming_record|
+      if can?('incoming_records', 'edit')
+        link_to '编辑', edit_incoming_record_path(incoming_record), class: 'btn btn-secondary btn-sm'
+      end
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |incoming_record|
+      if can?('incoming_records', 'destroy')
+        link_to '删除', incoming_record, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+      end
+    end
+end -%>

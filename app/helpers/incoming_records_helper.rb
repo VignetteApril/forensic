@@ -1,0 +1,2 @@
+module IncomingRecordsHelper
+end

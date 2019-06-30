@@ -1,6 +1,7 @@
 class PaymentOrder < ApplicationRecord
 	belongs_to :main_case
 	belongs_to :bill, required: false 
+  has_one :incoming_record # 缴费单和到账记录一一对应
 
 
   enum order_stage:[:not_submit, :not_confirm, :confirm ,:cancel]

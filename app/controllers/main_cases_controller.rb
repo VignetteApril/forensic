@@ -368,6 +368,8 @@ class MainCasesController < ApplicationController
 
     # 根据参数{page_type}来判断是要跳转到哪个页面
     case page_type
+    when 'filing_info'
+      redirect_url = filing_info_main_case_url(@main_case)
     when 'payment_order_management'
       redirect_url = payment_order_management_main_case_url(@main_case)
     when 'case_executing'

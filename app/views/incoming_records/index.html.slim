@@ -1,0 +1,9 @@
+.row.mb-2.no-gutters
+  .col-md-12
+    .btn-group.btn-group-sm role="group" aria-label="..."
+      button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='incoming_records_grid' 过滤
+      button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='incoming_records_grid' 清除过滤条件
+    - if can?('incoming_records', 'new')
+      = link_to '新建到账记录', new_incoming_record_path, class: 'btn btn-primary pull-right'
+.row.no-gutters
+  = render partial: 'incoming_records_grid', :locals => {incoming_records: @incoming_records}

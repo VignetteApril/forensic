@@ -3,22 +3,7 @@
                                               partial_name: 'executing_case_docs',
                                               case_modal_id: 'case_doc_modal' }
 #dynamic_file_modal
-.row
-  .col-md-6
-    = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
-    span.h5.ml-3 = "#{'案件流水号：' + @main_case.serial_no}"
-  .col-md-6 
-    = simple_form_for(@main_case, method: :patch, url: update_case_stage_main_case_path, html: { width: '100%' }) do |f|
-
-      .item style="display: flex; align-items: center; justify-content: center"
-        span style="width:100px" 案件状态：
-        .item style="display:none;" 
-          = f.input :page_type, as: :hidden, input_html: { value: 'case_executing' }
-        .item style="width:200px;padding-right:30px;height:100%" 
-          = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
-        .item style="width:100px;" 
-          = f.button :submit, '提交', class: 'btn-success', wrapper_html: {style: 'display:inline'}
-
+= render partial: 'case_stage_bar', locals: { main_case: @main_case, case_stage: 'case_executing' }
 = render 'nav_bar'
 
 .card

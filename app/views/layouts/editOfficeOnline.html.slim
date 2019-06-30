@@ -2,7 +2,7 @@ doctype html
 html
   head
     = javascript_include_tag 'weboffice'
-    
+
 javascript:
     var pfile = '20161108144356.doc'; //word的文件名
     var strOpenUrl = strRoot + "file/" + pfile; //取得打开路径和文件名
@@ -13,7 +13,7 @@ javascript:
         if (obj) setTimeout('OpenDocument()', 1000);//等待控件初始化完毕，时间可以根据网络速度设定。
     }
 
-    function OpenDocument() {
+    function OpenDocument() {i
         try {
             document.getElementById('WebOffice').Open(strOpenUrl, true, "Word.Document");
         } catch (e) {
