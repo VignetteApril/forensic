@@ -120,7 +120,7 @@ $(document).on('turbolinks:load', function() {
             });
         } // if
 
-        if ($('body').attr('data-action') === 'index' || $('body').attr('data-action') === 'department_cases' || $('body').attr('data-action') === 'center_cases') {
+        if ( $('body').attr('data-action') === 'filed_unpaid_cases' || $('body').attr('data-action') === 'index' || $('body').attr('data-action') === 'department_cases' || $('body').attr('data-action') === 'center_cases' || $('body').attr('data-action') === 'pending_case') {
             $(".clickable-row").click(function (e) {
                 // 通过当前点击元素判断是否点击的是带有id的元素
                 // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js

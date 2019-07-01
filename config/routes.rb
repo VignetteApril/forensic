@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     get :payment_order_management, on: :member
     get :request_bill, on: :collection
     get :case_executing, on: :member
+    get :pending_cases, on: :collection
     post :display_dynamic_file_modal, on: :member
     post :create_organization_and_user, on: :collection
     post :user_search, on: :collection

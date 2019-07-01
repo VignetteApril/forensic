@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_01_030455) do
+ActiveRecord::Schema.define(version: 2019_07_01_135945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -415,6 +415,7 @@ ActiveRecord::Schema.define(version: 2019_07_01_030455) do
     t.datetime "updated_at", null: false
     t.string "doc_type"
     t.string "unit"
+    t.string "serial_no"
     t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
   end
 

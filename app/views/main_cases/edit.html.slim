@@ -3,7 +3,7 @@
 
 .row
   .col-md-2
-    = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
+    = link_to '返回', :back, class: 'btn btn-primary mb-2'
   .col-md-10
     button type="button" class="btn btn-primary mb-2 pull-right" data-toggle="modal" data-target="#case_no_modal" 生成案号
     span.pull-right.mr-2.mt-2.h6 = "案件编号：#{@main_case.case_no_display}"

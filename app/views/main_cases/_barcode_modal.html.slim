@@ -7,6 +7,11 @@
           span aria-hidden="true" &times;
       .modal-body.text-center
         = image_tag url_for(barcode_image)
+        - if transfer_doc
+          h5 = transfer_doc.serial_no
+        - elsif main_case
+          h5 = main_case.serial_no
+
       .modal-footer
         .d-inline-block = link_to '下载条码', rails_blob_path(barcode_image, disposition: "attachment"), class: 'btn btn-success'
         button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭

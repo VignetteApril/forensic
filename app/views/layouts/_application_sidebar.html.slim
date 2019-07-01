@@ -31,6 +31,11 @@ aside.app-sidebar
             a.treeview-item href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
               i.app-menu__icon
               span.app-menu__label 已立案待付款案件
+        - if can?('main_cases', 'pending_cases')
+          li
+            a.treeview-item href="#{pending_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'pending_cases')}"
+              i.app-menu__icon
+              span.app-menu__label 待立案的案件
     / 只有委托人能看到以下的侧边栏
     - if court_user?
       - if can?('entrust_orders', 'index')
