@@ -9,5 +9,18 @@ aside.app-sidebar
       ul.treeview-menu
         li
           a.treeview-item href="#{incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'index')}"
-            i.app-menu__icon.fa.fa-building-o
+            i.app-menu__icon
             span.app-menu__label 到账记录管理
+        li
+          a.treeview-item href="#{finance_index_main_case_bills_path(-1)}" class="#{active_class_with_action(controller, 'bills', 'finance_index')}"
+            i.app-menu__icon
+            span.app-menu__label 发票管理
+        li
+          a.treeview-item href="#{finance_index_main_case_payment_orders_path(-1)}" class="#{active_class_with_action(controller, 'payment_orders', 'finance_index')}"
+            i.app-menu__icon
+            span.app-menu__label 缴费单管理
+        li
+          a.treeview-item href="#{incoming_records_path}"
+            i.app-menu__icon
+            span.app-menu__label 退费单管理
+

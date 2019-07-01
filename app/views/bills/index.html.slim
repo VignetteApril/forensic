@@ -1,0 +1,19 @@
+h1 Listing bills
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @bills.each do |bill|
+      tr
+        td = link_to 'Show', bill
+        td = link_to 'Edit', edit_bill_path(bill)
+        td = link_to 'Destroy', bill, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Bill', new_bill_path

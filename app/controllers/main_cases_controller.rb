@@ -388,11 +388,18 @@ class MainCasesController < ApplicationController
 
   # 费用管理页面
   def payment_order_management
-    @payment_orders = initialize_grid(PaymentOrder.where(main_case_id: params[:id]),     
-                              order: 'created_at',
-                              order_direction: 'desc',
-                              per_page: 10, 
-                              name: 'payment_orders')
+    @payment_orders = initialize_grid(@main_case.payment_orders,
+                                      order: 'created_at',
+                                      order_direction: 'desc',
+                                      per_page: 10,
+                                      name: 'payment_orders')
+
+    @bills = initialize_grid(@main_case.bills,
+                             order: 'created_at',
+                             order_direction: 'desc',
+                             per_page: 10,
+                             name: 'bills')
+    @bill = @main_case.bills.new
   end
 
   # 保存费用管理页面

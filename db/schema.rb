@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_30_191128) do
+ActiveRecord::Schema.define(version: 2019_07_01_030455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,10 @@ ActiveRecord::Schema.define(version: 2019_06_30_191128) do
     t.string "bank"
     t.string "phone"
     t.bigint "main_case_id"
+    t.float "amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "bill_stage", default: 0
     t.index ["main_case_id"], name: "index_bills_on_main_case_id"
   end
 
@@ -325,14 +329,14 @@ ActiveRecord::Schema.define(version: 2019_06_30_191128) do
     t.float "consult_cost"
     t.datetime "payment_date"
     t.float "total_cost"
-    t.boolean "take_bill"
+    t.boolean "take_bill", default: false
     t.bigint "bill_id"
     t.float "cash_pay"
     t.float "check_pay"
     t.string "check_num"
     t.float "card_pay"
     t.float "remit_pay"
-    t.integer "order_stage"
+    t.integer "order_stage", default: 0
     t.index ["bill_id"], name: "index_payment_orders_on_bill_id"
     t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
   end

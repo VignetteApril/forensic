@@ -1,25 +1,38 @@
-/ = render partial: 'case_doc_modal', locals: {case_doc: @main_case.case_docs.new,
-/                                              case_stage: :financial,
-/                                              partial_name: 'financial_case_docs',
-/                                              case_modal_id: 'case_doc_modal'}
-
+= render partial: 'case_doc_modal', locals: {case_doc: @main_case.case_docs.new,
+                                             case_stage: :financial,
+                                             partial_name: 'financial_case_docs',
+                                             case_modal_id: 'case_doc_modal'}
 = render partial: 'case_stage_bar', locals: {main_case: @main_case, case_stage: 'payment_order_management'}
 = render 'nav_bar'
-= render 'bill_modal'
 
-.card
-  .card-body
-    / = render 'payment_order_management_form'
-    = render "payment_orders_grid"
+.row
+  .col-md-12
+    span.h5 缴费单
+    = link_to '新建缴费单', new_main_case_payment_order_path(@main_case), class: 'btn btn-primary pull-right mb-2'
 
-/ #financial_case_docs.row.mt-2
-/   .col-md-4.offset-8
-/     ul.pull-right
-/       - @main_case.case_docs.where(case_stage: :financial).each do |doc|
-/         li = doc.name
+= simple_form_for(@bill, url: main_case_bills_path(@main_case), method: :post) do |f|
+  = render partial: 'bill_modal', locals: { f: f }
+  .row
+    .col-md-12
+      = render 'payment_orders/payment_orders_grid'
+  .row
+    .col-md-12
+      button.pull-right type="button" class="btn btn-primary" data-toggle="modal" data-target="#bill_modal" 开发票
+
+.row.mt-3
+  .col-md-12
+    span.h5 发票
+.row
+  .col-md-12
+    = render 'bills/bills_grid'
+
+#financial_case_docs.row.mt-2
+  .col-md-4.offset-8
+    ul.pull-right
+      - @main_case.case_docs.where(case_stage: :financial).each do |doc|
+        li = doc.name
 
 javascript:
-
   var digitUppercase = function(n) {
     var fraction = ['角', '分'];
     var digit = [

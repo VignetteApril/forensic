@@ -77,7 +77,19 @@ Rails.application.routes.draw do
     patch :update_reject, on: :member
     patch :save_payment_order, on: :member
 
-    resources :payment_orders
+    # 缴费单
+    resources :payment_orders do
+      get :submit_current_order, on: :member
+      get :finance_index, on: :collection
+      get :confirm_order, on: :member
+    end
+
+    # 发票
+    resources :bills do
+      get :finance_index, on: :collection
+      patch :to_billed, on: :member
+      patch :to_taked_away, on: :member
+    end
   end
 
   resources :material_cycles

@@ -1,0 +1,9 @@
+= form_for @bill do |f|
+  - if @bill.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@bill.errors.count, "error")} prohibited this bill from being saved:"
+      ul
+        - @bill.errors.full_messages.each do |message|
+          li = message
+
+  .actions = f.submit

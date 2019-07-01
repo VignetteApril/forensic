@@ -1,0 +1,109 @@
+<%= grid(@payment_orders, hide_submit_button: true, hide_reset_button: true) do |g|
+
+  g.action_column html_check_box: false, html: {style: "width:80px;"} do |a|
+    a.confirm? && a.bill_id.nil?
+  end
+
+	g.column name: '状态', html: {style: "width:50px;"}, custom_filter: false do |a|
+		PaymentOrder::ORDER_STAGE_MAP[a.try(:order_stage).try(:to_sym)]
+  end
+
+  g.column name: '交款人', custom_filter: false do |a|
+    a.payer
+  end
+
+  g.column name: '交款联系人', custom_filter: false do |a|
+    a.payer_contacts
+  end
+
+  g.column name: '交款联系人电话', custom_filter: false do |a|
+    a.payer_contacts_phone
+  end
+
+  g.column name: '委托人', custom_filter: false do |a|
+    a.consigner
+  end
+
+  g.column name: '委托人联系人', custom_filter: false do |a|
+    a.consiggner_contacts
+  end
+
+  g.column name: '委托人联系人电话', custom_filter: false do |a|
+    a.consiggner_contacts_phone
+  end
+
+  g.column name: '鉴定费', custom_filter: false do |a|
+    a.appraisal_cost
+  end
+
+  g.column name: '差旅费', custom_filter: false do |a|
+    a.business_cost
+  end
+
+  g.column name: '出庭费', custom_filter: false do |a|
+    a.appear_court_cost
+  end
+
+  g.column name: '调查费', custom_filter: false do |a|
+    a.investigation_cost
+  end
+
+  g.column name: '咨询费', custom_filter: false do |a|
+    a.consult_cost
+  end
+
+  g.column name: '其他', custom_filter: false do |a|
+    a.other_cost
+  end
+
+  g.column name: '缴费合计', custom_filter: false do |a|
+    a.total_cost
+  end
+
+  g.column name: '现金金额', custom_filter: false do |a|
+    a.cash_pay
+  end
+  g.column name: '支票金额', custom_filter: false do |a|
+    a.check_pay
+  end
+  g.column name: '支票号码', custom_filter: false do |a|
+    a.check_num
+  end
+  g.column name: '刷卡金额', custom_filter: false do |a|
+    a.card_pay
+  end
+  g.column name: '汇款金额', custom_filter: false do |a|
+    a.remit_pay
+  end
+  g.column name: '汇款日期', custom_filter: false do |a|
+    a.payment_date
+  end
+  g.column name: '汇款人', custom_filter: false do |a|
+    a.payment_people
+  end
+
+  g.column in_csv: false do |payment_order|
+    if can?('payment_orders', 'submit_current_order') && payment_order.not_confirm?
+      link_to '提交', submit_current_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-secondary btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |payment_order|
+    if can?('payment_orders', 'edit') && !payment_order.confirm? && !payment_order.cancel?
+      link_to '编辑', edit_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-secondary btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |payment_order|
+    if can?('payment_orders', 'destroy') && !payment_order.confirm? && !payment_order.cancel?
+      link_to '删除', main_case_payment_order_path(payment_order.main_case, payment_order), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |payment_order|
+    if can?('payment_orders', 'confirm_order')
+      link_to '确认缴费单', confirm_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-danger btn-sm'
+    end
+  end
+
+end -%>
