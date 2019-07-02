@@ -20,7 +20,6 @@ class MainCase < ApplicationRecord
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
 
   has_many :payment_orders, dependent: :destroy
-  accepts_nested_attributes_for :payment_orders, reject_if: :all_blank, allow_destroy: true
   has_many :bills
   has_many :refund_orders
   

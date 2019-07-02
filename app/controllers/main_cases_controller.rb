@@ -115,7 +115,6 @@ class MainCasesController < ApplicationController
         format.json { render :show, status: :created, location: @main_case }
       else
         format.html { render :new }
-        # format.json { render json: @main_case.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -301,11 +300,11 @@ class MainCasesController < ApplicationController
   # respond to only js
   def open_barcode_image
     if params[:transfer_doc_id]
-      transfer_doc = TransferDoc.find(params[:transfer_doc_id])
-      @barcode_image = transfer_doc.barcode_image
+      @transfer_doc = TransferDoc.find(params[:transfer_doc_id])
+      @barcode_image = @transfer_doc.barcode_image
     elsif params[:main_case_id]
-      main_case = MainCase.find(params[:main_case_id])
-      @barcode_image = main_case.barcode_image
+      @main_case = MainCase.find(params[:main_case_id])
+      @barcode_image = @main_case.barcode_image
     end
 
     respond_to do |format|
@@ -508,6 +507,15 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  # 待立案的案件列表
+  def pending_cases
+    current_org = @current_user.organization
+    redirect_to root_path, notice: '请您关联相关机构' and return if current_org.nil?
+    @main_cases = initialize_grid(current_org.main_cases.pending, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   private

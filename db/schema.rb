@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2019_07_02_102034) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -418,6 +419,7 @@ ActiveRecord::Schema.define(version: 2019_07_02_102034) do
     t.datetime "updated_at", null: false
     t.string "doc_type"
     t.string "unit"
+    t.string "serial_no"
     t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
   end
 

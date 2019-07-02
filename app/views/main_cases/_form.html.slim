@@ -1,5 +1,7 @@
+// render 移交材料的modal
+= render "nested_modal"
+
 = simple_form_for(@main_case) do |f|
-  = render "nested_modal"
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
       h4
@@ -44,11 +46,6 @@
             button#create_org_user.btn.btn-primary.mt-4.pull-right type="button" 保存成常用联系人
         .row.no-gutters
           .col-md-4
-            .attachment_upload
-              = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: { direct_upload: true }
-              - if @main_case.entrust_doc.attached?
-                span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
-          .col-md-4
             = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
     // 委托鉴定事项card
     .card.gray-card
@@ -74,6 +71,12 @@
             = f.input :matter_demand, label: '鉴定事项及要求', as: :text, :input_html => {:rows => 5}
           .col-md-6
             = f.input :base_info, label: '基本案情', as: :text, :input_html => {:rows => 5}
+        .row
+          .col-md-4
+            .attachment_upload
+              = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: {direct_upload: true}
+              - if @main_case.entrust_doc.attached?
+                span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
     // 移交材料card
     .card.gray-card
       .card-header
@@ -135,9 +138,7 @@
               = appraised_unit.input :addr, label: '联系地址'
 
   .form-actions
-    .row.no-gutters
-      = f.button :submit, '提交', class: 'btn btn-success'
-
+    = f.button :submit, '提交', class: 'btn btn-success'
 javascript:
     // 导入用户用到的事件
     $('#user_select').selectize({
@@ -171,15 +172,9 @@ javascript:
         }
     });
 
-    // 监听移交资料的插入事件
-    $('#transfer_docs').on('cocoon:before-insert', function (e, insertedItem, originalEvent) {
-       console.log(insertedItem)
-    });
-
-
     //新增模态框初始化input btn
     $('.add-file').click(function (){
-      $('#nested_modal').find('input').val("")
-      $('#nested_modal').find('.unit-btn').text("")
+      $('#nested_modal').find('input').val("");
+      $('#nested_modal').find('.unit-btn').text("");
       $('#nested_modal').find('.unit-btn').attr("data","")
     })

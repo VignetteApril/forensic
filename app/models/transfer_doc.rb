@@ -8,6 +8,7 @@ class TransferDoc < ApplicationRecord
 
   before_create :set_barcode_hex
   after_destroy :purge_barcode_image
+  before_save :set_serial_no
 
   # enum unit: [ :piece,
   #              :meter,
@@ -22,6 +23,11 @@ class TransferDoc < ApplicationRecord
   #              liter: '升',
   #              kilo: '千克',
   #              gram: '克' }
+
+  # 设置序号
+  def set_serial_no
+    self.serial_no = Time.now.strftime('%Y%m%d%H%M%S')
+  end
 
   # 设置条码，并且生成条码图片
   def set_barcode_hex
