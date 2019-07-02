@@ -1,5 +1,7 @@
+// render 移交材料的modal
+= render "nested_modal"
+
 = simple_form_for(@main_case) do |f|
-  = render "nested_modal"
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
       h4
@@ -136,9 +138,7 @@
               = appraised_unit.input :addr, label: '联系地址'
 
   .form-actions
-    .row.no-gutters
-      = f.button :submit, '提交', class: 'btn btn-success'
-
+    = f.button :submit, '提交', class: 'btn btn-success'
 javascript:
     // 导入用户用到的事件
     $('#user_select').selectize({
