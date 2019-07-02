@@ -1,0 +1,65 @@
+<%= grid(@refund_orders, hide_submit_button: true, hide_reset_button: true) do |g|
+
+  g.column name: '鉴定费', custom_filter: false do |a|
+    a.appraisal_cost
+  end
+
+  g.column name: '差旅费', custom_filter: false do |a|
+    a.business_cost
+  end
+
+  g.column name: '出庭费', custom_filter: false do |a|
+    a.appear_court_cost
+  end
+
+  g.column name: '调查费', custom_filter: false do |a|
+    a.investigation_cost
+  end
+
+  g.column name: '咨询费', custom_filter: false do |a|
+    a.consult_cost
+  end
+
+  g.column name: '其他', custom_filter: false do |a|
+    a.other_cost
+  end
+
+  g.column name: '总计', custom_filter: false do |a|
+    a.total_cost
+  end  
+
+  g.column name: '退费金额', custom_filter: false do |a|
+    a.refund_cost
+  end
+
+  g.column name: '领款人', custom_filter: false do |a|
+    User.find_by(:id=>a.payee_id).try(:name)
+  end
+
+  g.column name: '退费审核人', custom_filter: false do |a|
+    User.find_by(:id=>a.refund_checker_id).try(:name)
+  end
+
+  g.column name: '退费经办人', custom_filter: false do |a|
+    User.find_by(:id=>a.refund_dealer_id).try(:name)
+  end
+
+  g.column in_csv: false do |refund_order|
+    if can?('refund_orders', 'edit') && !refund_order.confirm? && !refund_order.cancel?
+      link_to '编辑', edit_main_case_refund_order_path(refund_order.main_case, refund_order), class: 'btn btn-secondary btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |refund_order|
+    if can?('refund_orders', 'destroy') && !refund_order.confirm? && !refund_order.cancel?
+      link_to '删除', main_case_refund_order_path(refund_order.main_case, refund_order), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |refund_order|
+    if can?('refund_orders', 'submit_current_order') && (refund_order.order_stage == "not_submit"||"not_confirm")
+      link_to '提交', submit_current_order_main_case_refund_order_path(refund_order.main_case, refund_order), class: 'btn btn-secondary btn-sm'
+    end
+  end
+
+end -%>

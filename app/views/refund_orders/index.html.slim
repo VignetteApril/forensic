@@ -1,0 +1,19 @@
+h1 Listing refund_orders
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @refund_orders.each do |refund_order|
+      tr
+        td = link_to 'Show', refund_order
+        td = link_to 'Edit', edit_refund_order_path(refund_order)
+        td = link_to 'Destroy', refund_order, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Refund order', new_refund_order_path

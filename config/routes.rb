@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/delayed_job" => BetterDelayedJobWeb, :anchor => false, :via => [:get, :post]
 
@@ -89,6 +90,11 @@ Rails.application.routes.draw do
       get :finance_index, on: :collection
       patch :to_billed, on: :member
       patch :to_taked_away, on: :member
+    end
+    
+    # 退费单
+    resources :refund_orders do
+      get :submit_current_order, on: :member
     end
   end
 

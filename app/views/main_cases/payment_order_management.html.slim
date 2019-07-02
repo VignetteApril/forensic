@@ -26,6 +26,14 @@
   .col-md-12
     = render 'bills/bills_grid'
 
+.row.mt-3
+  .col-md-12
+    span.h5 退费单
+    = link_to '新建退费单', new_main_case_refund_order_path(@main_case), class: 'btn btn-primary pull-right mb-2'
+.row
+  .col-md-12
+    = render 'refund_orders/refund_orders_grid'    
+
 #financial_case_docs.row.mt-2
   .col-md-4.offset-8
     ul.pull-right

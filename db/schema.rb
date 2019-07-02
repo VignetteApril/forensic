@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_01_030455) do
+ActiveRecord::Schema.define(version: 2019_07_02_102034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,9 +250,9 @@ ActiveRecord::Schema.define(version: 2019_07_01_030455) do
     t.integer "material_cycle"
     t.string "ident_users"
     t.datetime "acceptance_date"
+    t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
-    t.integer "wtr_id"
     t.float "amount"
     t.string "wtr_phone"
     t.bigint "entrust_order_id"
@@ -354,6 +354,9 @@ ActiveRecord::Schema.define(version: 2019_07_01_030455) do
     t.integer "refund_checker_id"
     t.float "total_cost"
     t.bigint "main_case_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer "order_stage", default: 0
     t.index ["main_case_id"], name: "index_refund_orders_on_main_case_id"
   end
 

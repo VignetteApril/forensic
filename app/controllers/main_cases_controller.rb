@@ -400,6 +400,12 @@ class MainCasesController < ApplicationController
                              per_page: 10,
                              name: 'bills')
     @bill = @main_case.bills.new
+
+    @refund_orders = initialize_grid(@main_case.refund_orders,
+                             order: 'created_at',
+                             order_direction: 'desc',
+                             per_page: 10,
+                             name: 'refund_orders')
   end
 
   # 保存费用管理页面
