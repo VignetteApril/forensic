@@ -1,5 +1,9 @@
 <%= grid(@refund_orders, hide_submit_button: true, hide_reset_button: true) do |g|
 
+  g.column name: '状态', html: {style: "width:50px;"}, custom_filter: false do |a|
+    RefundOrder::ORDER_STAGE_MAP[a.try(:order_stage).try(:to_sym)]
+  end
+
   g.column name: '鉴定费', custom_filter: false do |a|
     a.appraisal_cost
   end
