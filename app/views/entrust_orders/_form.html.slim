@@ -42,15 +42,12 @@
         .row
           .col-md-12
             = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
-                    collection: AppraisedUnit.unit_types_arr, checked: 'user', :item_wrapper_class => 'form-check form-check-inline'
-        .row
-          .col-md-4
-            = appraised_unit.input :name, label: '名称'
-          .col-md-8
-            = appraised_unit.input :addr, label: '联系地址'
-        #hidden-fields
+                    collection: AppraisedUnit.unit_types_arr, :item_wrapper_class => 'form-check form-check-inline'
+        .user-fields class="#{appraised_unit.object.unit_type == 'user' ? '' : 'd-none'}"
           .row
-            .col-md-3
+            .col-md-2
+              = appraised_unit.input :name, label: '名称'
+            .col-md-1
               = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
             .col-md-3
               = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
@@ -58,15 +55,26 @@
               = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
             .col-md-4
               = appraised_unit.input :id_num, label: '证件号码'
+          .row
+            .col-md-12
+              = appraised_unit.input :addr, label: '联系地址'
+        .company-fields class="#{appraised_unit.object.unit_type == 'user' ? 'd-none' : ''}"
+          .row
+            .col-md-1
+              = appraised_unit.input :name, label: '名称'
+            .col-md-11
+              = appraised_unit.input :addr, label: '联系地址'
   .row
     .col-md-12
       = f.button :submit, '提交', class: 'btn btn-success'
 javascript:
   $('input[type=radio][name="entrust_order[appraised_unit_attributes][unit_type]"]').change(function () {
       if (this.value == 'unit') {
-          $('#hidden-fields').css('display', 'none');
+          $('.user-fields').addClass("d-none");
+          $('.company-fields').removeClass("d-none");
       }
       else if (this.value == 'user') {
-          $('#hidden-fields').css('display', 'block');
+          $('.user-fields').removeClass("d-none");
+          $('.company-fields').addClass("d-none");
       }
   });

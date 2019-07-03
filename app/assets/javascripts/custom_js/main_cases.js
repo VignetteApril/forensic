@@ -1,6 +1,10 @@
 $(document).on('turbolinks:load', function() {
     if ($('body').attr('data-controller') === 'main_cases') {
-        if ($('body').attr('data-action') === 'edit' || $('body').attr('data-action') === 'new' || $('body').attr('data-action') === 'create' || $('body').attr('data-action') === 'update') {
+        if ($('body').attr('data-action') === 'edit' ||
+            $('body').attr('data-action') === 'new' ||
+            $('body').attr('data-action') === 'create' ||
+            $('body').attr('data-action') === 'update' ||
+            $('body').attr('data-action') === 'new_with_entrust_order' ) {
             // select2
             var province_select2 = $("#main_case_province_id");
             var city_select2 = $("#main_case_city_id");
@@ -111,11 +115,14 @@ $(document).on('turbolinks:load', function() {
 
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {
+                console.log('!!!');
                 if (this.value == 'unit') {
-                    $('.hidden-fields').css('display','none');
+                    $('.user-fields').addClass("d-none");
+                    $('.company-fields').removeClass("d-none");
                 }
                 else if (this.value == 'user') {
-                    $('.hidden-fields').css('display','block');
+                    $('.user-fields').removeClass("d-none");
+                    $('.company-fields').addClass("d-none");
                 }
             });
         } // if

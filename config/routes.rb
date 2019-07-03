@@ -68,6 +68,7 @@ Rails.application.routes.draw do
     get :request_bill, on: :collection
     get :case_executing, on: :member
     get :pending_cases, on: :collection
+    get :new_with_entrust_order, on: :collection
     post :display_dynamic_file_modal, on: :member
     post :create_organization_and_user, on: :collection
     post :user_search, on: :collection

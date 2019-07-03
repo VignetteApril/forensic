@@ -5,13 +5,34 @@
     g.column name:  '案件性质', attribute: 'case_property'
     g.column name:  '案由', attribute: 'anyou'
 
-    if court_user?
-      g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+    g.column name:  '认领状态', attribute: 'status' do |entrust_order|
+      case entrust_order.status.to_sym
+      when :unclaimed
+        content_tag :div, class: 'text-danger' do
+          EntrustOrder::STATUS_MAP[entrust_order.status.to_sym]
+        end
+      when :claimed
+        content_tag :div, class: 'text-success' do
+          EntrustOrder::STATUS_MAP[entrust_order.status.to_sym]
+        end
+      end
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+      if can?('entrust_orders', 'edit')
         link_to '编辑', edit_entrust_order_path(entrust_order), class: 'btn btn-secondary btn-sm'
       end
+    end
 
-      g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+    g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+      if can?('entrust_orders', 'destroy')
         link_to '删除', entrust_order, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+      end
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+      if can?('main_cases', 'new_with_entrust_order') && entrust_order.unclaimed?
+        link_to '认领', new_with_entrust_order_main_cases_path(entrust_order_id: entrust_order), method: :get, class: 'btn btn-primary btn-sm'
       end
     end
 end -%>

@@ -16,7 +16,7 @@ class AppraisedUnit < ApplicationRecord
       unit_types.each do |key, value|
         rs << [UNIT_TYPE_MAP[key.to_sym], key]
       end
-      rs
+      rs.reverse
     end
 
     def genders_arr

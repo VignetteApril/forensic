@@ -5,7 +5,7 @@ class MainCasesController < ApplicationController
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
                                        :display_dynamic_file_modal]
-  before_action :set_new_areas, only: [:new, :organization_and_user, :create]
+  before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
@@ -516,6 +516,25 @@ class MainCasesController < ApplicationController
     @main_cases = initialize_grid(current_org.main_cases.pending, per_page: 20, name: 'main_cases_grid')
 
     render :index
+  end
+
+  # 用户在委托单中点击【认领】按钮，系统会跳转到该action
+  # 该action和new页面基本一致但是需要预先设置部分字段的值，根据传进来的委托单的内容
+  def new_with_entrust_order
+    @entrust_order = EntrustOrder.find(params[:entrust_order_id])
+    @main_case = @entrust_order.build_main_case({ anyou: @entrust_order.anyou,
+                                                  case_property: @entrust_order.case_property,
+                                                  matter_demand: @entrust_order.matter_demand,
+                                                  base_info: @entrust_order.base_info,
+                                                  commission_date: @entrust_order.created_at })
+    @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
+    @main_case.transfer_docs.build
+
+    # 设置鉴定事项
+    set_department_matters
+
+    # 设定案件类型
+    set_case_types
   end
 
   private
