@@ -91,27 +91,49 @@ $(document).on('turbolinks:load', function() {
             var main_case_matter_select2 = $('#main_case_matter');
             var main_case_case_type_select2 =  $('#main_case_case_type');
             var request_url_matters = window.location.origin + '/main_cases/matter_demands_and_case_types.json';
-            department_select2.on("select2:select", function(e){
-                $.ajax({
-                    url: request_url_matters,
-                    type: "GET",
-                    data: {
-                        'department_id': e['currentTarget']['value'],
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        main_case_matter_select2.empty();
-                        main_case_matter_select2.select2({
-                            data: data.matters
-                        });
 
-                        main_case_case_type_select2.empty();
-                        main_case_case_type_select2.select2({
-                            data: data.case_types
-                        });
-                    }
-                });
+            main_case_matter_select2.selectize({
+                valueField: 'id',
+                labelField: 'name'
             });
+
+            main_case_case_type_select2.selectize({
+                valueField: 'id',
+                labelField: 'name'
+            });
+
+            department_select2.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                onChange: function(value) {
+                    $.ajax({
+                        url: request_url_matters,
+                        type: "GET",
+                        data: {
+                            'department_id': value,
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            reloadSelectize(main_case_matter_select2, data.matters, default_select_id = '')
+                            reloadSelectize(main_case_case_type_select2, data.case_types, default_select_id = '')
+                        }
+                    });
+                }
+            });
+            // department_select2.on("select2:select", function(e){
+            //     $.ajax({
+            //         url: request_url_matters,
+            //         type: "GET",
+            //         data: {
+            //             'department_id': e['currentTarget']['value'],
+            //         },
+            //         dataType: 'json',
+            //         success: function (data) {
+            //             reloadSelectize(main_case_matter_select2, data.matters, default_select_id = '')
+            //             reloadSelectize(main_case_case_type_select2, data.case_types, default_select_id = '')
+            //         }
+            //     });
+            // });
 
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {

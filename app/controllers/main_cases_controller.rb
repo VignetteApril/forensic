@@ -200,13 +200,13 @@ class MainCasesController < ApplicationController
   def matter_demands_and_case_types
     department = Department.find(params[:department_id])
     if department.matter
-      matters = department.matter.split(',').map { |matter| { text: matter, id: matter } }
+      matters = department.matter.split(',').map { |matter| { name: matter, id: matter } }
     else
       matters = []
     end
 
     if department.case_types
-      case_types = department.case_types.split(',').map { |case_type| { text: case_type , id: case_type } }
+      case_types = department.case_types.split(',').map { |case_type| { name: case_type , id: case_type } }
     else
       case_types = []
     end

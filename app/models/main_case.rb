@@ -33,7 +33,7 @@ class MainCase < ApplicationRecord
   # 设置流水号
   before_create :set_serial_no
   # 设置委托单的状态为已认领
-  before_save :set_entrust_order_status
+  after_save :set_entrust_order_status
 
   # 案件状态：待立案、待补充材料、立案、退案、执行中、执行完成、申请归档、结案
   # 财务状态：未付款、未付清、已付清、已退款
