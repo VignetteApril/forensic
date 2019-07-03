@@ -63,7 +63,7 @@
             = f.input :commission_date, as: :date, label: '委托日期', html5: true
         .row
           .col-md-4
-            = f.association :department, label: '受委托科室'
+            = f.association :department, label: '受委托科室', collection: @departments
           .col-md-4
             = f.input :matter, label: '鉴定事项', collection: @department_matters, selected: @selected_matters, include_hidden: false, include_blank: true, input_html: { multiple: true }
           .col-md-4

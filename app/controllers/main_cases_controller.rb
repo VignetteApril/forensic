@@ -12,6 +12,8 @@ class MainCasesController < ApplicationController
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
+  before_action :check_if_has_department, except: [:index]
+  before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
 
@@ -46,7 +48,6 @@ class MainCasesController < ApplicationController
   # 鉴定中心的人所在科室下的所有案件
   # 针对本中心的人没有权限
   def department_cases
-    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.departments.nil?
     data = MainCase.where(department_id: @current_user.departments.split(','))
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
@@ -57,8 +58,6 @@ class MainCasesController < ApplicationController
   # 本页面不为管理员和委托人这两种角色设计，请不要在这两个角色下添加该功能
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
-    redirect_to root_path, notice: '请您关联相关鉴定中心' and return if @current_user.organization.nil?
-
     data = @current_user.organization.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
@@ -69,7 +68,6 @@ class MainCasesController < ApplicationController
   # 通过财务状态：【已付款】和案件状态：【待立案】，筛选本中心的所有案件
   # 本页面属于角色为立案人
   def filed_unpaid_cases
-    redirect_to root_path, notice: '请您关联相关鉴定中心' and return if @current_user.organization.nil?
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
 
@@ -696,6 +694,20 @@ class MainCasesController < ApplicationController
     def forbid_admin_user
       if admin?
         redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
+      end
+    end
+
+    def check_if_has_department
+      redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
+    end
+
+    # 新建和编辑页面需要对应将科室的选择框限定在当前用户所属于的科室
+    def set_departments
+      departments = Department.where(id: @current_user.departments.split(','))
+      if departments.empty?
+        @departments = []
+      else
+        @departments = departments.map { |department| [department.name, department.id] }
       end
     end
 end

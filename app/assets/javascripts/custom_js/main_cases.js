@@ -120,20 +120,6 @@ $(document).on('turbolinks:load', function() {
                     });
                 }
             });
-            // department_select2.on("select2:select", function(e){
-            //     $.ajax({
-            //         url: request_url_matters,
-            //         type: "GET",
-            //         data: {
-            //             'department_id': e['currentTarget']['value'],
-            //         },
-            //         dataType: 'json',
-            //         success: function (data) {
-            //             reloadSelectize(main_case_matter_select2, data.matters, default_select_id = '')
-            //             reloadSelectize(main_case_case_type_select2, data.case_types, default_select_id = '')
-            //         }
-            //     });
-            // });
 
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {
@@ -149,7 +135,11 @@ $(document).on('turbolinks:load', function() {
             });
         } // if
 
-        if ( $('body').attr('data-action') === 'filed_unpaid_cases' || $('body').attr('data-action') === 'index' || $('body').attr('data-action') === 'department_cases' || $('body').attr('data-action') === 'center_cases' || $('body').attr('data-action') === 'pending_case') {
+        if ( $('body').attr('data-action') === 'filed_unpaid_cases' ||
+             $('body').attr('data-action') === 'index' ||
+             $('body').attr('data-action') === 'department_cases' ||
+             $('body').attr('data-action') === 'center_cases' ||
+             $('body').attr('data-action') === 'pending_cases') {
             $(".clickable-row").click(function (e) {
                 // 通过当前点击元素判断是否点击的是带有id的元素
                 // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
