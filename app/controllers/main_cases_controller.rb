@@ -234,7 +234,7 @@ class MainCasesController < ApplicationController
       user_ids = @main_case.ident_users.split(',')
       users = User.where(id: user_ids).pluck(:id, :name).to_h
       user_ids.each_with_index do |id, index|
-        @ident_users << "##{index + 1}#{users[id.to_i]}  "
+        @ident_users << "第#{index + 1}鉴定人：#{users[id.to_i]}  "
         @select_ident_users << id.to_i
       end
     end

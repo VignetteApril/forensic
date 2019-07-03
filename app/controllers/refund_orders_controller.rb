@@ -68,10 +68,9 @@ class RefundOrdersController < ApplicationController
                                             :refund_cost,
                                             :payee_id,
                                             :refund_dealer_id,
-                                            :refund_checker_id
-      )
-
+                                            :refund_checker_id )
     end
+
     def set_refund_order
       @refund_order = RefundOrder.find(params[:id])
     end

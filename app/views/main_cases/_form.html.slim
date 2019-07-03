@@ -1,6 +1,5 @@
 // render 移交材料的modal
 = render "nested_modal"
-
 = simple_form_for(@main_case) do |f|
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
@@ -20,9 +19,10 @@
         .card-header-btn
           .row.no-gutters
             .col-md-4
+              label 选择已有的委托方信息导入
               #user_select
             .col-md-4
-              span.ml-2.mb-1 class='btn btn-primary' id='import_user' 导入
+              button class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
       .card-body.principal
         .row
           .col-md-4
@@ -77,6 +77,10 @@
               = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: {direct_upload: true}
               - if @main_case.entrust_doc.attached?
                 span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
+                // 只有当位图书为图片类型时才渲染modal
+                - if @main_case.entrust_doc.blob.content_type.match? (/png|jpg/)
+                  button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览委托书
+                  = render partial: 'preview_image_modal', locals: {wts_image_url: @main_case.entrust_doc}
     // 移交材料card
     .card.gray-card
       .card-header
