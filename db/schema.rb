@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_02_102034) do
-
+ActiveRecord::Schema.define(version: 2019_07_04_074505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,6 +303,7 @@ ActiveRecord::Schema.define(version: 2019_07_02_102034) do
     t.string "open_account_bank"
     t.string "account_number"
     t.string "level"
+    t.boolean "is_confirm"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end
@@ -461,7 +461,7 @@ ActiveRecord::Schema.define(version: 2019_07_02_102034) do
     t.integer "city_id"
     t.integer "district_id"
     t.string "organization_name"
-    t.boolean "is_confirm"
+    t.integer "confirm_stage", default: 0
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end

@@ -13,9 +13,14 @@ aside.app-sidebar
           span.app-menu__label 科室管理
     - if can?('users', 'index')
       li
-        a href="#{users_path}" class="#{active_class(controller, 'users')}"
+        a href="#{users_path}" class="#{active_class_with_action(controller,'users' ,'index')}"
           i.app-menu__icon.fa.fa-user-o
           span.app-menu__label 用户管理
+    - if can?('users', 'confirm_users')
+      li
+        a href="#{confirm_users_users_path}" class="#{active_class_with_action(controller,'users' ,'confirm_users')}"
+          i.app-menu__icon.fa.fa-user-o
+          span.app-menu__label 注册审核管理      
     - if can?('features', 'index')
       li
         a href="#{features_path}" class="#{active_class(controller, 'features')}"

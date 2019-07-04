@@ -1,12 +1,12 @@
 #content
   .container-fluid
-    = get_bread_crumb
-    = get_notice_bar
     .row
-      .col-sm-12
+      .col-md-8
         .btn-group.btn-group-sm role="group" aria-label="..."
-          button.wg-external-submit-button.btn.btn-primary.search data-grid-name="notifications" 过滤
-          button.wg-external-reset-button.btn.btn-default.search data-grid-name="notifications" 清除过滤条件
+          button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='notifications' 过滤
+          button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='notifications' 清除过滤条件
+      .col-md-3
+        = link_to '全部标记已读', all_readed_notifications_path, class: 'btn btn-primary pull-right'
     | &nbsp;
     | &nbsp;
     .row
@@ -14,7 +14,3 @@
         = render "notifications_grid" 
 
 javascript:
-  $('#notifications_f_title').css("position","relative");
-  $('#notifications_f_title').css("bottom","5px");
-  $('#notifications_f_title').css("width","160px");
-  $('#notifications_f_title').css("border","1px solid #ccc");

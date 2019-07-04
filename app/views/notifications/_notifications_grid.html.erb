@@ -30,7 +30,7 @@
   g.column  name: '操作',html: {style: "width:80px;"}  do |a|
     if a.status == false
       link_to edit_notification_path(a) do
-        raw("<span class='glyphicon glyphicon-ok-sign' title='标记为已读'>标记为已读</span>")
+        raw("<span class='btn btn-primary pull-right' style='font-size:7pt;padding:2px;margin:0px;' title='标记为已读'>标记为已读</span>")
       end
     end
   end

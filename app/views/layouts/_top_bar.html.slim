@@ -32,10 +32,10 @@ header class="app-header"
                     i.fa.fa-envelope.fa-stack-1x.fa-inverse
                 div
                   p.app-notification__message = notice.title
-                  p.app-notification__meta =distance_of_time_in_words_to_now(notice.created_at, include_seconds: false) + "之前"
+                  p.app-notification__meta = notice.description
 
         li.app-notification__footer
-          a href="#" class='all-readed' 全部标记为已读
+          = link_to '查看所有通知',notifications_path
     - if !admin?
       li class="dropdown"
         a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"
@@ -69,20 +69,20 @@ header class="app-header"
 
 
 javascript:
-  $('.all-readed').click(function (){
-    var data = {}
-    $.ajax({
-    type : 'POST',
-    url : '/notifications/all_readed',
-    data: data,
-    error : function() {
-        alert('更新失败 ');
-    },
-    success : function(data) {
-     $('.app-notification__content').css('display','none')
-     $('.notification-count-icon').css('display','none')
+  / $('.all-readed').click(function (){
+  /   var data = {}
+  /   $.ajax({
+  /   type : 'POST',
+  /   url : '/notifications/all_readed',
+  /   data: data,
+  /   error : function() {
+  /       alert('更新失败 ');
+  /   },
+  /   success : function(data) {
+  /    $('.app-notification__content').css('display','none')
+  /    $('.notification-count-icon').css('display','none')
      
-    }
-    });
-  });
+  /   }
+  /   });
+  / });
 

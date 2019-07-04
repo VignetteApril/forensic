@@ -1,5 +1,5 @@
 class RefundOrdersController < ApplicationController
-  before_action :set_refund_order
+  before_action :set_refund_order, except: [:new, :create]
   before_action :set_main_case
 
   def new

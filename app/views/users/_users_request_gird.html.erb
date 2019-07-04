@@ -1,0 +1,47 @@
+<%= grid(@request_users, hide_submit_button: true, hide_reset_button: true) do |g|
+
+  g.column name: '登录名', custom_filter: false do |a|
+    a.login
+  end
+
+  g.column name: '名称', custom_filter: false do |a|
+    a.name
+  end
+
+  g.column name: '邮箱', custom_filter: false do |a|
+    a.email
+  end
+
+  g.column name: '手机号码', custom_filter: false do |a|
+    a.mobile_phone
+  end
+
+  g.column name: '申请日期', custom_filter: false do |a|
+    a.created_at.strftime('%Y-%m-%d')
+  end
+  #用户的单位如果是新建出来不能直接点击确认按钮 
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
+    if user.login != 'admin' 
+      if can?("users", "confirm_user")
+        link_to '同意', confirm_user_user_path(user), class: 'btn btn-success btn-sm'
+      end
+    end
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
+    if user.login != 'admin' 
+      if can?("users", "cancel_user")
+        link_to '驳回', cancel_user_user_path(user), class: 'btn btn-danger btn-sm'
+      end
+    end
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
+    if user.login != 'admin'
+      if can?("users", "edit_org") && can_sys?(user)
+        link_to '查看编辑组织', edit_org_user_path(user), class: 'btn btn-primary'
+      end
+     end
+  end
+
+end -%>

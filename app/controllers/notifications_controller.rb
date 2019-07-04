@@ -37,15 +37,7 @@ class NotificationsController < ApplicationController
         errors << notification.errors
       end
     end
-    if errors.blank?
-      respond_to do |format|
-        format.json { render json:{:msg=>'全部设置已读成功'}.to_json }
-      end
-    else
-      respond_to do |format|
-        format.json { render json:{:msg=>'全部设置已读失败'}.to_json }
-      end
-    end
+    redirect_to notifications_path, notice: '全部设置为已读'
   end
 
 end
