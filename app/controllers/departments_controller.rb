@@ -85,22 +85,22 @@ class DepartmentsController < ApplicationController
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_department
+      @department = Department.find(params[:id])
+    end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_department
-    @department = Department.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def department_params
-    params.require(:department).permit( :parent_id,
-                                        :name,
-                                        :description,
-                                        :code,
-                                        :sort_no,
-                                        :organization_id,
-                                        :matter,
-                                        :case_types,
-                                        :abbreviation)
-  end
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def department_params
+      params.require(:department).permit( :parent_id,
+                                          :name,
+                                          :description,
+                                          :code,
+                                          :sort_no,
+                                          :organization_id,
+                                          :matter,
+                                          :case_types,
+                                          :abbreviation,
+                                          :case_start_no)
+    end
 end

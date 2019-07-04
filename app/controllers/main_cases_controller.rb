@@ -5,13 +5,15 @@ class MainCasesController < ApplicationController
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
                                        :display_dynamic_file_modal]
-  before_action :set_new_areas, only: [:new, :organization_and_user, :create]
+  before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
+  before_action :check_if_has_department, except: [:index]
+  before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
 
@@ -46,7 +48,6 @@ class MainCasesController < ApplicationController
   # 鉴定中心的人所在科室下的所有案件
   # 针对本中心的人没有权限
   def department_cases
-    redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.departments.nil?
     data = MainCase.where(department_id: @current_user.departments.split(','))
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
@@ -57,8 +58,6 @@ class MainCasesController < ApplicationController
   # 本页面不为管理员和委托人这两种角色设计，请不要在这两个角色下添加该功能
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
-    redirect_to root_path, notice: '请您关联相关鉴定中心' and return if @current_user.organization.nil?
-
     data = @current_user.organization.main_cases
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
@@ -69,7 +68,6 @@ class MainCasesController < ApplicationController
   # 通过财务状态：【已付款】和案件状态：【待立案】，筛选本中心的所有案件
   # 本页面属于角色为立案人
   def filed_unpaid_cases
-    redirect_to root_path, notice: '请您关联相关鉴定中心' and return if @current_user.organization.nil?
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
 
@@ -200,13 +198,13 @@ class MainCasesController < ApplicationController
   def matter_demands_and_case_types
     department = Department.find(params[:department_id])
     if department.matter
-      matters = department.matter.split(',').map { |matter| { text: matter, id: matter } }
+      matters = department.matter.split(',').map { |matter| { name: matter, id: matter } }
     else
       matters = []
     end
 
     if department.case_types
-      case_types = department.case_types.split(',').map { |case_type| { text: case_type , id: case_type } }
+      case_types = department.case_types.split(',').map { |case_type| { name: case_type , id: case_type } }
     else
       case_types = []
     end
@@ -234,7 +232,7 @@ class MainCasesController < ApplicationController
       user_ids = @main_case.ident_users.split(',')
       users = User.where(id: user_ids).pluck(:id, :name).to_h
       user_ids.each_with_index do |id, index|
-        @ident_users << "##{index + 1}#{users[id.to_i]}  "
+        @ident_users << "第#{index + 1}鉴定人：#{users[id.to_i]}  "
         @select_ident_users << id.to_i
       end
     end
@@ -518,6 +516,25 @@ class MainCasesController < ApplicationController
     render :index
   end
 
+  # 用户在委托单中点击【认领】按钮，系统会跳转到该action
+  # 该action和new页面基本一致但是需要预先设置部分字段的值，根据传进来的委托单的内容
+  def new_with_entrust_order
+    @entrust_order = EntrustOrder.find(params[:entrust_order_id])
+    @main_case = @entrust_order.build_main_case({ anyou: @entrust_order.anyou,
+                                                  case_property: @entrust_order.case_property,
+                                                  matter_demand: @entrust_order.matter_demand,
+                                                  base_info: @entrust_order.base_info,
+                                                  commission_date: @entrust_order.created_at })
+    @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
+    @main_case.transfer_docs.build
+
+    # 设置鉴定事项
+    set_department_matters
+
+    # 设定案件类型
+    set_case_types
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -677,6 +694,20 @@ class MainCasesController < ApplicationController
     def forbid_admin_user
       if admin?
         redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
+      end
+    end
+
+    def check_if_has_department
+      redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
+    end
+
+    # 新建和编辑页面需要对应将科室的选择框限定在当前用户所属于的科室
+    def set_departments
+      departments = Department.where(id: @current_user.departments.split(','))
+      if departments.empty?
+        @departments = []
+      else
+        @departments = departments.map { |department| [department.name, department.id] }
       end
     end
 end

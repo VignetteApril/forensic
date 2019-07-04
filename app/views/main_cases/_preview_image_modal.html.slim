@@ -1,0 +1,12 @@
+.modal.fade id="preview_image" tabindex="-1" role="dialog" aria-labelledby="preview_image" aria-hidden="true"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" 图片预览
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-body
+        // wts_image 就是用户上传的图片类型的委托书
+        .row
+          .col-md-12
+            = image_tag url_for(wts_image_url), class: 'w-100'

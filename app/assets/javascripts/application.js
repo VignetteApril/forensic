@@ -77,9 +77,7 @@ function appendDataToSelect2(request_url, selected_id, target_select, column_nam
                 id: selected_id,
             },
             function(data, status){
-                console.log(target_select)
-                console.log(data[target_hash_key])
-                reloadSelectize(target_select, data[target_hash_key])
+                reloadSelectize(target_select, data[target_hash_key]);
             }); // post
     } else {
         target_select.empty();

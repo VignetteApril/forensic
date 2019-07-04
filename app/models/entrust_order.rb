@@ -8,4 +8,8 @@ class EntrustOrder < ApplicationRecord
 
   validates :anyou, :presence => true
   validates :case_property, :presence => true
+
+  enum status: [:unclaimed, :claimed]
+  STATUS_MAP = { unclaimed: '未认领',
+                 claimed: '已认领'}
 end

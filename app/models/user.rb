@@ -16,7 +16,7 @@ class User < ApplicationRecord
   validates :mobile_phone, :length => {:maximum => 100}, :uniqueness => true # 用户的手机号字段是唯一的，因为将来会跟小程序联动 #TODO(委托人注册)
   validates :password, :confirmation => true
   validates :password, :presence => true, on: :create
-  validates :password, format: { with: /(?![0-9a-z]+$)(?![a-zA-Z]+$)(?![0-9A-Z]+$)[\S]{8,}/ }, allow_nil: true
+  validates :password, :length => {:minimum => 6, :maximum => 20}, allow_nil: true # 密码的位数 6 <= password <= 20
   validate  :password_must_be_present
   # validates :city_id, :presence => true
   # validates :district_id, :presence => true

@@ -1,6 +1,10 @@
 $(document).on('turbolinks:load', function() {
     if ($('body').attr('data-controller') === 'main_cases') {
-        if ($('body').attr('data-action') === 'edit' || $('body').attr('data-action') === 'new' || $('body').attr('data-action') === 'create' || $('body').attr('data-action') === 'update') {
+        if ($('body').attr('data-action') === 'edit' ||
+            $('body').attr('data-action') === 'new' ||
+            $('body').attr('data-action') === 'create' ||
+            $('body').attr('data-action') === 'update' ||
+            $('body').attr('data-action') === 'new_with_entrust_order' ) {
             // select2
             var province_select2 = $("#main_case_province_id");
             var city_select2 = $("#main_case_city_id");
@@ -87,40 +91,55 @@ $(document).on('turbolinks:load', function() {
             var main_case_matter_select2 = $('#main_case_matter');
             var main_case_case_type_select2 =  $('#main_case_case_type');
             var request_url_matters = window.location.origin + '/main_cases/matter_demands_and_case_types.json';
-            department_select2.on("select2:select", function(e){
-                $.ajax({
-                    url: request_url_matters,
-                    type: "GET",
-                    data: {
-                        'department_id': e['currentTarget']['value'],
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        main_case_matter_select2.empty();
-                        main_case_matter_select2.select2({
-                            data: data.matters
-                        });
 
-                        main_case_case_type_select2.empty();
-                        main_case_case_type_select2.select2({
-                            data: data.case_types
-                        });
-                    }
-                });
+            main_case_matter_select2.selectize({
+                valueField: 'id',
+                labelField: 'name'
+            });
+
+            main_case_case_type_select2.selectize({
+                valueField: 'id',
+                labelField: 'name'
+            });
+
+            department_select2.selectize({
+                valueField: 'id',
+                labelField: 'name',
+                onChange: function(value) {
+                    $.ajax({
+                        url: request_url_matters,
+                        type: "GET",
+                        data: {
+                            'department_id': value,
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            reloadSelectize(main_case_matter_select2, data.matters, default_select_id = '')
+                            reloadSelectize(main_case_case_type_select2, data.case_types, default_select_id = '')
+                        }
+                    });
+                }
             });
 
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {
+                console.log('!!!');
                 if (this.value == 'unit') {
-                    $('.hidden-fields').css('display','none');
+                    $('.user-fields').addClass("d-none");
+                    $('.company-fields').removeClass("d-none");
                 }
                 else if (this.value == 'user') {
-                    $('.hidden-fields').css('display','block');
+                    $('.user-fields').removeClass("d-none");
+                    $('.company-fields').addClass("d-none");
                 }
             });
         } // if
 
-        if ( $('body').attr('data-action') === 'filed_unpaid_cases' || $('body').attr('data-action') === 'index' || $('body').attr('data-action') === 'department_cases' || $('body').attr('data-action') === 'center_cases' || $('body').attr('data-action') === 'pending_case') {
+        if ( $('body').attr('data-action') === 'filed_unpaid_cases' ||
+             $('body').attr('data-action') === 'index' ||
+             $('body').attr('data-action') === 'department_cases' ||
+             $('body').attr('data-action') === 'center_cases' ||
+             $('body').attr('data-action') === 'pending_cases') {
             $(".clickable-row").click(function (e) {
                 // 通过当前点击元素判断是否点击的是带有id的元素
                 // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js

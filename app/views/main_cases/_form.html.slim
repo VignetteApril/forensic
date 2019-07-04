@@ -1,6 +1,5 @@
 // render 移交材料的modal
 = render "nested_modal"
-
 = simple_form_for(@main_case) do |f|
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
@@ -20,9 +19,10 @@
         .card-header-btn
           .row.no-gutters
             .col-md-4
+              label 选择已有的委托方信息导入
               #user_select
             .col-md-4
-              span.ml-2.mb-1 class='btn btn-primary' id='import_user' 导入
+              button class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
       .card-body.principal
         .row
           .col-md-4
@@ -44,9 +44,11 @@
           .col-md-4
             / 这里需要设置button的type因为默认的button type是submit，会自动提交表单
             button#create_org_user.btn.btn-primary.mt-4.pull-right type="button" 保存成常用联系人
-        .row.no-gutters
-          .col-md-4
-            = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
+        // 只有当前案件没有对应的委托单时才可以关联委托单
+        - if @main_case.entrust_order.nil?
+          .row.no-gutters
+            .col-md-4
+              = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
     // 委托鉴定事项card
     .card.gray-card
       .card-header
@@ -61,7 +63,7 @@
             = f.input :commission_date, as: :date, label: '委托日期', html5: true
         .row
           .col-md-4
-            = f.association :department, label: '受委托科室'
+            = f.association :department, label: '受委托科室', collection: @departments
           .col-md-4
             = f.input :matter, label: '鉴定事项', collection: @department_matters, selected: @selected_matters, include_hidden: false, include_blank: true, input_html: { multiple: true }
           .col-md-4
@@ -77,6 +79,10 @@
               = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: {direct_upload: true}
               - if @main_case.entrust_doc.attached?
                 span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
+                // 只有当位图书为图片类型时才渲染modal
+                - if @main_case.entrust_doc.blob.content_type.match? (/png|jpg/)
+                  button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览委托书
+                  = render partial: 'preview_image_modal', locals: {wts_image_url: @main_case.entrust_doc}
     // 移交材料card
     .card.gray-card
       .card-header
@@ -121,21 +127,28 @@
           .row
             .col-md-12
               = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
-                      collection: AppraisedUnit.unit_types_arr, checked: 'user', :item_wrapper_class => 'form-check form-check-inline'
-          .row
-            .col-md-1
-              = appraised_unit.input :name, label: '名称'
-            .col-md-1.hidden-fields
-              = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
-            .col-md-3.hidden-fields
-              = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
-            .col-md-2.hidden-fields
-              = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
-            .col-md-5.hidden-fields
-              = appraised_unit.input :id_num, label: '证件号码'
-          .row
-            .col-md-12
-              = appraised_unit.input :addr, label: '联系地址'
+                      collection: AppraisedUnit.unit_types_arr, :item_wrapper_class => 'form-check form-check-inline'
+          .user-fields class="#{appraised_unit.object.unit_type == 'user' ? '' : 'd-none'}"
+            .row
+              .col-md-2
+                = appraised_unit.input :name, label: '名称'
+              .col-md-1
+                = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
+              .col-md-3
+                = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
+              .col-md-2
+                = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
+              .col-md-4
+                = appraised_unit.input :id_num, label: '证件号码'
+            .row
+              .col-md-12
+                = appraised_unit.input :addr, label: '联系地址'
+          .company-fields class="#{appraised_unit.object.unit_type == 'user' ? 'd-none' : ''}"
+            .row
+              .col-md-1
+                = appraised_unit.input :name, label: '名称'
+              .col-md-11
+                = appraised_unit.input :addr, label: '联系地址'
 
   .form-actions
     = f.button :submit, '提交', class: 'btn btn-success'

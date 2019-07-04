@@ -30,28 +30,27 @@
         h4.card-title 立案
       .card-body.principal
         .row
-          .col-md-4
+          .col-md-2
             = f.input :identification_cycle, collection: @identification_cycles, label: '鉴定周期（天）', include_blank: false
-          .col-md-4
+          .col-md-2
             = f.input :pass_user, collection: @users, label: '经办人', include_blank: false
-          .col-md-4
-            = f.button :submit, '保存', class: 'btn btn-success pull-right mt-4'
-        .row
-          .col-md-4
+          .col-md-2
             = f.input :sign_user, collection: @users, label: '授权签字人', include_blank: false
-          .col-md-4
+          .col-md-6
             = f.input :ident_users, collection: @users, label: '指定鉴定人', include_blank: false,
-                                    include_hidden: false, input_html: { multiple: true}
+                    include_hidden: false, input_html: {multiple: true}
             span id="passwordHelpBlock" class="form-text text-muted" = @ident_users
-          .col-md-4
-            button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#case_doc_modal" 上传文件
         .row
-          .col-md-4
-            = f.input :payer, label: '付款人'
-          .col-md-4
-            = f.input :payer_phone, label: '付款人手机号'
-          .col-md-4
-            = f.input :amount, label: '付款金额'
+          .col-md-2
+            = f.input :amount, label: '缴费金额'
+          .col-md-2
+            = f.input :payer, label: '缴费义务人'
+          .col-md-2
+            = f.input :payer_phone, label: '缴费义务人手机号'
+          .col-md-3.mt-4
+            = f.button :submit, '保存', class: 'btn btn-success'
+            button type="button" class="btn btn-primary ml-1" data-toggle="modal" data-target="#case_doc_modal" 上传文件
+
         .row
           .col-md-12
             #filed_case_docs
