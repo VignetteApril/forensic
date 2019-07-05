@@ -18,6 +18,7 @@ features:
   - [用户浏览,users,"index,list",系统管理]
   - [查看用户详细信息,users,"show",系统管理]
   - [用户管理,users,"new,create,edit,update,destroy",系统管理]
+  - [注册审核管理,users,"confirm_users,confirm_user,edit_org",系统管理]
   - [重置用户密码,users,reset_password,系统管理]
   - [科室浏览,departments,index,系统管理]
   - [科室管理,departments,"new,create,edit,update,destroy",系统管理]

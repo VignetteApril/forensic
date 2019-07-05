@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :delayed_jobs
   resources :favorites
   resources :notifications do
-    post :all_readed, :on => :collection
+    get :all_readed, :on => :collection
   end
   resources :sys_configs
   resources :sys_logs do
@@ -44,6 +44,11 @@ Rails.application.routes.draw do
     get :list, on: :collection
     get :show_api_key, on: :member
     post :generate_api_key, on: :member
+    get :confirm_users,  :on => :collection
+    get :confirm_user,  :on => :member
+    get :cancel_user,  :on => :member
+    get :edit_org,:on => :member
+    post :update_confirm_user_org,:on => :member
   end
 
   resources :session do

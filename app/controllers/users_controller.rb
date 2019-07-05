@@ -2,10 +2,10 @@
 class UsersController < ApplicationController
   layout 'system'
   skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
-  before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password]
+  before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create]
-  before_action :set_new_areas, only: [:new, :create,:new_consignor]
+  before_action :set_new_areas, only: [:new, :create,:new_consignor,:edit_org]
   before_action :set_edit_areas, only: [:edit, :update]
   skip_before_action :authorize, only: [:new_consignor,:create_consignor]
   skip_before_action :verify_authenticity_token, only: [:new_consignor,:create_consignor]
@@ -108,6 +108,49 @@ class UsersController < ApplicationController
     end
   end
 
+  #委托人审核
+  def confirm_users
+    @request_users = initialize_grid(User.where(:confirm_stage=>:not_confirm),
+                         order: 'created_at',
+                         order_direction: 'desc',
+                         per_page: 10,
+                         name: 'request_users')
+  end
+
+  #委托人审核-同意
+  def confirm_user
+    @user.confirm_stage = :confirm
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to confirm_users_users_path, notice: '已审核通过该用户' }
+      else
+        format.html { redirect_to confirm_users_users_path, notice: '未审核通过该用户' }
+      end
+    end
+  end
+
+  #委托人审核-驳回
+  def cancel_user
+    @user.confirm_stage = :cancel
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to confirm_users_users_path, notice: '已驳回用户申请信息' }
+      else
+        format.html { redirect_to confirm_users_users_path, notice: '未驳回该用户' }
+      end
+    end
+  end
+
+  #编辑组织
+  def edit_org
+    @user_org = Organization.where(:name=>@user.organization_name).first
+
+  end
+
+  def update_confirm_user_org
+
+  end
+
   #委托人注册
   def new_consignor
     @consignor_user = User.new
@@ -119,7 +162,7 @@ class UsersController < ApplicationController
     if !Organization.where(:name=>params["user"]["organization_name"]).exists?
       org = Organization.new(:name=>params["user"]["organization_name"],:org_type=>:court,:province_id=>params['user']['province_id'],:city_id=>params['user']['city_id'],:district_id=>params['user']['district_id'],:area_id=>params['user']['district_id'])
       if org.save
-        user = org.users.new(:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        user = org.users.new(:name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
         if user.save
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
@@ -138,7 +181,7 @@ class UsersController < ApplicationController
           redirect_to '/users/new_consignor' ,flash: { danger: '系统已经找到同名委托人重置密码失败' }
         end
       else
-        user = User.new(:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        user = User.new(:name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
         user.organization = org
         if user.save 
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }

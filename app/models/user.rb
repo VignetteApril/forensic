@@ -41,6 +41,13 @@ class User < ApplicationRecord
   before_save  :set_department_names
   before_save  :set_area_relation
 
+  enum confirm_stage: [:not_confirm, :cancel, :confirm]
+  CONFIRM_STAGE_MAP = {
+      not_confirm: '未审核',
+      confirm: '通过',
+      cancel: '驳回',
+  }
+
   def set_area_relation
     #TODO api请求来的数据只有 城市id和区域id 需要设置字段省的id  并且让user belongs to Area里的区域id
   end
@@ -63,7 +70,7 @@ class User < ApplicationRecord
   # 用户登录验证方法
   def User.authenticate(login, password)
     if user = find_by_login(login)
-      if user.hashed_password == encrypt_password(password, user.salt)
+      if user.hashed_password == encrypt_password(password, user.salt) && user.confirm?
         user
       end
     end

@@ -23,7 +23,7 @@ class ApisController < ApplicationController
 	    end
 
 	    user.organization = org
-	    user.is_confirm = false
+	    # user.is_confirm = false
 	    dep = org.departments.where(:name=>params["department"]).try(:first)
 	    if dep.nil?
 	    	dep = org.departments.create(:name=>params["department"])

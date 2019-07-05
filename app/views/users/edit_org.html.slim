@@ -1,0 +1,22 @@
+= link_to '返回', confirm_users_users_path, class: 'btn btn-primary mb-2'
+.card
+  .card-header
+    .card-title 委托人单位审核
+  .card-body
+  	= simple_form_for(@user_org, url: :update_confirm_user_org_user ,method: :post) do |f|
+      .row
+        .col-md-8
+          = f.input :province_id, collection: @provinces, label:'省份', include_blank: false
+      .row
+        .col-md-8
+          = f.input :city_id, collection: @cities, label:'城市', include_blank: false
+      .row
+        .col-md-8
+          = f.input :district_id, collection: @districts, label: '地区', include_blank: false            
+      .row
+          = f.input :organization_id,  collection: Organization.where(is_confirm: true).where.not(org_type: :center), label: false, include_blank: false           
+      .row
+        .col-md-4
+          .span 机构名称:
+        .col-md-8      
+          = f.input :name, label: false

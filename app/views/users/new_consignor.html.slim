@@ -23,10 +23,16 @@
                   = message_value
           .row
             .col-md-4
-              .span 用户名:
+              .span 登录名:
             .col-md-8
               = f.input :login, label: false
           .row
+          .row
+            .col-md-4
+              .span 名称:
+            .col-md-8
+              = f.input :name, label: false
+          .row          
             .col-md-4
               .span 邮箱:
             .col-md-8      
@@ -77,24 +83,36 @@
 
 
 javascript:
-  $(document).on('turbolinks:load', function() {
-    var province_select2 = $("#user_province_id");
-    var city_select2 = $("#user_city_id");
-    var district_select2 = $("#user_district_id");
-    var request_url_cities = window.location.origin + '/areas/cities.json';
-    var request_url_districts = window.location.origin + '/areas/districts.json';
+ 
+  var province_select2 = $("#user_province_id");
+  var city_select2 = $("#user_city_id");
+  var district_select2 = $("#user_district_id");
+  var request_url_cities = window.location.origin + '/areas/cities.json';
+  var request_url_districts = window.location.origin + '/areas/districts.json';
 
-    // listening the select2 change method
-    province_select2.on("select2:select", function(e){
-        // refresh project select2 element
-        appendDataToSelect2(request_url_cities, e['currentTarget']['value'], city_select2, 'name', 'cities');
-        district_select2.empty().trigger('change');
-    });
+  province_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function(value) {
+          appendDataToSelect2(request_url_cities, value, city_select2, 'name', 'cities');
+          district_select2[0].selectize.clear();
+          district_select2[0].selectize.clearOptions();
+      }
+  });
 
-    city_select2.on("select2:select", function(e){
-        appendDataToSelect2(request_url_districts, e['currentTarget']['value'], district_select2, 'name', 'districts');
-    });
-  })
+  city_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function(value) {
+          appendDataToSelect2(request_url_districts, value, district_select2, 'name', 'districts');
+      }
+  });
+
+  district_select2.selectize({
+      valueField: 'id',
+      labelField: 'name'
+  });
+  
 
 
 
