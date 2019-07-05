@@ -56,6 +56,7 @@ features:
   - [案件缴费单管理, payment_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 鉴定人]
   - [案件退费单管理, refund_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 鉴定人]
   - [财务确认缴费单, payment_orders, 'finance_index, confirm_order', 财务管理]
+  - [财务确认退费单, refund_orders, 'finance_index, confirm_order', 财务管理]
   - [申请开发票, bills, 'index, create, update, edit, new, destroy', 鉴定人]
   - [财务发票管理, bills, 'to_taked_away, to_billed, finance_index', 财务管理]
   - [认领委托单, main_cases, 'new_with_entrust_order, update', 鉴定人]

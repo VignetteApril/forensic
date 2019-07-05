@@ -49,6 +49,12 @@
   end
 
   g.column in_csv: false do |refund_order|
+    if can?('refund_orders', 'submit_current_order') && refund_order.not_submit? && !refund_order.cancel?
+      link_to '提交', submit_current_order_main_case_refund_order_path(refund_order.main_case, refund_order), class: 'btn btn-primary btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |refund_order|
     if can?('refund_orders', 'edit') && !refund_order.confirm? && !refund_order.cancel?
       link_to '编辑', edit_main_case_refund_order_path(refund_order.main_case, refund_order), class: 'btn btn-secondary btn-sm'
     end
@@ -62,13 +68,7 @@
 
   g.column in_csv: false do |refund_order|
     if can?('refund_orders', 'cancel_order') && !refund_order.cancel?
-      link_to '作废', cancel_order_main_case_refund_order_path(refund_order.main_case, refund_order), class: 'btn btn-danger btn-sm'
-    end
-  end
-
-  g.column in_csv: false do |refund_order|
-    if can?('refund_orders', 'submit_current_order') && (refund_order.order_stage == "not_submit"||"not_confirm")
-      link_to '提交', submit_current_order_main_case_refund_order_path(refund_order.main_case, refund_order), class: 'btn btn-secondary btn-sm'
+      link_to '作废', cancel_order_main_case_refund_order_path(refund_order.main_case, refund_order), method: :patch,class: 'btn btn-danger btn-sm'
     end
   end
 

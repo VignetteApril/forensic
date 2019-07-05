@@ -1,14 +1,15 @@
 = simple_form_for(@refund_order, method: @request_type, url: @path) do |f|        
   .row
-    .col-md-4
+    .col-md-2
       span = "案由：#{@main_case.anyou}"
-    .col-md-4
+    .col-md-2
       span = "鉴定类型：#{@main_case.case_type}"
-    .col-md-4
+    .col-md-2
       span = "案件编号：#{@main_case.case_no}"
-  .row
-    .col-md-4
+    .col-md-2
       span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
+
+  hr
   .row
     .col-md-2
       = f.input :appraisal_cost, label: '鉴定费'
