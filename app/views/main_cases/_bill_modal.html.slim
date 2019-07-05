@@ -2,11 +2,11 @@
   .modal-dialog role="document"
     .modal-content
       .modal-header 发票信息
-      .modal-body.text-center
+      .modal-body
         .form-inputs
           .row
             .col-md-12
-              = f.input :bill_type, label: '发票类型'
+              = f.input :bill_type, label: '发票类型', collection: Bill.bill_type_collection
           .row
             .col-md-12
               = f.input :organization, label: '单位名称'
@@ -15,12 +15,29 @@
               = f.input :code, label: '税号'
           .row
             .col-md-12
-              = f.input :bank, label: '开户行'
-          .row
-            .col-md-12
-              = f.input :address, label: '地址'
-          .row
-            .col-md-12
               = f.input :amount, label: '金额'
-        .form-actions
-          = f.button :submit, '申请开具发票', class: 'btn btn-success'
+          #hidden_fields
+            .row
+              .col-md-12
+                = f.input :bank, label: '开户行'
+            .row
+              .col-md-12
+                = f.input :bank_account, label: '银行账号'
+            .row
+              .col-md-12
+                = f.input :address, label: '地址'
+        .modal-footer
+          button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+          .form-actions
+            = f.button :submit, '申请开具发票', class: 'btn btn-success'
+
+javascript:
+  $('#bill_bill_type').selectize({
+      onChange: function (value) {
+          if (value =='vat_ordinary') {
+              $('#hidden_fields').removeClass('d-none');
+          } else {
+              $('#hidden_fields').addClass('d-none');
+          }
+      }
+  });

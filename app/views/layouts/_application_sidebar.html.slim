@@ -69,8 +69,8 @@ aside.app-sidebar
             i.app-menu__icon.fa.fa-laptop
             span.app-menu__label 机构管理
 
-    - if can?('incoming_records', 'index')
+    - if can?('incoming_records', 'claim_record_list')
       li
-        a.app-menu__item href="#{incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'index')}"
+        a.app-menu__item href="#{claim_record_list_incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'claim_record_list')}"
           i.app-menu__icon.fa.fa-laptop
           span.app-menu__label 到账记录认领

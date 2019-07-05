@@ -42,7 +42,7 @@ $(document).on('turbolinks:load', function() {
             var user_name = $('#main_case_user_name');
             var wtr_phone = $('#main_case_wtr_phone');
             var organization_addr = $('#main_case_organization_addr');
-            var user_id = $('#main_case_user_id');
+            var wtr_id = $('#main_case_wtr_id');
             $('#import_user').click(function () {
                 var user_select2 = $('#user_select');
                 $.ajax({
@@ -55,7 +55,7 @@ $(document).on('turbolinks:load', function() {
                     success: function (data) {
                         organization_name.val(data.organization_name);
                         user_name.val(data.user_name);
-                        user_id.val(data.user_id);
+                        wtr_id.val(data.user_id);
                         wtr_phone.val(data.wtr_phone);
                         organization_addr.val(data.organization_addr);
 
@@ -64,6 +64,8 @@ $(document).on('turbolinks:load', function() {
                         reloadSelectize(district_select2, data.districts, data.current_district.id);
                     }
                 });
+
+                return false;
             });
 
             // 根据用户填写的委托方信息和委托人信息

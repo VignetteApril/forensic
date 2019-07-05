@@ -31,13 +31,13 @@
     end
 
     g.column in_csv: false, html: {style: "width:15px;"}  do |incoming_record|
-      if can?('incoming_records', 'edit')
+      if can?('incoming_records', 'edit') && incoming_record.unclaimed?
         link_to '编辑', edit_incoming_record_path(incoming_record), class: 'btn btn-secondary btn-sm'
       end
     end
 
     g.column in_csv: false, html: {style: "width:15px;"}  do |incoming_record|
-      if can?('incoming_records', 'destroy')
+      if can?('incoming_records', 'destroy') && incoming_record.unclaimed?
         link_to '删除', incoming_record, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
       end
     end

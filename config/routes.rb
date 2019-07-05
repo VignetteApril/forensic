@@ -85,6 +85,7 @@ Rails.application.routes.draw do
       get :submit_current_order, on: :member
       get :finance_index, on: :collection
       get :confirm_order, on: :member
+      patch :cancel_order, on: :member
     end
 
     # 发票
@@ -97,6 +98,9 @@ Rails.application.routes.draw do
     # 退费单
     resources :refund_orders do
       get :submit_current_order, on: :member
+      get :finance_index, on: :collection
+      get :confirm_order, on: :member
+      patch :cancel_order, on: :member
     end
   end
 
@@ -109,6 +113,7 @@ Rails.application.routes.draw do
 
   resources :incoming_records do
     get :claim_record_index, on: :member
+    get :claim_record_list, on: :collection
     post :get_payment_order, on: :collection
     patch :claim_record, on: :member
   end

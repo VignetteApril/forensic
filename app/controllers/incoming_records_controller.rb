@@ -64,22 +64,49 @@ class IncomingRecordsController < ApplicationController
     end
   end
 
+  def claim_record_list
+    @incoming_records = initialize_grid(@current_user.organization.incoming_records.unclaimed,
+                                        per_page: 20,
+                                        name: 'incoming_records_grid')
+    respond_to do |format|
+      format.html { render :index }
+    end
+  end
 
   # 到账记录认领主页面
   def claim_record_index
     @main_cases = @current_user.organization.main_cases
+    # 默认的会选中第一个案件
+    # 所以要初始化第一个案件的缴费单
+    @main_case = @main_cases[0]
+    if @main_cases.empty?
+      @payment_orders = []
+    else
+      @payment_orders = @main_case.payment_orders.map do |payment_order|
+        # 返回的第一个案子的缴费单，应返回还没有关联到账记录的
+        { name: "付款人：#{payment_order.payer} 付款金额：#{payment_order.total_cost}元", id: payment_order.id } if payment_order.incoming_record.nil?
+      end
+    end
   end
 
   # 到账记录认领动作提交的到的action
   # PATCH
   def claim_record
+    order_id = claim_record_params[:payment_order_id]
+
     respond_to do |format|
-      if @incoming_record.update(claim_record_params.merge({ status: :claimed }))
-        format.html { redirect_to incoming_records_url, notice: '到账记录已经成功的和缴费单关联！' }
-        format.json { render :show, status: :ok, location: @incoming_record }
+      if order_id.present?
+        if PaymentOrder.find(order_id).incoming_record.present?
+          format.html { redirect_to claim_record_index_incoming_record_url(@incoming_record), notice: '该缴费单已经认领过到账记录了！' }
+        elsif @incoming_record.update(claim_record_params.merge({ status: :claimed }))
+          format.html { redirect_to claim_record_list_incoming_records_url, notice: '到账记录已经成功的和缴费单关联！' }
+          format.json { render :show, status: :ok, location: @incoming_record }
+        else
+          format.html { render :claim_record_index }
+          format.json { render json: @incoming_record.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @incoming_record.errors, status: :unprocessable_entity }
+        format.html { redirect_to claim_record_index_incoming_record_url(@incoming_record), notice: '请选择一个缴费单进行关联！' }
       end
     end
   end
@@ -87,13 +114,15 @@ class IncomingRecordsController < ApplicationController
   # 获取到案件下的所有（已确认的）缴费单
   # POST
   def get_payment_order
-    main_case = MainCase.find(params[:id])
-    data = main_case.payment_orders.map do |payment_order|
-      { text: payment_order.payer, value: payment_order.id }
+    incoming_record = IncomingRecord.find(params[:incoming_record_id])
+    main_case = MainCase.find(params[:main_case_id])
+    data = main_case.payment_orders.not_submit.map do |payment_order|
+      { name: "付款人：#{payment_order.payer} 付款金额：#{payment_order.total_cost}元", id: payment_order.id }
     end
 
     respond_to do |format|
-      format.json { render json: { payment_orders: data } }
+      format.json { render json: { payment_orders: data,
+                                   new_payment_order_url: new_main_case_payment_order_path({main_case_id: main_case, incoming_record_id: incoming_record.id}) } }
     end
   end
 

@@ -52,7 +52,10 @@ $(document).on("turbolinks:before-cache", function() {
 
 // 处理组件在turbolinks中初始化中的bug
 $(document).on('turbolinks:load', function () {
-    $('select').selectize();
+    $('select').selectize({
+        valueField: 'id',
+        labelField: 'name'
+    });
 
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_03_100701) do
+ActiveRecord::Schema.define(version: 2019_07_05_070741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,6 @@ ActiveRecord::Schema.define(version: 2019_07_03_100701) do
   end
 
   create_table "bills", force: :cascade do |t|
-    t.string "bill_type"
     t.string "organization"
     t.string "address"
     t.string "code"
@@ -77,6 +76,8 @@ ActiveRecord::Schema.define(version: 2019_07_03_100701) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "bill_stage", default: 0
+    t.string "bank_account"
+    t.integer "bill_type"
     t.index ["main_case_id"], name: "index_bills_on_main_case_id"
   end
 

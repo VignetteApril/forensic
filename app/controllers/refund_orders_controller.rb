@@ -8,6 +8,15 @@ class RefundOrdersController < ApplicationController
     @path = main_case_refund_orders_path
   end
 
+  # 财务管理人员看到的缴费单列表页面
+  def finance_index
+    data = @current_user.organization.refund_orders.not_confirm
+    @refund_orders = initialize_grid(data,
+                                      order: 'created_at',
+                                      order_direction: 'desc',
+                                      per_page: 10,
+                                      name: 'refund_orders')
+  end
 
   def edit
     @request_type = :PUT
@@ -53,6 +62,24 @@ class RefundOrdersController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '当前退费单已经成功提交了！' }
+    end
+  end
+
+  # 更新当前退费单的状态为已确认，这样鉴定人就可以在退费单里，选择并且创建发票了
+  def confirm_order
+    respond_to do |format|
+      if @refund_order.update(order_stage: :confirm)
+        format.html { redirect_to finance_index_main_case_payment_orders_path(-1), notice: '退费单已经确认！' }
+      end
+    end
+  end
+
+  # 更改当前退费单状态为作废
+  def cancel_order
+    respond_to do |format|
+      if @refund_order.update(order_stage: :cancel)
+        format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '退费单已变为作废状态！' }
+      end
     end
   end
 

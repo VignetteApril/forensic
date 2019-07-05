@@ -1,4 +1,16 @@
 = simple_form_for(@payment_order, method: :post, url: main_case_payment_orders_path) do |f|
+  = f.input :incoming_record_id, as: :hidden, input_html: {value: @incoming_record.try(:id)}
+  .row
+    .col-md-2
+      span = "案由：#{@main_case.anyou}"
+    .col-md-2
+      span = "鉴定类型：#{@main_case.case_type}"
+    .col-md-2
+      span = "案件编号：#{@main_case.case_no}"
+    .col-md-2
+      span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
+
+  hr
   .row
     .col-md-4
       = f.input :payer, label: '交款人'
@@ -13,16 +25,6 @@
       = f.input :consiggner_contacts, label: '委托人联系人'
     .col-md-4
       = f.input :consiggner_contacts_phone, label: '委托人联系人电话'
-  .row
-    .col-md-4
-      span = "案由：#{@main_case.anyou}"
-    .col-md-4
-      span = "鉴定类型：#{@main_case.case_type}"
-    .col-md-4
-      span = "案件编号：#{@main_case.case_no}"
-  .row
-    .col-md-4
-      span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
   .row
     .col-md-2
       = f.input :appraisal_cost, label: '鉴定费'

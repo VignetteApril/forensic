@@ -1,5 +1,5 @@
 class MainCasesController < ApplicationController
-  before_action :forbid_admin_user
+  before_action :forbid_admin_user, except: :payment
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
@@ -12,7 +12,7 @@ class MainCasesController < ApplicationController
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
-  before_action :check_if_has_department, except: [:index]
+  before_action :check_if_has_department, except: [:index, :payment]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
@@ -468,29 +468,29 @@ class MainCasesController < ApplicationController
                     params[:city_id],
                     params[:district_id])
 
-    org = Organization.new(name: org_name,
-                           org_type: :court,
-                           addr: org_addr,
-                           area_id: area,
-                           province_id: params[:province_id],
-                           city_id: params[:city_id],
-                           district_id: params[:district_id])
+    org = Organization.find_or_create_by(name: org_name,
+                                         org_type: :court,
+                                         addr: org_addr,
+                                         area_id: area,
+                                         province_id: params[:province_id],
+                                         city_id: params[:city_id],
+                                         district_id: params[:district_id])
     respond_to do |format|
-      if org.save
+      if org.present?
         user = org.users.new(login: wtr_phone,
                              name: user_name,
                              email: "#{wtr_phone}@forensic.com",
                              password: 'Fc123456',
                              password_confirmation: 'Fc123456')
         if user.save
-          flash[:success] = "委托方和委托人创建成功！请用户使用账号：#{wtr_phone}和密码：Fc123456 登录"
+          flash.now[:success] = "委托方和委托人创建成功！请用户使用账号：#{wtr_phone}和密码：Fc123456 登录"
           format.js { render 'layouts/display_flash' }
         else
-          flash[:danger] = '委托人创建失败！请填写委托人电话字段，或您填写的电话已被占用！'
+          flash.now[:danger] = '系统中已经存在该委托方信息，请使用上面的下拉列表选择之后点击【导入】按钮'
           format.js { render 'layouts/display_flash' }
         end
       else
-        flash[:danger] = '委托方创建失败！请选择地区信息，或该委托方已经被创建了！'
+        flash.now[:danger] = '委托方创建失败！请选择地区信息！'
         format.js { render 'layouts/display_flash' }
       end
     end
@@ -567,6 +567,7 @@ class MainCasesController < ApplicationController
                                         :matter_demand,
                                         :base_info,
                                         :entrust_order_id,
+                                        :wtr_id,
                                         transfer_docs_attributes: [:id,
                                                                    :name,
                                                                    :doc_type,

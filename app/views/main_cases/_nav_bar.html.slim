@@ -1,9 +1,13 @@
 ul.nav.nav-tabs.mb-2
-  li.nav-item
-    a href="#{edit_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'edit')}" 案件基本信息
-  li.nav-item
-    a href="#{filing_info_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'filing_info')}" 立案信息
-  li.nav-item
-    a href="#{payment_order_management_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'payment_order_management')}" 费用管理
-  li.nav-item
-    a href="#{case_executing_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'case_executing')}" 鉴定执行
+  - if can?('main_cases', 'edit')
+    li.nav-item
+      a href="#{edit_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'edit')}" 案件基本信息
+  - if can?('main_cases', 'filing_info')
+    li.nav-item
+      a href="#{filing_info_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'filing_info')}" 立案信息
+  - if can?('main_cases', 'payment_order_management')
+    li.nav-item
+      a href="#{payment_order_management_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'payment_order_management')}" 费用管理
+  - if can?('main_cases', 'case_executing')
+    li.nav-item
+      a href="#{case_executing_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'case_executing')}" 鉴定执行
