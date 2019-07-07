@@ -50,7 +50,7 @@ header class="app-header"
                   = link_to claim_record_index_incoming_record_path(incoming_record) do
                     p.app-notification__message = "付款人：#{incoming_record.pay_person_name}  金额：#{incoming_record.amount}元"
           li.app-notification__footer
-            a href="#{incoming_records_path}" 查看全部到账记录
+            a href="#{claim_record_list_incoming_records_path}" 查看全部到账记录
     // User Menu
     li.dropdown
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Open Profile Menu"

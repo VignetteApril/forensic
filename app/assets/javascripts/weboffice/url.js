@@ -32,7 +32,8 @@ function ShowPage(path)
 		try {
             window.open(strUrl,'_self');
         } catch(e) {
-		    alert('请先下载安装在线编辑Word控件！')
+		    alert('请先下载安装在线编辑Word控件！');
+		    window.location.href =  window.location.origin + '/weboffice.rar';
         }
 	}
 	else

@@ -84,8 +84,8 @@ class IncomingRecordsController < ApplicationController
     else
       @payment_orders = @main_case.payment_orders.map do |payment_order|
         # 返回的第一个案子的缴费单，应返回还没有关联到账记录的
-        { name: "付款人：#{payment_order.payer} 付款金额：#{payment_order.total_cost}元", id: payment_order.id } if payment_order.incoming_record.nil?
-      end
+        [ "付款人：#{payment_order.payer} 付款金额：#{payment_order.total_cost}元", payment_order.id ] if payment_order.incoming_record.nil?
+      end.compact
     end
   end
 
