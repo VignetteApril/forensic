@@ -133,6 +133,8 @@ Rails.application.routes.draw do
   get 'edit_office_online/edit_office'
   # 保存word文档
   post 'edit_office_online/save_doc'
+  # 刷新页面
+  post 'edit_office_online/get_doc_url'
 
   # 小程序后台API
   post 'apis/register'
