@@ -5,15 +5,16 @@ class ApisController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
 	def register 
+		province_id = Area.find(params["city_id"]).parent.id
 		# 分两次提交图片请求，通过params判断是不是一个user
 		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).exists?
-	    user = User.new(:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
-	    # 单位暂时不支持模糊搜索，目前需要直接存入（最早的通过地区筛选创建单位的模式也不采用）
-	    # org = Organization.where(:name=>params["organization"]).try(:first)
+	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
+	
+	    org = Organization.where(:name=>params["organization"]).try(:first)
 	    if Organization.where(:name =>params["organization"]).exists?
 	    	org = Organization.where(:name =>params["organization"]).first
 	    else
-	    	org = Organization.new(name: params["organization"],area_id: 1,org_type: :court)
+	    	org = Organization.new(is_confirm:false,name: params["organization"],org_type: :court,:province_id=>province_id,:city_id=>params['city_id'].to_i, :district_id=>params['district_id'].to_i,:area_id=>params['district_id'].to_i)
 	    	unless org.save
 	    		json = {"code":"0","msg":"关联新创建的法院失败"}				
 		    	respond_to do |format|
@@ -23,7 +24,6 @@ class ApisController < ApplicationController
 	    end
 
 	    user.organization = org
-	    # user.is_confirm = false
 	    dep = org.departments.where(:name=>params["department"]).try(:first)
 	    if dep.nil?
 	    	dep = org.departments.create(:name=>params["department"])
@@ -89,6 +89,12 @@ class ApisController < ApplicationController
 		  respond_to do |format|
 				format.json { render json:json.to_json }
 			end		
+		elsif !user.confirm?
+			json["msg"] = "此账号在审核中未开通权限"
+			json["code"] = "1"
+		  respond_to do |format|
+				format.json { render json:json.to_json }
+			end	
 		else
 			user_info = {"id":user.id,"login":user.login}
 			user_token = JWT.encode user_info, nil, 'none'
