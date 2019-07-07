@@ -1,6 +1,6 @@
 .row
   .col-md-6
-    = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2'
+    = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2 back'
     span.h5.ml-3 = "#{'案件流水号：' + main_case.serial_no}"
   .col-md-6
     = simple_form_for(main_case, method: :patch, url: update_case_stage_main_case_path, html: { width: '100%' }) do |f|

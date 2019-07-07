@@ -29,6 +29,35 @@ javascript:
       case_stage_select[0].selectize.setValue('apply_filing');
   });
 
+  //鉴定人之外的人看案件信息里的所有可点按钮为disable状态（此方法在四个页面里都有）
+  var arr = ['edit','filing_info', 'payment_order_management', 'case_executing']
+
+  if($('body').attr('data-controller') == 'main_cases' && arr.indexOf($('body').attr('data-action')) > -1){
+      console.log('load!')
+      var is_wtr = "#{@main_case.ident_user?(@current_user)}" 
+      if(is_wtr == "false"){
+
+          $('.app-content').find('input').attr('disabled',"disabled")
+          $('.app-content').find('a').attr('disabled',"disabled")
+          $('.app-content').find('textarea').attr('disabled',"disabled")
+          $('.app-content').find('.btn').addClass('disabled');
+          $('.app-content').find('button').attr('data-target','');
+
+          var selects = $('.app-content').find('select')
+          for(var i=0;i<selects.length;i++){
+              var select = $(selects[i]).selectize();
+                  var selectize = select[0].selectize;
+                  selectize.disable();
+          }
+
+          //注：['edit','filing_info', 'payment_order_management', 'case_executing'] 的返回按钮增加class back 这里需要打开返回按钮的点击权限
+           $('.app-content').find('.back').removeClass('disabled')
+
+           $('#create_org_user').unbind();
+           $('#apply_close').unbind();
+      }
+  }
+
   $('.edit-doc').click(function (e) {
       var file_path = '';
       var doc_id = $(e.target).attr('data-doc-id');

@@ -3,7 +3,7 @@
     g.column name:  '对方付款人名称', attribute: 'pay_person_name'
     g.column name:  '对方付款人账号', attribute: 'pay_account'
     g.column name:  '付款时间', attribute: 'pay_date' do |incoming_record|
-      incoming_record.pay_date.strftime('%Y-%m-%d')
+      incoming_record.pay_date.try{|e| e.strftime('%Y-%m-%d')}
     end
     g.column name:  '付款金额', attribute: 'amount'
     g.column name:  '支付方式', attribute: 'pay_type' do |incoming_record|
