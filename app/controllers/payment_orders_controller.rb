@@ -26,7 +26,9 @@ class PaymentOrdersController < ApplicationController
       @payment_order = @main_case.payment_orders.new
     else
       @incoming_record = IncomingRecord.find(params[:incoming_record_id])
-      @payment_order = @main_case.payment_orders.new
+      @payment_order = @main_case.payment_orders.new(payer: @incoming_record.pay_person_name,
+                                                     total_cost: @incoming_record.amount,
+                                                     payment_in_advance: @incoming_record.amount)
     end
 	end
 

@@ -80,7 +80,7 @@
               - if @main_case.entrust_doc.attached?
                 span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
                 // 只有当位图书为图片类型时才渲染modal
-                - if @main_case.entrust_doc.blob.content_type.match? (/png|jpg/)
+                - if @main_case.entrust_doc.blob.content_type.match? (/png|jpg|jpeg/)
                   button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览委托书
                   = render partial: 'preview_image_modal', locals: {wts_image_url: @main_case.entrust_doc}
     // 移交材料card

@@ -144,6 +144,9 @@ class MainCase < ApplicationRecord
     self.save!
   end
 
+  # 得到生成案号的方法
+  # 只有没有case_no_display的案件才走总体的逻辑
+  # 如果已经有了案号则不能重复生成
   def get_case_no
     center = self.department.organization
     dep_abbreviation = self.department.abbreviation
@@ -205,6 +208,6 @@ class MainCase < ApplicationRecord
 
   # 判断当前user是否是案件的鉴定人
   def ident_user?(user)
-    self.ident_users.split(',').include?(user.id) if self.ident_users
+    self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
   end
 end
