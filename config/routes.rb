@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/delayed_job" => BetterDelayedJobWeb, :anchor => false, :via => [:get, :post]
 
@@ -128,6 +127,10 @@ Rails.application.routes.draw do
 
   get 'login' => 'session#new', as: :login
   get 'logout' => 'session#destroy', as: :logout
+  # 打开word在线编辑页面
+  get 'edit_office_online/edit_office'
+  # 保存word文档
+  post 'edit_office_online/save_doc'
 
   # 小程序后台API
   post 'apis/register'

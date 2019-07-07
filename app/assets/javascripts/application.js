@@ -38,6 +38,10 @@
 // nested form js
 //= require cocoon
 
+// weboffice
+//= require weboffice/issetup
+//= require weboffice/url
+
 // 处理select2在turbolinks的bug
 // 处理selectize在turbolinks中重复渲染的bug
 $(document).on("turbolinks:before-cache", function() {

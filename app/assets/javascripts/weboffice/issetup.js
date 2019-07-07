@@ -1,6 +1,6 @@
 
 document.write('<script language=javascript>var WebOfficeSetup=0;</script>');
-document.write('<script language=javascript src="http://127.0.0.1:60106"></script>');
+// document.write('<script language=javascript src="http://127.0.0.1:60106"></script>');
 function WebOfficeInstall()
 { 
 	var issetup=true;//默认值设置为WebOffice控件已安装，用于兼容旧版本的WebOffice设置

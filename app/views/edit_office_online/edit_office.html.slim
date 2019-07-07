@@ -1,0 +1,65 @@
+body topmargin=0 leftmargin=0 onload="javascript:WebOpen();"
+  div style="text-align:left;font-size:15px;"
+    input type="button" class="button" value="保存本地电脑" onclick="WebSave();"
+    input type="button" value="关闭智能窗口" onclick="window.opener=null; window.open('','_self',''); window.close();"
+
+javascript:
+  var strOpenUrl = "#{@file_path}" ; //取得打开路径和文件名
+  var strSaveUrl = "#{@file_path}" ; //取得保存路径和文件名
+  var bOpen=false;//设置控件打开文档的状态，默认为FALSE
+  strSmartUrl = "WebOffice://|Officectrl|" + window.location.href;//开启智能窗模式
+  var WebOffice;//WebOffice的JS编程对象
+  function WebOpen()
+  {
+    WebOffice = document.getElementById('WebOffice');//获得控件对象
+    if (WebOffice){//等待控件初始化完毕，时间可以根据网络速度设定。
+        setTimeout('OpenDocument()',1000);
+        // 等待控件加载完毕后，启动替换程序
+        setTimeout('ReplaceWordText()', 2000);
+    }
+  }
+
+  // 执行替换操作
+  function ReplaceWordText() {
+      var obj = WebOffice.ActiveDocument;
+      var app = obj.Application;
+      app.Selection.Find.Execute('【手机号】', false, false, false, false, false, 1, false, false, '13601115771', 2, false, false, false, false);
+      app.Selection.Find.Execute('【姓名】', false, false, false, false, false, 1, false, false, '张杰', 2, false, false, false, false);
+  }
+
+  function OpenDocument()
+  {
+    try{
+      document.getElementById('WebOffice').Open(strOpenUrl,true,"Word.Document");
+      bOpen=true;//如果js代码能执行到此句，说明控件能正常打开文档,则设置打开文档的状态为真
+    }catch(e)
+    {
+      //如果WebOffice对象通过Open方法抛出异常，则可能控件没安装或者是使用了Google等高版本的Chrome引起，提示用户安装或启动智能窗,因此将此页转移回网页首页
+      alert('请先下载安装WebOffice控件或启动智能窗链接浏览！');
+      location.href='../index.html';
+    }
+  }
+  function WebSave()
+  {
+      try {
+          WebOffice.HttpInit();
+          if (document.getElementById('filename'))
+              WebOffice.HttpAddPostString("doc_id", "#{@department_doc.id}");
+              WebOffice.HttpAddPostCurrFile("docfile", "");
+              WebOffice.HttpAddPostString("doc_id", "#{@department_doc.id}");
+              //strResults用于获得网页提交后的返回数据，可用以调试服务器端代码。
+
+              var strResults = WebOffice.HttpPost("#{edit_office_online_save_doc_url}");
+              var return_message = JSON.parse(strResults);
+              if (return_message.status == 'ok') {
+                  alert('office文档保存成功!');
+                  document.getElementById('WebOffice').Close();
+                  window.close();
+                  setTimeout('location.reload();',3000);
+              }
+
+      }
+      catch (e) {
+          alert('发生错误！请使用查阅返回值！');
+      }
+  }

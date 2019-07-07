@@ -202,4 +202,9 @@ class MainCase < ApplicationRecord
       self.entrust_order.claimed!
     end
   end
+
+  # 判断当前user是否是案件的鉴定人
+  def ident_user?(user)
+    self.ident_users.split(',').include?(user.id) if self.ident_users
+  end
 end
