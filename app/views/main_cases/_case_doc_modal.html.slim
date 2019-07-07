@@ -1,5 +1,5 @@
-= simple_form_for(case_doc, remote: true, method: :post, url: create_case_doc_main_case_path, type: 'script', authenticity_token: true ) do |f|
-  .modal.fade id="#{case_modal_id}" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+.modal.fade id="#{case_modal_id}" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
+  = simple_form_for(case_doc, remote: true, method: :post, url: create_case_doc_main_case_path, type: 'script', authenticity_token: true) do |f|
     .modal-dialog role="document"
       .modal-content
         .modal-header
@@ -27,4 +27,9 @@ javascript:
   // 当点击确定按钮后，关闭所有的modal
   $(":submit").click(function () {
       $('.modal').modal('hide');
+  });
+
+  $('.modal').on('show.bs.modal', function () {
+      $('#department_doc_attachment').removeAttr('disabled');
+      $('.direct-upload').css('display','none');
   });

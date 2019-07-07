@@ -325,14 +325,15 @@ class MainCasesController < ApplicationController
     @partial_name = params[:department_doc][:partial_name]
     @partial_name_element = "##{@partial_name}"
     case_doc_id = params[:department_doc][:case_doc_id]
+
     if case_doc_id.blank?
       case_doc = @main_case.case_docs.new(case_doc_params)
       respond_to do |format|
         if case_doc.save
-          flash[:notice] = "文件上传成功！"
+          flash.now[:notice] = "文件上传成功！"
           format.js
         else
-          flash[:warning] = "文件上传失败，请重新上传！"
+          flash.now[:warning] = "文件上传失败，请重新上传！#{case_doc.errors.messages}"
           format.js
         end
       end
@@ -340,10 +341,10 @@ class MainCasesController < ApplicationController
       case_doc = DepartmentDoc.find(case_doc_id)
       respond_to do |format|
         if case_doc.update(case_doc_params)
-          flash[:notice] = "文件上传成功！"
+          flash.now[:notice] = "文件上传成功！"
           format.js
         else
-          flash[:warning] = "文件上传失败，请重新上传！"
+          flash.now[:warning] = "文件上传失败，请重新上传！#{case_doc.errors.messages}"
           format.js
         end
       end
