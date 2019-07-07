@@ -70,7 +70,7 @@ class User < ApplicationRecord
   # 用户登录验证方法
   def User.authenticate(login, password)
     if user = find_by_login(login)
-      if user.hashed_password == encrypt_password(password, user.salt) && user.confirm?
+      if user.hashed_password == encrypt_password(password, user.salt)
         user
       end
     end

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2019_07_04_074505) do
+ActiveRecord::Schema.define(version: 2019_07_07_013541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,7 +149,6 @@ ActiveRecord::Schema.define(version: 2019_07_04_074505) do
     t.string "case_types"
     t.string "abbreviation"
     t.integer "case_start_no"
-    t.string "transfer_columns"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -306,7 +304,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_074505) do
     t.string "open_account_bank"
     t.string "account_number"
     t.string "level"
-    t.boolean "is_confirm"
+    t.boolean "is_confirm", default: true
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end
@@ -341,6 +339,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_074505) do
     t.float "card_pay"
     t.float "remit_pay"
     t.integer "order_stage", default: 0
+    t.float "mobile_pay"
     t.index ["bill_id"], name: "index_payment_orders_on_bill_id"
     t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
   end
@@ -464,7 +463,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_074505) do
     t.integer "city_id"
     t.integer "district_id"
     t.string "organization_name"
-    t.integer "confirm_stage", default: 0
+    t.integer "confirm_stage", default: 2
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end

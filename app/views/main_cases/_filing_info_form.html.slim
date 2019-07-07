@@ -42,11 +42,15 @@
             span id="passwordHelpBlock" class="form-text text-muted" = @ident_users
         .row
           .col-md-2
-            = f.input :amount, label: '缴费金额'
+            = f.input :amount, label: '缴费金额', input_html: { class: 'payment-cost-input' }
           .col-md-2
             = f.input :payer, label: '缴费义务人'
           .col-md-2
             = f.input :payer_phone, label: '缴费义务人手机号'
+        .row
+          .col-md-4
+            span 大写金额:
+            span class='payment-cost'
           .col-md-3.mt-4
             = f.button :submit, '保存', class: 'btn btn-success'
             button type="button" class="btn btn-primary ml-1" data-toggle="modal" data-target="#case_doc_modal" 上传文件
@@ -78,6 +82,47 @@ javascript:
   var values = #{raw @select_ident_users.to_json};
   var $select = $('#main_case_ident_users').selectize();
   $select[0].selectize.setValue(values);
+
+  var digitUppercase = function(n) {
+    var fraction = ['角', '分'];
+    var digit = [
+        '零', '壹', '贰', '叁', '肆',
+        '伍', '陆', '柒', '捌', '玖'
+    ];
+    var unit = [
+        ['元', '万', '亿'],
+        ['', '拾', '佰', '仟']
+    ];
+    var head = n < 0 ? '欠' : '';
+    n = Math.abs(n);
+    var s = '';
+    for (var i = 0; i < fraction.length; i++) {
+        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+    }
+    s = s || '整';
+    n = Math.floor(n);
+    for (var i = 0; i < unit[0].length && n > 0; i++) {
+        var p = '';
+        for (var j = 0; j < unit[1].length && n > 0; j++) {
+            p = digit[n % 10] + unit[1][j] + p;
+            n = Math.floor(n / 10);
+        }
+        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+    }
+    return head + s.replace(/(零.)*零元/, '元')
+        .replace(/(零.)+/g, '零')
+        .replace(/^整$/, '零元整');
+    }
+
+
+  $(document).on('turbolinks:load', function() {
+    $('.payment-cost-input').parent().parent().parent().parent().find('.payment-cost').text(digitUppercase($('.payment-cost-input').val()))
+
+    $('.payment-cost-input').on('input',function(e){
+      $(e.target).parent().parent().parent().parent().find('.payment-cost').text(digitUppercase($(e.target).val()))
+    })
+
+  });  
 
 css:
   .main_case_ident_users {

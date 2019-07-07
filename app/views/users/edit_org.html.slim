@@ -1,22 +1,80 @@
 = link_to '返回', confirm_users_users_path, class: 'btn btn-primary mb-2'
 .card
   .card-header
-    .card-title 委托人单位审核
+    .card-title 用户信息
   .card-body
-  	= simple_form_for(@user_org, url: :update_confirm_user_org_user ,method: :post) do |f|
+    .row 
+      .col-md-2
+        span 登录名：
+        =@user.login
+      .col-md-2 
+        span 名称：
+        =@user.name
+      .col-md-3 
+        span 手机号：
+        =@user.mobile_phone
+      .col-md-3 
+        span 邮箱：
+        =@user.email
+
+= simple_form_for(@user_org, url: :update_confirm_user_org_user ,method: :post) do |f|
+
+  -if @user_org.is_confirm == false
+    .card.mt-2  
+      .card-header
+        = f.radio_button :is_new_org, true
+        .card-title style="display:inline" 新建机构信息
+      .card-body class='user-org-1'
+        .row
+          .col-md-4
+            = f.input :province_id, collection: @provinces, label:'省份', include_blank: false
+          .col-md-4
+            = f.input :city_id, collection: @cities, label:'城市', include_blank: false
+          .col-md-4
+            = f.input :district_id, collection: @districts, label: '地区', include_blank: false    
+        .row
+          .col-md-4      
+            = f.input :name, label: '机构名称'             
+
+  .card.mt-2  
+    .card-header
+      = f.radio_button :is_new_org, false, checked:"checked"
+      .card-title style="display:inline" 选择一个已有机构   
+    .card-body class='user-org-2'
       .row
-        .col-md-8
-          = f.input :province_id, collection: @provinces, label:'省份', include_blank: false
-      .row
-        .col-md-8
-          = f.input :city_id, collection: @cities, label:'城市', include_blank: false
-      .row
-        .col-md-8
-          = f.input :district_id, collection: @districts, label: '地区', include_blank: false            
-      .row
-          = f.input :organization_id,  collection: Organization.where(is_confirm: true).where.not(org_type: :center), label: false, include_blank: false           
-      .row
-        .col-md-4
-          .span 机构名称:
-        .col-md-8      
-          = f.input :name, label: false
+        .col-md-4     
+          = f.input :organization_id,  collection: Organization.where(is_confirm: true).where.not(org_type: :center), label: false, include_blank: false       
+  = f.button :submit, '提交', class: 'btn btn-success'         
+
+
+javascript:
+ 
+  var province_select2 = $("#organization_province_id");
+  var city_select2 = $("#organization_city_id");
+  var district_select2 = $("#organization_district_id");
+  var request_url_cities = window.location.origin + '/areas/cities.json';
+  var request_url_districts = window.location.origin + '/areas/districts.json';
+
+  province_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function(value) {
+          appendDataToSelect2(request_url_cities, value, city_select2, 'name', 'cities');
+          district_select2[0].selectize.clear();
+          district_select2[0].selectize.clearOptions();
+      }
+  });
+
+  city_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function(value) {
+          appendDataToSelect2(request_url_districts, value, district_select2, 'name', 'districts');
+      }
+  });
+
+  district_select2.selectize({
+      valueField: 'id',
+      labelField: 'name'
+  });
+  

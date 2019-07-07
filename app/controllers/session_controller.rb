@@ -26,7 +26,8 @@ class SessionController < ApplicationController
   # 用户登录信息提交，用户身份验证，成功之后转向系统首页
   def create
     if user = User.authenticate(params[:login], params[:password])
-      redirect_to :login, flash: { danger: '用户被锁定，请联系管理员' } if user.is_locked == true
+      redirect_to :login, flash: { danger: '用户被锁定，请联系管理员' } and return  if user.is_locked == true
+      redirect_to :login, flash: { danger: '用户权限正在审核，请联系管理员' } and return  unless user.confirm? 
 
       session[:user_id] = user.id
 

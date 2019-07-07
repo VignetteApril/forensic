@@ -8,7 +8,7 @@
             span style="font-size: 35px; font-weight: 700; color: rgb(61,116,200)" 智慧司法云服务平台
         badge.badge-danger style='height: 25px; margin-top: 10px;' 测试版
   .container-fluid.pt-5
-    .container.card style="width: 30%;"
+    .container.card style="width: 36%;"
       = simple_form_for(@consignor_user, url: :create_consignor_users,method: :post) do |f|
         .card-title
         .card-body.p-6
@@ -22,50 +22,51 @@
                   i.fe.fe-alert-triangle.mr-2 aria-hidden="true"
                   = message_value
           .row
-            .col-md-4
+            .col-md-3
               .span 登录名:
             .col-md-8
               = f.input :login, label: false
           .row
           .row
-            .col-md-4
+            .col-md-3
               .span 名称:
             .col-md-8
               = f.input :name, label: false
           .row          
-            .col-md-4
+            .col-md-3
               .span 邮箱:
             .col-md-8      
               = f.input :email, label: false
           .row
-            .col-md-4
+            .col-md-3
               .span 手机号码:
             .col-md-8      
               = f.input :mobile_phone, label: false   
           .row
-            .col-md-4 省：
-            .col-md-8
+            .col-md-3 
+              span 机构区域：
+            .col-md-3
               = f.input :province_id, collection: @provinces, label: false, include_blank: false
-          .row
-            .col-md-4 城市：
-            .col-md-8
+            .col-md-3
               = f.input :city_id, collection: @cities, label:false, include_blank: false
+            .col-md-3
+              = f.input :district_id, collection: @districts, label: false, include_blank: false                           
           .row
-            .col-md-4 区县：
-            .col-md-8
-              = f.input :district_id, collection: @districts, label: false, include_blank: false            
-          .row
-            .col-md-4
+            .col-md-3
               .span 所属机构:
             .col-md-8      
               = f.input :organization_name, label: false
           .row
-            .col-md-4
+            .col-md-3 部门名：
+            .col-md-8
+              = f.input :department_names, label: false                   
+          .row
+            .col-md-3
               .span 密码:
             .col-md-8      
               = f.input :password, label: false
           .row
-            .col-md-4
+            .col-md-3
               .span 重复输入密码:
             .col-md-8      
               = f.input :password_confirmation, label: false

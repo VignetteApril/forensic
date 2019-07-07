@@ -1,0 +1,31 @@
+= simple_form_for(@user) do |f|
+  - if @user.errors.any?
+    #error_explanation.alert.alert-warning
+      h4
+        | 该角色保存时出错：
+        = pluralize(@user.errors.count, "个错误")
+      ul
+        - @user.errors.full_messages.each do |message|
+          li
+            = message
+  .form-inputs
+    .row
+      .col-md-4
+        = f.input :name, label: '姓名'
+      .col-md-4
+        = f.input :gender, collection: USER_GENDER, label: '性别'
+    .row
+      .col-md-4
+        / 平台管理员只关注用户属于哪个机构
+        / 鉴定中心的管理员则关注用户属于哪个科室
+        - if admin?
+          = f.input :organization_id, label: '所属机构', collection: Organization.all.map {|organization| [organization.name, organization.id]}, include_blank: true
+        - else
+          = f.input :departments, label: '所属科室', collection: @current_user.organization.departments.map {|department| [department.name, department.id]},
+                  selected: @departments_selected, include_blank: true, include_hidden: false, input_html: {multiple: true}
+      .col-md-4
+        = f.input :mobile_phone, label: '手机号'
+      .col-md-4
+        = f.input :email, label: '邮箱'
+  .form-actions
+    = f.button :submit, '确认', class: 'btn btn-success'

@@ -36,6 +36,8 @@ Rails.application.routes.draw do
     delete :remove_user_from_department, :on => :member
   end
   resources :users do
+    get :edit_self, :on => :member
+    put :update_edit_self, :on => :member
     get :new_consignor, :on => :collection
     post :create_consignor, :on => :collection
     get :reset_password, :on => :member

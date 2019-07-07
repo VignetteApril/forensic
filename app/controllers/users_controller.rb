@@ -2,9 +2,9 @@
 class UsersController < ApplicationController
   layout 'system'
   skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
-  before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user]
+  before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user, :update_confirm_user_org, :edit_self]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
-  before_action :set_selected_departments, only: [:edit, :update, :new, :create]
+  before_action :set_selected_departments, only: [:edit, :update, :new, :create, :edit_self]
   before_action :set_new_areas, only: [:new, :create,:new_consignor,:edit_org]
   before_action :set_edit_areas, only: [:edit, :update]
   skip_before_action :authorize, only: [:new_consignor,:create_consignor]
@@ -141,14 +141,33 @@ class UsersController < ApplicationController
     end
   end
 
-  #编辑组织
+  #委托人审核-编辑组织
   def edit_org
     @user_org = Organization.where(:name=>@user.organization_name).first
-
   end
 
+  #委托人审核-编辑组织-提交
   def update_confirm_user_org
-
+    if params['organization']['is_new_org'] == 'true'
+      org = Organization.where(:name=>@user.organization_name).first
+      unless org.update(:province_id=>params['organization']["province_id"],
+        :city_id=>params['organization']["city_id"],
+        :district_id=>params['organization']["district_id"],
+        :area_id=>params['organization']["district_id"],
+        :name=>params['organization']["name"],
+        :is_confirm=>true
+        )
+        redirect_to edit_org_user_path(@user), notice: "#{@org.errors}"
+      end
+      @user.update(organization_id:org.id)
+      @user.save
+      redirect_to confirm_users_users_path, notice: "设置用户#{@user.name}机构为新增机构#{org.name}"
+    else
+      org =  Organization.find_by(:id=>params['organization']['organization_id'])
+      @user.update(organization_id:org.id)
+      @user.save
+      redirect_to confirm_users_users_path, notice: "设置用户#{@user.name}机构为已有机构#{@user.organization.name}"
+    end
   end
 
   #委托人注册
@@ -157,12 +176,23 @@ class UsersController < ApplicationController
     render layout: 'login'
   end
 
+  def edit_self
+  end
+
+  def update_edit_self
+  end
+
   #委托人创建
   def create_consignor
     if !Organization.where(:name=>params["user"]["organization_name"]).exists?
-      org = Organization.new(:name=>params["user"]["organization_name"],:org_type=>:court,:province_id=>params['user']['province_id'],:city_id=>params['user']['city_id'],:district_id=>params['user']['district_id'],:area_id=>params['user']['district_id'])
+      org = Organization.new(:is_confirm=>false, :name=>params["user"]["organization_name"],:org_type=>:court,:province_id=>params['user']['province_id'],:city_id=>params['user']['city_id'],:district_id=>params['user']['district_id'],:area_id=>params['user']['district_id'])
       if org.save
-        user = org.users.new(:name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        user = org.users.new(:confirm_stage=>:not_confirm, :name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        dep = org.departments.where(:name=>params["user"]["department_names"]).try(:first)
+        if dep.nil?
+          dep = org.departments.create(:name=>params["user"]["department_names"])
+        end
+        user.departments = dep.id.to_s
         if user.save
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
@@ -181,8 +211,13 @@ class UsersController < ApplicationController
           redirect_to '/users/new_consignor' ,flash: { danger: '系统已经找到同名委托人重置密码失败' }
         end
       else
-        user = User.new(:name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
+        user = User.new(:confirm_stage=>:not_confirm, :name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
         user.organization = org
+        dep = org.departments.where(:name=>params["user"]["department_names"]).try(:first)
+        if dep.nil?
+          dep = org.departments.create(:name=>params["user"]["department_names"])
+        end
+        user.departments = dep.id.to_s
         if user.save 
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else

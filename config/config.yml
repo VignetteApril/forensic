@@ -13,6 +13,7 @@ use_cas_server: false
 features:
   - [登录系统,session,"index,new,create,destroy",平台]
   - [委托人注册,users,"new_consignor",平台]
+  - [编辑个人信息,users,"edit_self,update_edit_self",平台]
   - [修改个人密码,users,"edit_password,update_password",平台]
   - [管理个人API接口键值,users,"show_api_key,generate_api_key",平台]
   - [用户浏览,users,"index,list",系统管理]

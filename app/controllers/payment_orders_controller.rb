@@ -14,9 +14,25 @@ class PaymentOrdersController < ApplicationController
 
 	def new
 		@payment_order = @main_case.payment_orders.new
+		@request_type = :POST
+    @path = main_case_payment_orders_path
 	end
 
 	def edit
+		@request_type = :PUT
+    @path = main_case_payment_order_path
+	end
+
+	def update
+		respond_to do |format|
+      if @payment_order.update(payment_order_params)
+        format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '编辑缴费单成功'}
+        format.json { render :show, status: :ok, location: @payment_order }
+      else
+        format.html { render :edit }
+        format.json { render json: @payment_order.errors, status: :unprocessable_entity }
+      end
+    end
 	end
 
 	def create
@@ -81,6 +97,8 @@ class PaymentOrdersController < ApplicationController
 	                                           :cash_pay,
 	                                           :card_pay,
 	                                           :check_pay,
+	                                           :mobile_pay,
+	                                           :payment_accept_type,
 	                                           :check_num)
 
 		end

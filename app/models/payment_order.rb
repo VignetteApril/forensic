@@ -12,10 +12,12 @@ class PaymentOrder < ApplicationRecord
       cancel: '作废',
   }
 
-	enum payment_accept_type: [:roll, :roll1,]
+
+	enum payment_accept_type: [:roll, :to_send, :check]
   PAYMENT_ACCEPT_MAP = {
-      roll: '摇号',
-      roll1: '摇号1'
+      roll:'摇号',
+      to_send:'送达',
+      check:'自选',
   }
 
   before_destroy :update_incoming_record
