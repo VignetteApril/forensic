@@ -24,23 +24,32 @@
           .row
             .col-md-3
               .span 登录名:
-            .col-md-8
+            .col-md-9
               = f.input :login, label: false
           .row
+            .col-md-3
+              .span 密码:
+            .col-md-9      
+              = f.input :password, label: false
+          .row
+            .col-md-3
+              .span 重复输入密码:
+            .col-md-9      
+              = f.input :password_confirmation, label: false
           .row
             .col-md-3
               .span 名称:
-            .col-md-8
+            .col-md-9
               = f.input :name, label: false
           .row          
             .col-md-3
               .span 邮箱:
-            .col-md-8      
+            .col-md-9      
               = f.input :email, label: false
           .row
             .col-md-3
               .span 手机号码:
-            .col-md-8      
+            .col-md-9      
               = f.input :mobile_phone, label: false   
           .row
             .col-md-3 
@@ -53,23 +62,13 @@
               = f.input :district_id, collection: @districts, label: false, include_blank: false                           
           .row
             .col-md-3
-              .span 所属机构:
-            .col-md-8      
+              .span 机构名称:
+            .col-md-9      
               = f.input :organization_name, label: false
           .row
-            .col-md-3 部门名：
-            .col-md-8
+            .col-md-3 部门名称：
+            .col-md-9
               = f.input :department_names, label: false                   
-          .row
-            .col-md-3
-              .span 密码:
-            .col-md-8      
-              = f.input :password, label: false
-          .row
-            .col-md-3
-              .span 重复输入密码:
-            .col-md-8      
-              = f.input :password_confirmation, label: false
           .row style="padding-bottom:20px;"
             .col-md-6
             .col-md-6
