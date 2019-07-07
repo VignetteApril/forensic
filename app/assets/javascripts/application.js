@@ -38,6 +38,10 @@
 // nested form js
 //= require cocoon
 
+// weboffice
+//= require weboffice/issetup
+//= require weboffice/url
+
 // 处理select2在turbolinks的bug
 // 处理selectize在turbolinks中重复渲染的bug
 $(document).on("turbolinks:before-cache", function() {
@@ -52,7 +56,10 @@ $(document).on("turbolinks:before-cache", function() {
 
 // 处理组件在turbolinks中初始化中的bug
 $(document).on('turbolinks:load', function () {
-    $('select').selectize();
+    $('select').selectize({
+        valueField: 'id',
+        labelField: 'name'
+    });
 
     $('.datepicker').datepicker({
         format: 'yyyy-mm-dd',

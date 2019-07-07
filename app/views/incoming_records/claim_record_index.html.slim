@@ -24,15 +24,47 @@
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
   .form-inputs
     .row.mt-2
-      .col-md-1.offset-3
+      .col-md-4.offset-4
         span 案件
-      .col-md-4
-        = select_tag 'main_case', options_from_collection_for_select(@main_cases, "id", "case_no_display")
-    .row
-      .col-md-1.offset-3
-        span 缴费单
-      .col-md-4
-        = f.input :payment_order_id, label: false, as: :select, collection: []
+        = select_tag 'main_case', options_from_collection_for_select(@main_cases, "id", "case_no_display"), label: '案件'
     .row
       .col-md-4.offset-4
+        = f.input :payment_order_id, label: '缴费单', as: :select, collection: @payment_orders
+    .row
+      .col-md-4.offset-4
+        = link_to '新建缴费单', new_main_case_payment_order_path({main_case_id: @main_case, incoming_record_id: @incoming_record.id}),
+                class: 'btn btn-primary w-100',
+                id: 'new_payment_order'
+        / = f.button :submit, '新建缴费单', class: 'btn btn-primary w-100'
+    .row.mt-1
+      .col-md-4.offset-4
         = f.button :submit, '认领该到账记录', class: 'btn btn-success w-100'
+
+javascript:
+  var main_case_select = $('#main_case');
+  var payment_order_select = $('#incoming_record_payment_order_id');
+  var request_url = window.location.origin + '/incoming_records/get_payment_order';
+
+  main_case_select.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function (value) {
+          $.ajax({
+              url: request_url,
+              type: "POST",
+              data: {
+                  'main_case_id': value,
+                  'incoming_record_id': #{@incoming_record.id},
+              },
+              dataType: 'json',
+              success: function (data) {
+                  // 刷新缴费单
+                  reloadSelectize(payment_order_select, data.payment_orders);
+                  // 重新设置新建缴费单的按钮
+                  $('#new_payment_order').attr("href", data.new_payment_order_url);
+              }
+          });
+      }
+  });
+
+

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/delayed_job" => BetterDelayedJobWeb, :anchor => false, :via => [:get, :post]
 
@@ -92,6 +91,7 @@ Rails.application.routes.draw do
       get :submit_current_order, on: :member
       get :finance_index, on: :collection
       get :confirm_order, on: :member
+      patch :cancel_order, on: :member
     end
 
     # 发票
@@ -104,6 +104,9 @@ Rails.application.routes.draw do
     # 退费单
     resources :refund_orders do
       get :submit_current_order, on: :member
+      get :finance_index, on: :collection
+      get :confirm_order, on: :member
+      patch :cancel_order, on: :member
     end
   end
 
@@ -116,6 +119,7 @@ Rails.application.routes.draw do
 
   resources :incoming_records do
     get :claim_record_index, on: :member
+    get :claim_record_list, on: :collection
     post :get_payment_order, on: :collection
     patch :claim_record, on: :member
   end
@@ -125,6 +129,10 @@ Rails.application.routes.draw do
 
   get 'login' => 'session#new', as: :login
   get 'logout' => 'session#destroy', as: :logout
+  # 打开word在线编辑页面
+  get 'edit_office_online/edit_office'
+  # 保存word文档
+  post 'edit_office_online/save_doc'
 
   # 小程序后台API
   post 'apis/register'

@@ -1,6 +1,11 @@
 class PaymentOrdersController < ApplicationController
   before_action :set_main_case, except: [:finance_index, :confirm_order]
-  before_action :set_payment_order, only: [ :edit, :update, :destroy, :submit_current_order, :confirm_order ]
+  before_action :set_payment_order, only: [ :edit,
+                                            :update,
+                                            :destroy,
+                                            :submit_current_order,
+                                            :confirm_order,
+                                            :cancel_order ]
 
   # 财务管理人员看到的缴费单列表页面
   def finance_index
@@ -16,6 +21,13 @@ class PaymentOrdersController < ApplicationController
 		@payment_order = @main_case.payment_orders.new
 		@request_type = :POST
     @path = main_case_payment_orders_path
+
+    if params[:incoming_record_id].blank?
+      @payment_order = @main_case.payment_orders.new
+    else
+      @incoming_record = IncomingRecord.find(params[:incoming_record_id])
+      @payment_order = @main_case.payment_orders.new
+    end
 	end
 
 	def edit
@@ -37,7 +49,6 @@ class PaymentOrdersController < ApplicationController
 
 	def create
 		@payment_order = @main_case.payment_orders.new(payment_order_params)
-
 		respond_to do |format|
 			if @payment_order.save
 				format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '缴费单被成功的创建了！' }
@@ -75,6 +86,21 @@ class PaymentOrdersController < ApplicationController
 		end
 	end
 
+  # 更改当前缴费单状态为作废
+  # 作废这个动作只有在缴费单未关联发票前执行，如果已关联了发票则需要提醒用户，删除对应的发票，然后再作废缴费单
+  # 当状态为作废时，系统需要取消关联的到账记录，并将该到账记录的状态改为未关联
+  def cancel_order
+    respond_to do |format|
+      if @payment_order.bill.nil?
+        if @payment_order.update(order_stage: :cancel)
+          format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '缴费单已变为作废状态！' }
+        end
+      else
+        format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '当前缴费单已经关联了发票，请删除对应的发票！' }
+      end
+    end
+	end
+
 	private
 	  def payment_order_params
 	 	  params.require(:payment_order).permit( :payer,
@@ -99,7 +125,9 @@ class PaymentOrdersController < ApplicationController
 	                                           :check_pay,
 	                                           :mobile_pay,
 	                                           :payment_accept_type,
-	                                           :check_num)
+	                                           :check_num,
+                                             :incoming_record_id)
+
 
 		end
 

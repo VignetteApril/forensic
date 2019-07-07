@@ -2,6 +2,7 @@
 class BillsController < ApplicationController
   before_action :set_bill, only: [:show, :edit, :update, :destroy, :to_billed, :to_taked_away]
   before_action :set_main_case, except: [:finance_index, :to_billed, :to_taked_away]
+  before_action :guard_edit_destroy, only: [:edit, :destroy]
 
   # GET /bills
   # GET /bills.json
@@ -110,5 +111,10 @@ class BillsController < ApplicationController
     # Never trust parameters from the scary intern\et, only allow the white list through.
     def bill_params
       params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount)
+    end
+
+    # 当发票状态变为已开/已领走后就不能再edit和destroy
+    def guard_edit_destroy
+      redirect_to payment_order_management_main_case_path(@main_case), notice: '发票已开或已领走！' if @bill.billed? || @bill.taked_away?
     end
 end

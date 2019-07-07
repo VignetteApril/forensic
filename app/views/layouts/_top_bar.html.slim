@@ -6,12 +6,13 @@ header class="app-header"
   // Navbar Right Menu
   ul.app-nav 
     ul.text-white style="display:flex;align-items:center;"
-      span = '欢迎 ' + @current_user.name + ' 登录系统！'
-      - if @current_user.organization
-        span 机构：
-        span = @current_user.organization.name+'　'
-      - else
-        span 该用户尚未关联任何机构
+      - if @current_user
+        span = '欢迎 ' + @current_user.name + ' 登录系统！'
+        - if @current_user.organization
+          span 机构：
+          span = @current_user.organization.name+'　'
+        - else
+          span 该用户尚未关联任何机构
     // Notification Menu
     li class="dropdown"
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"

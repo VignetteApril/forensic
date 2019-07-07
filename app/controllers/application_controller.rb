@@ -134,7 +134,7 @@ class ApplicationController < ActionController::Base
     return true if @current_user.login == 'admin'
     return true if can?(c_name, a_name)
 
-    redirect_to acceptable_url(c_name, a_name), notice: "对不起，您没有使用该功能的权限。"
+    redirect_to acceptable_url(c_name, a_name), notice: "已为您跳转到具有权限的功能区域"
   end
 
   # 获得已登录用户的个人事务提醒

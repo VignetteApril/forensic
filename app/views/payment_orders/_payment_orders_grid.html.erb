@@ -83,7 +83,8 @@
   end
 
   g.column in_csv: false do |payment_order|
-    if can?('payment_orders', 'submit_current_order') && payment_order.not_confirm?
+    # 当缴费是未提交状态，且缴费单已经和到账记录关联上了，才可以发起缴费单提交申请
+    if can?('payment_orders', 'submit_current_order') && payment_order.not_submit? && payment_order.incoming_record.present?
       link_to '提交', submit_current_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-secondary btn-sm'
     end
   end
@@ -95,14 +96,23 @@
   end
 
   g.column in_csv: false do |payment_order|
-    if can?('payment_orders', 'destroy') && !payment_order.confirm? && !payment_order.cancel?
+    # 一旦财务人员确认了该缴费单，该缴费单就不能被删除了，只能作废
+    if can?('payment_orders', 'destroy') && !payment_order.cancel? && !payment_order.confirm?
       link_to '删除', main_case_payment_order_path(payment_order.main_case, payment_order), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
     end
   end
 
   g.column in_csv: false do |payment_order|
+    # 一旦财务人员确认了该缴费单，该缴费单就不能被删除了，只能作废
+    # 作废操作只有在当前缴费未关联发票时才可以点
+    if can?('payment_orders', 'cancel_order') && payment_order.bill.nil? && !payment_order.cancel?
+      link_to '作废', cancel_order_main_case_payment_order_path(payment_order.main_case, payment_order), method: :patch, class: 'btn btn-danger btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |payment_order|
     if can?('payment_orders', 'confirm_order')
-      link_to '确认缴费单', confirm_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-danger btn-sm'
+      link_to '确认缴费单', confirm_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm'
     end
   end
 
