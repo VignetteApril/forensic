@@ -64,13 +64,12 @@ header class="app-header"
             = link_to(organizations_path, class: "dropdown-item") do
               i.dropdown-icon.fa.fa-cog
               | 系统管理
-          = link_to(logout_path, class: "dropdown-item") do
-            i.dropdown-icon.fa.fa-sign-out
-            | 登出
           = link_to(edit_self_user_path(@current_user), class: "dropdown-item") do
             i.dropdown-icon.fa.fa-pencil-square-o
             | 编辑个人信息
-
+          = link_to(logout_path, class: "dropdown-item") do
+            i.dropdown-icon.fa.fa-sign-out
+            | 登出
 
 
 javascript:
