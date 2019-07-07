@@ -41,92 +41,9 @@
         li = doc.name
 
 javascript:
-  var digitUppercase = function(n) {
-    var fraction = ['角', '分'];
-    var digit = [
-        '零', '壹', '贰', '叁', '肆',
-        '伍', '陆', '柒', '捌', '玖'
-    ];
-    var unit = [
-        ['元', '万', '亿'],
-        ['', '拾', '佰', '仟']
-    ];
-    var head = n < 0 ? '欠' : '';
-    n = Math.abs(n);
-    var s = '';
-    for (var i = 0; i < fraction.length; i++) {
-        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
-    }
-    s = s || '整';
-    n = Math.floor(n);
-    for (var i = 0; i < unit[0].length && n > 0; i++) {
-        var p = '';
-        for (var j = 0; j < unit[1].length && n > 0; j++) {
-            p = digit[n % 10] + unit[1][j] + p;
-            n = Math.floor(n / 10);
-        }
-        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
-    }
-    return head + s.replace(/(零.)*零元/, '元')
-        .replace(/(零.)+/g, '零')
-        .replace(/^整$/, '零元整');
-    }
-
-  var deal_num_payment = function(){
-    //缴费单
-    for (i = 0; i < $('.payment-total-cost').length; i++) { 
-      var span_dom = $($('.payment-total-cost')[i])
-      var input = span_dom.parent().parent().parent().find('.payment-total-cost-input')
-      span_dom.text(digitUppercase(input.val()))
-
-      input.on('input',function(e){
-        $(e.target).parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($(e.target).val()))
-      })
-    }
-
-    for (i = 0; i < $('.payment-advance').length; i++) { 
-      var span_dom = $($('.payment-advance')[i])
-      var input = span_dom.parent().parent().parent().find('.payment-advance-input')
-      span_dom.text(digitUppercase(input.val()))
-
-      input.on('input',function(e){
-        $(e.target).parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($(e.target).val()))
-      })
-    }
-
-  }
-
-  var deal_num_refund = function(){
-    //退款单
-    for (i = 0; i < $('.refund-advance').length; i++) { 
-      var span_dom = $($('.refund-advance')[i])
-      var from_span_dom = span_dom.parent().parent().parent().find('.refund-advance-span')
-      span_dom.text(digitUppercase(from_span_dom.text()))
-    }    
-
-    for (i = 0; i < $('.refund-cost').length; i++) { 
-      var span_dom = $($('.refund-cost')[i])
-      var input = span_dom.parent().parent().parent().find('.refund-cost-input')
-      span_dom.text(digitUppercase(input.val()))
-
-      input.on('input',function(e){
-        $(e.target).parent().parent().parent().parent().find('.refund-cost').text(digitUppercase($(e.target).val()))
-      })
-    }
-
-    for (i = 0; i < $('.refund-total-cost').length; i++) { 
-      var span_dom = $($('.refund-total-cost')[i])
-      var input = span_dom.parent().parent().parent().find('.refund-total-cost-input')
-      span_dom.text(digitUppercase(input.val()))
-
-      input.on('input',function(e){
-        $(e.target).parent().parent().parent().parent().find('.refund-total-cost').text(digitUppercase($(e.target).val()))
-      })
-    }
-  
-  }
 
   $(document).on('turbolinks:load', function() {
+    //费用管理最早的页面有一个请求动态设置发票模态框（“编辑”功能）
     $(".open-bill-modal").bind("click",function(e){
       console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
       //请求数据设置模态框
@@ -140,22 +57,36 @@ javascript:
         $(".bill-bank").val(data['bank'])
       
       });
-
-      deal_num_payment()
-      deal_num_refund()
     });
-
-
-    $('#payment_orders')
-      .on('cocoon:after-insert', function(e, insertedItem) {
-        deal_num_payment()
-    })
-
-    $('#refund_orders')
-      .on('cocoon:after-insert', function(e, insertedItem) {
-        deal_num_refund()
-    })
-  
   });
+
+  //鉴定人之外的人看案件信息里的所有可点按钮为disable状态（此方法在四个页面里都有）
+  var arr = ['edit','filing_info', 'payment_order_management', 'case_executing']
+
+  if($('body').attr('data-controller') == 'main_cases' && arr.indexOf($('body').attr('data-action')) > -1){
+      console.log('load!')
+      var is_wtr = "#{@main_case.ident_user?(@current_user)}" 
+      if(is_wtr == "false"){
+
+          $('.app-content').find('input').attr('disabled',"disabled")
+          $('.app-content').find('a').attr('disabled',"disabled")
+          $('.app-content').find('textarea').attr('disabled',"disabled")
+          $('.app-content').find('.btn').addClass('disabled');
+          $('.app-content').find('button').attr('data-target','');
+
+          var selects = $('.app-content').find('select')
+          for(var i=0;i<selects.length;i++){
+              var select = $(selects[i]).selectize();
+                  var selectize = select[0].selectize;
+                  selectize.disable();
+          }
+
+          //注：['edit','filing_info', 'payment_order_management', 'case_executing'] 的返回按钮增加class back 这里需要打开返回按钮的点击权限
+           $('.app-content').find('.back').removeClass('disabled')
+
+           $('#create_org_user').unbind();
+           $('#apply_close').unbind();
+      }
+  }
 
    

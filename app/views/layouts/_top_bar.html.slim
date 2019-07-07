@@ -37,7 +37,7 @@ header class="app-header"
 
         li.app-notification__footer
           = link_to '查看所有通知',notifications_path
-    - if !admin?
+    - if !admin? && can?('incoming_records','claim_record_list')
       li class="dropdown"
         a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"
           i class="app-menu__icon fa fa-file-text"
@@ -72,3 +72,5 @@ header class="app-header"
             | 编辑个人信息
 
 
+
+javascript:

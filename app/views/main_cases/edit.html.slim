@@ -3,7 +3,7 @@
 
 .row
   .col-md-2
-    = link_to '返回', :back, class: 'btn btn-primary mb-2'
+    = link_to '返回', :back, class: 'btn btn-primary mb-2 back'
   .col-md-10
     button type="button" class="btn btn-primary mb-2 pull-right" data-toggle="modal" data-target="#case_no_modal" 生成案号
     span.pull-right.mr-2.mt-2.h6 = "案件编号：#{@main_case.case_no_display}"
@@ -14,3 +14,33 @@
   .card-body
     .table-responsive
       == render 'form'
+
+javascript:
+  //鉴定人之外的人看案件信息里的所有可点按钮为disable状态（此方法在四个页面里都有）
+  var arr = ['edit','filing_info', 'payment_order_management', 'case_executing']
+
+  if($('body').attr('data-controller') == 'main_cases' && arr.indexOf($('body').attr('data-action')) > -1){
+      console.log('load!')
+      var is_wtr = "#{@main_case.ident_user?(@current_user)}" 
+      if(is_wtr == "false"){
+
+          $('.app-content').find('input').attr('disabled',"disabled")
+          $('.app-content').find('a').attr('disabled',"disabled")
+          $('.app-content').find('textarea').attr('disabled',"disabled")
+          $('.app-content').find('.btn').addClass('disabled');
+          $('.app-content').find('button').attr('data-target','');
+
+          var selects = $('.app-content').find('select')
+          for(var i=0;i<selects.length;i++){
+              var select = $(selects[i]).selectize();
+                  var selectize = select[0].selectize;
+                  selectize.disable();
+          }
+
+          //注：['edit','filing_info', 'payment_order_management', 'case_executing'] 的返回按钮增加class back 这里需要打开返回按钮的点击权限
+           $('.app-content').find('.back').removeClass('disabled')
+
+           $('#create_org_user').unbind();
+           $('#apply_close').unbind();
+      }
+  }
