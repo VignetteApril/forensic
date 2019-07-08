@@ -102,7 +102,7 @@ class MainCase < ApplicationRecord
     end
 
     # 转换到 结案状态
-    event :turn_apply_filing, after: :record_case_process do
+    event :turn_close, after: :record_case_process do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :close
     end
   end

@@ -9,6 +9,6 @@
         .item style="display:none;"
           = f.input :page_type, as: :hidden, input_html: { value: "#{case_stage}" }
         .item style="width:200px;padding-right:30px;height:100%"
-          = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
+          = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, selected: @main_case.case_stage, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
         .item style="width:100px;"
           = f.button :submit, '提交', class: 'btn-success', wrapper_html: {style: 'display:inline'}

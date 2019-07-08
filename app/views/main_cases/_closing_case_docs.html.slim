@@ -1,0 +1,20 @@
+- @main_case.case_docs.where(case_stage: :archived).order(:check_archived_no).each do |case_doc|
+  - unless case_doc.attachment.attached?
+    .col-md-2
+      span data-toggle="tooltip" data-placement="right" title="未关联文件" = case_doc.name
+    .col-md-1
+      span 【无】
+    .col-md-2
+      = link_to display_dynamic_file_modal_main_case_path(@main_case, case_doc_id: case_doc.id), remote: true, method: 'POST' do
+        span#upload_file.fa.fa-upload.ml-2
+  - else
+    .col-md-2
+      span data-toggle="tooltip" data-placement="right" title="#{case_doc.attachment.blob.filename}" = case_doc.name
+    .col-md-1
+      span 【有】
+    .col-md-2
+      i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{case_doc.id}"
+  .col-md-7
+    .custom-control.custom-checkbox.d-inline-block
+      input type="checkbox" class="custom-control-input" id="customCheck1" checked="1"
+      label class="custom-control-label" for="customCheck1" 通过

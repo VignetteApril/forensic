@@ -4,7 +4,7 @@ class MainCasesController < ApplicationController
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
-                                       :display_dynamic_file_modal]
+                                       :display_dynamic_file_modal, :closing_case]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -362,7 +362,7 @@ class MainCasesController < ApplicationController
     case_stage = params[:main_case][:case_stage]
     # 这个是aasm的改变案件状态的方法名
     # 因为该方法名是turn_{case_stage}的形式的，需要用到动态派发的技术
-    turn_case_stage_sym = "turn_#{case_stage}".to_sym
+    turn_case_stage_sym = "turn_#{case_stage}!".to_sym
 
     # 根据参数{page_type}来判断是要跳转到哪个页面
     case page_type
@@ -371,7 +371,9 @@ class MainCasesController < ApplicationController
     when 'payment_order_management'
       redirect_url = payment_order_management_main_case_url(@main_case)
     when 'case_executing'
-      redirect_url = case_executing_management_main_case_url(@main_case)
+      redirect_url = case_executing_main_case_url(@main_case)
+    when 'closing_case'
+      redirect_url = closing_case_main_case_url(@main_case)
     end
 
     respond_to do |format|
@@ -502,6 +504,14 @@ class MainCasesController < ApplicationController
   # 用户在表单modal中填写相关信息，并可以上传文件，完成文件的上传
   def display_dynamic_file_modal
     @case_doc = DepartmentDoc.find(params[:case_doc_id])
+    case @case_doc.case_stage.to_sym
+    when :executing
+      @partial_name = 'executing_case_docs'
+      @case_stage = :executing
+    when :archived
+      @partial_name = 'closing_case_docs'
+      @case_stage = :archived
+    end
 
     respond_to do |format|
       format.js
@@ -534,6 +544,21 @@ class MainCasesController < ApplicationController
 
     # 设定案件类型
     set_case_types
+  end
+
+  # 结案主页面
+  def closing_case
+  end
+
+  # 更新文档是否通过
+  # method POST
+  # params doc_id
+  # params true | false
+  # no return 不返回任何结果
+  def update_doc_is_passed
+    case_doc = DepartmentDoc.find(params[:doc_id])
+    case_doc.update(is_passed: params[:is_passed])
+    return
   end
 
   private

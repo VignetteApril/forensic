@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_07_013541) do
+ActiveRecord::Schema.define(version: 2019_07_08_125752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 2019_07_07_013541) do
     t.integer "doc_template_id"
     t.integer "docable_id"
     t.string "docable_type"
+    t.boolean "is_passed", default: false
   end
 
   create_table "departments", force: :cascade do |t|

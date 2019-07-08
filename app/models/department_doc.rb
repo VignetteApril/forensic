@@ -5,8 +5,6 @@ class DepartmentDoc < ApplicationRecord
   validates :name, presence: { message: '名称不能为空' }
   validates :doc_code, presence: { message: '文件编码不能为空' }
   validates :case_stage, presence: { message: '案件阶段不能为空' }
-  validates :check_archived, presence: { message: '是否归档检查不能为空' }
-  validates :check_archived_no, presence: { message: '归档检查顺序号不能为空' }
 
   enum case_stage: [ :base_info,
                      :add_materials,
