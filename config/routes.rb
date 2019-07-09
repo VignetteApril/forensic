@@ -75,6 +75,8 @@ Rails.application.routes.draw do
     get :case_executing, on: :member
     get :pending_cases, on: :collection
     get :new_with_entrust_order, on: :collection
+    get :closing_case, on: :member
+    post :update_doc_is_passed, on: :collection
     post :display_dynamic_file_modal, on: :member
     post :create_organization_and_user, on: :collection
     post :user_search, on: :collection
@@ -133,6 +135,8 @@ Rails.application.routes.draw do
   get 'edit_office_online/edit_office'
   # 保存word文档
   post 'edit_office_online/save_doc'
+  # 刷新页面
+  post 'edit_office_online/get_doc_url'
 
   # 小程序后台API
   post 'apis/register'

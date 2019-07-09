@@ -29,8 +29,13 @@ function ShowPage(path)
 	var v=getBrowser();	
 	if(v==1){//当浏览器返回值为1时定义为使用智能窗方式打开网址
 		strUrl = pre + path;
-		alert(strUrl)
-		window.open(strUrl,'_self');
+		try {
+            window.open(strUrl,'_self');
+            console.log(window.open(strUrl,'_self'))
+        } catch(e) {
+		    alert('请先下载安装在线编辑Word控件！');
+		    window.location.href =  window.location.origin + '/weboffice.rar';
+        }
 	}
 	else
 	{ //当浏览器返回值1以外的数据时采用传统方式打开网址

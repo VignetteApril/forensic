@@ -4,7 +4,10 @@ header class="app-header"
     span 智慧司法云服务平台
   a.app-sidebar__toggle href="#" data-toggle="sidebar" aria-label="Hide Sidebar"
   // Navbar Right Menu
-  ul.app-nav 
+  ul.app-nav
+    ul.text-white style="display:flex;align-items:center;"
+      a.text-white data-toggle="tooltip" data-placement="bottom" title="点击下载在线文档编辑控件" href="javascript:window.open(window.location.origin + '/weboffice.rar');"
+       | 下载控件
     ul.text-white style="display:flex;align-items:center;"
       - if @current_user
         span = '欢迎 ' + @current_user.name + ' 登录系统！'
@@ -50,7 +53,7 @@ header class="app-header"
                   = link_to claim_record_index_incoming_record_path(incoming_record) do
                     p.app-notification__message = "付款人：#{incoming_record.pay_person_name}  金额：#{incoming_record.amount}元"
           li.app-notification__footer
-            a href="#{incoming_records_path}" 查看全部到账记录
+            a href="#{claim_record_list_incoming_records_path}" 查看全部到账记录
     // User Menu
     li.dropdown
       a.app-nav__item href="#" data-toggle="dropdown" aria-label="Open Profile Menu"
@@ -71,5 +74,3 @@ header class="app-header"
             i.dropdown-icon.fa.fa-sign-out
             | 登出
 
-
-javascript:

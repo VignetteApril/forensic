@@ -1,6 +1,7 @@
 - @main_case.case_docs.where(case_stage: :executing).each do |case_doc|
   .col-md-4.mt-2
     span = case_doc.name
+    i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{case_doc.id}"
     - unless case_doc.attachment.attached?
       = link_to display_dynamic_file_modal_main_case_path(@main_case, case_doc_id: case_doc.id), remote: true, method: 'POST' do
         span#upload_file.fa.fa-upload.ml-2

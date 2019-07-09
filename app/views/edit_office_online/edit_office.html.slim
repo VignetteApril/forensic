@@ -1,11 +1,10 @@
 body topmargin=0 leftmargin=0 onload="javascript:WebOpen();"
   div style="text-align:left;font-size:15px;"
-    input type="button" class="button" value="保存本地电脑" onclick="WebSave();"
+    input type="button" class="button" value="保存文档" onclick="WebSave();"
     input type="button" value="关闭智能窗口" onclick="window.opener=null; window.open('','_self',''); window.close();"
 
 javascript:
   var strOpenUrl = "#{@file_path}" ; //取得打开路径和文件名
-  var strSaveUrl = "#{@file_path}" ; //取得保存路径和文件名
   var bOpen=false;//设置控件打开文档的状态，默认为FALSE
   strSmartUrl = "WebOffice://|Officectrl|" + window.location.href;//开启智能窗模式
   var WebOffice;//WebOffice的JS编程对象
@@ -23,8 +22,33 @@ javascript:
   function ReplaceWordText() {
       var obj = WebOffice.ActiveDocument;
       var app = obj.Application;
-      app.Selection.Find.Execute('【手机号】', false, false, false, false, false, 1, false, false, '13601115771', 2, false, false, false, false);
-      app.Selection.Find.Execute('【姓名】', false, false, false, false, false, 1, false, false, '张杰', 2, false, false, false, false);
+      // 委托方信息替换
+      app.Selection.Find.Execute('@#省@#', false, false, false, false, false, 1, false, false, "#{@province_name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#市@#', false, false, false, false, false, 1, false, false, "#{@city_name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#区@#', false, false, false, false, false, 1, false, false, "#{@district_name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托方名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.organization_name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托人姓名@#', false, false, false, false, false, 1, false, false, "#{@main_case.user_name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托人电话@#', false, false, false, false, false, 1, false, false, "#{@main_case.wtr_phone}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托方地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.organization_addr}", 2, false, false, false, false);
+      // 委托鉴定事项替换
+      app.Selection.Find.Execute('@#案由@#', false, false, false, false, false, 1, false, false, "#{@main_case.anyou}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案件性质@#', false, false, false, false, false, 1, false, false, "#{@main_case.case_property}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{@main_case.commission_date}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#受委托科室@#', false, false, false, false, false, 1, false, false, "#{@main_case.department.name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定事项@#', false, false, false, false, false, 1, false, false, "#{@case_matter}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案件类型@#', false, false, false, false, false, 1, false, false, "#{@main_case.case_type}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定事项及要求@#', false, false, false, false, false, 1, false, false, "#{@main_case.matter_demand}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.base_info}", 2, false, false, false, false);
+      // 鉴定人信息替换
+      app.Selection.Find.Execute('@#被鉴定人类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_unit_type}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.appraised_unit.name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人性别@#', false, false, false, false, false, 1, false, false, "#{@appraised_gender}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{@main_case.appraised_unit.birthday}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人证件类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_id_type}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人联系地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.appraised_unit.addr}", 2, false, false, false, false);
+
+      // TODO: 移交材料相关信息替换
+      // 等待需求确认
   }
 
   function OpenDocument()
@@ -55,7 +79,6 @@ javascript:
                   alert('office文档保存成功!');
                   document.getElementById('WebOffice').Close();
                   window.close();
-                  setTimeout('location.reload();',3000);
               }
 
       }

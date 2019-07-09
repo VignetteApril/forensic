@@ -1,0 +1,83 @@
+#dynamic_file_modal
+= render partial: 'case_stage_bar', locals: { main_case: @main_case, case_stage: 'closing_case' }
+= render 'nav_bar'
+
+.card
+  .card-body
+    .row
+      .col-md-12
+        / button type="button" class="btn btn-primary pull-right ml-2" data-toggle="modal" data-target="#case_doc_modal" 上传文件
+        button#close type="button" class="btn btn-primary pull-right ml-2" 结案
+        button#reject type="button" class="btn btn-primary pull-right " 退案
+    .row#closing_case_docs.no-gutters
+      - @main_case.case_docs.where(case_stage: :archived).order(:check_archived_no).each do |case_doc|
+        - unless case_doc.attachment.attached?
+          .col-md-2
+            span data-toggle="tooltip" data-placement="right" title="未关联文件" = case_doc.name
+          .col-md-1
+            span 【无】
+          .col-md-2
+            = link_to display_dynamic_file_modal_main_case_path(@main_case, case_doc_id: case_doc.id), remote: true, method: 'POST' do
+              span#upload_file.fa.fa-upload.ml-2
+        - else
+          .col-md-2
+            span data-toggle="tooltip" data-placement="right" title="#{case_doc.attachment.blob.filename}" = case_doc.name
+          .col-md-1
+            span 【有】
+          .col-md-2
+            i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{case_doc.id}"
+        .col-md-7
+          .custom-control.custom-checkbox.d-inline-block
+            - if case_doc.is_passed
+              input type="checkbox" class="custom-control-input" checked='checked' id="customCheck#{case_doc.id}" data-doc-id="#{case_doc.id}"
+            - else
+              input type="checkbox" class="custom-control-input" id="customCheck#{case_doc.id}" data-doc-id="#{case_doc.id}"
+            label class="custom-control-label" for="customCheck#{case_doc.id}" 通过
+javascript:
+    $('#close').click(function () {
+        var case_stage_select = $('#main_case_case_stage').selectize();
+        case_stage_select[0].selectize.setValue('close');
+    });
+
+    $('#reject').click(function () {
+        var case_stage_select = $('#main_case_case_stage').selectize();
+        case_stage_select[0].selectize.setValue('rejected');
+    });
+
+    $('.edit-doc').click(function (e) {
+        var file_path = '';
+        var doc_id = $(e.target).attr('data-doc-id');
+
+        // 发送请求，刷新页面
+        $.ajax({
+            type: "post",
+            url: "#{edit_office_online_get_doc_url_url}",
+            data: {doc_id: doc_id},
+            dataType: "json",
+            success: function (data) {
+                file_path = data.url;
+
+                OpenDoc(file_path, doc_id);
+            }
+        });
+        return false;
+    });
+
+
+    $(".custom-control-input").change(function (e) {
+        var doc_id = $(e.target).attr('data-doc-id');
+        var is_passed = false;
+        if (this.checked) {
+            is_passed = true;
+        } else {
+            is_passed = false;
+        }
+        // 发送请求更新是否通过字段
+        $.ajax({
+            type: "post",
+            url: "#{update_doc_is_passed_main_cases_url}",
+            data: { doc_id: doc_id, is_passed: is_passed }
+        });
+
+        return false;
+    });

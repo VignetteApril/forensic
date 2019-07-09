@@ -34,11 +34,17 @@
   .col-md-12
     = render 'refund_orders/refund_orders_grid'    
 
+hr
+.row
+  .col-md-12
+    button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#case_doc_modal" 上传文件
 #financial_case_docs.row.mt-2
   .col-md-4.offset-8
     ul.pull-right
       - @main_case.case_docs.where(case_stage: :financial).each do |doc|
-        li = doc.name
+        li
+          span = doc.name
+          i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
 
 javascript:
 
@@ -86,6 +92,37 @@ javascript:
 
            $('#create_org_user').unbind();
            $('#apply_close').unbind();
+      }
+  }
+
+  // 在线编辑文档用
+  $('.edit-doc').click(function (e) {
+      var file_path = '';
+      var doc_id = $(e.target).attr('data-doc-id');
+
+      // 发送请求，刷新页面
+      $.ajax({
+          type: "post",
+          url: "#{edit_office_online_get_doc_url_url}",
+          data: {doc_id: doc_id},
+          dataType: "json",
+          success: function (data) {
+              file_path = data.url;
+
+              OpenDoc(file_path, doc_id);
+          }
+      });
+
+      return false;
+  });
+
+  function OpenDoc(file_path, doc_id) {
+      //判断用户是否安装过WebOffice分两步完成：
+      //1.引入js脚本：<script language=javascript src="src/cssjs/issetup.js" charset="utf-8"><\/script>；
+      //2.通过js函数WebOfficeInstall()返回值为真时表示已安装。
+      if (WebOfficeInstall()) {
+          var strPath = "#{edit_office_online_edit_office_url}" + '?file_path=' + file_path + '&doc_id=' + doc_id;
+          ShowPage(strPath);
       }
   }
 

@@ -1,6 +1,6 @@
 class RefundOrdersController < ApplicationController
-  before_action :set_refund_order, except: [:new, :create]
-  before_action :set_main_case
+  before_action :set_refund_order, except: [:new, :create, :finance_index]
+  before_action :set_main_case, except: [:finance_index]
 
   def new
     @refund_order = RefundOrder.new
