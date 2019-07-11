@@ -40,6 +40,7 @@ class MainCasesController < ApplicationController
     end
 
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
   end
 
   # 本科室案件页面
