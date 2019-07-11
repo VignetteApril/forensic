@@ -254,7 +254,7 @@ class MainCasesController < ApplicationController
   def update_add_material
     respond_to do |format|
       if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
-        @main_case.turn_add_material
+        @main_case.turn_add_material!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入补充材料阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -280,7 +280,7 @@ class MainCasesController < ApplicationController
                            amount: params[:main_case][:amount],
                            case_stage: :filed,
                            acceptance_date: Date.today)
-        @main_case.turn_filed
+        @main_case.turn_filed!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -294,7 +294,7 @@ class MainCasesController < ApplicationController
   # method patch
   def update_reject
     respond_to do |format|
-      if @main_case.turn_rejected
+      if @main_case.turn_rejected!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已退案！' }
         format.json { render :show, status: :ok, location: @main_case }
       else
