@@ -4,7 +4,8 @@ class MainCasesController < ApplicationController
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
-                                       :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo]
+                                       :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
+                                       :case_process_records]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -590,6 +591,10 @@ class MainCasesController < ApplicationController
         format.html { redirect_to case_memos_main_case_url(@main_case), alert: '便签创建失败！请填写便签内容，并选择可见范围' }
       end
     end
+  end
+
+  # 案件进程
+  def case_process_records
   end
 
   private
