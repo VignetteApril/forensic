@@ -591,6 +591,8 @@ class MainCasesController < ApplicationController
       @main_case.case_memos.where.not(visibility_range: :only_me)
     elsif @main_case.wtr?(@current_user)
       @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+    else
+      @main_case.case_memos.where.not(visibility_range: :only_me)
     end.or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
 
     @case_memo = @main_case.case_memos.new
