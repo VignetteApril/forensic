@@ -569,11 +569,11 @@ class MainCasesController < ApplicationController
   # 委托人可以看到可见范围是 案件 和 本案件和领导的便签
   # 鉴定中心的科室主任的可见范围是 本案件和领导
   def case_memos
-    if @main_case.ident_user?(@current_user)
-      @case_memos = @main_case.case_memos.where.not(visibility_range: :only_me).or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
+    @case_memos = if @main_case.ident_user?(@current_user)
+      @main_case.case_memos.where.not(visibility_range: :only_me)
     elsif @main_case.wtr?(@current_user)
-      @case_memos = @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
-    end
+      @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+    end.or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
 
     @case_memo = @main_case.case_memos.new
   end
