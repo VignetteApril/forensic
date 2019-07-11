@@ -15,9 +15,9 @@ class MainCase < ApplicationRecord
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】
   has_many :case_process_records, dependent: :destroy # 案件中改变状态时的记录
   has_many :payment_orders, dependent: :destroy
-  has_many :bills
-  has_many :refund_orders
-  has_many :case_memos
+  has_many :bills, dependent: :destroy
+  has_many :refund_orders, dependent: :destroy
+  has_many :case_memos, dependent: :destroy
   has_many :case_docs, class_name: 'DepartmentDoc',as: :docable, dependent: :destroy
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
