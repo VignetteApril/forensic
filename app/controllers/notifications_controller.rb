@@ -4,7 +4,7 @@ class NotificationsController < ApplicationController
   # 用户查看自己所有的个人事务提醒列表
   def index
     init_bread('个人事务提醒')
-    @notifications = initialize_grid( Notification.where(user_id: @current_user&.id),       
+    @notifications = initialize_grid( Notification.where(user_id: @current_user.id),
                               order: 'created_at',
                               order_direction: 'desc',
                               per_page: 10, 
