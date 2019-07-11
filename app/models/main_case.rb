@@ -14,15 +14,14 @@ class MainCase < ApplicationRecord
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】
   has_many :case_process_records, dependent: :destroy # 案件中改变状态时的记录
+  has_many :payment_orders, dependent: :destroy
+  has_many :bills
+  has_many :refund_orders
+  has_many :case_memos
   has_many :case_docs, class_name: 'DepartmentDoc',as: :docable, dependent: :destroy
   accepts_nested_attributes_for :transfer_docs, reject_if: :all_blank, allow_destroy: true
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
-
-  has_many :payment_orders, dependent: :destroy
-  has_many :bills
-  has_many :refund_orders
-  
   has_one_attached :barcode_image
   has_one_attached :entrust_doc # 案件下的委托书
 
@@ -209,5 +208,10 @@ class MainCase < ApplicationRecord
   # 判断当前user是否是案件的鉴定人
   def ident_user?(user)
     self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
+  end
+
+  # 判断当前user是否是案件的委托人
+  def wtr?(user)
+    self.wtr_id == user.id
   end
 end

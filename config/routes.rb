@@ -76,6 +76,8 @@ Rails.application.routes.draw do
     get :pending_cases, on: :collection
     get :new_with_entrust_order, on: :collection
     get :closing_case, on: :member
+    get :case_memos, on: :member
+    post :create_case_memo, on: :member
     post :update_doc_is_passed, on: :collection
     post :display_dynamic_file_modal, on: :member
     post :create_organization_and_user, on: :collection

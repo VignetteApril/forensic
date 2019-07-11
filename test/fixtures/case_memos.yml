@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  main_case: one
+  content: MyString
+  visibility_range: 1
+
+two:
+  user: two
+  main_case: two
+  content: MyString
+  visibility_range: 1

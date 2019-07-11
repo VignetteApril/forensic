@@ -14,3 +14,6 @@ ul.nav.nav-tabs.mb-2
   - if can?('main_cases', 'closing_case')
     li.nav-item
       a href="#{closing_case_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'closing_case')}" 结案
+  - if can?('main_cases', 'case_memos')
+    li.nav-item
+      a href="#{case_memos_main_case_path(@main_case)}" class="#{top_bar_active_class(controller, 'main_cases', 'case_memos')}" 便签

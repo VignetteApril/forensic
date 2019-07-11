@@ -44,7 +44,7 @@ features:
                            payment_order_management, user_search, create_organization_and_user,
                            save_payment_order, request_bill, update_bill, update_case_stage,
                            case_executing, display_dynamic_file_modal, pending_cases, closing_case,
-                           update_doc_is_passed", 案件管理]
+                           update_doc_is_passed, case_memos, create_case_memo", 案件管理]
   - [我的案件, main_cases, "index, open_barcode_image", 机构]
   - [本科室案件, main_cases, "department_cases, open_barcode_image", 机构]
   - [本机构的案件, main_cases, "center_cases, open_barcode_image", 机构]

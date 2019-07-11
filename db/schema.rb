@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_08_125752) do
+ActiveRecord::Schema.define(version: 2019_07_09_125445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,17 @@ ActiveRecord::Schema.define(version: 2019_07_08_125752) do
     t.string "bank_account"
     t.integer "bill_type"
     t.index ["main_case_id"], name: "index_bills_on_main_case_id"
+  end
+
+  create_table "case_memos", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "main_case_id"
+    t.string "content"
+    t.integer "visibility_range"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["main_case_id"], name: "index_case_memos_on_main_case_id"
+    t.index ["user_id"], name: "index_case_memos_on_user_id"
   end
 
   create_table "case_process_records", force: :cascade do |t|
@@ -474,6 +485,8 @@ ActiveRecord::Schema.define(version: 2019_07_08_125752) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appraised_units", "main_cases"
   add_foreign_key "bills", "main_cases"
+  add_foreign_key "case_memos", "main_cases"
+  add_foreign_key "case_memos", "users"
   add_foreign_key "case_process_records", "main_cases"
   add_foreign_key "case_users", "main_cases"
   add_foreign_key "case_users", "users"
