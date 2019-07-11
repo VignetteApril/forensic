@@ -31,7 +31,7 @@ class MainCasesController < ApplicationController
       data = MainCase
     elsif @current_user.organization.nil?
       redirect_to acceptable_url('sessions', 'index'), notice: '请您关联对应的机构'
-    elsif @current_user.organization.org_type.to_sym == :court
+    elsif @current_user.organization.org_type.to_sym != :center
       data = MainCase.where(wtr_id: @current_user.id)
     else
       current_org_cases = @current_user.organization.main_cases
@@ -61,6 +61,14 @@ class MainCasesController < ApplicationController
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
     data = @current_user.organization.main_cases
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
+  end
+
+  # 委托人查看案件
+  def wtr_cases
+    data = MainCase.where(wtr_id: @current_user.id)
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
     render :index
@@ -595,6 +603,7 @@ class MainCasesController < ApplicationController
 
   # 案件进程
   def case_process_records
+
   end
 
   private
