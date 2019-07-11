@@ -764,7 +764,7 @@ class MainCasesController < ApplicationController
 
     # 指定给当前机构的委托单
     def set_entrust_orders
-      entrust_orders = @current_user.organization.entrust_orders
+      entrust_orders = @current_user.organization.entrust_orders.unclaimed
       @entrust_orders = []
       unless entrust_orders.empty?
         @entrust_orders = entrust_orders.map do|order|
