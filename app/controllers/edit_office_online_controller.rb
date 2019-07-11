@@ -47,4 +47,9 @@ class EditOfficeOnlineController < ApplicationController
       format.json { render json: { url: url } }
     end
   end
+
+  # 下载控件
+  def download_weboffice
+    send_file("#{Rails.root}/public/webOffice.rar")
+  end
 end

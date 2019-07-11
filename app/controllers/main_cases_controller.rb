@@ -456,7 +456,7 @@ class MainCasesController < ApplicationController
   def user_search
     user_name = params[:user_name]
 
-    res = User.includes(:organization).where('name like ?', "%#{user_name}%")
+    res = User.includes(:organization).where.not(user_type: :center_user).where('name like ?', "%#{user_name}%")
 
     render json: { users: res }
   end

@@ -139,6 +139,8 @@ Rails.application.routes.draw do
   post 'edit_office_online/save_doc'
   # 刷新页面
   post 'edit_office_online/get_doc_url'
+  # 下载控件
+  get 'edit_office_online/download_weboffice'
 
   # 小程序后台API
   post 'apis/register'
