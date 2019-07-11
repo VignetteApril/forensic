@@ -50,6 +50,6 @@ class EditOfficeOnlineController < ApplicationController
 
   # 下载控件
   def download_weboffice
-    send_file("#{Rails.root}/public/webOffice.rar")
+    send_file("#{Rails.root}/public/WebOffice.rar")
   end
 end
