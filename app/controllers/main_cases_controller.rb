@@ -543,11 +543,20 @@ class MainCasesController < ApplicationController
   # 该action和new页面基本一致但是需要预先设置部分字段的值，根据传进来的委托单的内容
   def new_with_entrust_order
     @entrust_order = EntrustOrder.find(params[:entrust_order_id])
+    wtr = @entrust_order.user
+    wtr_org = @entrust_order.organization
     @main_case = @entrust_order.build_main_case({ anyou: @entrust_order.anyou,
                                                   case_property: @entrust_order.case_property,
                                                   matter_demand: @entrust_order.matter_demand,
                                                   base_info: @entrust_order.base_info,
-                                                  commission_date: @entrust_order.created_at })
+                                                  commission_date: @entrust_order.created_at,
+                                                  province_id: wtr_org.province_id,
+                                                  city_id: wtr_org.city_id,
+                                                  district_id: wtr_org.district_id,
+                                                  organization_name: wtr_org.name,
+                                                  user_name: wtr.name,
+                                                  wtr_phone: wtr.mobile_phone,
+                                                  organization_addr: wtr_org.addr})
     @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
     @main_case.transfer_docs.build
 
