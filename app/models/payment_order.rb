@@ -5,6 +5,7 @@ class PaymentOrder < ApplicationRecord
 	belongs_to :bill, required: false 
   has_one :incoming_record # 缴费单和到账记录一一对应
 
+  before_destroy :update_incoming_record_nil
   after_save :update_incoming_record_claimed
 
   enum order_stage: [:not_submit, :not_confirm, :confirm ,:cancel]
@@ -44,7 +45,14 @@ class PaymentOrder < ApplicationRecord
       incoming_record = IncomingRecord.find(self.incoming_record_id)
       incoming_record.update(status: :claimed, payment_order_id: self.id)
     end
-  end
+	end
+
+  def update_incoming_record_nil
+		if !self.incoming_record.nil?
+			self.incoming_record.update(payment_order_id: nil, status: :unclaimed)
+		end
+	end
+
 	class << self
 		def take_bill_collection
 			[['已开',true],['未开',false]]

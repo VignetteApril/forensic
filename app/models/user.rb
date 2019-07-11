@@ -29,6 +29,7 @@ class User < ApplicationRecord
   has_many   :notifications
   has_many   :sys_logs
   has_many   :favorites
+  has_many   :case_memos
   has_one    :case_user
   belongs_to :department, required: false   
   belongs_to :organization # 每一个用户只能同时属于一个机构

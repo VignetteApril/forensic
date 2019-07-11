@@ -4,7 +4,7 @@ class MainCasesController < ApplicationController
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
-                                       :display_dynamic_file_modal, :closing_case]
+                                       :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -375,6 +375,8 @@ class MainCasesController < ApplicationController
       redirect_url = case_executing_main_case_url(@main_case)
     when 'closing_case'
       redirect_url = closing_case_main_case_url(@main_case)
+    when 'case_memos'
+      redirect_url = case_memos_main_case_url(@main_case)
     end
 
     respond_to do |format|
@@ -454,7 +456,7 @@ class MainCasesController < ApplicationController
   def user_search
     user_name = params[:user_name]
 
-    res = User.includes(:organization).where('name like ?', "%#{user_name}%")
+    res = User.includes(:organization).where.not(user_type: :center_user).where('name like ?', "%#{user_name}%")
 
     render json: { users: res }
   end
@@ -562,6 +564,34 @@ class MainCasesController < ApplicationController
     return
   end
 
+  # 便签主页面
+  # 鉴定人可以看到除了仅自己可见的其他所有便签（当然自己的设置的仅自己可见自己仍然可以看到）
+  # 委托人可以看到可见范围是 案件 和 本案件和领导的便签
+  # 鉴定中心的科室主任的可见范围是 本案件和领导
+  def case_memos
+    if @main_case.ident_user?(@current_user)
+      @case_memos = @main_case.case_memos.where.not(visibility_range: :only_me).or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
+    elsif @main_case.wtr?(@current_user)
+      @case_memos = @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+    end
+
+    @case_memo = @main_case.case_memos.new
+  end
+
+  # 在案件下新建一个便签
+  def create_case_memo
+    @case_memo = @main_case.case_memos.new(case_memo_params)
+    @case_memo.user = @current_user
+
+    respond_to do |format|
+      if @case_memo.save
+        format.html { redirect_to case_memos_main_case_url(@main_case), notice: '便签创建成功！' }
+      else
+        format.html { redirect_to case_memos_main_case_url(@main_case), alert: '便签创建失败！请填写便签内容，并选择可见范围' }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -663,6 +693,10 @@ class MainCasesController < ApplicationController
                                                                                                             :refund_checker_id ] ])
     end
 
+    def case_memo_params
+      params.require(:case_memo).permit(:content, :visibility_range)
+    end
+
     def set_new_areas
       @provinces = Area.roots
       @cities = @provinces.first.children
@@ -711,10 +745,7 @@ class MainCasesController < ApplicationController
       @entrust_orders = []
       unless entrust_orders.empty?
         @entrust_orders = entrust_orders.map do|order|
-          [order.user.try(:name) + ' ' +
-             order.appraised_unit.try(:name) + ' ' +
-             order.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-           order.id]
+          ["#{order.user.try(:name)} #{order.appraised_unit.try(:name)} #{order.created_at.strftime("%Y-%m-%d")}", order.id]
         end
       end
     end
