@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_09_125445) do
+ActiveRecord::Schema.define(version: 2019_07_12_231619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,6 +188,23 @@ ActiveRecord::Schema.define(version: 2019_07_09_125445) do
     t.index ["user_id"], name: "index_entrust_orders_on_user_id"
   end
 
+  create_table "express_orders", force: :cascade do |t|
+    t.string "receiver"
+    t.string "receiver_addr"
+    t.string "receiver_phone"
+    t.integer "company_type"
+    t.string "content"
+    t.datetime "order_date"
+    t.bigint "main_case_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.string "order_num"
+    t.string "case_no"
+    t.index ["main_case_id"], name: "index_express_orders_on_main_case_id"
+    t.index ["user_id"], name: "index_express_orders_on_user_id"
+  end
+
   create_table "favorites", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "title", null: false
@@ -357,6 +374,21 @@ ActiveRecord::Schema.define(version: 2019_07_09_125445) do
     t.index ["main_case_id"], name: "index_payment_orders_on_main_case_id"
   end
 
+  create_table "recive_express_orders", force: :cascade do |t|
+    t.string "sender"
+    t.integer "company_type"
+    t.string "content"
+    t.datetime "order_date"
+    t.string "order_num"
+    t.bigint "main_case_id"
+    t.bigint "user_id"
+    t.string "case_no"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["main_case_id"], name: "index_recive_express_orders_on_main_case_id"
+    t.index ["user_id"], name: "index_recive_express_orders_on_user_id"
+  end
+
   create_table "refund_orders", force: :cascade do |t|
     t.float "appraisal_cost"
     t.float "business_cost"
@@ -492,6 +524,8 @@ ActiveRecord::Schema.define(version: 2019_07_09_125445) do
   add_foreign_key "departments", "organizations"
   add_foreign_key "entrust_orders", "organizations"
   add_foreign_key "entrust_orders", "users"
+  add_foreign_key "express_orders", "main_cases"
+  add_foreign_key "express_orders", "users"
   add_foreign_key "identification_cycles", "organizations"
   add_foreign_key "incoming_records", "organizations"
   add_foreign_key "incoming_records", "payment_orders"
@@ -501,6 +535,8 @@ ActiveRecord::Schema.define(version: 2019_07_09_125445) do
   add_foreign_key "organizations", "areas"
   add_foreign_key "payment_orders", "bills"
   add_foreign_key "payment_orders", "main_cases"
+  add_foreign_key "recive_express_orders", "main_cases"
+  add_foreign_key "recive_express_orders", "users"
   add_foreign_key "refund_orders", "main_cases"
   add_foreign_key "transfer_docs", "main_cases"
   add_foreign_key "users", "organizations"

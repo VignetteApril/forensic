@@ -10,6 +10,8 @@ class MainCase < ApplicationRecord
   belongs_to :department
   belongs_to :entrust_order, required: false 
   has_many :case_talks, dependent: :destroy
+  has_many :express_orders, dependent: :destroy
+  has_many :recive_express_orders, dependent: :destroy
   has_many :notification, dependent: :destroy
   has_many :case_users, dependent: :destroy # 机构中有很多
   has_many :transfer_docs, inverse_of: :main_case, dependent: :destroy # 机构中有很多【移交材料】

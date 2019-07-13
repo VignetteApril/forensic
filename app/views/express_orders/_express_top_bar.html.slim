@@ -1,0 +1,12 @@
+.row.express-btns
+  .col-md-10
+  .col-md-1
+    a href="#{new_recive_express_order_path}" class="btn btn-primary small-btn"  收到快递
+  .col-md-1 
+    a href="#{new_express_order_path}" class="btn btn-primary small-btn"  发送快递
+
+ul.nav.nav-tabs.mb-2.expressnav.row
+  li.nav-item
+    a href="#{recive_express_orders_path}" class="#{top_bar_active_class(controller, 'recive_express_orders', 'index')}" 收到快递
+  li.nav-item
+    a href="#{express_orders_path}" class="#{top_bar_active_class(controller, 'express_orders', 'index')}" 发送快递

@@ -1,0 +1,30 @@
+= simple_form_for(@express_order, method: @request_type, url: @path) do |f|        
+  .row
+    .col-md-4
+      = f.input :receiver, label: '收件人'
+    .col-md-4
+    .col-md-4
+      = f.button :submit, '发送快递信息', class: 'btn btn-success'
+  .row
+    .col-md-8
+      = f.input :receiver_addr, label: '收件人地址'
+  .row
+    .col-md-4
+      = f.input :receiver_phone, label: '收件人电话'
+  .row
+    .col-md-4
+      = f.input :order_num, label: '快递单号'    
+  .row
+    .col-md-4
+      = f.input :company_type, label: '快递单位' , collection: ExpressOrder.company_type_collection
+  .row
+    .col-md-4
+      = f.input :order_date, label: '发送时间', as: :date, html5: true
+  .row
+    .col-md-8
+      = f.input :content, label: '内容'
+  .row
+    .col-md-4
+      = f.input :main_case_id, label: '关联案件', collection: @express_order.my_cases_collection(@current_user)
+
+javascript:
