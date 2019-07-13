@@ -49,6 +49,8 @@
           .row.no-gutters
             .col-md-4
               = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
+        - else
+          = f.input :entrust_order_id, :as => :hidden, html: { value: @main_case.entrust_order.id }
     // 委托鉴定事项card
     .card.gray-card
       .card-header

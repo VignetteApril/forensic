@@ -71,6 +71,7 @@ Rails.application.routes.draw do
     get :payment, on: :member
     get :department_cases, on: :collection
     get :center_cases, on: :collection
+    get :wtr_cases, on: :collection
     get :filed_unpaid_cases, on: :collection
     get :payment_order_management, on: :member
     get :request_bill, on: :collection
@@ -79,6 +80,7 @@ Rails.application.routes.draw do
     get :new_with_entrust_order, on: :collection
     get :closing_case, on: :member
     get :case_memos, on: :member
+    get :case_process_records, on: :member
     post :create_case_memo, on: :member
     post :update_doc_is_passed, on: :collection
     post :display_dynamic_file_modal, on: :member

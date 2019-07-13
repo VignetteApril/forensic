@@ -154,8 +154,8 @@ class MainCase < ApplicationRecord
     org_abbreviation = center.abbreviation
     beginning_of_year = Date.today.beginning_of_year
     end_of_year = Date.today.end_of_year
-    # 找到当前年份 当前科室 所有的案件 按照案件的编号排序
-    main_cases = MainCase.where.not(id: self.id).where(created_at: beginning_of_year..end_of_year, department_id: self.department.id ).order(:case_no)
+    # 找到当前年份 当前科室 所有的case_no不为nil的案件 按照案件的编号排序
+    main_cases = MainCase.where.not(id: self.id, case_no: nil).where(created_at: beginning_of_year..end_of_year, department_id: self.department.id ).order(:case_no)
 
     if main_cases.empty?
       self.case_no = self.department.case_start_no.nil? ? 1 : self.department.case_start_no

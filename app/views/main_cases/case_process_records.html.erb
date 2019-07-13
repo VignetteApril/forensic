@@ -1,0 +1,66 @@
+<%= render partial: 'case_stage_bar', locals: { main_case: @main_case, case_stage: 'case_memos' } %>
+<%= render 'nav_bar' %>
+
+<div class="container py-2">
+  <% n = 0 %>
+  <% @main_case.case_process_records.each do |process_record| %>
+    <% if n%2 == 0 %>
+      <!-- timeline item 1 -->
+      <div class="row no-gutters">
+        <div class="col-sm"> <!--spacer--> </div>
+        <!-- timeline item 1 center dot -->
+        <div class="col-sm-1 text-center flex-column d-none d-sm-flex">
+          <div class="row h-50">
+            <div class="col">&nbsp;</div>
+            <div class="col">&nbsp;</div>
+          </div>
+          <h5 class="m-2">
+            <span class="badge badge-pill bg-light border">&nbsp;</span>
+          </h5>
+          <div class="row h-50">
+            <div class="col border-right">&nbsp;</div>
+            <div class="col">&nbsp;</div>
+          </div>
+        </div>
+        <!-- timeline item 1 event content -->
+        <div class="col-sm py-2">
+          <div class="card">
+            <div class="card-body">
+              <div class="float-right text-muted small"><%= process_record.created_at.strftime('%Y年%m月%d日 %H:%M:%S') %></div>
+              <h4 class="card-title text-muted"><%= process_record.detail %></h4>
+<!--              <p class="card-text"><%#= process_record.detail %></p>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    <% else %>
+      <div class="row no-gutters">
+        <div class="col-sm py-2">
+          <div class="card border-success shadow">
+            <div class="card-body">
+              <div class="float-right text-success small"><%= process_record.created_at.strftime('%Y年%m月%d日 %H:%M:%S') %></div>
+              <h4 class="card-title text-success"><%= process_record.detail %></h4>
+<!--              <p class="card-text"><%#= process_record.detail %></p>-->
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-1 text-center flex-column d-none d-sm-flex">
+          <div class="row h-50">
+            <div class="col border-right">&nbsp;</div>
+            <div class="col">&nbsp;</div>
+          </div>
+          <h5 class="m-2">
+            <span class="badge badge-pill bg-success">&nbsp;</span>
+          </h5>
+          <div class="row h-50">
+            <div class="col border-right">&nbsp;</div>
+            <div class="col">&nbsp;</div>
+          </div>
+        </div>
+        <div class="col-sm"> <!--spacer--> </div>
+      </div>
+    <% end %>
+    <% n += 1 %>
+  <% end %>
+  <!--/row-->
+</div>

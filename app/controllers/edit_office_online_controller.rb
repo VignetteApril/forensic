@@ -7,9 +7,9 @@ class EditOfficeOnlineController < ApplicationController
     @file_path = params[:file_path]
     @department_doc = DepartmentDoc.find(params[:doc_id])
     @main_case = @department_doc.docable
-    @province_name = Area.find(@main_case.province_id).try(:name)
-    @city_name = Area.find(@main_case.city_id).try(:name)
-    @district_name = Area.find(@main_case.district_id).try(:name)
+    @province_name = Area.find_by_id(@main_case.province_id).try(:name)
+    @city_name = Area.find_by_id(@main_case.city_id).try(:name)
+    @district_name = Area.find_by_id(@main_case.district_id).try(:name)
     @case_matter = JSON.parse(@main_case.matter).join(',')
     @appraised_unit_type = AppraisedUnit::UNIT_TYPE_MAP[@main_case.appraised_unit.unit_type.to_sym]
     @appraised_gender = if @main_case.appraised_unit.gender

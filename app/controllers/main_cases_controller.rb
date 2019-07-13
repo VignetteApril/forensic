@@ -4,7 +4,8 @@ class MainCasesController < ApplicationController
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
-                                       :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo]
+                                       :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
+                                       :case_process_records]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -30,7 +31,7 @@ class MainCasesController < ApplicationController
       data = MainCase
     elsif @current_user.organization.nil?
       redirect_to acceptable_url('sessions', 'index'), notice: '请您关联对应的机构'
-    elsif @current_user.organization.org_type.to_sym == :court
+    elsif @current_user.organization.org_type.to_sym != :center
       data = MainCase.where(wtr_id: @current_user.id)
     else
       current_org_cases = @current_user.organization.main_cases
@@ -60,6 +61,14 @@ class MainCasesController < ApplicationController
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
     data = @current_user.organization.main_cases
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
+  end
+
+  # 委托人查看案件
+  def wtr_cases
+    data = MainCase.where(wtr_id: @current_user.id)
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
     render :index
@@ -245,7 +254,7 @@ class MainCasesController < ApplicationController
   def update_add_material
     respond_to do |format|
       if @main_case.update(material_cycle:  params[:main_case][:material_cycle])
-        @main_case.turn_add_material
+        @main_case.turn_add_material!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入补充材料阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -271,7 +280,7 @@ class MainCasesController < ApplicationController
                            amount: params[:main_case][:amount],
                            case_stage: :filed,
                            acceptance_date: Date.today)
-        @main_case.turn_filed
+        @main_case.turn_filed!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -285,7 +294,7 @@ class MainCasesController < ApplicationController
   # method patch
   def update_reject
     respond_to do |format|
-      if @main_case.turn_rejected
+      if @main_case.turn_rejected!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已退案！' }
         format.json { render :show, status: :ok, location: @main_case }
       else
@@ -534,11 +543,20 @@ class MainCasesController < ApplicationController
   # 该action和new页面基本一致但是需要预先设置部分字段的值，根据传进来的委托单的内容
   def new_with_entrust_order
     @entrust_order = EntrustOrder.find(params[:entrust_order_id])
+    wtr = @entrust_order.user
+    wtr_org = @entrust_order.organization
     @main_case = @entrust_order.build_main_case({ anyou: @entrust_order.anyou,
                                                   case_property: @entrust_order.case_property,
                                                   matter_demand: @entrust_order.matter_demand,
                                                   base_info: @entrust_order.base_info,
-                                                  commission_date: @entrust_order.created_at })
+                                                  commission_date: @entrust_order.created_at,
+                                                  province_id: wtr_org.province_id,
+                                                  city_id: wtr_org.city_id,
+                                                  district_id: wtr_org.district_id,
+                                                  organization_name: wtr_org.name,
+                                                  user_name: wtr.name,
+                                                  wtr_phone: wtr.mobile_phone,
+                                                  organization_addr: wtr_org.addr})
     @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
     @main_case.transfer_docs.build
 
@@ -569,11 +587,13 @@ class MainCasesController < ApplicationController
   # 委托人可以看到可见范围是 案件 和 本案件和领导的便签
   # 鉴定中心的科室主任的可见范围是 本案件和领导
   def case_memos
-    if @main_case.ident_user?(@current_user)
-      @case_memos = @main_case.case_memos.where.not(visibility_range: :only_me).or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
+    @case_memos = if @main_case.ident_user?(@current_user)
+      @main_case.case_memos.where.not(visibility_range: :only_me)
     elsif @main_case.wtr?(@current_user)
-      @case_memos = @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
-    end
+      @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+    else
+      @main_case.case_memos.where.not(visibility_range: :only_me)
+    end.or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
 
     @case_memo = @main_case.case_memos.new
   end
@@ -590,6 +610,11 @@ class MainCasesController < ApplicationController
         format.html { redirect_to case_memos_main_case_url(@main_case), alert: '便签创建失败！请填写便签内容，并选择可见范围' }
       end
     end
+  end
+
+  # 案件进程
+  def case_process_records
+
   end
 
   private
@@ -741,7 +766,7 @@ class MainCasesController < ApplicationController
 
     # 指定给当前机构的委托单
     def set_entrust_orders
-      entrust_orders = @current_user.organization.entrust_orders
+      entrust_orders = @current_user.organization.entrust_orders.unclaimed
       @entrust_orders = []
       unless entrust_orders.empty?
         @entrust_orders = entrust_orders.map do|order|
