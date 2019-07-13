@@ -1,0 +1,42 @@
+<%= grid(@recive_express_orders, hide_submit_button: true, hide_reset_button: true) do |g|
+
+  g.column name: '单号', attribute: 'order_num' do |a|
+    a.order_num
+  end
+
+  g.column name: '快递单位', attribute: 'company_type', custom_filter: ReciveExpressOrder.company_type_reverse, allow_multiple_selection: false  do |a|
+    ReciveExpressOrder::COMPANY_TYPE_MAP[a.company_type.to_sym]
+  end
+
+  g.column name: '发件人', attribute: 'sender' do |a|
+    a.sender
+  end
+
+  g.column name: '内容', custom_filter: false do |a|
+    a.content
+  end
+
+  g.column name: '发送日期', custom_filter: false do |a|
+    a.order_date.strftime('%Y-%m-%d')
+  end
+
+  g.column name: '关联案件号',attribute: 'case_no' ,custom_filter: false do |a|
+    a.case_no
+  end
+
+
+
+  g.column in_csv: false do |recive_express_order|
+    if can?('recive_express_orders', 'edit') 
+      link_to '编辑', edit_recive_express_order_path(recive_express_order), method: :get, class: 'btn btn-secondary btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |recive_express_order|
+    if can?('recive_express_orders', 'destroy')
+      link_to '删除', recive_express_order_path(recive_express_order), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
+    end
+  end
+
+
+end -%>

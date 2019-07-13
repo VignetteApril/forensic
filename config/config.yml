@@ -62,7 +62,10 @@ features:
   - [申请开发票, bills, 'index, create, update, edit, new, destroy', 鉴定人]
   - [财务发票管理, bills, 'to_taked_away, to_billed, finance_index', 财务管理]
   - [认领委托单, main_cases, 'new_with_entrust_order, update', 鉴定人]
+  - [发送快递, express_orders, 'index,create,edit,new,destroy,update', 平台]
+  - [收到快递, recive_express_orders, 'index,create,edit,new,destroy,update', 平台]
   - [委托人查看案件, main_cases, 'wtr_cases', 委托人]
+
 apps:
   - name: 系统管理
     module_chain:

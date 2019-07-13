@@ -23,6 +23,8 @@ class User < ApplicationRecord
 
   # 关联
   has_many   :entrust_orders
+  has_many   :express_orders
+  has_many   :recive_express_orders
   has_many   :case_talks
   has_many   :user_roles, dependent: :delete_all
   has_many   :roles, :through => :user_roles
