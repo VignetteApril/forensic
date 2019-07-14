@@ -3,6 +3,8 @@ class Department < ApplicationRecord
   validates :name, :presence => true, :length => {:maximum => 200}
   validates :code, :presence => true, :length => {:maximum => 20}
   validates :abbreviation, :presence => true, unless: :org_is_court?
+  validates :matter, :presence => true
+  validates :case_types, :presence => true
 
   def org_is_court?
     self.organization.is_court?
@@ -10,7 +12,7 @@ class Department < ApplicationRecord
 
   has_ancestry
   has_many :department_docs, as: :docable
-  has_many :main_cases
+  has_many :main_cases, dependent: :destroy
   belongs_to :organization
 
   def user_array

@@ -13,7 +13,7 @@ class MainCasesController < ApplicationController
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
-  before_action :check_if_has_department, except: [:index, :payment]
+  before_action :check_if_has_department, except: [:index, :payment, :wtr_cases]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
@@ -27,16 +27,15 @@ class MainCasesController < ApplicationController
   # 除去以上所有情况，剩下的用户都为鉴定中心的用，鉴定中心的用户在该action里
   # 鉴定中心人员只能看到自己作为鉴定人的案件
   def index
-    if admin?
+    if @current_user.admin?
       data = MainCase
     elsif @current_user.organization.nil?
       redirect_to acceptable_url('sessions', 'index'), notice: '请您关联对应的机构'
-    elsif @current_user.organization.org_type.to_sym != :center
+    elsif @current_user.client_entrust_user?
       data = MainCase.where(wtr_id: @current_user.id)
     else
       current_org_cases = @current_user.organization.main_cases
-      case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? &&
-                                                                     main_case.ident_users.split(',').include?(@current_user.id) }
+      case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
       data = MainCase.where(id: case_ids)
     end
 
@@ -591,9 +590,11 @@ class MainCasesController < ApplicationController
       @main_case.case_memos.where.not(visibility_range: :only_me)
     elsif @main_case.wtr?(@current_user)
       @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+    elsif @current_user.center_department_director_user?
+      @main_case.case_memos.where(visibility_range: :current_case_and_leader)
     else
-      @main_case.case_memos.where.not(visibility_range: :only_me)
-    end.or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
+      @main_case.case_memos
+    end.or(@main_case.case_memos.where(user_id: @current_user.id)).order(:created_at).uniq
 
     @case_memo = @main_case.case_memos.new
   end

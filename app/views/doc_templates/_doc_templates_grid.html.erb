@@ -12,6 +12,10 @@
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|
+    content_tag :button, '编辑模板', class: 'btn btn-secondary btn-sm edit-doc', 'data-doc-id' => doc_template.id
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|
     link_to '编辑', edit_doc_template_path(doc_template), class: 'btn btn-secondary btn-sm'
   end
 
@@ -19,3 +23,23 @@
     link_to '删除', doc_template, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
   end
 end -%>
+
+
+<script>
+    // 在线编辑文档用
+    $('.edit-doc').click(function (e) {
+        var doc_id = $(e.target).attr('data-doc-id');
+
+        OpenDoc(doc_id);
+
+        return false;
+    });
+
+    function OpenDoc(doc_id) {
+        //判断用户是否安装过WebOffice分两步完成
+        //1.引入js脚本：<script language=javascript src="src/cssjs/issetup.js" charset="utf-8"><\/script>；
+        //2.通过js函数WebOfficeInstall()返回值为真时表示已安装。
+        var strPath = "<%= edit_office_online_edit_office_url %>" + '?doc_id=' + doc_id;
+        ShowPage(strPath);
+    }
+</script>

@@ -209,7 +209,9 @@ class MainCase < ApplicationRecord
 
   # 判断当前user是否是案件的鉴定人
   def ident_user?(user)
-    self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
+    # TODO: 先打开所有的权限，等权限系统全部完成后再打开
+    return true
+    # self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
   end
 
   # 判断当前user是否是案件的委托人
