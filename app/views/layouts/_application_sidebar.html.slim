@@ -136,11 +136,11 @@ aside.app-sidebar
                 a.treeview-item href="#{org_orders_unclaimed_entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'org_orders_unclaimed')}"
                   i.app-menu__icon
                   span.app-menu__label 待认领的委托单
-    - if can?('main_cases', 'personal_count')
-      li
-        a.app-menu__item href="#{personal_count_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'personal_count')}"
-          i.app-menu__icon.fa.fa-laptop
-          span.app-menu__label 统计      
+        - if can?('main_cases', 'personal_count')
+          li
+            a.app-menu__item href="#{personal_count_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'personal_count')}"
+              i.app-menu__icon.fa.fa-laptop
+              span.app-menu__label 统计
 
         - if can?('incoming_records', 'claim_record_list')
           li
