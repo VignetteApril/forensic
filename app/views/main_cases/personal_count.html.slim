@@ -11,8 +11,6 @@
         .per-chart id='container2' style="height:500px;width:100%"
 
 javascript:
-
-
   $(document).ready(function() {  
 
    var chart = {
@@ -22,42 +20,46 @@ javascript:
    };
    var title = {
       text: '今年案件数量-按鉴定中心统计'   
-   };      
+   };   
+
+   
    var tooltip = {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      pointFormat: '{series.name}: <b>{point.y}</b>'
    };
+
+   var pie_data = [
+         {y: 1,name: "Point2"},
+         {y: 5,name: "Point3"},
+         {y: 5,name: "Point6"},
+         {y: 5,name: "Point8"},
+         {y: 5,name: "Point9"},
+         {y: 5,name: "Point0"},
+         {y: 9,name: "Point4"}
+      ]
+
+
+   var series= [{
+      type: 'pie',
+      name: '数量',
+      data: pie_data
+   }]; 
+
    var plotOptions = {
       pie: {
          allowPointSelect: true,
          cursor: 'pointer',
          dataLabels: {
             enabled: true,
-            format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+            format: '<b>{point.name}</b>: {point.percentage:.1f}% ',
             style: {
                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
             }
          }
       }
    };
-   var series= [{
-      type: 'pie',
-      name: 'Browser share',
-      data: [
-         ['Firefox',   45.0],
-         ['IE',       26.8],
-         {
-            name: 'Chrome',
-            y: 12.8,
-            sliced: true,
-            selected: true
-         },
-         ['Safari',    8.5],
-         ['Opera',     6.2],
-         ['Others',   0.7]
-      ]
-   }];     
+    
       
-   var json = {};   
+   var json = {}; 
    json.chart = chart; 
    json.title = title;     
    json.tooltip = tooltip;  
@@ -153,7 +155,7 @@ javascript:
    };   
 
    var tooltip2 = {
-      valueSuffix: '\xB0C'
+      valueSuffix: ''
    }
 
    var legend2 = {
@@ -166,8 +168,8 @@ javascript:
    var series2 =  [
       {
          name: '案件数量',
-         data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2,
-            26.5, 23.3, 18.3, 13.9, 9.6]
+         data: [7, 6, 9, 14, 18, 21, 25,
+            26, 23, 18, 13, 9]
       }, 
    ];
 
