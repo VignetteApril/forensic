@@ -13,7 +13,7 @@ class MainCasesController < ApplicationController
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
-  before_action :check_if_has_department, except: [:index, :payment, :wtr_cases]
+  # before_action :check_if_has_department, except: [:index, :payment, :wtr_cases]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
@@ -79,6 +79,17 @@ class MainCasesController < ApplicationController
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
+
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
+  end
+
+  # 案件状态为【申请归档】的案件列表页面
+  # 该页面的权限属于档案管理员
+  def apply_filing_cases
+    current_org_cases = @current_user.organization.main_cases
+    data = current_org_cases.where(case_stage: :apply_filing)
 
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
@@ -542,7 +553,7 @@ class MainCasesController < ApplicationController
   # 该action和new页面基本一致但是需要预先设置部分字段的值，根据传进来的委托单的内容
   def new_with_entrust_order
     @entrust_order = EntrustOrder.find(params[:entrust_order_id])
-    wtr = @entrust_order.user
+    @wtr = @entrust_order.user
     wtr_org = @entrust_order.organization
     @main_case = @entrust_order.build_main_case({ anyou: @entrust_order.anyou,
                                                   case_property: @entrust_order.case_property,
@@ -553,8 +564,8 @@ class MainCasesController < ApplicationController
                                                   city_id: wtr_org.city_id,
                                                   district_id: wtr_org.district_id,
                                                   organization_name: wtr_org.name,
-                                                  user_name: wtr.name,
-                                                  wtr_phone: wtr.mobile_phone,
+                                                  user_name: @wtr.name,
+                                                  wtr_phone: @wtr.mobile_phone,
                                                   organization_addr: wtr_org.addr})
     @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
     @main_case.transfer_docs.build
@@ -781,14 +792,21 @@ class MainCasesController < ApplicationController
         redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
       end
     end
-
-    def check_if_has_department
-      redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
-    end
+    #
+    # def check_if_has_department
+    #   redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
+    # end
 
     # 新建和编辑页面需要对应将科室的选择框限定在当前用户所属于的科室
+    # 如果当前用户没有科室，却能点进到案件的编辑中，则说明是领导，则要返回所有的科室列表
     def set_departments
-      departments = Department.where(id: @current_user.departments.split(','))
+      # 如果当前用户没有关联科室则返回所有当前机构科室列表
+      if @current_user.departments.nil?
+        departments = @current_user.organization.departments
+      else
+        departments = Department.where(id: @current_user.departments.split(','))
+      end
+
       if departments.empty?
         @departments = []
       else

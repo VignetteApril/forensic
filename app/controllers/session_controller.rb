@@ -38,7 +38,43 @@ class SessionController < ApplicationController
       end
 
       user.update_columns(session_id: session.id) if FORBID_SHADOW_LOGIN
-      redirect_to main_cases_path
+
+      # 登录成功后根据用户的角色跳转到对应的界面
+      # 平台管理员          => 机构管理
+      # 委托人             => 我的案件（委托人）
+      # 鉴定中心立案人员    => 委托单（认领操作）
+      # 鉴定中心管理员      => 科室管理
+      # 鉴定中心主任        => 统计页面 由于暂无统计页面，暂且跳转到本中心的所有案件
+      # 鉴定中心科室主任    => 统计页面 由于暂无统计页面，暂且跳转到本科室的所有案件
+      # 鉴定人            => 我的案件（鉴定人）
+      # 鉴定中心助理       => 我的案件（和鉴定人一样）
+      # 鉴定中心档案管理员  => 待归档的案件列表
+      # 鉴定中心财务人员    => 已立案待付款的案件列表
+
+      if user.admin_user?
+        redirect_to organizations_url
+      elsif user.client_entrust_user?
+        redirect_to wtr_cases_main_cases_url
+      elsif user.center_admin_user?
+        redirect_to departments_url
+      elsif user.center_filing_user?
+        redirect_to org_orders_entrust_orders_url
+      elsif user.center_director_user?
+        redirect_to center_cases_main_cases_url
+      elsif user.center_department_director_user?
+        redirect_to department_cases_main_cases_url
+      elsif user.center_ident_user?
+        redirect_to main_cases_url
+      elsif user.center_assistant_user?
+        redirect_to main_cases_url
+      elsif user.center_archivist_user?
+        redirect_to apply_filing_cases_main_cases_url
+      elsif user.center_finance_user?
+        redirect_to filed_unpaid_cases_main_cases_url
+      else
+        redirect_to main_cases_path
+      end
+
     else
       redirect_to :login, flash: { danger: '用户名或者密码输入错误' }
     end

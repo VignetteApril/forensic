@@ -7,7 +7,7 @@ class RolesController < ApplicationController
   # 系统在角色列表页面还需要显示“新建角色”按钮，同时针对每一个已有的角色，系统还需要显示“人员”链接和“编辑角色”、“删除角色”按钮。
   def index
     # 非管理员不能管理 【系统管理员】角色里的用户
-    @roles = @current_user.admin? ? Role.all.order(:name) : Role.where.not(name: :admin_user)
+    @roles = @current_user.admin? ? Role.all.order(:name) : Role.where.not(name: :admin_user).where.not(name: :client_entrust_user)
     @role = params[:role_id] ? Role.find_by_id(params[:role_id]) : @roles.first
     users = @current_user.admin? ? @role.users : @role.users.where(organization_id: @current_user.organization_id)
 

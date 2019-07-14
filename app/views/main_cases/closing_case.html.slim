@@ -8,7 +8,7 @@
       .col-md-12
         / button type="button" class="btn btn-primary pull-right ml-2" data-toggle="modal" data-target="#case_doc_modal" 上传文件
         button#close type="button" class="btn btn-primary pull-right ml-2" 结案
-        button#reject type="button" class="btn btn-primary pull-right " 退案
+        button#return type="button" class="btn btn-primary pull-right " 退回
     .row#closing_case_docs.no-gutters
       - @main_case.case_docs.where(case_stage: :archived).order(:check_archived_no).each do |case_doc|
         - unless case_doc.attachment.attached?
@@ -39,9 +39,9 @@ javascript:
         case_stage_select[0].selectize.setValue('close');
     });
 
-    $('#reject').click(function () {
+    $('#return').click(function () {
         var case_stage_select = $('#main_case_case_stage').selectize();
-        case_stage_select[0].selectize.setValue('rejected');
+        case_stage_select[0].selectize.setValue('executed');
     });
 
     $('.edit-doc').click(function (e) {

@@ -11,7 +11,10 @@
           li
             = message
   .form-inputs
-    = f.input :wtr_id, :as => :hidden
+    - if @wtr.nil?
+      = f.input :wtr_id, :as => :hidden
+    - else
+      = f.input :wtr_id, :as => :hidden, input_html: { value: @wtr.id }
     // 委托方card
     .card.gray-card
       .card-header
