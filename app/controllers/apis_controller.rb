@@ -1,8 +1,40 @@
 require 'jwt'
+require "net/http" 
+
 class ApisController < ApplicationController
 	skip_before_action :can
 	skip_before_action :authorize
 	skip_before_action :verify_authenticity_token
+
+	def wx_msg_code_to_session
+		app_id = "wx5e9e5d5e051dcd16"
+		secret = "370a22bff4b187b86aed5158489ff671"
+		jscode = params["jscode"]
+
+		url  = URI("https://api.weixin.qq.com/sns/jscode2session?appid=#{app_id}&secret=#{secret}&js_code=#{jscode}&grant_type=authorization_code")
+		res  = Net::HTTP.get_response(url)
+
+		respond_to do |format|
+			format.json { render json:res.body }
+		end
+	end
+
+	def wx_msg_send
+		app_id = "wx5e9e5d5e051dcd16"
+		secret = "370a22bff4b187b86aed5158489ff671"
+
+		token_url  = URI("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{secret}")
+		token_res  = Net::HTTP.get_response(token_url)
+		token = JSON.parse(token_res.body)["access_token"].to_s
+
+		msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
+		res = Net::HTTP.post_form(msg_url, 'touser' => params['touser'], 'template_id' => params['template_id'], 'form_id' => params['form_id'])
+
+		respond_to do |format|
+			format.json { render json:res.body }
+		end	
+	end
+
 
 	def register 
 		province_id = Area.find(params["city_id"]).parent.id

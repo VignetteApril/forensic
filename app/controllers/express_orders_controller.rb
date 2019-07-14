@@ -80,6 +80,7 @@ class ExpressOrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def express_order_params
       params.require(:express_order).permit( :receiver,
+                                      :reporter,
                                       :receiver_addr,
                                       :receiver_phone,
                                       :company_type,

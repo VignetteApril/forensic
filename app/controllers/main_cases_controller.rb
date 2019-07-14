@@ -648,6 +648,11 @@ class MainCasesController < ApplicationController
 
   end
 
+  # 统计页面
+  def presonal_count
+    
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case

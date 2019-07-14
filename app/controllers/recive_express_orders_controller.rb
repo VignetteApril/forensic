@@ -79,6 +79,7 @@ class ReciveExpressOrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def recive_express_order_params
         params.require(:recive_express_order).permit( :sender,
+                                  :reporter,
                                   :company_type,
                                   :order_date,
                                   :content,
