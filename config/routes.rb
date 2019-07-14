@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     post :create_case_doc, on: :member
     post :update_bill, on: :collection
     patch :update_case_stage, on: :member
+    patch :update_financial_stage, on: :member
     patch :update_add_material, on: :member
     patch :update_filing, on: :member
     patch :update_reject, on: :member
@@ -124,6 +125,7 @@ Rails.application.routes.draw do
 
   resources :entrust_orders do
     get :org_orders, on: :collection
+    get :org_orders_unclaimed, on: :collection
   end
 
   resources :incoming_records do

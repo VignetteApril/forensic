@@ -4,7 +4,7 @@
                                              case_modal_id: 'case_doc_modal'}
 = render partial: 'case_stage_bar', locals: {main_case: @main_case, case_stage: 'payment_order_management'}
 = render 'nav_bar'
-
+= render partial: 'financial_stage_bar', locals: {main_case: @main_case}
 .row
   .col-md-12
     span.h5 缴费单

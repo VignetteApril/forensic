@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_14_193447) do
+ActiveRecord::Schema.define(version: 2019_07_14_211357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -308,7 +308,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_193447) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "channel"
-    t.boolean "status"
+    t.boolean "status", default: false
     t.text "description"
     t.bigint "main_case_id"
     t.index ["created_at"], name: "index_notifications_on_created_at"

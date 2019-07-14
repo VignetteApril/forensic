@@ -1,0 +1,9 @@
+.row
+  .col-md-12
+    = simple_form_for(main_case, method: :patch, url: update_financial_stage_main_case_path, html: { width: '100%' }) do |f|
+      .item style="display: flex; align-items: center; "
+        span style="width:100px" 案件财务状态：
+        .item style="width:200px;padding-right:30px;height:100%"
+          = f.input :financial_stage, label: false, collection: MainCase.financial_stage_collection, selected: @main_case.financial_stage, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
+        .item style="width:100px;"
+          = f.button :submit, '提交', class: 'btn-success', wrapper_html: {style: 'display:inline'}

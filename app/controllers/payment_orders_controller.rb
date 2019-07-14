@@ -8,8 +8,14 @@ class PaymentOrdersController < ApplicationController
                                             :cancel_order ]
 
   # 财务管理人员看到的缴费单列表页面
+  # 只能看到当前科室下的所有缴费的提交清单
   def finance_index
-		data = @current_user.organization.payment_orders.not_confirm
+		data = PaymentOrder.none
+    if !@current_user.departments.nil?
+      main_case_ids = MainCase.where(department_id: @current_user.departments.split(',')).pluck(:id)
+      data = PaymentOrder.where(main_case_id: main_case_ids).not_confirm
+    end
+
 		@payment_orders = initialize_grid(data,
 																			order: 'created_at',
 																			order_direction: 'desc',
@@ -86,8 +92,20 @@ class PaymentOrdersController < ApplicationController
 	end
 
   # 将当前缴费单的状态改为已提交(未确认)，这样在财务人员那里就可以看到，该缴费单了
+  # 当缴费的状态变为已提交时，需要通知当前科室下的所有财务人员
   def submit_current_order
 		@payment_order.update(order_stage: :not_confirm)
+    department = Department.find_by_id(@payment_order.main_case.department_id)
+    # 拿到当前科室下的所有user
+    users = department.user_array
+    users.each do |user|
+      # 只通知财务人员
+      next if !user.center_finance_user?
+      user.notifications.create( channel: :submit_payment_order,
+                                 title: "缴费单已经提交",
+                                 description: "缴费单#{@payment_order.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为已提交状态",
+                                 main_case_id: @payment_order.main_case.id, url: finance_index_main_case_payment_orders_path(-1))
+    end
 
 		respond_to do |format|
 			format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '当前缴费单已经成功提交了！' }
@@ -98,6 +116,18 @@ class PaymentOrdersController < ApplicationController
   def confirm_order
 		respond_to do |format|
 			if @payment_order.update(order_stage: :confirm)
+        # 发送通知给当前案件的鉴定人
+        if !@payment_order.main_case.ident_users.nil?
+          users = User.where(id: @payment_order.main_case.ident_users.split(','))
+
+          users.each do |user|
+            user.notifications.create( channel: :confirm_payment_order,
+                                       title: "缴费单已经确认",
+                                       description: "缴费单#{@payment_order.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为确认状态",
+                                       main_case_id: @payment_order.main_case.id, url: payment_order_management_main_case_path(@payment_order.main_case) )
+          end
+        end
+
 				format.html { redirect_to finance_index_main_case_payment_orders_path(-1), notice: '缴费单已经确认！' }
 			end
 		end

@@ -3,7 +3,7 @@ class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
-                                       :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
+                                       :save_payment_order, :case_executing, :update_case_stage, :update_financial_stage,
                                        :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
                                        :case_process_records]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
@@ -401,6 +401,25 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       if @main_case.respond_to? turn_case_stage_sym
         @main_case.send turn_case_stage_sym
+        format.html { redirect_to redirect_url, notice: '案件状态已经更新了！' }
+      else
+        format.html { redirect_to redirect_url, danger: '案件状态更新失败！' }
+      end
+    end
+  end
+
+  # 更新案件的财务状态
+  # method patch
+  def update_financial_stage
+    financial_stage = params[:main_case][:financial_stage]
+    # 这个是aasm的改变案件状态的方法名
+    # 因为该方法名是turn_{case_stage}的形式的，需要用到动态派发的技术
+    turn_financial_stage_sym = "turn_#{financial_stage}!".to_sym
+    redirect_url = payment_order_management_main_case_url(@main_case)
+
+    respond_to do |format|
+      if @main_case.respond_to? turn_financial_stage_sym
+        @main_case.send turn_financial_stage_sym
         format.html { redirect_to redirect_url, notice: '案件状态已经更新了！' }
       else
         format.html { redirect_to redirect_url, danger: '案件状态更新失败！' }

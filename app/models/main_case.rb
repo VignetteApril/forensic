@@ -67,6 +67,14 @@ class MainCase < ApplicationRecord
       rs
     end
 
+    def financial_stage_collection
+      rs = []
+      financial_stages.each do |key, value|
+        rs << [FINANCIAL_STAGE_MAP[key.to_sym], key]
+      end
+      rs
+    end
+
     # 返回当前user作为鉴定人的所有相关案件
     def ident_user_cases(user)
       cases = []
@@ -81,6 +89,7 @@ class MainCase < ApplicationRecord
   aasm(:case, column: :case_stage, enum: true) do
     state :pending, initial: true
     state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
+    after_all_transitions :record_case_process, :notify_user_case_stage_changed
 
     # 转换到 立案状态
     event :turn_filed, after: :record_case_process do
@@ -121,19 +130,20 @@ class MainCase < ApplicationRecord
   aasm(:financial, column: :financial_stage, enum: true) do
     state :unpaid, initial: true
     state :not_fully_paid, :paid, :refunded
+    after_all_transitions :notify_user_financial_stage_changed
 
     # 转换到 未完全支付状态
-    event :turn_not_fully_paid, after: :record_case_process do
+    event :turn_not_fully_paid do
       transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :not_fully_paid
     end
 
     # 转换到 完全支付状态
-    event :turn_paid, after: :record_case_process do
+    event :turn_paid do
       transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :paid
     end
 
     # 转换到 已退款状态
-    event :turn_refunded, after: :record_case_process do
+    event :turn_refunded do
       transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :refunded
     end
   end
@@ -178,7 +188,7 @@ class MainCase < ApplicationRecord
     case_no_display
   end
 
-  # 记录案件状态改变的信息
+  # 记录进程改变的信息
   def record_case_process
     self.case_process_records.create(detail: '案件进入' + CASE_STAGE_MAP[self.case_stage.to_sym] + '状态')
 
@@ -190,6 +200,34 @@ class MainCase < ApplicationRecord
     notification.save
   rescue => ex
     Rails.logger.info ex.to_s
+  end
+
+  # 当案件的财务状态更改时通知鉴定人
+  def notify_user_financial_stage_changed
+    if !self.ident_users.nil?
+      users = User.where(id: self.ident_users.split(','))
+      users.each do |user|
+        user.notifications.create( channel: :change_case_status,
+                                   title: "案件#{self.serial_no}状态变更通知",
+                                   description: "案件#{self.serial_no}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{FINANCIAL_STAGE_MAP[self.financial_stage.to_sym]}状态",
+                                   main_case_id: self.id, url: Rails.application.routes.url_helpers.payment_order_management_main_case_url(self, only_path: true))
+      end
+    end
+  end
+
+  # 当案件状态改变时，通知案件相关的鉴定人和委托人
+  def notify_user_case_stage_changed
+    ident_user_ids = self.ident_users.nil? ? [] : self.ident_users.split(',')
+    wtr_id = self.wtr_id
+    user_ids = wtr_id.nil? ? ident_user_ids : ident_user_ids << wtr_id
+    users = User.where(id: user_ids)
+
+    users.each do |user|
+      user.notifications.create( channel: :change_case_status,
+                                 title: "案件#{self.serial_no}状态变更通知",
+                                 description: "案件#{self.serial_no}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{CASE_STAGE_MAP[self.case_stage.to_sym]}状态",
+                                 main_case_id: self.id, url: Rails.application.routes.url_helpers.edit_main_case_url(self, only_path: true))
+    end
   end
 
   # 从科室的模板中拷贝文档

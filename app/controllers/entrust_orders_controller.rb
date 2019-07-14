@@ -15,10 +15,18 @@ class EntrustOrdersController < ApplicationController
   # 鉴定中心查看委托单功能
   # 查看用户所在的机构的所有委托单
   def org_orders
-    redirect_to root_path, notice: '请您关联鉴定中心' and return if @current_user.organization.nil? || !@current_user.organization.center?
     @entrust_orders = initialize_grid( @current_user.organization.entrust_orders.includes(:organization),
                                       name: 'entrust_orders',
                                       per_page: 20)
+    render :index
+  end
+
+  # 鉴定中心查看委托单功能
+  # 查看用户所在机构下所有未认领的委托单
+  def org_orders_unclaimed
+    @entrust_orders = initialize_grid( @current_user.organization.entrust_orders.unclaimed.includes(:organization),
+                                       name: 'entrust_orders',
+                                       per_page: 20)
     render :index
   end
 

@@ -28,7 +28,7 @@ header class="app-header"
         .app-notification__content
           - @current_user.notifications.where(:status=>false).each do |notice|
             li
-              a.app-notification__item href="javascript:;"
+              a.app-notification__item href="#{notice.url}"
                 span.app-notification__icon
                   span.fa-stack.fa-lg
                     i.fa.fa-circle.fa-stack-2x.text-primary
