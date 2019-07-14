@@ -74,8 +74,10 @@ class IncomingRecordsController < ApplicationController
   end
 
   # 到账记录认领主页面
+  # 到账记录的认领只能由鉴定人来完成
+  # 因为只能认领到当前用户作为鉴定人的案件中去
   def claim_record_index
-    @main_cases = @current_user.organization.main_cases
+    @main_cases = MainCase.ident_user_cases(@current_user)
     # 默认的会选中第一个案件
     # 所以要初始化第一个案件的缴费单
     @main_case = @main_cases[0]
@@ -140,7 +142,8 @@ class IncomingRecordsController < ApplicationController
                                               :amount,
                                               :pay_date,
                                               :pay_type,
-                                              :organization_id)
+                                              :organization_id,
+                                              :check_num)
     end
 
     def claim_record_params

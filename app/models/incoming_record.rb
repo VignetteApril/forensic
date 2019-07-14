@@ -6,9 +6,12 @@ class IncomingRecord < ApplicationRecord
   STATUS_MAP = { unclaimed: '未认领',
                  claimed: '已认领'}
 
-  enum pay_type: [:check, :cash]
+  enum pay_type: [:check, :cash, :remit, :wechat, :card]
   PAY_TYPE_MAP = { check: '支票',
-                   cash: '现金' }
+                   cash: '现金',
+                   remit: '汇款',
+                   wechat: '微信',
+                   card: '刷卡' }
 
   class << self
     def status_select_arr

@@ -26,9 +26,24 @@ class PaymentOrdersController < ApplicationController
       @payment_order = @main_case.payment_orders.new
     else
       @incoming_record = IncomingRecord.find(params[:incoming_record_id])
-      @payment_order = @main_case.payment_orders.new(payer: @incoming_record.pay_person_name,
-                                                     total_cost: @incoming_record.amount,
-                                                     payment_in_advance: @incoming_record.amount)
+			new_params = { payer: @incoming_record.pay_person_name,
+										 total_cost: @incoming_record.amount,
+										 payment_in_advance: @incoming_record.amount }
+
+			case @incoming_record.pay_type.to_sym
+			when :check
+				new_params.merge!({ check_pay: @incoming_record.amount, check_num: @incoming_record.check_num })
+			when :cash
+				new_params.merge!({ cash_pay: @incoming_record.amount })
+			when :remit
+				new_params.merge!({ remit_pay: @incoming_record.amount, payment_date: @incoming_record.pay_date, payment_people: @incoming_record.pay_person_name })
+			when :wechat
+				new_params.merge!({ mobile_pay: @incoming_record.amount })
+			when :card
+				new_params.merge!({ card_pay: @incoming_record.amount })
+			end
+
+      @payment_order = @main_case.payment_orders.new(new_params)
     end
 	end
 

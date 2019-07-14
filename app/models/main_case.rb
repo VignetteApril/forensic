@@ -66,6 +66,16 @@ class MainCase < ApplicationRecord
       end
       rs
     end
+
+    # 返回当前user作为鉴定人的所有相关案件
+    def ident_user_cases(user)
+      cases = []
+      self.all.each do |current_case|
+        ident_users = current_case.ident_users
+        cases << current_case if !ident_users.nil? && ident_users.split(',').include?(user.id.to_s)
+      end
+      cases
+    end
   end
 
   aasm(:case, column: :case_stage, enum: true) do

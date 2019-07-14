@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_13_120349) do
+ActiveRecord::Schema.define(version: 2019_07_14_193447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 2019_07_13_120349) do
     t.integer "pay_type"
     t.bigint "payment_order_id"
     t.bigint "organization_id"
+    t.string "check_num"
     t.index ["organization_id"], name: "index_incoming_records_on_organization_id"
     t.index ["payment_order_id"], name: "index_incoming_records_on_payment_order_id"
   end
@@ -466,7 +467,7 @@ ActiveRecord::Schema.define(version: 2019_07_13_120349) do
     t.datetime "updated_at", null: false
     t.string "doc_type"
     t.string "unit"
-    t.string "serial_no"
+    t.integer "serial_no", default: 0
     t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
   end
 
