@@ -22,6 +22,7 @@ class EditOfficeOnlineController < ApplicationController
                          else
                            '空值'
                          end
+    @barcode_path = url_for(@main_case.barcode_image)
   end
 
   def save_doc
