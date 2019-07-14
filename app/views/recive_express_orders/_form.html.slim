@@ -3,22 +3,23 @@
     .col-md-4
       = f.input :sender, label: '发件人'
     .col-md-4
+     	= f.input :reporter, label: '登记人'
     .col-md-4
-      = f.button :submit, '提交收到快递', class: 'btn btn-success'
+      = f.input :order_num, label: '快递单号'
+
   .row
     .col-md-4
-      = f.input :order_num, label: '快递单号'    
-  .row
+      = f.input :content, label: '内容'  
     .col-md-4
       = f.input :company_type, label: '快递单位' , collection: ExpressOrder.company_type_collection
-  .row
     .col-md-4
       = f.input :order_date, label: '发送时间', as: :date, html5: true
-  .row
-    .col-md-8
-      = f.input :content, label: '内容'
+      
   .row
     .col-md-4
       = f.input :main_case_id, label: '关联案件', collection: @recive_express_order.my_cases_collection(@current_user)
+    .col-md-7
+    .col-md-1 style="display:flex;align-items:center;"
+    	= f.button :submit, '保存', class: 'btn btn-success'
 
 javascript:

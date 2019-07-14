@@ -1,18 +1,22 @@
-<%= grid(@recive_express_orders, hide_submit_button: true, hide_reset_button: true) do |g|
+<%= grid(@recive_express_orders, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
 
   g.column name: '单号', attribute: 'order_num' do |a|
     a.order_num
   end
 
-  g.column name: '快递单位', attribute: 'company_type', custom_filter: ReciveExpressOrder.company_type_reverse, allow_multiple_selection: false  do |a|
+  g.column name: '快递单位', attribute: 'company_type', custom_filter: ReciveExpressOrder.company_type_reverse, allow_multiple_selection: false  , ordering: false do |a|
     ReciveExpressOrder::COMPANY_TYPE_MAP[a.company_type.to_sym]
   end
 
-  g.column name: '发件人', attribute: 'sender' do |a|
+  g.column name: '登记人', attribute: 'reporter' do |a|
+    a.reporter
+  end
+
+  g.column name: '发件人', attribute: 'sender' , ordering: false do |a|
     a.sender
   end
 
-  g.column name: '内容', custom_filter: false do |a|
+  g.column name: '内容', custom_filter: false , ordering: false do |a|
     a.content
   end
 
@@ -20,7 +24,7 @@
     a.order_date.strftime('%Y-%m-%d')
   end
 
-  g.column name: '关联案件号',attribute: 'case_no' ,custom_filter: false do |a|
+  g.column name: '关联案件号',attribute: 'case_no' ,custom_filter: false , ordering: false do |a|
     a.case_no
   end
 

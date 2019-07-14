@@ -1,4 +1,4 @@
-<%= grid(@express_orders, hide_submit_button: true, hide_reset_button: true) do |g|
+<%= grid(@express_orders, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
 
   g.column name: '单号', attribute: 'order_num' do |a|
     a.order_num
@@ -6,6 +6,10 @@
 
   g.column name: '快递单位', attribute: 'company_type', custom_filter: ExpressOrder.company_type_reverse, allow_multiple_selection: false  do |a|
     ExpressOrder::COMPANY_TYPE_MAP[a.company_type.to_sym]
+  end
+
+  g.column name: '登记人', attribute: 'reporter' do |a|
+    a.reporter
   end
 
   g.column name: '收件人', attribute: 'receiver' do |a|
