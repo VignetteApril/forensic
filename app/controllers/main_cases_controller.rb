@@ -776,7 +776,7 @@ class MainCasesController < ApplicationController
     end
 
     def forbid_admin_user
-      if admin?
+      if @current_user.admin?
         redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
       end
     end

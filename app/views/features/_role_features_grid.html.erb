@@ -10,7 +10,7 @@
       <button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='role_features'>清除过滤条件</button>
     </div>
     <span>
-      <%- if can?("features", "add_features") && can_sys?(role) %>
+      <%- if can?("features", "add_features") %>
         <%= link_to '角色授权', add_features_feature_path(role), class: "btn btn-primary btn-sm", style: "float:right" %>
       <%- end %>
     </span>
@@ -24,8 +24,7 @@
         feature.name
       end
       g.column in_csv: false, html: {style: "width:30px;"}  do |feature|
-        if can?("features", "remove_feature_from_role") && can_sys?(role)
-          # link_to remove_feature_from_role_feature_path(role, feature_id: feature.id), remote: true, method: :delete, data: { confirm: '您确认移除该权限吗？' } do 
+        if can?("features", "remove_feature_from_role")
           link_to '移除权限', remove_feature_from_role_feature_path(role, feature_id: feature.id), method: :delete, data: { confirm: '您确认移除该权限吗？' }, class: 'btn btn-danger btn-sm'
         end
       end

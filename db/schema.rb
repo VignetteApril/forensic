@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_12_231619) do
+ActiveRecord::Schema.define(version: 2019_07_13_120349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 2019_07_12_231619) do
     t.string "case_types"
     t.string "abbreviation"
     t.integer "case_start_no"
+    t.string "transfer_columns"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -217,7 +218,7 @@ ActiveRecord::Schema.define(version: 2019_07_12_231619) do
     t.string "name"
     t.string "controller_name"
     t.string "action_names"
-    t.string "app"
+    t.string "role_names"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controller_name"], name: "index_features_on_controller_name"
@@ -418,12 +419,11 @@ ActiveRecord::Schema.define(version: 2019_07_12_231619) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.string "name", limit: 50, null: false
-    t.string "orgnization_name", default: "系统"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "r_type"
+    t.integer "name"
   end
 
   create_table "sessions", force: :cascade do |t|

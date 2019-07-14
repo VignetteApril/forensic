@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
-  layout 'system'
   skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
   before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user, :update_confirm_user_org, :edit_self]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
@@ -14,7 +13,7 @@ class UsersController < ApplicationController
   # 管理员可以输入关键字进行搜索，可与对列表进行排序，列表应该进行分页显示。
   # 页面中醒目显示“新建用户”按钮；针对每一个用户，页面上显示：查看、编辑、禁用/启用、删除按钮。
   def index
-    if admin?
+    if @current_user.admin?
       @users = initialize_grid( User, per_page: 20,
                                 order: 'sort_no', order_direction: 'asc',
                                 name: 'users',
@@ -47,7 +46,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params.merge({:password => 'Fc123456', :password_confirmation => 'Fc123456'}))
     @user.departments = user_params[:departments].join(',') unless user_params[:departments].blank?
-    @user.organization = @current_user.organization unless admin?
+    @user.organization = @current_user.organization unless @current_user.admin?
 
     respond_to do |format|
       if @user.save

@@ -6,7 +6,7 @@
       .col-sm-12
         .btn-group.btn-group-sm role="group"
           = link_to '返回', session[:bread][-2]["url_str"], class: "btn btn-default"
-          = link_to '编辑', edit_user_path(@user), class: "btn btn-default" if can?("users", "edit") && can_sys?(@user)
+          = link_to '编辑', edit_user_path(@user), class: "btn btn-default" if can?("users", "edit")
     .row
       .col-sm-3
         p.text-right

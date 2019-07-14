@@ -9,7 +9,7 @@
         button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='features' 清除过滤条件
       | &nbsp;
       .btn-group.btn-group-sm role="group" aria-label="..."
-        - if can?("features", "add_features_submit") && can_sys?(@role)
+        - if can?("features", "add_features_submit")
           = submit_tag '增加所选功能', class: "btn btn-primary btn-sm"
       span.h5
         | &nbsp;&nbsp;当前角色：

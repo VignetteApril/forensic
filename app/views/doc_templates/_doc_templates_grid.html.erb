@@ -8,7 +8,7 @@
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|
-    link_to '下载', rails_blob_path(doc_template.attachment, disposition: 'attachment')
+    link_to '下载', rails_blob_path(doc_template.attachment, disposition: 'attachment'), class: 'btn btn-success btn-sm'
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |doc_template|

@@ -1,11 +1,10 @@
 class MaterialCyclesController < ApplicationController
-  layout 'system'
   before_action :set_material_cycle, only: [:show, :edit, :update, :destroy]
 
   # GET /material_cycles
   # GET /material_cycles.json
   def index
-    data = admin? ? MaterialCycle.all : @current_user.organization.material_cycles
+    data = @current_user.organization.material_cycles
     @material_cycles = initialize_grid(data, per_page: 20, name: 'material_cycle_grid')
   end
 

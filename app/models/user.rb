@@ -103,15 +103,6 @@ class User < ApplicationRecord
     end
   end
 
-  # 是否是平台管理员
-  def admin?
-    if self.login == 'admin'
-      true
-    else
-      false
-    end
-  end
-
   def set_department_names
     self.department_names = Department.where(id: self.departments.split(',')).pluck(:name).join(',') unless self.departments.blank?
   end
@@ -149,6 +140,29 @@ class User < ApplicationRecord
   # 忘记用户
   def forget
     update_attribute(:remember_digest, nil)
+  end
+
+
+  # 判断当前用户是否是平台管理员
+  def admin?
+    self.login == 'admin'
+  end
+
+  # 定义了以下的方法，用来询问当前用户是否是某种角色
+  # admin_user?  =>                       询问当前用户是否拥有【系统管理员】角色
+  # client_entrust_user? =>               询问当前用户是否拥有【委托人】角色
+  # center_admin_user? =>                 询问当前用户是否拥有【鉴定中心管理员】角色
+  # center_director_user? =>              询问当前用户是否拥有【鉴定中心主任】角色
+  # center_department_director_user? =>   询问当前用户是否拥有【鉴定中心科室主任】角色
+  # center_filing_user? =>                询问当前用户是否拥有【鉴定中心立案人】角色
+  # center_ident_user? =>                 询问当前用户是否拥有【鉴定中心鉴定人】角色
+  # center_assistant_user? =>             询问当前用户是否拥有【鉴定中心鉴定助理】角色
+  # center_archivist_user? =>             询问当前用户是否拥有【鉴定中心归档人】角色
+  # center_finance_user? =>               询问当前用户是否拥有【鉴定中心财务管理人】角色
+  Role::NAME_TYPE.each do |key, value|
+    define_method (key.to_s + '?').to_sym do
+      self.roles.pluck(:name).map(&:to_sym).include? key
+    end
   end
 
   class << self

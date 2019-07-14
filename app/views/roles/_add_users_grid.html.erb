@@ -12,7 +12,7 @@
   end
 
   # 平台管理员只关注用户的机构级别的信息
-  if admin?
+  if @current_user.admin?
     g.column name: '所属机构', attribute: 'organization_id', ordering: false,
              custom_filter: Organization.all.map{ |organization| [organization.name, organization.id] }, allow_multiple_selection: false do |a|
       a.organization.name if a.organization

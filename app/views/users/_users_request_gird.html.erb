@@ -38,7 +38,7 @@
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |user|
     if user.login != 'admin'
-      if can?("users", "edit_org") && can_sys?(user)
+      if can?("users", "edit_org")
         link_to '查看编辑组织', edit_org_user_path(user), class: 'btn btn-primary'
       end
      end

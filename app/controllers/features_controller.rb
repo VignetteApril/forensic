@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class FeaturesController < ApplicationController
-  layout 'system'
   before_action :set_role, only: [:add_features, :add_features_submit, :remove_feature_from_role]
   after_action :make_log, only: [:add_features_submit, :remove_feature_from_role]
   
@@ -12,12 +11,8 @@ class FeaturesController < ApplicationController
   # 显示角色列表页面，默认显示所有系统角色，并且不需要分页显示
   # 同时针对每一个已有的角色，系统还需要显示“功能”链接。
   def index
-    if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      @roles = Role.where(orgnization_name: [@current_user.orgnization_name, '系统'])
-    else
-      @roles = Role.all
-    end
-    # @roles = Role.all
+    @roles = Role.all.order(:name)
+
     @role = params[:role_id] ? Role.find_by_id(params[:role_id]) : @roles.first
     @features = initialize_grid(@role.features, name: 'role_features', per_page: 1000)
   end
