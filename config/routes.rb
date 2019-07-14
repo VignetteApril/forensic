@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   resources :organizations
   resources :doc_templates
   resources :main_cases do
+    get :personal_count,  :on => :collection
     get :organization_and_user, on: :collection
     get :matter_demands_and_case_types, on: :collection
     get :generate_case_no, on: :member
@@ -147,6 +148,8 @@ Rails.application.routes.draw do
   get 'edit_office_online/download_weboffice'
 
   # 小程序后台API
+  post 'apis/wx_msg_send'
+  post 'apis/wx_msg_code_to_session'
   post 'apis/register'
   get 'apis/get_search_courts'
   get 'apis/get_search_centers'

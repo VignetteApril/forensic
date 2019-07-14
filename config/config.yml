@@ -65,6 +65,7 @@ features:
   - [发送快递, express_orders, 'index,create,edit,new,destroy,update', 平台]
   - [收到快递, recive_express_orders, 'index,create,edit,new,destroy,update', 平台]
   - [委托人查看案件, main_cases, 'wtr_cases', 委托人]
+  - [统计, main_cases, 'personal_count', 平台]
 
 apps:
   - name: 系统管理
