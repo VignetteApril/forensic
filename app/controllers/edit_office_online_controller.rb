@@ -30,6 +30,14 @@ class EditOfficeOnlineController < ApplicationController
                              end
       end
 
+      # 移交材料语句
+      # 1、name xx unit 2、name xx unit这种形式，插入到@#移交材料#@占位符中
+      if !@main_case.transfer_docs.empty?
+        @transfer_docs = @main_case.transfer_docs.map { |transfer_doc| "#{transfer_doc.serial_no}、收到#{transfer_doc.name}#{transfer_doc.num}#{transfer_doc.unit}。" }.join
+      else
+        @transfer_docs = '无移交材料'
+      end
+
       @barcode_path = url_for(@main_case.barcode_image)
     end
   end
