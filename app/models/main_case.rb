@@ -92,37 +92,37 @@ class MainCase < ApplicationRecord
     after_all_transitions :record_case_process, :notify_user_case_stage_changed
 
     # 转换到 立案状态
-    event :turn_filed, after: :record_case_process do
+    event :turn_filed do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :filed
     end
 
     # 转换到 结案
-    event :turn_add_material, after: :record_case_process do
+    event :turn_add_material do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :add_material
     end
 
     # 转换到 退案状态
-    event :turn_rejected, after: :record_case_process do
+    event :turn_rejected do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :rejected
     end
 
     # 转换到 执行中状态
-    event :turn_executing, after: :record_case_process do
+    event :turn_executing do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :executing
     end
 
     # 转换到 执行完成状态
-    event :turn_executed, after: :record_case_process do
+    event :turn_executed do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :executed
     end
 
     # 转换到 申请归档状态
-    event :turn_apply_filing, after: :record_case_process do
+    event :turn_apply_filing do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :apply_filing
     end
 
     # 转换到 结案状态
-    event :turn_close, after: :record_case_process do
+    event :turn_close do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :close
     end
   end
@@ -191,13 +191,6 @@ class MainCase < ApplicationRecord
   # 记录进程改变的信息
   def record_case_process
     self.case_process_records.create(detail: '案件进入' + CASE_STAGE_MAP[self.case_stage.to_sym] + '状态')
-
-    notification = User.find_by(:id=>self.wtr_id).notifications.new
-    notification.channel = :change_case_status
-    notification.title = "案件#{self.serial_no}状态变更通知"
-    notification.description = "案件#{self.serial_no}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{CASE_STAGE_MAP[self.case_stage.to_sym]}状态"
-    notification.main_case_id = self.id
-    notification.save
   rescue => ex
     Rails.logger.info ex.to_s
   end
@@ -217,11 +210,16 @@ class MainCase < ApplicationRecord
 
   # 当案件状态改变时，通知案件相关的鉴定人和委托人
   def notify_user_case_stage_changed
+    # 通知到鉴定人
     ident_user_ids = self.ident_users.nil? ? [] : self.ident_users.split(',')
-    wtr_id = self.wtr_id
-    user_ids = wtr_id.nil? ? ident_user_ids : ident_user_ids << wtr_id
-    users = User.where(id: user_ids)
+    # 通知到委托人
+    user_ids = self.wtr_id.nil? ? ident_user_ids : ident_user_ids << self.wtr_id
+    # 如果是申请归档的通知要通知到当前科室的档案管理员
+    archivist_users = self.department.user_array
+    archivist_users.each { |user| user_ids << user.id if user.center_archivist_user?  } if !archivist_users.empty?
 
+    users = User.where(id: user_ids)
+    # 发送通知
     users.each do |user|
       user.notifications.create( channel: :change_case_status,
                                  title: "案件#{self.serial_no}状态变更通知",
