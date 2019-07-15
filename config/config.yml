@@ -42,7 +42,7 @@ features:
                            payment_order_management, user_search, create_organization_and_user,
                            save_payment_order, request_bill, update_bill, update_case_stage,
                            case_executing, display_dynamic_file_modal, pending_cases, closing_case,
-                           update_doc_is_passed, case_memos, create_case_memo, case_process_records, update_financial_stage, personal_count", 'center_department_director_user, center_ident_user, center_assistant_user, center_admin_user, center_director_user']
+                           update_doc_is_passed, case_memos, create_case_memo, case_process_records, update_financial_stage, personal_count", 'center_filing_user, center_department_director_user, center_ident_user, center_assistant_user, center_admin_user, center_director_user']
   - [我的案件, main_cases, "index, open_barcode_image, edit, filing_info, payment_order_management,
                           case_executing, closing_case, case_memos, case_process_records", 'center_ident_user,
                                                                                             center_assistant_user,
