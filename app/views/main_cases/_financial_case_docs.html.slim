@@ -1,4 +1,21 @@
 .col-md-4.offset-8
   ul.pull-right
     - @main_case.case_docs.where(case_stage: :financial).each do |doc|
-      li = doc.name
+      li
+        span.ml-2 = doc.name
+        i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+
+javascript:
+    $('.edit-doc').click(function (e) {
+        var doc_id = $(e.target).attr('data-doc-id');
+        OpenDoc(doc_id);
+        return false;
+    });
+
+    function OpenDoc(doc_id) {
+        //判断用户是否安装过WebOffice分两步完成：
+        //1.引入js脚本：<script language=javascript src="src/cssjs/issetup.js" charset="utf-8"><\/script>；
+        //2.通过js函数WebOfficeInstall()返回值为真时表示已安装。
+        var strPath = "#{edit_office_online_edit_office_url}" + '?doc_id=' + doc_id;
+        ShowPage(strPath);
+    }

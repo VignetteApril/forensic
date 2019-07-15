@@ -11,7 +11,7 @@
             | &nbsp;
             .btn-group.btn-group-sm role="group" aria-label="..."
               = submit_tag('增加所选用户', class: "btn btn-primary btn-sm") \
-                if can?("departments", "add_users_submit") && can_sys?(@department) 
+                if can?("departments", "add_users_submit")
             | &nbsp;
             span.h5
               | 当前部门：

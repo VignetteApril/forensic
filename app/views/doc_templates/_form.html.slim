@@ -3,5 +3,29 @@
   .form-inputs
     = f.input :desc, label: '模板描述'
     = f.input :attachment, label: '模板文件', as: :file, input_html: { direct_upload: true }
+
+    - if @doc_template.attachment.attached?
+      span = @doc_template.attachment.blob.filename
+      i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{@doc_template.id}"
   .form-actions
     = f.button :submit, '保存', class: 'btn btn-success'
+
+
+javascript:
+    // 在线编辑文档用
+    $('.edit-doc').click(function (e) {
+        var doc_id = $(e.target).attr('data-doc-id');
+
+        OpenDoc(doc_id);
+
+        return false;
+    });
+
+    function OpenDoc(doc_id) {
+        //判断用户是否安装过WebOffice分两步完成
+        //1.引入js脚本：<script language=javascript src="src/cssjs/issetup.js" charset="utf-8"><\/script>；
+        //2.通过js函数WebOfficeInstall()返回值为真时表示已安装。
+        var strPath = "#{edit_office_online_edit_office_url}" + '?doc_id=' + doc_id;
+        ShowPage(strPath);
+        return false;
+    }

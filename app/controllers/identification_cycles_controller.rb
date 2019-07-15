@@ -1,11 +1,10 @@
 class IdentificationCyclesController < ApplicationController
-  layout 'system'
   before_action :set_identification_cycle, only: [:show, :edit, :update, :destroy]
 
   # GET /identification_cycles
   # GET /identification_cycles.json
   def index
-    data = admin? ? IdentificationCycle.all : @current_user.organization.identification_cycles
+    data = @current_user.organization.identification_cycles
     @identification_cycles = initialize_grid(data, per_page: 20, name: 'identification_cycle_grid')
   end
 

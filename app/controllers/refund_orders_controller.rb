@@ -10,12 +10,17 @@ class RefundOrdersController < ApplicationController
 
   # 财务管理人员看到的缴费单列表页面
   def finance_index
-    data = @current_user.organization.refund_orders.not_confirm
+    data = RefundOrder.none
+    if !@current_user.departments.nil?
+      main_case_ids = MainCase.where(department_id: @current_user.departments.split(',')).pluck(:id)
+      data = RefundOrder.where(main_case_id: main_case_ids).not_confirm
+    end
+
     @refund_orders = initialize_grid(data,
-                                      order: 'created_at',
-                                      order_direction: 'desc',
-                                      per_page: 10,
-                                      name: 'refund_orders')
+                                     order: 'created_at',
+                                     order_direction: 'desc',
+                                     per_page: 10,
+                                     name: 'refund_orders')
   end
 
   def edit
@@ -60,6 +65,18 @@ class RefundOrdersController < ApplicationController
   def submit_current_order
     @refund_order.update(order_stage: :not_confirm)
 
+    department = Department.find_by_id(@refund_order.main_case.department_id)
+    # 拿到当前科室下的所有user
+    users = department.user_array
+    users.each do |user|
+      # 只通知财务人员
+      next if !user.center_finance_user?
+      user.notifications.create( channel: :submit_refund_order,
+                                 title: "退费单已经提交",
+                                 description: "退费单#{@refund_order.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为已提交状态",
+                                 main_case_id: @refund_order.main_case.id, url: finance_index_main_case_refund_orders_path(-1))
+    end
+
     respond_to do |format|
       format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '当前退费单已经成功提交了！' }
     end
@@ -69,6 +86,18 @@ class RefundOrdersController < ApplicationController
   def confirm_order
     respond_to do |format|
       if @refund_order.update(order_stage: :confirm)
+        # 发送通知给当前案件的鉴定人
+        if !@refund_order.main_case.ident_users.nil?
+          users = User.where(id: @refund_order.main_case.ident_users.split(','))
+
+          users.each do |user|
+            user.notifications.create( channel: :confirm_refund_order,
+                                       title: "退费单已经确认",
+                                       description: "退费单#{@refund_order.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为确认状态",
+                                       main_case_id: @refund_order.main_case.id, url: payment_order_management_main_case_path(@refund_order.main_case) )
+          end
+        end
+
         format.html { redirect_to finance_index_main_case_payment_orders_path(-1), notice: '退费单已经确认！' }
       end
     end

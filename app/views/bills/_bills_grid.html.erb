@@ -1,6 +1,9 @@
 <%= grid(@bills, hide_submit_button: true, hide_reset_button: true) do |g|
   g.column name: '发票类型', custom_filter: false do |a|
-    a.bill_type
+    Bill::BILL_TYPE_MAP[a.bill_type.to_sym]
+  end
+  g.column name: '发票类型', custom_filter: false do |a|
+    Bill::BILL_STAGE_MAP[a.bill_stage.to_sym]
   end
 
   g.column name: '公司名称', custom_filter: false do |a|

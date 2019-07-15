@@ -116,6 +116,7 @@ $(document).on('turbolinks:load', function() {
                         },
                         dataType: 'json',
                         success: function (data) {
+                            console.log(data);
                             reloadSelectize(main_case_matter_select2, data.matters, default_select_id = '')
                             reloadSelectize(main_case_case_type_select2, data.case_types, default_select_id = '')
                         }

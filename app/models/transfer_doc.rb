@@ -8,25 +8,11 @@ class TransferDoc < ApplicationRecord
 
   before_create :set_barcode_hex
   after_destroy :purge_barcode_image
-  before_save :set_serial_no
+  # before_save :set_serial_no
 
-  # enum unit: [ :piece,
-  #              :meter,
-  #              :cm,
-  #              :liter,
-  #              :kilo,
-  #              :gram ]
-
-  # UNIT_MAP = { piece: '个',
-  #              meter: '米',
-  #              cm: '厘米',
-  #              liter: '升',
-  #              kilo: '千克',
-  #              gram: '克' }
-
-  # 设置序号
-  def set_serial_no
-    self.serial_no = Time.now.strftime('%Y%m%d%H%M%S')
+  # 设置移交材料的序号
+  before_validation( :on => :create ) do
+    self.serial_no = self.main_case.transfer_docs.collect { | doc | doc.serial_no }.max + 1
   end
 
   # 设置条码，并且生成条码图片
@@ -45,14 +31,6 @@ class TransferDoc < ApplicationRecord
   end
 
   class << self
-    # 为前端的显示的方法
-    # def collection_select_arr
-    #   rs = []
-    #   units.each do |key, value|
-    #     rs << [UNIT_MAP[key.to_sym], key]
-    #   end
-    #   rs
-    # end
 
     def collection_select_arr
       [['个', '个'], ['米' , '米'], ['厘米','厘米'], ['升','升'], ['千克','千克'], ['克','克']]

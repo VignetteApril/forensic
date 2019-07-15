@@ -16,6 +16,8 @@
         = f.input :pay_date, label: '付款时间', as: :date, html5: true
       .col-md-4
         = f.input :amount, label: '付款金额'
+      .col-md-4
+        = f.input :check_num, label: '支票号'
 
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'

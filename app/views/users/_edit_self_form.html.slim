@@ -18,7 +18,7 @@
       .col-md-4
         / 平台管理员只关注用户属于哪个机构
         / 鉴定中心的管理员则关注用户属于哪个科室
-        - if admin?
+        - if @current_user.admin?
           = f.input :organization_id, label: '所属机构', collection: Organization.all.map {|organization| [organization.name, organization.id]}, include_blank: true
         - else
           = f.input :departments, label: '所属科室', collection: @current_user.organization.departments.map {|department| [department.name, department.id]},

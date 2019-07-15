@@ -16,7 +16,7 @@ module DepartmentsHelper
   # 而且只有组织机构类型为鉴定中心时才有科室的概念
   # 法院用户（委托人）是没有机构管理权限的
   def organization_collection
-    organizations = admin? ? Organization.center : [@current_user.organization]
+    organizations = @current_user.admin? ? Organization.center : [@current_user.organization]
     organizations.map{ |organization| [organization.name, organization.id] }
   end
 end

@@ -11,7 +11,7 @@
           - @roles.each do |role|
             tr id="role-#{role.id}" class="#{'info' if role == @role}"
               td
-                = role.name
+                = role.name_human
               / td
               /   = h(role.description)
               td

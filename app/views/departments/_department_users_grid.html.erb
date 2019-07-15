@@ -6,7 +6,7 @@
       <button class="btn btn-default btn-sm wg-external-reset-button" data-grid-name='department_users_grid'>清除过滤条件</button>
     </div>
     <span style="float:right;">
-      <%= link_to('增加人员', add_users_department_path(department), class: "btn btn-default btn-sm") if can?("departments", "add_users") && can_has_users?(department) && can_sys?(department) %>
+      <%= link_to('增加人员', add_users_department_path(department), class: "btn btn-default btn-sm") if can?("departments", "add_users") && can_has_users?(department) %>
     </span>
   </div>
 </div>
@@ -22,7 +22,7 @@
       end
 
       g.column in_csv: false, html: {style: "width:30px;"}  do |user|
-        if can?("departments", "remove_user_from_department") && can_sys?(@department)
+        if can?("departments", "remove_user_from_department")
           link_to '移除用户', remove_user_from_department_department_path(department, user_id: user.id), method: :delete, data: { confirm: '您确认移除该用户吗？' }, class: 'btn btn-danger btn-sm'
         end
       end

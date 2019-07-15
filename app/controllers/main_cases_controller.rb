@@ -3,7 +3,7 @@ class MainCasesController < ApplicationController
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
-                                       :save_payment_order, :case_executing, :update_case_stage, :update_case_stage,
+                                       :save_payment_order, :case_executing, :update_case_stage, :update_financial_stage,
                                        :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
                                        :case_process_records]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
@@ -13,7 +13,7 @@ class MainCasesController < ApplicationController
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
-  before_action :check_if_has_department, except: [:index, :payment]
+  # before_action :check_if_has_department, except: [:index, :payment, :wtr_cases]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: :payment
   skip_before_action :can, only: :payment
@@ -27,16 +27,15 @@ class MainCasesController < ApplicationController
   # 除去以上所有情况，剩下的用户都为鉴定中心的用，鉴定中心的用户在该action里
   # 鉴定中心人员只能看到自己作为鉴定人的案件
   def index
-    if admin?
+    if @current_user.admin?
       data = MainCase
     elsif @current_user.organization.nil?
       redirect_to acceptable_url('sessions', 'index'), notice: '请您关联对应的机构'
-    elsif @current_user.organization.org_type.to_sym != :center
+    elsif @current_user.client_entrust_user?
       data = MainCase.where(wtr_id: @current_user.id)
     else
       current_org_cases = @current_user.organization.main_cases
-      case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? &&
-                                                                     main_case.ident_users.split(',').include?(@current_user.id) }
+      case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
       data = MainCase.where(id: case_ids)
     end
 
@@ -80,6 +79,17 @@ class MainCasesController < ApplicationController
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
+
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
+  end
+
+  # 案件状态为【申请归档】的案件列表页面
+  # 该页面的权限属于档案管理员
+  def apply_filing_cases
+    current_org_cases = @current_user.organization.main_cases
+    data = current_org_cases.where(case_stage: :apply_filing)
 
     @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
@@ -398,6 +408,25 @@ class MainCasesController < ApplicationController
     end
   end
 
+  # 更新案件的财务状态
+  # method patch
+  def update_financial_stage
+    financial_stage = params[:main_case][:financial_stage]
+    # 这个是aasm的改变案件状态的方法名
+    # 因为该方法名是turn_{case_stage}的形式的，需要用到动态派发的技术
+    turn_financial_stage_sym = "turn_#{financial_stage}!".to_sym
+    redirect_url = payment_order_management_main_case_url(@main_case)
+
+    respond_to do |format|
+      if @main_case.respond_to? turn_financial_stage_sym
+        @main_case.send turn_financial_stage_sym
+        format.html { redirect_to redirect_url, notice: '案件状态已经更新了！' }
+      else
+        format.html { redirect_to redirect_url, danger: '案件状态更新失败！' }
+      end
+    end
+  end
+
   # 费用管理页面
   def payment_order_management
     @payment_orders = initialize_grid(@main_case.payment_orders,
@@ -543,7 +572,7 @@ class MainCasesController < ApplicationController
   # 该action和new页面基本一致但是需要预先设置部分字段的值，根据传进来的委托单的内容
   def new_with_entrust_order
     @entrust_order = EntrustOrder.find(params[:entrust_order_id])
-    wtr = @entrust_order.user
+    @wtr = @entrust_order.user
     wtr_org = @entrust_order.organization
     @main_case = @entrust_order.build_main_case({ anyou: @entrust_order.anyou,
                                                   case_property: @entrust_order.case_property,
@@ -554,8 +583,8 @@ class MainCasesController < ApplicationController
                                                   city_id: wtr_org.city_id,
                                                   district_id: wtr_org.district_id,
                                                   organization_name: wtr_org.name,
-                                                  user_name: wtr.name,
-                                                  wtr_phone: wtr.mobile_phone,
+                                                  user_name: @wtr.name,
+                                                  wtr_phone: @wtr.mobile_phone,
                                                   organization_addr: wtr_org.addr})
     @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
     @main_case.transfer_docs.build
@@ -591,9 +620,11 @@ class MainCasesController < ApplicationController
       @main_case.case_memos.where.not(visibility_range: :only_me)
     elsif @main_case.wtr?(@current_user)
       @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+    elsif @current_user.center_department_director_user?
+      @main_case.case_memos.where(visibility_range: :current_case_and_leader)
     else
-      @main_case.case_memos.where.not(visibility_range: :only_me)
-    end.or(@main_case.case_memos.where(visibility_range: :only_me, user_id: @current_user.id)).order(:created_at)
+      @main_case.case_memos
+    end.or(@main_case.case_memos.where(user_id: @current_user.id)).order(:created_at).uniq
 
     @case_memo = @main_case.case_memos.new
   end
@@ -782,18 +813,25 @@ class MainCasesController < ApplicationController
     end
 
     def forbid_admin_user
-      if admin?
+      if @current_user.admin?
         redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
       end
     end
-
-    def check_if_has_department
-      redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
-    end
+    #
+    # def check_if_has_department
+    #   redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
+    # end
 
     # 新建和编辑页面需要对应将科室的选择框限定在当前用户所属于的科室
+    # 如果当前用户没有科室，却能点进到案件的编辑中，则说明是领导，则要返回所有的科室列表
     def set_departments
-      departments = Department.where(id: @current_user.departments.split(','))
+      # 如果当前用户没有关联科室则返回所有当前机构科室列表
+      if @current_user.departments.nil?
+        departments = @current_user.organization.departments
+      else
+        departments = Department.where(id: @current_user.departments.split(','))
+      end
+
       if departments.empty?
         @departments = []
       else

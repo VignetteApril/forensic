@@ -11,32 +11,30 @@ forbid_shadow_login: true # 如果是TRUE，则同一个用户在同一时间只
 use_cas_server: false
 
 features:
-  - [登录系统,session,"index,new,create,destroy",平台]
-  - [委托人注册,users,"new_consignor",平台]
-  - [编辑个人信息,users,"edit_self,update_edit_self",平台]
-  - [修改个人密码,users,"edit_password,update_password",平台]
-  - [管理个人API接口键值,users,"show_api_key,generate_api_key",平台]
-  - [用户浏览,users,"index,list",系统管理]
-  - [查看用户详细信息,users,"show",系统管理]
-  - [用户管理,users,"new,create,edit,update,destroy",系统管理]
-  - [注册审核管理,users,"confirm_users,confirm_user,edit_org",系统管理]
-  - [重置用户密码,users,reset_password,系统管理]
-  - [科室浏览,departments,index,系统管理]
-  - [科室管理,departments,"new,create,edit,update,destroy",系统管理]
-  - [科室人员管理,departments,"add_users,add_users_submit,remove_user_from_department",系统管理]
-  - [角色浏览,roles,index,系统管理]
-  - [角色管理,roles,"new,create,edit,update,destroy",系统管理]
-  - [角色人员管理,roles,"add_users,add_users_submit,remove_user_from_role",系统管理]
-  - [权限浏览,features,"index,list",系统管理]
-  - [权限角色授权,features,"add_features,add_features_submit,remove_feature_from_role",系统管理]
-  - [日志管理,sys_logs,"index,show,search",系统管理]
-  - [任务管理,delayed_jobs,"index",系统管理]
-  - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy",系统管理]
-  - [个人事务提醒,notifications,"index,show,edit,all_readed",平台]
-  - [机构管理, organizations,"index, new, edit, create, destroy, update",系统管理]
-  - [编辑机构, organizations, 'edit, update', 机构]
-  - [科室模板管理, department_docs, "index, new, edit, create, destroy", 机构]
-  - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 平台]
+  - [登录系统, session,"index,new,create,destroy", 'all']
+  - [委托人注册, users,"new_consignor",'admin_user, client_entrust_user']
+  - [编辑个人信息, users,"edit_self,update_edit_self", 'all']
+  - [修改个人密码, users, "edit_password,update_password", 'all']
+  - [用户浏览, users, "index,list", 'admin_user, center_admin_user, center_director_user']
+  - [查看用户详细信息, users, "show", 'admin_user, center_admin_user, center_director_user']
+  - [用户管理, users,"new,create,edit,update,destroy", 'admin_user, center_admin_user, center_director_user']
+  - [注册审核管理, users,"confirm_users,confirm_user,edit_org", 'admin_user']
+  - [重置用户密码, users,reset_password, 'admin_user, center_admin_user, center_director_user']
+  - [科室管理, departments,"index,new,create,edit,update,destroy", 'center_admin_user, center_director_user']
+  - [科室人员管理, departments,"add_users,add_users_submit,remove_user_from_department", 'center_admin_user, center_director_user']
+  - [角色浏览, roles,index, 'admin_user, center_admin_user, center_director_user']
+  - [角色管理, roles,"new,create,edit,update,destroy", 'admin_user']
+  - [角色人员管理,roles,"add_users,add_users_submit,remove_user_from_role", 'admin_user, center_admin_user, center_director_user']
+  - [权限浏览,features,"index,list", 'admin_user']
+  - [权限角色授权,features,"add_features,add_features_submit,remove_feature_from_role", 'admin_user']
+  - [日志管理,sys_logs,"index,show,search", 'admin_user']
+  - [任务管理,delayed_jobs,"index", 'admin_user']
+  - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy", 'admin_user']
+  - [个人事务提醒,notifications,"index,show,edit,all_readed", 'all']
+  - [机构管理, organizations,"index, new, edit, create, destroy, update", 'admin_user']
+  - [编辑机构, organizations, 'edit, update', 'center_admin_user, center_director_user']
+  - [科室模板管理, department_docs, "index, new, edit, create, destroy", 'center_admin_user, center_director_user']
+  - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 'admin_user']
   - [案件管理, main_cases, "index, new, edit, update, show, create, destroy,
                            organization_and_user, matter_demands, generate_case_no,
                            matter_demands_and_case_types, filing_info, update_add_material,
@@ -44,28 +42,47 @@ features:
                            payment_order_management, user_search, create_organization_and_user,
                            save_payment_order, request_bill, update_bill, update_case_stage,
                            case_executing, display_dynamic_file_modal, pending_cases, closing_case,
-                           update_doc_is_passed, case_memos, create_case_memo, case_process_records", 案件管理]
-  - [我的案件, main_cases, "index, open_barcode_image", 机构]
-  - [本科室案件, main_cases, "department_cases, open_barcode_image", 机构]
-  - [本机构的案件, main_cases, "center_cases, open_barcode_image", 机构]
-  - [已立案待付款案件, main_cases, "filed_unpaid_cases, open_barcode_image", 机构]
-  - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 机构]
-  - [补充材料周期管理, material_cycles, 'index, new, edit, update, show, create, destroy', 机构]
-  - [委托单管理, entrust_orders, 'index, new, edit, update, show, create, destroy', 机构]
-  - [鉴定中心查看委托单, entrust_orders, 'org_orders, show', 机构]
-  - [到账记录管理, incoming_records, 'index, new, edit, update, show, create, destroy', 财务管理]
-  - [到账记录认领, incoming_records, 'claim_record_list, claim_record_index, get_payment_order, claim_record', 鉴定人]
-  - [案件缴费单管理, payment_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 鉴定人]
-  - [案件退费单管理, refund_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 鉴定人]
-  - [财务确认缴费单, payment_orders, 'finance_index, confirm_order', 财务管理]
-  - [财务确认退费单, refund_orders, 'finance_index, confirm_order', 财务管理]
-  - [申请开发票, bills, 'index, create, update, edit, new, destroy', 鉴定人]
-  - [财务发票管理, bills, 'to_taked_away, to_billed, finance_index', 财务管理]
-  - [认领委托单, main_cases, 'new_with_entrust_order, update', 鉴定人]
-  - [发送快递, express_orders, 'index,create,edit,new,destroy,update', 平台]
-  - [收到快递, recive_express_orders, 'index,create,edit,new,destroy,update', 平台]
-  - [委托人查看案件, main_cases, 'wtr_cases', 委托人]
-  - [统计, main_cases, 'personal_count', 平台]
+                           update_doc_is_passed, case_memos, create_case_memo, case_process_records, update_financial_stage, personal_count", 'center_department_director_user, center_ident_user, center_assistant_user, center_admin_user, center_director_user']
+  - [我的案件, main_cases, "index, open_barcode_image, edit, filing_info, payment_order_management,
+                          case_executing, closing_case, case_memos, case_process_records", 'center_ident_user,
+                                                                                            center_assistant_user,
+                                                                                            center_department_director_user']
+  - [本科室案件, main_cases, "department_cases, open_barcode_image, edit, update, filing_info,
+                            payment_order_management, case_executing, closing_case, case_memos, case_process_records", 'center_department_director_user, center_filing_user, center_ident_user, center_assistant_user']
+  - [本机构的案件, main_cases, "center_cases, open_barcode_image, edit, filing_info, payment_order_management,
+                              case_executing, closing_case, case_memos, case_process_records", 'center_admin_user, center_director_user, center_director_user']
+  - [已立案待付款案件, main_cases, "filed_unpaid_cases, open_barcode_image, edit, filing_info,
+                                 payment_order_management, case_executing, closing_case, case_memos, case_process_records, update_financial_stage", 'center_finance_user']
+  - [待结案的案件, main_cases, "apply_filing_cases, open_barcode_image, edit, filing_info,
+                              payment_order_management, case_executing, closing_case, case_memos, case_process_records", 'center_archivist_user']
+  - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 'center_admin_user, center_director_user']
+  - [补充材料周期管理, material_cycles, 'index, new, edit, update, show, create, destroy', 'center_admin_user, center_director_user']
+  - [委托单管理, entrust_orders, 'index, new, edit, update, show, create, destroy', 'client_entrust_user']
+  - [鉴定中心查看委托单, entrust_orders, 'org_orders, org_orders_unclaimed, show', 'center_director_user, center_filing_user']
+  - [到账记录管理, incoming_records, 'index, new, edit, update, show, create, destroy', 'center_finance_user']
+  - [到账记录认领, incoming_records, 'claim_record_list, claim_record_index, get_payment_order, claim_record', 'center_department_director_user, center_ident_user, center_assistant_user']
+  - [案件缴费单管理, payment_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 'center_department_director_user, center_ident_user, center_assistant_user']
+  - [案件退费单管理, refund_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 'center_department_director_user, center_ident_user, center_assistant_user']
+  - [财务确认缴费单, payment_orders, 'finance_index, confirm_order', 'center_finance_user']
+  - [财务确认退费单, refund_orders, 'finance_index, confirm_order', 'center_finance_user']
+  - [申请开发票, bills, 'index, create, update, edit, new, destroy', 'center_department_director_user, center_ident_user, center_assistant_user']
+  - [财务发票管理, bills, 'to_taked_away, to_billed, finance_index', 'center_finance_user']
+  - [认领委托单, main_cases, 'new_with_entrust_order, update, matter_demands_and_case_types, create', 'center_filing_user']
+  - [发送快递, express_orders, 'index,create,edit,new,destroy,update', 'center_admin_user,
+                                                                       center_director_user,
+                                                                       center_department_director_user,
+                                                                       center_filing_user,
+                                                                       center_ident_user,
+                                                                       center_assistant_user,
+                                                                       center_archivist_user']
+  - [收到快递, recive_express_orders, 'index,create,edit,new,destroy,update', 'center_admin_user,
+                                                                              center_director_user,
+                                                                              center_department_director_user,
+                                                                              center_filing_user,
+                                                                              center_ident_user,
+                                                                              center_assistant_user,
+                                                                              center_archivist_user']
+  - [委托人查看案件, main_cases, 'wtr_cases, edit, case_memos, create_case_memo, case_process_records', 'client_entrust_user']
 
 apps:
   - name: 系统管理

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_14_071148) do
+ActiveRecord::Schema.define(version: 2019_07_14_211357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_071148) do
     t.string "case_types"
     t.string "abbreviation"
     t.integer "case_start_no"
+    t.string "transfer_columns"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -218,7 +219,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_071148) do
     t.string "name"
     t.string "controller_name"
     t.string "action_names"
-    t.string "app"
+    t.string "role_names"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["controller_name"], name: "index_features_on_controller_name"
@@ -243,6 +244,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_071148) do
     t.integer "pay_type"
     t.bigint "payment_order_id"
     t.bigint "organization_id"
+    t.string "check_num"
     t.index ["organization_id"], name: "index_incoming_records_on_organization_id"
     t.index ["payment_order_id"], name: "index_incoming_records_on_payment_order_id"
   end
@@ -307,7 +309,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_071148) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "channel"
-    t.boolean "status"
+    t.boolean "status", default: false
     t.text "description"
     t.bigint "main_case_id"
     t.index ["created_at"], name: "index_notifications_on_created_at"
@@ -420,12 +422,11 @@ ActiveRecord::Schema.define(version: 2019_07_14_071148) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.string "name", limit: 50, null: false
-    t.string "orgnization_name", default: "系统"
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "r_type"
+    t.integer "name"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -468,7 +469,7 @@ ActiveRecord::Schema.define(version: 2019_07_14_071148) do
     t.datetime "updated_at", null: false
     t.string "doc_type"
     t.string "unit"
-    t.string "serial_no"
+    t.integer "serial_no", default: 0
     t.index ["main_case_id"], name: "index_transfer_docs_on_main_case_id"
   end
 

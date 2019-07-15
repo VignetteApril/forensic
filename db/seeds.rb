@@ -16,7 +16,7 @@ else
 end
 
 puts "设置系统管理员角色"
-role = Role.find_or_create_by name: '系统管理员', r_type: :platform
+role = Role.find_or_create_by name: :admin_user, r_type: :platform
 
 puts "关联系统管理员角色和用户"
 UserRole.find_or_create_by user_id: user.id, role_id: role.id
@@ -34,6 +34,14 @@ puts "为系统管理员授权"
 Feature.all.each do |f|
   role.role_features.find_or_create_by(feature_id: f.id)
 end
+
+puts "设置管理员以外的角色"
+Role::NAME_TYPE.each do |key, value|
+  puts "设置角色#{value}"
+  r_type = key == :client_entrust_user ? :court : :center
+  Role.find_or_create_by name: key.to_sym, r_type: r_type
+end
+
 
 puts "初始化地区信息表"
 file = File.read(Rails.root.join("public", "geo/city_list.json"))

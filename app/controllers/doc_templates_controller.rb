@@ -1,5 +1,4 @@
 class DocTemplatesController < ApplicationController
-  layout 'system'
   before_action :set_doc_template, only: [:show, :edit, :update, :destroy]
 
   # GET /doc_templates

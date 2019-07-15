@@ -2,92 +2,177 @@
 aside.app-sidebar
   ul.app-menu
     li.treeview.is-expanded
-      a.app-menu__item.text-white
-        i class="app-menu__icon fa fa-laptop"
-        span class="app-menu__label" 案件
-      ul.treeview-menu
-        - if can?('main_cases', 'new')
+      - if @current_user.admin?
+        - if can?('organizations', 'index')
           li
-            a.treeview-item href="#{new_main_case_path}" class="#{active_class_with_action(controller, 'main_cases', 'new')}"
-              i.app-menu__icon
-              span.app-menu__label 新建案件
-        - if can?('main_cases', 'index')
+            a href="#{organizations_path}" class="#{active_class(controller, 'organizations')}"
+              i.app-menu__icon.fa.fa-building-o
+              span.app-menu__label 机构管理
+        - if can?('users', 'index')
           li
-            a.treeview-item href="#{main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'index')}"
-              i.app-menu__icon
-              span.app-menu__label 我的案件
-        - if can?('main_cases', 'wtr_cases')
+            a href="#{users_path}" class="#{active_class_with_action(controller, 'users', 'index')}"
+              i.app-menu__icon.fa.fa-user-o
+              span.app-menu__label 用户管理
+        - if can?('users', 'confirm_users')
           li
-            a.treeview-item href="#{wtr_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'wtr_cases')}"
-              i.app-menu__icon
-              span.app-menu__label 我的案件
-        - if can?('main_cases', 'department_cases')
+            a href="#{confirm_users_users_path}" class="#{active_class_with_action(controller, 'users', 'confirm_users')}"
+              i.app-menu__icon.fa.fa-user-o
+              span.app-menu__label 注册审核管理
+        - if can?('features', 'index')
           li
-            a.treeview-item href="#{department_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'department_cases')}"
-              i.app-menu__icon
-              span.app-menu__label 本科室案件
-        - if can?('main_cases', 'center_cases')
+            a href="#{features_path}" class="#{active_class(controller, 'features')}"
+              i.app-menu__icon.fa.fa-hdd-o
+              span.app-menu__label 角色权限管理
+        - if can?('roles', 'index')
           li
-            a.treeview-item href="#{center_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'center_cases')}"
-              i.app-menu__icon
-              span.app-menu__label 本中心案件
-        - if can?('main_cases', 'filed_unpaid_cases')
+            a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
+              i.app-menu__icon.fa.fa-flag-o
+              span.app-menu__label 用户角色管理
+        - if can?('doc_templates', 'index')
           li
-            a.treeview-item href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
-              i.app-menu__icon
-              span.app-menu__label 已立案待付款案件
-        - if can?('main_cases', 'pending_cases')
-          li
-            a.treeview-item href="#{pending_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'pending_cases')}"
-              i.app-menu__icon
-              span.app-menu__label 待立案的案件
-    / 只有委托人能看到以下的侧边栏
-    - if court_user?
-      - if can?('entrust_orders', 'index')
-        li
-          a.app-menu__item href="#{entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'index')}"
-            i.app-menu__icon.fa.fa-laptop
-            span.app-menu__label 委托单
-    / 除了委托人以外的人，也就是鉴定中心能查看的委托单
-    - else
-      - if can?('entrust_orders', 'org_orders')
-        li
-          a.app-menu__item href="#{org_orders_entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'org_orders')}"
-            i.app-menu__icon.fa.fa-laptop
-            span.app-menu__label 委托单
-      li
-        a.app-menu__item href="#"
-          i.app-menu__icon.fa.fa-laptop
-          span.app-menu__label 统计
-      li
-        a.app-menu__item href="#"
-          i.app-menu__icon.fa.fa-laptop
-          span.app-menu__label 快递单
-    - unless admin?
-      - if can?('departments', 'index')
-        li
-          a.app-menu__item href="#{departments_path}"
-            i.app-menu__icon.fa.fa-laptop
-            span.app-menu__label 机构管理
+            a href="#{doc_templates_path}" class="#{active_class(controller, 'doc_templates')}"
+              i.app-menu__icon.fa.fa-flag-o
+              span.app-menu__label 模板文档管理
+      - else
+        a.app-menu__item.text-white
+          i class="app-menu__icon fa fa-laptop"
+          span class="app-menu__label" 案件
+        ul.treeview-menu
+          - if can?('main_cases', 'new')
+            li
+              a.treeview-item href="#{new_main_case_path}" class="#{active_class_with_action(controller, 'main_cases', 'new')}"
+                i.app-menu__icon
+                span.app-menu__label 新建案件
+          - if can?('main_cases', 'index')
+            li
+              a.treeview-item href="#{main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'index')}"
+                i.app-menu__icon
+                span.app-menu__label 我的案件
+          - if can?('main_cases', 'wtr_cases')
+            li
+              a.treeview-item href="#{wtr_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'wtr_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 我的案件
+          - if can?('main_cases', 'department_cases')
+            li
+              a.treeview-item href="#{department_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'department_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 本科室案件
+          - if can?('main_cases', 'center_cases')
+            li
+              a.treeview-item href="#{center_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'center_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 本中心案件
+          - if can?('main_cases', 'filed_unpaid_cases')
+            li
+              a.treeview-item href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 已立案待付款案件
+          - if can?('main_cases', 'pending_cases')
+            li
+              a.treeview-item href="#{pending_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'pending_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 待立案的案件
+          - if can?('main_cases', 'apply_filing_cases')
+            li
+              a.treeview-item href="#{apply_filing_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'apply_filing_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 待结案的案件
+        - if @current_user.center_admin_user? || @current_user.center_director_user?
+          a.app-menu__item.text-white
+            i class="app-menu__icon fa fa-laptop"
+            span class="app-menu__label" 机构管理
+          ul.treeview-menu
+            - if can?('material_cycles', 'index')
+              li
+                a href="#{material_cycles_path}" class="#{active_class(controller, 'material_cycles')}"
+                  i.app-menu__icon
+                  span.app-menu__label 补充材料周期管理
 
-    - if can?('incoming_records', 'claim_record_list')
-      li
-        a.app-menu__item href="#{claim_record_list_incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'claim_record_list')}"
-          i.app-menu__icon.fa.fa-laptop
-          span.app-menu__label 到账记录认领
+            - if can?('identification_cycles', 'index')
+              li
+                a href="#{identification_cycles_path}" class="#{active_class(controller, 'identification_cycles')}"
+                  i.app-menu__icon
+                  span.app-menu__label 鉴定周期管理
 
-    - if can?('express_orders', 'index')
-      li
-        a.app-menu__item href="#{express_orders_path}" class="#{active_class(controller, 'express_orders')} #{active_class(controller, 'recive_express_orders')}"
-          i.app-menu__icon.fa.fa-laptop
-          span.app-menu__label 快递管理
+            - if can?('organizations', 'edit') && @current_user.center_admin_user?
+              li
+                a href="#{edit_organization_path(@current_user.organization.id)}" class="#{active_class(controller, 'organizations')}"
+                  i.app-menu__icon
+                  span.app-menu__label 机构信息编辑
+            - if can?('departments', 'index') && !@current_user.admin?
+              li
+                a href="#{departments_path}" class="#{active_class(controller, 'departments')}"
+                  i.app-menu__icon.fa
+                  span.app-menu__label 科室管理
+            - if can?('users', 'index')
+              li
+                a href="#{users_path}" class="#{active_class_with_action(controller, 'users', 'index')}"
+                  i.app-menu__icon.fa
+                  span.app-menu__label 用户管理
+            - if can?('roles', 'index')
+              li
+                a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
+                  i.app-menu__icon.fa
+                  span.app-menu__label 用户角色管理
 
-    - if can?('main_cases', 'personal_count')
-      li
-        a.app-menu__item href="#{personal_count_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'personal_count')}"
-          i.app-menu__icon.fa.fa-laptop
-          span.app-menu__label 统计      
+        - if can?('entrust_orders', 'index')
+          li
+            a.app-menu__item href="#{entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'index')}"
+              i.app-menu__icon.fa.fa-laptop
+              span.app-menu__label 委托单
+        - if can?('entrust_orders', 'org_orders') && can?('entrust_orders', 'org_orders_unclaimed')
+          a.app-menu__item.text-white
+            i class="app-menu__icon fa fa-laptop"
+            span class="app-menu__label" 委托单
+          ul.treeview-menu
+            - if can?('entrust_orders', 'org_orders')
+              li
+                a.treeview-item href="#{org_orders_entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'org_orders')}"
+                  i.app-menu__icon
+                  span.app-menu__label 全部委托单
+            - if can?('entrust_orders', 'org_orders_unclaimed')
+              li
+                a.treeview-item href="#{org_orders_unclaimed_entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'org_orders_unclaimed')}"
+                  i.app-menu__icon
+                  span.app-menu__label 待认领的委托单
+        - if can?('main_cases', 'personal_count')
+          li
+            a.app-menu__item href="#{personal_count_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'personal_count')}"
+              i.app-menu__icon.fa.fa-laptop
+              span.app-menu__label 统计
 
+        - if can?('incoming_records', 'claim_record_list')
+          li
+            a.app-menu__item href="#{claim_record_list_incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'claim_record_list')}"
+              i.app-menu__icon.fa.fa-laptop
+              span.app-menu__label 到账记录认领
 
+        - if can?('express_orders', 'index')
+          li
+            a.app-menu__item href="#{express_orders_path}" class="#{active_class(controller, 'express_orders')} #{active_class(controller, 'recive_express_orders')}"
+              i.app-menu__icon.fa.fa-laptop
+              span.app-menu__label 快递管理
 
+        - if @current_user.center_finance_user?
+          a.app-menu__item.text-white
+            i class="app-menu__icon fa fa-laptop"
+            span class="app-menu__label" 财务管理
+          ul.treeview-menu
+            li
+              a.treeview-item href="#{incoming_records_path}" class="#{active_class_with_action(controller, 'incoming_records', 'index')}"
+                i.app-menu__icon
+                span.app-menu__label 到账记录管理
+            li
+              a.treeview-item href="#{finance_index_main_case_bills_path(-1)}" class="#{active_class_with_action(controller, 'bills', 'finance_index')}"
+                i.app-menu__icon
+                span.app-menu__label 发票管理
+            li
+              a.treeview-item href="#{finance_index_main_case_payment_orders_path(-1)}" class="#{active_class_with_action(controller, 'payment_orders', 'finance_index')}"
+                i.app-menu__icon
+                span.app-menu__label 缴费单管理
+            li
+              a.treeview-item href="#{finance_index_main_case_refund_orders_path(-1)}" class="#{active_class_with_action(controller, 'refund_orders', 'finance_index')}"
+                i.app-menu__icon
+                span.app-menu__label 退费单管理
 

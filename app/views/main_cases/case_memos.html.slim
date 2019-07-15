@@ -43,7 +43,7 @@ css:
               .message
                 = image_tag('user_chat.png', style: 'height: 45px; width: 45px;')
                 .message-content
-                  span = "#{case_memo.created_at.strftime("%d-%m-%Y %H:%M:%S")} #{@current_user.name}说："
+                  span = "#{case_memo.created_at.strftime("%Y年%m月%d日 %H:%M:%S")} #{case_memo.user.name}说："
                   p.info style="min-width: 250px;"
                     span = case_memo.content
   .col-md-6

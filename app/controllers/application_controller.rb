@@ -3,7 +3,6 @@ require 'uri'
 # require 'macaddr'
 class ApplicationController < ActionController::Base
   include ApplicationHelper
-  helper_method :can_sys?
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -11,31 +10,6 @@ class ApplicationController < ActionController::Base
 
   before_action :authorize, :can
   before_action :get_notifications
-  # before_action :set_back_session
-
-  # 针对用户、角色、部门编辑的“数据”权限控制
-  def can_sys?(sys_object=nil, key_field='orgnization_name')
-    return true if @current_user.login == 'admin'
-    return true if sys_object.nil?
-    # current_user = User.find(session[:user_id])
-    # 如果不是超级用户
-    #     如果是本机构的对象，则：
-    #         有权限
-    #     否则
-    #         无权限
-    # 否则
-    #     有权限
-
-    if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      if @current_user.orgnization_name == sys_object[key_field]
-        return true
-      else
-        return false
-      end
-    else
-      return true
-    end
-  end
 
   protected
 
@@ -202,11 +176,6 @@ class ApplicationController < ActionController::Base
     else
       SysLog.create user_id: @current_user&.id, log_date: Date.today, log_content: log_msg
     end
-  end
-
-  # 判断当前用户是否是平台管理员
-  def admin?
-    !(SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
   end
 
   # 判断当前地区的id

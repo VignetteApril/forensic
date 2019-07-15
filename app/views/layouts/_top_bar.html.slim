@@ -28,7 +28,7 @@ header class="app-header"
         .app-notification__content
           - @current_user.notifications.where(:status=>false).each do |notice|
             li
-              a.app-notification__item href="javascript:;"
+              a.app-notification__item href="#{notice.url}"
                 span.app-notification__icon
                   span.fa-stack.fa-lg
                     i.fa.fa-circle.fa-stack-2x.text-primary
@@ -38,8 +38,8 @@ header class="app-header"
                   p.app-notification__meta = notice.description
 
         li.app-notification__footer
-          = link_to '查看所有通知',notifications_path
-    - if !admin? && can?('incoming_records','claim_record_list')
+          =link_to '查看所有通知',notifications_path
+    - if !@current_user.admin? && can?('incoming_records','claim_record_list')
       li class="dropdown"
         a.app-nav__item href="#" data-toggle="dropdown" aria-label="Show notifications"
           i class="app-menu__icon fa fa-file-text"
@@ -62,7 +62,7 @@ header class="app-header"
           = link_to(edit_password_user_path(@current_user), class: "dropdown-item") do
             i.dropdown-icon.fa.fa-pencil-square-o
             | 修改密码
-          - if admin?
+          - if @current_user.admin?
             = link_to(organizations_path, class: "dropdown-item") do
               i.dropdown-icon.fa.fa-cog
               | 系统管理

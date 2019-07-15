@@ -31,15 +31,17 @@ function ShowPage(path)
 		strUrl = pre + path;
 		try {
             window.open(strUrl,'_self');
-            console.log(window.open(strUrl,'_self'))
+            return false;
         } catch(e) {
 		    alert('请先下载安装在线编辑Word控件！');
 		    window.location.href =  window.location.origin + '/weboffice.rar';
+            return false;
         }
 	}
 	else
 	{ //当浏览器返回值1以外的数据时采用传统方式打开网址
 		strUrl = pre + path;
 		window.open(strUrl,'_blank');
+        return false;
 	}
 }

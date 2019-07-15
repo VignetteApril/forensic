@@ -11,7 +11,11 @@ class Notification < ApplicationRecord
                     :case_online_pay,
                     :apply_bill,
                     :bill_made,
-                    :add_case_tip ]
+                    :add_case_tip,
+                    :submit_payment_order,
+                    :submit_refund_order,
+                    :confirm_payment_order,
+                    :confirm_refund_order ]
 
     CHANNEL_MAP = {
       :recived_order=>'收到委托单',
@@ -22,7 +26,11 @@ class Notification < ApplicationRecord
       :case_online_pay=>'案件在线付款',
       :apply_bill=>'申请发票',
       :bill_made=>'发票已开',
-      :add_case_tip=>'案件新增便签'
+      :add_case_tip=>'案件新增便签',
+      :submit_payment_order => '提交缴费单',
+      :submit_refund_order => '提交退费单',
+      :confirm_payment_order => '确认缴费单',
+      :confirm_refund_order => '确认退费单'
     }
 
     def infos_for_api
@@ -49,7 +57,11 @@ class Notification < ApplicationRecord
                     :case_online_pay,
                     :apply_bill,
                     :bill_made,
-                    :add_case_tip ]
+                    :add_case_tip,
+                    :submit_payment_order,
+                    :submit_refund_order,
+                    :confirm_payment_order,
+                    :confirm_refund_order ]
       return channel.rindex(channel_word)
     end
 

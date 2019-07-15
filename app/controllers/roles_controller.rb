@@ -1,19 +1,21 @@
 # -*- encoding : utf-8 -*-
 class RolesController < ApplicationController
-  layout 'system'
   before_action :set_role, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_role]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_role]
 
   # 显示角色列表页面，默认显示所有系统角色，并且不需要分页显示
   # 系统在角色列表页面还需要显示“新建角色”按钮，同时针对每一个已有的角色，系统还需要显示“人员”链接和“编辑角色”、“删除角色”按钮。
   def index
-    if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      @roles = Role.where(r_type: @current_user.organization.org_type.to_sym )
-    else
-      @roles = Role.all
-    end
+    # 非管理员不能管理 【系统管理员】角色里的用户
+    @roles = @current_user.admin? ? Role.all.order(:name) : Role.where.not(name: :admin_user).where.not(name: :client_entrust_user)
     @role = params[:role_id] ? Role.find_by_id(params[:role_id]) : @roles.first
-    @users = initialize_grid(@role.users, order: 'sort_no', order_direction: 'asc',per_page: 20, name: 'role_users')
+    users = @current_user.admin? ? @role.users : @role.users.where(organization_id: @current_user.organization_id)
+
+    @users = initialize_grid(users,
+                             order: 'sort_no',
+                             order_direction: 'asc',
+                             per_page: 20,
+                             name: 'role_users')
   end
 
   # 显示新建角色表单页面。 
@@ -28,9 +30,6 @@ class RolesController < ApplicationController
   # 在新建角色页面中，用户点击“提交”按钮，系统保存该角色并返回角色列表页面。
   def create
     @role = Role.new(role_params)
-    if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
-      @role.orgnization_name = @current_user.orgnization_name
-    end
 
     respond_to do |format|
       if @role.save
@@ -68,7 +67,7 @@ class RolesController < ApplicationController
     
   # 管理员在角色人员列表页面中，点击 “加入”按钮,系统显示所有人员的列表
   def add_users
-    if (SysConfig.super_roles & @current_user.roles.map{ |r| r.name }).empty?
+    if !@current_user.admin?
       @users = initialize_grid( @current_user.organization.users, per_page: 50,
                                 order: 'sort_no', order_direction: 'asc',
                                 name: 'users' )

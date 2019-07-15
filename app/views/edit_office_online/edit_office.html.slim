@@ -13,7 +13,6 @@ javascript:
     WebOffice = document.getElementById('WebOffice');//获得控件对象
     if (WebOffice){//等待控件初始化完毕，时间可以根据网络速度设定。
         setTimeout('OpenDocument()',1000);
-        // 等待控件加载完毕后，启动替换程序
         setTimeout('ReplaceWordText()', 2000);
     }
   }
@@ -26,26 +25,26 @@ javascript:
       app.Selection.Find.Execute('@#省@#', false, false, false, false, false, 1, false, false, "#{@province_name}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#市@#', false, false, false, false, false, 1, false, false, "#{@city_name}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#区@#', false, false, false, false, false, 1, false, false, "#{@district_name}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托方名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.organization_name}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托人姓名@#', false, false, false, false, false, 1, false, false, "#{@main_case.user_name}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托人电话@#', false, false, false, false, false, 1, false, false, "#{@main_case.wtr_phone}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托方地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.organization_addr}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托方名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:organization_name)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托人姓名@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:user_name)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托人电话@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:wtr_phone)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托方地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:organization_addr)}", 2, false, false, false, false);
       // 委托鉴定事项替换
-      app.Selection.Find.Execute('@#案由@#', false, false, false, false, false, 1, false, false, "#{@main_case.anyou}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#案件性质@#', false, false, false, false, false, 1, false, false, "#{@main_case.case_property}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{@main_case.commission_date}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#受委托科室@#', false, false, false, false, false, 1, false, false, "#{@main_case.department.name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案由@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:anyou)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案件性质@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_property)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:commission_date)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#受委托科室@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:department).try(:name)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#鉴定事项@#', false, false, false, false, false, 1, false, false, "#{@case_matter}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#案件类型@#', false, false, false, false, false, 1, false, false, "#{@main_case.case_type}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#鉴定事项及要求@#', false, false, false, false, false, 1, false, false, "#{@main_case.matter_demand}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.base_info}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案件类型@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_type)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定事项及要求@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:matter_demand)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:base_info)}", 2, false, false, false, false);
       // 鉴定人信息替换
       app.Selection.Find.Execute('@#被鉴定人类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_unit_type}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.appraised_unit.name}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:name)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人性别@#', false, false, false, false, false, 1, false, false, "#{@appraised_gender}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{@main_case.appraised_unit.birthday}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:birthday)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人证件类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_id_type}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人联系地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.appraised_unit.addr}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人联系地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:addr)}", 2, false, false, false, false);
 
       // TODO: 移交材料相关信息替换
       // 等待需求确认
@@ -54,16 +53,29 @@ javascript:
       // 获取总页数
       // 在每页都加入图片
       // TODO: 因为每次会往同样的位置加入条形码，用户保存后，下一次进来会在同一个位置再加入条形码
-      var pageCount = current_word.ComputeStatistics(2);
-      for (var i = 0; i <= pageCount; i++) {
-          current_word.GoTo(1, i + 1).Select();
-          var Shape = app.Selection.InlineShapes.AddPicture("#{@barcode_path}", false, true).ConvertToShape();
-          Shape.RelativeHorizontalPosition = 5;
-          Shape.RelativeVerticalPosition = 5;
-          Shape.Top = 20;
-          Shape.Left = 2;
-          Shape.Width = 100;
-          Shape.Height = 50;
+      if ("#{@barcode_path}" != '') {
+          var pageCount = current_word.ComputeStatistics(2);
+          if (pageCount > 1) {
+              for (var i = 0; i <= pageCount; i++) {
+                  current_word.GoTo(1, i + 1).Select();
+                  var Shape = app.Selection.InlineShapes.AddPicture("#{@barcode_path}", false, true).ConvertToShape();
+                  Shape.RelativeHorizontalPosition = 5;
+                  Shape.RelativeVerticalPosition = 5;
+                  Shape.Top = 20;
+                  Shape.Left = 2;
+                  Shape.Width = 100;
+                  Shape.Height = 50;
+              }
+          } else {
+              var Shape = app.Selection.InlineShapes.AddPicture("#{@barcode_path}", false, true).ConvertToShape();
+              Shape.RelativeHorizontalPosition = 5;
+              Shape.RelativeVerticalPosition = 5;
+              Shape.Top = 20;
+              Shape.Left = 2;
+              Shape.Width = 100;
+              Shape.Height = 50;
+          }
+
       }
   }
 
@@ -79,6 +91,7 @@ javascript:
       location.href='../index.html';
     }
   }
+
   function WebSave()
   {
       try {
