@@ -39,6 +39,12 @@
   end
 
   g.column in_csv: false do |bill|
+    if can?('bills', 'update') && bill.unBilled?
+      link_to '编辑', dyn_form_modal_main_case_bill_path(@main_case, bill), method: :post, remote: true, class: 'btn btn-primary btn-sm'
+    end
+  end
+
+  g.column in_csv: false do |bill|
     if can?('bills', 'destroy') && bill.unBilled?
       link_to '删除', main_case_bill_path(bill.main_case, bill), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
     end

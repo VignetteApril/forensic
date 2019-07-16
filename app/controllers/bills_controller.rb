@@ -1,7 +1,7 @@
 # 发票控制器
 class BillsController < ApplicationController
-  before_action :set_bill, only: [:show, :edit, :update, :destroy, :to_billed, :to_taked_away]
-  before_action :set_main_case, except: [:finance_index, :to_billed, :to_taked_away]
+  before_action :set_bill, only: [:show, :edit, :update, :destroy, :to_billed, :to_taked_away, :dyn_form_modal]
+  before_action :set_main_case, except: [:finance_index, :to_billed, :to_taked_away, :dyn_form_modal]
   before_action :guard_edit_destroy, only: [:edit, :destroy]
 
   # GET /bills
@@ -61,10 +61,10 @@ class BillsController < ApplicationController
   def update
     respond_to do |format|
       if @bill.update(bill_params)
-        format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '发票已经更新成功了！' }
+        format.html { redirect_to payment_order_management_main_case_path(@bill.main_case), notice: '发票已经更新成功了！' }
         format.json { render :show, status: :ok, location: @bill }
       else
-        format.html { render :edit }
+        format.html { render redirect_to payment_order_management_main_case_path(@bill.main_case), notice: '发票更新失败！' }
         format.json { render json: @bill.errors, status: :unprocessable_entity }
       end
     end
@@ -95,6 +95,12 @@ class BillsController < ApplicationController
       if @bill.update(bill_stage: :taked_away)
         format.html { redirect_to finance_index_main_case_bills_path(-1), notice: '发票已经变更为已领走状态' }
       end
+    end
+  end
+
+  def dyn_form_modal
+    respond_to do |format|
+      format.js
     end
   end
 

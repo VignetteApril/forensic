@@ -1,9 +1,9 @@
 desc "系统初始化功能和授权"
 task :init_feature => :environment do
   puts "初始化所有的系统功能"
-
   Role::NAME_TYPE.each do |key, value|
     puts "重新创建系统角色：#{value}"
+    next if key.to_sym == :admin_user # 跳过系统管理员角色的重建
     r_type = key == :client_entrust_user ? :court : :center
     Role.find_or_create_by name: key.to_sym, r_type: r_type
   end

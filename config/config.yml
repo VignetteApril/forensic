@@ -65,7 +65,7 @@ features:
   - [案件退费单管理, refund_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 'center_department_director_user, center_ident_user, center_assistant_user']
   - [财务确认缴费单, payment_orders, 'finance_index, confirm_order', 'center_finance_user']
   - [财务确认退费单, refund_orders, 'finance_index, confirm_order', 'center_finance_user']
-  - [申请开发票, bills, 'index, create, update, edit, new, destroy', 'center_department_director_user, center_ident_user, center_assistant_user']
+  - [申请开发票, bills, 'index, create, update, edit, new, destroy, dyn_form_modal', 'center_department_director_user, center_ident_user, center_assistant_user']
   - [财务发票管理, bills, 'to_taked_away, to_billed, finance_index', 'center_finance_user']
   - [认领委托单, main_cases, 'new_with_entrust_order, update, matter_demands_and_case_types, create', 'center_filing_user']
   - [发送快递, express_orders, 'index,create,edit,new,destroy,update', 'center_admin_user,
