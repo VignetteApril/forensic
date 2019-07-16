@@ -1,14 +1,18 @@
 .card
   .card-header
-    .card-title style='text-align:center;font-size:16ptfont-size:16pt'委托案件统计分析
+    .card-title style='text-align:center;font-size:16ptfont-size:16pt'本鉴定中心案件统计分析
   .card-body
     .row
-      .col-md-4
+      .col-md-6
         .per-chart id='container' style="height:500px;width:100%"
-      .col-md-4
+      .col-md-6
+        .per-chart id='container0' style="height:500px;width:100%"  
+    .row      
+      .col-md-6
         .per-chart id='container1' style="height:500px;width:100%"
-      .col-md-4
+      .col-md-6
         .per-chart id='container2' style="height:500px;width:100%"
+
 
 javascript:
   $(document).ready(function() {  
@@ -22,7 +26,7 @@ javascript:
        plotShadow: false
    };
    var title = {
-      text: '今年案件数量-按鉴定中心统计'   
+      text: '今年案件数量-按委托方统计'   
    };   
 
    
@@ -36,7 +40,7 @@ javascript:
          {y: 5,name: "鉴定中心3"}
       ]
    //输入数据   
-   pie_data = json_data.cases_count
+   pie_data = json_data.center_cases_count
 
    var series= [{
       type: 'pie',
@@ -69,6 +73,60 @@ javascript:
 
 
   // ---------------
+
+  var chart0 = {
+       plotBackgroundColor: null,
+       plotBorderWidth: null,
+       plotShadow: false
+   };
+   var title0 = {
+      text: '今年案件数量-按科室统计'   
+   };   
+
+   
+   var tooltip0 = {
+      pointFormat: '{series.name}: <b>{point.y}</b>'
+   };
+
+   var pie_data0 = [
+         {y: 1,name: "鉴定中心1"},
+         {y: 5,name: "鉴定中心2"},
+         {y: 5,name: "鉴定中心3"}
+      ]
+   //输入数据    
+   pie_data = json_data.department_cases_count
+
+   var series0= [{
+      type: 'pie',
+      name: '数量',
+      data: pie_data
+   }]; 
+
+   var plotOptions0 = {
+      pie: {
+         allowPointSelect: true,
+         cursor: 'pointer',
+         dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f}% ',
+            style: {
+               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+         }
+      }
+   };
+    
+      
+   var json0 = {}; 
+   json0.chart = chart0; 
+   json0.title = title0;     
+   json0.tooltip = tooltip0;  
+   json0.series = series0;
+   json0.plotOptions = plotOptions0;
+   $('#container0').highcharts(json0); 
+
+
+  // --------------- 
 
    var chart1 = {
       type: 'column'
@@ -116,7 +174,7 @@ javascript:
    //输入数据
    var stage_data =[]
    for(var i=0;i<json_data.stage_count.length;i++){
-    stage_data.push(json_data.stage_count[i].count)
+   stage_data.push(json_data.stage_count[i].count)
    }
    var series1= [{
         name: '案件数量',
@@ -145,7 +203,7 @@ javascript:
    }
 
    var title2 = {
-      text: '我委托的案件数量-按月统计'   
+      text: '本中心委托的案件数量-按月统计'   
    };
    var subtitle2 = {
       text: ''
@@ -178,7 +236,7 @@ javascript:
    var series2 =  [
       {
          name: '案件数量',
-         data: month_count
+         data:  month_count
       }, 
    ];
 

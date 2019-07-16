@@ -1,5 +1,7 @@
-=render 'entrust_user_count'
-
-=render 'entrust_user_count'
-
-=render 'entrust_user_count'
+.hidden style='display:none' 
+   =@data.to_json
+-if @current_user.client_entrust_user?
+   =render 'entrust_user_count'
+-if @current_user.center_director_user?
+   =render 'center_director_count'
+/ =render 'department_count'
