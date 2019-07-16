@@ -78,6 +78,8 @@ class IncomingRecordsController < ApplicationController
   # 因为只能认领到当前用户作为鉴定人的案件中去
   def claim_record_index
     @main_cases = MainCase.ident_user_cases(@current_user)
+    redirect_to claim_record_list_incoming_records_url, notice: '您还没有在任何案件担任鉴定人！' and return if @main_cases.empty?
+
     # 默认的会选中第一个案件
     # 所以要初始化第一个案件的缴费单
     @main_case = @main_cases[0]
