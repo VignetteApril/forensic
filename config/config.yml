@@ -83,6 +83,7 @@ features:
                                                                               center_assistant_user,
                                                                               center_archivist_user']
   - [委托人查看案件, main_cases, 'wtr_cases, edit, case_memos, create_case_memo, case_process_records', 'client_entrust_user']
+  - [统计, main_cases, 'personal_count', 'client_entrust_user,center_director_user,center_department_director_user']
 
 apps:
   - name: 系统管理

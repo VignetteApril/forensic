@@ -649,8 +649,73 @@ class MainCasesController < ApplicationController
   end
 
   # 统计页面
-  def presonal_count
+  def personal_count
     
+    if @current_user.client_entrust_user?
+      @data = {}
+      my_case = MainCase.where(:wtr_id =>@current_user.id)
+
+      @data['cases_count'] =[]
+      my_cases_center_ids_map = my_case.select(:organization_id).map{|e|e.organization_id}.uniq
+      my_cases_center_ids_map.each do |e|
+        center_name = e.nil? ? "未指定鉴定中心": Organization.find_by(id:e).name
+        @data['cases_count'] << {"name":center_name,"y":MainCase.where(:wtr_id =>@current_user.id).where(:organization_id =>e).count}
+      end
+
+      @data['stage_count'] =[]
+      case_stage = [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
+      case_stage.each do |e|
+        @data['stage_count'] << {"name":MainCase::CASE_STAGE_MAP[e],"count":my_case.where(case_stage:e).count}
+      end
+
+      @data['month_mycase_count'] =[]
+      this_month_begin = Time.now.at_beginning_of_month
+      this_month_end = Time.now
+      @data['month_mycase_count'] << {"count":my_case.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+
+      11.times do
+        this_month_end = this_month_begin
+        this_month_begin = this_month_begin - 1.month
+        @data['month_mycase_count'] << {"count":my_case.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+      end
+    end
+
+    if @current_user.center_director_user?
+      @data = {}
+      center_cases = MainCase.where(:organization_id =>@current_user.organization.id)
+
+      @data['center_cases_count'] =[]
+      wtr_orgs_map = center_cases.select(:organization_name).map{|e|e.organization_name}.uniq
+      wtr_orgs_map.each do |e|
+        @data['cases_count'] << {"name":e,"y":center_cases.where(:organization_name =>e).count}
+      end
+
+      @data['department_cases_count'] =[]
+      department_ids_map = center_cases.select(:department_id).map{|e|e.department_id}.uniq
+      department_ids_map.each do |e|
+        department_name = e.nil? ? "未指定部门": Department.find_by(id:e).name
+        @data['department_cases_count'] << {"name":department_name,"y":center_cases.where(:department_id =>e).count}
+      end 
+
+      @data['stage_count'] =[]
+      case_stage = [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
+      case_stage.each do |e|
+        @data['stage_count'] << {"name":MainCase::CASE_STAGE_MAP[e],"count":center_cases.where(case_stage:e).count}
+      end
+
+      @data['month_mycase_count'] =[]
+      this_month_begin = Time.now.at_beginning_of_month
+      this_month_end = Time.now
+      @data['month_mycase_count'] << {"count":center_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+
+      11.times do
+        this_month_end = this_month_begin
+        this_month_begin = this_month_begin - 1.month
+        @data['month_mycase_count'] << {"count":center_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+      end     
+
+    end
+
   end
 
   private

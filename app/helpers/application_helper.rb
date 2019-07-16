@@ -2,6 +2,7 @@
 
 module ApplicationHelper
   # 用户权限验证功能模块
+
   def can?(controller_name, action_name)
     return true if @current_user.login == 'admin'
     @current_user.roles.each do |r|
