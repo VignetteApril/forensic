@@ -1,0 +1,155 @@
+.card
+  .card-header
+    .card-title style='text-align:center;font-size:18pt'本科室案件统计分析
+  .card-body
+    .row
+      .col-md-1 style="display:flex;align-items:center;font-size:11pt"
+        span 选择科室：
+      .col-md-2
+        .btn-group
+          button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            span class="caret selected-name" =Department.find_by(id:@data["department_selected"]).name
+
+          ul class="dropdown-menu"
+            -@data["departments_select"].each do |item|  
+              li
+                a href="/main_cases/personal_count?department_id=#{item[:id]}" =item[:name]
+    .row
+      .col-md-6
+        .per-chart id='container1' style="height:500px;width:100%"
+      .col-md-6
+        .per-chart id='container2' style="height:500px;width:100%"
+
+javascript:
+  $(document).ready(function() {  
+   var data = $('.hidden').text()
+   console.log(data)
+   var json_data = JSON.parse(data)
+
+  // ---------------
+
+   var chart1 = {
+      type: 'column'
+   };
+   var title1 = {
+      text: '本科室案件数量-按状态统计'   
+   };
+   var subtitle1 = {
+      text: ''  
+   };
+   var xAxis1 = {
+      categories: ['待立案',
+                  '待补充材料',
+                  '立案',
+                  '退案',
+                  '执行中',
+                  '执行完成',
+                  '申请归档',
+                  '结案'],
+      crosshair: true
+   };
+   var yAxis1 = {
+      min: 0,
+      title: {
+         text: ''         
+      }      
+   };
+   var tooltip1 = {
+      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+         '<td style="padding:0"><b>{point.y}</b></td></tr>',
+      footerFormat: '</table>',
+      shared: true,
+      useHTML: true
+   };
+   var plotOptions1 = {
+      column: {
+         pointPadding: 0.2,
+         borderWidth: 0
+      }
+   };  
+   var credits1 = {
+      enabled: false
+   };
+   //输入数据
+   var stage_data =[]
+   for(var i=0;i<json_data.stage_count.length;i++){
+    stage_data.push(json_data.stage_count[i].count)
+   }
+   var series1= [{
+        name: '案件数量',
+            data: stage_data
+        }];     
+      
+   var json1 = {};   
+   json1.chart = chart1; 
+   json1.title = title1;   
+   json1.subtitle = subtitle1; 
+   json1.tooltip = tooltip1;
+   json1.xAxis = xAxis1;
+   json1.yAxis = yAxis1;  
+   json1.series = series1;
+   json1.plotOptions = plotOptions1;  
+   json1.credits = credits1;
+   $('#container1').highcharts(json1);
+
+   //--------------
+   //输入数据
+   var months = []
+   var month_count = []
+   for(var i=0;i<json_data.month_mycase_count.length;i++){
+    months.push(json_data.month_mycase_count[i].time)
+    month_count.push(json_data.month_mycase_count[i].count)
+   }
+
+   var title2 = {
+      text: '本科室立案案件数量-按月统计'   
+   };
+   var subtitle2 = {
+      text: ''
+   };
+   var xAxis2 = {
+      categories: months
+   };
+   var yAxis2 = {
+      title: {
+         text: ''
+      },
+      plotLines2: [{
+         value: 0,
+         width: 1,
+         color: '#808080'
+      }]
+   };   
+
+   var tooltip2 = {
+      valueSuffix: ''
+   }
+
+   var legend2 = {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+      borderWidth: 0
+   };
+
+   var series2 =  [
+      {
+         name: '案件数量',
+         data: month_count
+      }, 
+   ];
+
+   var json2 = {};
+
+   json2.title = title2;
+   json2.subtitle = subtitle2;
+   json2.xAxis = xAxis2;
+   json2.yAxis = yAxis2;
+   json2.tooltip = tooltip2;
+   json2.legend = legend2;
+   json2.series = series2;
+
+   $('#container2').highcharts(json2);
+
+  });
