@@ -4,6 +4,7 @@
                                               case_modal_id: 'case_doc_modal' }
 #dynamic_file_modal
 = render partial: 'case_stage_bar', locals: { main_case: @main_case, case_stage: 'case_executing' }
+= render partial: 'case_no_modal', locals: {main_case: @main_case}
 = render 'nav_bar'
 
 .card

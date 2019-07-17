@@ -13,4 +13,4 @@
       .modal-footer
         button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
         - if @main_case.case_no_display.nil?
-          = link_to '生成案号', generate_case_no_main_case_path(@main_case), class: 'btn btn-primary'
+          = link_to '生成案号', generate_case_no_main_case_path({id: @main_case, current_action: controller.action_name}), class: 'btn btn-primary'

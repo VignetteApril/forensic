@@ -235,9 +235,25 @@ class MainCasesController < ApplicationController
   end
 
   def generate_case_no
+    current_action = params[:current_action]
     @main_case.set_case_no
 
-    redirect_to edit_main_case_url(@main_case)
+    case current_action
+    when 'filing_info'
+      redirect_url = filing_info_main_case_url(@main_case)
+    when 'payment_order_management'
+      redirect_url = payment_order_management_main_case_url(@main_case)
+    when 'case_executing'
+      redirect_url = case_executing_main_case_url(@main_case)
+    when 'closing_case'
+      redirect_url = closing_case_main_case_url(@main_case)
+    when 'case_memos'
+      redirect_url = case_memos_main_case_url(@main_case)
+    when 'edit'
+      redirect_url = edit_main_case_url(@main_case)
+    end
+
+    redirect_to redirect_url, notice: '案件号已经生成！'
   end
 
   # 案件审查主页面
@@ -396,6 +412,8 @@ class MainCasesController < ApplicationController
       redirect_url = closing_case_main_case_url(@main_case)
     when 'case_memos'
       redirect_url = case_memos_main_case_url(@main_case)
+    when 'edit'
+      redirect_url = edit_main_case_url(@main_case)
     end
 
     respond_to do |format|
