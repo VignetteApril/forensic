@@ -3,18 +3,15 @@
     .card-title style='text-align:center;font-size:18pt'本科室案件统计分析
   .card-body
     .row
-      .col-md-1 style="display:flex;align-items:center;font-size:11pt"
+      .col-md-2 style="display:flex;align-items:center;font-size:11pt"
         span 选择科室：
       .col-md-2
         .btn-group
-          button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-            span class="caret selected-name" =Department.find_by(id:@data["department_selected"]).name
-
-          ul class="dropdown-menu"
-            -@data["departments_select"].each do |item|  
-              li
-                a href="/main_cases/personal_count?department_id=#{item[:id]}" =item[:name]
-    .row
+          button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 选择科室
+          .dropdown-menu
+            - @data["departments_select"].each do |item|
+              a class="dropdown-item caret" href="/main_cases/personal_count?department_id=#{item[:id]}" = item[:name]
+    .row.mt-2
       .col-md-6
         .per-chart id='container1' style="height:500px;width:100%"
       .col-md-6
