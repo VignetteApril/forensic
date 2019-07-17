@@ -61,31 +61,29 @@
 .row.no-gutters.cases    
   -@main_cases.current_page_records.each do |e|
     .case-item data-id="#{e.id}"
-      span 流水号：
-      span =e.serial_no
+      .status
+        span =MainCase::CASE_STAGE_MAP[e.case_stage.to_sym]
       br
+      p style='color:#256188;border-bottom:1px solid #CCCCCC;' =e.serial_no
+
       span 案件号：
       span =e.case_no
       br
       span 委托方:
       span =e.organization_name
-      br      
+      br    
       span 被鉴定人：
       span =e.appraised_unit.try(:name)
       br
       span 登记日期：
       span =e.created_at.strftime('%Y-%m-%d')
       br
-      span 当前状态：
-      span =MainCase::CASE_STAGE_MAP[e.case_stage.to_sym]
       br
-      br
-      span style="color:red" 创建时间：
-      span style="color:red" ="#{get_distance_of_time(e)}"
+      .case-bottom style='color:#256188;border-top:1px solid #CCCCCC;background-color: #f1f0ea;' 
+        span style="color:red" ="#{get_distance_of_time(e)}"
 
 .row.no-gutters 
   == render_grid(@main_cases)
-
 
 css:
   .cases{
@@ -96,10 +94,24 @@ css:
   }
   .case-item{
     padding:0.5%;
-    margin: 0.5%;
-    background-color: #F8F9FA;
+    margin: 2.0%;
+    background-color: #f1f0ea;
     width:15%;
     border-radius: 10px;
+   
+  }
+  .case-item:hover{
+   -webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  }
+  .status{
+    text-align:center;
+    float:right;
+    width:60px;
+    height:20px;
+    background-color:#7143B4;
+    position:relative;top:-5px;right:-5px;
+    border-radius：2px;
+    color:white
   }
 
 javascript:
