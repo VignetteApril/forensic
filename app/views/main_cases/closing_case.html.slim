@@ -21,6 +21,7 @@
               span#upload_file.fa.fa-upload.ml-2
         - else
           .col-md-2
+            = image_tag('word.png', style: 'height: 20px; width: 15px', class: 'mr-1')
             span data-toggle="tooltip" data-placement="right" title="#{case_doc.attachment.blob.filename}" = case_doc.name
           .col-md-1
             span 【有】

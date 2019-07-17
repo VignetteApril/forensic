@@ -47,6 +47,7 @@ hr
     ul.pull-right
       - @main_case.case_docs.where(case_stage: :financial).each do |doc|
         li
+          = image_tag('word.png', style: 'height: 20px; width: 15px')
           span = doc.name
           i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
 

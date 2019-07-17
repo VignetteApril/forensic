@@ -19,6 +19,7 @@
         .row
           .col-md-12
             - @main_case.case_docs.where(case_stage: :add_materials).each do |doc|
+              = image_tag('word.png', style: 'height: 20px; width: 15px')
               span.ml-2 = doc.name
               i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
 
@@ -60,8 +61,9 @@
           .col-md-12
             #filed_case_docs
               - @main_case.case_docs.where(case_stage: :filed).each do |doc|
+                = image_tag('word.png', style: 'height: 20px; width: 15px')
                 span.ml-2 = doc.name
-                i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+                i.fa.fa-pencil-square-o.ml-2.mr-4.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
 
 = simple_form_for(@main_case, method: :patch, url: update_reject_main_case_path) do |f|
   .form-inputs
@@ -77,6 +79,7 @@
         .row
           .col-md-12
             - @main_case.case_docs.where(case_stage: :reject_case).each do |doc|
+              = image_tag('word.png', style: 'height: 20px; width: 15px')
               span.ml-2 = doc.name
               i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
 

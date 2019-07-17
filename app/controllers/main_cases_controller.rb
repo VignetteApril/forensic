@@ -623,7 +623,7 @@ class MainCasesController < ApplicationController
     elsif @current_user.center_department_director_user?
       @main_case.case_memos.where(visibility_range: :current_case_and_leader)
     else
-      @main_case.case_memos
+      MainCase.none
     end.or(@main_case.case_memos.where(user_id: @current_user.id)).order(:created_at).uniq
 
     @case_memo = @main_case.case_memos.new
