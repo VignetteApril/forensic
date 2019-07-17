@@ -80,8 +80,9 @@
         span =e.created_at.strftime('%Y-%m-%d')
         br
         br
-      .case-bottom style='color:#256188;border-top:1px solid #CCCCCC;background-color: #f1f0ea;width:120%;float:left;position:relative;right:19px;' 
+      .case-bottom style='color:#256188;border-top:1px solid #CCCCCC;background-color: #f1f0ea;width:120%;position:relative;right:10%'  
         span style="color:red;padding-left:18px" ="#{get_distance_of_time(e)}"
+
 
 .row.no-gutters 
   == render_grid(@main_cases)
@@ -89,7 +90,7 @@
 css:
   .cases{
     display:none;
-    width:110%;
+    width:100%;
     / display:flex;
     flex-wrap: wrap;
   }
@@ -98,12 +99,13 @@ css:
     margin: 2.0%;
     background-color: #f1f0ea;
     width:15%;
-   
+    / border-bottom:1px solid #CCCCCC;
   }
   .case-item:hover{
    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
   }
   .case-info{
+    margin: 2.0%;
     padding-left:10px;
   }
   .status{
