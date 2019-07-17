@@ -682,7 +682,7 @@ class MainCasesController < ApplicationController
 
     if @current_user.center_director_user?
       @data = {}
-      center_cases = MainCase.where(:organization_id =>@current_user.organization.id)
+      center_cases = @current_user.organization.main_cases
 
       @data['center_cases_count'] =[]
       wtr_orgs_map = center_cases.select(:organization_name).map{|e|e.organization_name}.uniq
@@ -738,8 +738,6 @@ class MainCasesController < ApplicationController
         this_month_begin = this_month_begin - 1.month
         @data['month_mycase_count'] << {"count":department_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
       end 
-
-      # binding.pry
     end
 
   end
