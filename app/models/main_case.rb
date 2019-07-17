@@ -51,12 +51,27 @@ class MainCase < ApplicationRecord
     close: '结案'
   }
 
+  CASE_STAGE_COLOR_MAP = {
+    pending: '#7143B4',
+    add_material: '#ee5f5b',
+    filed: '#22B8DD',
+    rejected: '#524A47',
+    executing: '#48DD22',
+    executed: '#2B8514',
+    apply_filing: '#DEEF98',
+    close: '#EFAA98'  
+  }
+
   FINANCIAL_STAGE_MAP = {
     unpaid: '未支付',
     not_fully_paid: '未完全支付',
     paid: '已支付',
     refunded: '已退款'
   }
+
+  def stage_color
+    MainCase::CASE_STAGE_COLOR_MAP[self.case_stage.to_sym]
+  end
 
   class << self
     def case_stage_collection
