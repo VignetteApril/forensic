@@ -4,4 +4,5 @@
    =render 'entrust_user_count'
 -if @current_user.center_director_user?
    =render 'center_director_count'
-/ =render 'department_count'
+-if @current_user.center_department_director_user?
+   =render 'center_department_director_count'

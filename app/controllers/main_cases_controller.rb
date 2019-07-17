@@ -687,7 +687,7 @@ class MainCasesController < ApplicationController
       @data['center_cases_count'] =[]
       wtr_orgs_map = center_cases.select(:organization_name).map{|e|e.organization_name}.uniq
       wtr_orgs_map.each do |e|
-        @data['cases_count'] << {"name":e,"y":center_cases.where(:organization_name =>e).count}
+        @data['center_cases_count'] << {"name":e,"y":center_cases.where(:organization_name =>e).count}
       end
 
       @data['department_cases_count'] =[]
@@ -712,8 +712,34 @@ class MainCasesController < ApplicationController
         this_month_end = this_month_begin
         this_month_begin = this_month_begin - 1.month
         @data['month_mycase_count'] << {"count":center_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
-      end     
+      end  
+    end
 
+    if  @current_user.center_department_director_user?
+      @data = {}
+      @data["departments_select"] = @current_user.departments.split(",").map{|e| {"name":Department.find_by(id:e).name,"id":e}}
+      @data['department_selected'] = params[:department_id].blank? ? @data["departments_select"][0][:id] : params[:department_id] 
+
+      department_cases = MainCase.where(:department_id =>@data['department_selected'])
+      
+      @data['stage_count'] =[]
+      case_stage = [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
+      case_stage.each do |e|
+        @data['stage_count'] << {"name":MainCase::CASE_STAGE_MAP[e],"count":department_cases.where(case_stage:e).count}
+      end
+
+      @data['month_mycase_count'] =[]
+      this_month_begin = Time.now.at_beginning_of_month
+      this_month_end = Time.now
+      @data['month_mycase_count'] << {"count":department_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+
+      11.times do
+        this_month_end = this_month_begin
+        this_month_begin = this_month_begin - 1.month
+        @data['month_mycase_count'] << {"count":department_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+      end 
+
+      # binding.pry
     end
 
   end
