@@ -5,6 +5,10 @@
 = render partial: 'case_stage_bar', locals: {main_case: @main_case, case_stage: 'payment_order_management'}
 = render 'nav_bar'
 = render partial: 'financial_stage_bar', locals: {main_case: @main_case}
+
+// 动态更新发票的moadal
+#dyn_bill_modal_box
+
 .row
   .col-md-12
     span.h5 缴费单

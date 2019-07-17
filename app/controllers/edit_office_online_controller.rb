@@ -33,7 +33,14 @@ class EditOfficeOnlineController < ApplicationController
       # 移交材料语句
       # 1、name xx unit 2、name xx unit这种形式，插入到@#移交材料#@占位符中
       if !@main_case.transfer_docs.empty?
-        @transfer_docs = @main_case.transfer_docs.map { |transfer_doc| "#{transfer_doc.serial_no}、收到#{transfer_doc.name}#{transfer_doc.num}#{transfer_doc.unit}。" }.join
+        @transfer_docs = @main_case.transfer_docs.map do |transfer_doc|
+          base_string = "收到#{transfer_doc.name}#{transfer_doc.num}#{transfer_doc.unit}，"
+          base_string.prepend("于#{transfer_doc.receive_date.strftime('%Y年%m月%d日')}") unless transfer_doc.receive_date.nil?
+          base_string.prepend("#{transfer_doc.serial_no}、") unless transfer_doc.serial_no.nil?
+          base_string << "类型为：#{transfer_doc.doc_type}，" unless transfer_doc.doc_type.nil?
+          base_string << "性状为：#{transfer_doc.traits}，" unless transfer_doc.traits.nil?
+          base_string << "状态为：#{transfer_doc.status}。" unless transfer_doc.status.nil?
+        end.join
       else
         @transfer_docs = '无移交材料'
       end

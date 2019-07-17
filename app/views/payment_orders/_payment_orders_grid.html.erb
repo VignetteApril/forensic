@@ -76,7 +76,7 @@
     a.remit_pay
   end
   g.column name: '汇款日期', custom_filter: false do |a|
-    a.payment_date
+    a.payment_date.strftime('%Y年%m月%d日') if a.payment_date
   end
   g.column name: '汇款人', custom_filter: false do |a|
     a.payment_people

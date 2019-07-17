@@ -15,7 +15,7 @@
     .col-md-1
       = f.input :status, label: false, input_html: { class: 'nested-status-input border-0', readonly: "readonly" }
     .col-md-3
-      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input border-0', readonly: "readonly" }
+      = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input border-0 text-center', readonly: "readonly" }
     .col-md-1
       - if f.object.barcode_image.attached?
         = link_to open_barcode_image_main_cases_path(transfer_doc_id: f.object.id), remote: true

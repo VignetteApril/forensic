@@ -11,8 +11,8 @@ class RefundOrdersController < ApplicationController
   # 财务管理人员看到的缴费单列表页面
   def finance_index
     data = RefundOrder.none
-    if !@current_user.departments.nil?
-      main_case_ids = MainCase.where(department_id: @current_user.departments.split(',')).pluck(:id)
+    if !@current_user.organization.nil?
+      main_case_ids = @current_user.organization.main_cases.pluck(:id)
       data = RefundOrder.where(main_case_id: main_case_ids).not_confirm
     end
 
@@ -65,9 +65,8 @@ class RefundOrdersController < ApplicationController
   def submit_current_order
     @refund_order.update(order_stage: :not_confirm)
 
-    department = Department.find_by_id(@refund_order.main_case.department_id)
-    # 拿到当前科室下的所有user
-    users = department.user_array
+    # 通知当前机构下的所有财务人员，退费单已经提交
+    users = @current_user.organization.users
     users.each do |user|
       # 只通知财务人员
       next if !user.center_finance_user?

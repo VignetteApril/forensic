@@ -8,13 +8,13 @@ class PaymentOrdersController < ApplicationController
                                             :cancel_order ]
 
   # 财务管理人员看到的缴费单列表页面
-  # 只能看到当前科室下的所有缴费的提交清单
+  # 能够看到当前机构下的所有缴费的提交清单
   def finance_index
 		data = PaymentOrder.none
-    if !@current_user.departments.nil?
-      main_case_ids = MainCase.where(department_id: @current_user.departments.split(',')).pluck(:id)
+    if !@current_user.organization.nil?
+      main_case_ids = @current_user.organization.main_cases.pluck(:id)
       data = PaymentOrder.where(main_case_id: main_case_ids).not_confirm
-    end
+		end
 
 		@payment_orders = initialize_grid(data,
 																			order: 'created_at',
@@ -95,9 +95,9 @@ class PaymentOrdersController < ApplicationController
   # 当缴费的状态变为已提交时，需要通知当前科室下的所有财务人员
   def submit_current_order
 		@payment_order.update(order_stage: :not_confirm)
-    department = Department.find_by_id(@payment_order.main_case.department_id)
-    # 拿到当前科室下的所有user
-    users = department.user_array
+    # 拿到当前机构下的所有user
+    # 然后通知当前机构下的财务人员，某个缴费单已经提交了
+    users = @current_user.organization.users
     users.each do |user|
       # 只通知财务人员
       next if !user.center_finance_user?
