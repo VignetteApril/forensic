@@ -737,7 +737,9 @@ class MainCasesController < ApplicationController
         this_month_end = this_month_begin
         this_month_begin = this_month_begin - 1.month
         @data['month_mycase_count'] << {"count":department_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
+
       end 
+
     end
 
   end
