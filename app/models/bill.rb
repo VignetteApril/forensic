@@ -11,10 +11,25 @@ class Bill < ApplicationRecord
   BILL_TYPE_MAP = { vat_ordinary: '增值税普通发票', vat_special: '增值税专用发票'  }
 
   before_destroy :update_payment_orders
+  after_create :notify_finance_user
 
   # 当用户删除某一个发票时需要更新所有的缴费单的中bill_id字段为空
   def update_payment_orders
     self.payment_orders.update_all(bill_id: nil)
+  end
+
+  # 通知当前机构下的财务用户去修改发票的信息
+  def notify_finance_user
+    current_department = self.main_case.department
+    current_org = current_department.organization if current_department
+    users = current_org.users if current_org
+    users.each do |user|
+      next if !user.center_finance_user?
+      user.notifications.create( channel: :apply_bill,
+                                 title: "发票单提交申请",
+                                 description: "发票#{self.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}已经创建，请知悉",
+                                 main_case_id: self.main_case.id, url: Rails.application.routes.url_helpers.finance_index_main_case_bills_path(-1))
+    end
   end
 
   class << self

@@ -2,7 +2,7 @@
   g.column name: '发票类型', custom_filter: false do |a|
     Bill::BILL_TYPE_MAP[a.bill_type.to_sym]
   end
-  g.column name: '发票类型', custom_filter: false do |a|
+  g.column name: '发票状态', custom_filter: false do |a|
     Bill::BILL_STAGE_MAP[a.bill_stage.to_sym]
   end
 

@@ -84,15 +84,33 @@ class BillsController < ApplicationController
   def to_billed
     respond_to do |format|
       if @bill.update(bill_stage: :billed)
+        users = User.where(id: @bill.main_case.ident_users.split(','))
+
+        users.each do |user|
+          user.notifications.create( channel: :confirm_payment_order,
+                                     title: "发票状态更改",
+                                     description: "发票#{@bill.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为已开状态",
+                                     main_case_id: @bill.main_case.id, url: payment_order_management_main_case_path(@bill.main_case) )
+        end
+
         format.html { redirect_to finance_index_main_case_bills_path(-1), notice: '发票已经变更为已开状态' }
       end
     end
   end
 
-  # 更细发票状态为已领走
+  # 更新发票状态为已领走
   def to_taked_away
     respond_to do |format|
       if @bill.update(bill_stage: :taked_away)
+        users = User.where(id: @bill.main_case.ident_users.split(','))
+
+        users.each do |user|
+          user.notifications.create( channel: :confirm_payment_order,
+                                     title: "发票状态更改",
+                                     description: "发票#{@bill.id}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为已领走状态",
+                                     main_case_id: @bill.main_case.id, url: payment_order_management_main_case_path(@bill.main_case) )
+        end
+
         format.html { redirect_to finance_index_main_case_bills_path(-1), notice: '发票已经变更为已领走状态' }
       end
     end
