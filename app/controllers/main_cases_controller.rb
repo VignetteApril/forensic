@@ -177,13 +177,13 @@ class MainCasesController < ApplicationController
     when :city
       @current_province = user.organization.area.root
       @current_city = user.organization.area
-      @current_district = []
+      @current_district = Area.new
       @cites = @current_province.children
       @districts = []
     when :province
       @current_province = user.organization.area
-      @current_city = []
-      @current_district = []
+      @current_city = Area.new
+      @current_district = Area.new
       @cites = []
       @districts = []
     end
