@@ -46,8 +46,8 @@ class ApisController < ApplicationController
 	def register 
 		province_id = Area.find(params["city_id"]).parent.id
 		# 分两次提交图片请求，通过params判断是不是一个user
-		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).exists?
-	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
+		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline'],:name=>params['name']).exists?
+	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:name=>params['name'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
 	
 	    org = Organization.where(:name=>params["organization"]).try(:first)
 	    if Organization.where(:name =>params["organization"]).exists?
