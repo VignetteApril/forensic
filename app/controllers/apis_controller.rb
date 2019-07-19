@@ -47,7 +47,7 @@ class ApisController < ApplicationController
 		province_id = Area.find(params["city_id"]).parent.id
 		# 分两次提交图片请求，通过params判断是不是一个user
 		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline'],:name=>params['name']).exists?
-	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:name=>params['name'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
+	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:form_id=>params['form_id'],:open_id=>params['open_id'],:name=>params['name'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
 	
 	    org = Organization.where(:name=>params["organization"]).try(:first)
 	    if Organization.where(:name =>params["organization"]).exists?
@@ -86,8 +86,6 @@ class ApisController < ApplicationController
 			end
 		else
 			user = User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).first
-			user.form_id = params["form_id"]
-			user.open_id = params["open_id"]
 			user.negative.attach params["negative"]
 			json = {"code":"0","msg":"上传背面相片成功,提交注册信息成功","errors":{}}
 			if user.save
