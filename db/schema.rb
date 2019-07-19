@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_14_211357) do
+ActiveRecord::Schema.define(version: 2019_07_19_150943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,7 +162,6 @@ ActiveRecord::Schema.define(version: 2019_07_14_211357) do
     t.string "case_types"
     t.string "abbreviation"
     t.integer "case_start_no"
-    t.string "transfer_columns"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -512,6 +511,8 @@ ActiveRecord::Schema.define(version: 2019_07_14_211357) do
     t.integer "district_id"
     t.string "organization_name"
     t.integer "confirm_stage", default: 2
+    t.string "form_id"
+    t.string "open_id"
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end

@@ -7,6 +7,7 @@ class ApisController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
 	def wx_msg_code_to_session
+		# code2Session
 		app_id = "wx5e9e5d5e051dcd16"
 		secret = "370a22bff4b187b86aed5158489ff671"
 		jscode = params["jscode"]
@@ -19,7 +20,7 @@ class ApisController < ApplicationController
 		end
 	end
 
-	def wx_msg_send(form_id)
+	def wx_msg_send(form_id,tem_id,data)
 		app_id = "wx5e9e5d5e051dcd16"
 		secret = "370a22bff4b187b86aed5158489ff671"
 
@@ -27,10 +28,18 @@ class ApisController < ApplicationController
 		token_res  = Net::HTTP.get_response(token_url)
 		token = JSON.parse(token_res.body)["access_token"].to_s
 
-		msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
-		res = Net::HTTP.post_form(msg_url, 'touser' => params['touser'], 'template_id' => params['template_id'], 'form_id' => form_id)
-    p "发送通知"
- 		p res.body 
+		# msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
+		# data = {
+  #     "keyword1": {
+  #         "value": "创建委托单成功！"
+  #     },
+  #     "keyword2": {
+  #         "value": "#{Time.now.strftime('%Y-%m-%d')}"
+  #     },
+
+		# res = Net::HTTP.post_form(msg_url, 'touser' => params['touser'], 'template_id' => tem_id, 'form_id' => form_id)
+  #   p "发送通知"
+ 	# 	p res.body 
 	end
 
 
@@ -77,6 +86,8 @@ class ApisController < ApplicationController
 			end
 		else
 			user = User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).first
+			user.form_id = params["form_id"]
+			user.open_id = params["open_id"]
 			user.negative.attach params["negative"]
 			json = {"code":"0","msg":"上传背面相片成功,提交注册信息成功","errors":{}}
 			if user.save
@@ -381,7 +392,7 @@ class ApisController < ApplicationController
   	entrust_order.appraised_unit = AppraisedUnit.find_by(:id=>params["appraised_unit_id"])
 
     if entrust_order.save
-    	wx_msg_send(params["form_id"])
+    	# wx_msg_send(params["form_id"])
 	    respond_to do |format|
 				format.json { render json:{"code": "0","messages":"创建委托单成功"}.to_json }
 		  end	
