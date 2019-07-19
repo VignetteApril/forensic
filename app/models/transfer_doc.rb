@@ -17,7 +17,7 @@ class TransferDoc < ApplicationRecord
 
   # 设置条码，并且生成条码图片
   def set_barcode_hex
-    self.barcode = SecureRandom.hex 10
+    self.barcode = Time.now.strftime('%Y%m%d%H%M%S')
     barcode = Barby::Code128B.new(self.barcode)
     blob = Barby::PngOutputter.new(barcode).to_png
     self.barcode_image.attach io: StringIO.new(blob),
