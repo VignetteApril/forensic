@@ -105,7 +105,9 @@ class ApisController < ApplicationController
 
 	def get_search_courts
 		name = params["name_str"]
-		json = {"courts": Organization.where('name like ?', "%#{name}%").where(:org_type=>:court).all.select(:name,:id)}
+		json = {}
+		json["code"] = "0"
+		json["data"] = {"courts": Organization.where('name like ?', "%#{name}%").where(:org_type=>:court).all.select(:name,:id)}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 		end		
@@ -113,7 +115,9 @@ class ApisController < ApplicationController
 
 	def get_search_centers
 		name = params["name_str"]
-		json = {"centers": Organization.where('name like ?', "%#{name}%").where(:org_type=>:center).all.select(:name,:id)}
+		json = {}
+		json["code"] = "0"
+		json["data"] = {"centers": Organization.where('name like ?', "%#{name}%").where(:org_type=>:center).all.select(:name,:id)}
 		respond_to do |format|
 			format.json { render json:json.to_json }
 		end				
