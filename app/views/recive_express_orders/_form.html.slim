@@ -1,4 +1,13 @@
-= simple_form_for(@recive_express_order, method: @request_type, url: @path) do |f|        
+= simple_form_for(@recive_express_order, method: @request_type, url: @path) do |f|
+  - if @recive_express_order.errors.any?
+    #error_explanation.alert.alert-warning
+      h4
+        | 收到快递记录出现以下：
+        = pluralize(@recive_express_order.errors.count, "个错误")
+      ul
+        - @recive_express_order.errors.full_messages.each do |message|
+          li
+            = message
   .row
     .col-md-4
       = f.input :sender, label: '发件人'
@@ -20,6 +29,4 @@
       = f.input :main_case_id, label: '关联案件', collection: @recive_express_order.my_cases_collection(@current_user)
     .col-md-7
     .col-md-1 style="display:flex;align-items:center;"
-    	= f.button :submit, '保存', class: 'btn btn-success'
-
-javascript:
+    	= f.button :submit, '保存', class: 'btn btn-success'、

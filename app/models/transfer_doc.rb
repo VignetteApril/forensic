@@ -1,5 +1,5 @@
 require 'barby'
-require 'barby/barcode/code_128'
+require 'barby/barcode/ean_13'
 require 'barby/outputter/png_outputter'
 
 class TransferDoc < ApplicationRecord
@@ -17,8 +17,8 @@ class TransferDoc < ApplicationRecord
 
   # 设置条码，并且生成条码图片
   def set_barcode_hex
-    self.barcode = SecureRandom.hex 10
-    barcode = Barby::Code128B.new(self.barcode)
+    self.barcode = Time.now.strftime('%Y%m%d%H%M')
+    barcode = Barby::EAN13.new(self.barcode)
     blob = Barby::PngOutputter.new(barcode).to_png
     self.barcode_image.attach io: StringIO.new(blob),
                             filename: self.barcode + '.png',

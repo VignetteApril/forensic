@@ -1,7 +1,6 @@
 require 'barby'
-require 'barby/barcode/code_128'
+require 'barby/barcode/ean_13'
 require 'barby/outputter/png_outputter'
-
 
 class MainCase < ApplicationRecord
   include AASM
@@ -165,9 +164,8 @@ class MainCase < ApplicationRecord
 
   # 设置案件的顺序号
   def set_serial_no
-    self.serial_no = Time.now.strftime('%Y%m%d%H%M%S')
-
-    barcode = Barby::Code128B.new(self.serial_no)
+    self.serial_no = Time.now.strftime('%Y%m%d%H%M')
+    barcode = Barby::EAN13.new(self.serial_no)
     blob = Barby::PngOutputter.new(barcode).to_png
     self.barcode_image.attach io: StringIO.new(blob),
                               filename: self.serial_no + '.png',

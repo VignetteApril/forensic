@@ -1,4 +1,13 @@
-= simple_form_for(@express_order, method: @request_type, url: @path) do |f|        
+= simple_form_for(@express_order, method: @request_type, url: @path) do |f|
+  - if @express_order.errors.any?
+    #error_explanation.alert.alert-warning
+      h4
+        | 发送快递记录出现以下：
+        = pluralize(@express_order.errors.count, "个错误")
+      ul
+        - @express_order.errors.full_messages.each do |message|
+          li
+            = message
   .row
     .col-md-4
       = f.input :receiver, label: '收件人'
@@ -21,8 +30,5 @@
     .col-md-4
       = f.input :main_case_id, label: '关联案件', collection: @express_order.my_cases_collection(@current_user)
   .row
-    .col-md-11
-    .col-md-1
-      = f.button :submit, '保存', class: 'btn btn-success'
-
-javascript:
+    .col-md-12
+      = f.button :submit, '保存', class: 'btn btn-success pull-right'
