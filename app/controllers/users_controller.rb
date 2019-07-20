@@ -258,7 +258,7 @@ class UsersController < ApplicationController
     msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
     req_data = {
       "data": data, 
-      "page":"pages/auth/auth",
+      "page":"pages/login/login",
       "touser": user.open_id,
       "template_id": "DmlBLeL8AJsT3tnJcXtQgNhIXTHLq8I3HTagSlurBsU",
       "form_id":user.form_id

@@ -413,7 +413,7 @@ class ApisController < ApplicationController
 		end
 
 		respond_to do |format|
-			format.json { render json:{"code": "1","messages":"查询成功","data": orgs_hash}.to_json }
+			format.json { render json:{"code": "0","messages":"查询成功","data": orgs_hash}.to_json }
 	  end	
 
   end
