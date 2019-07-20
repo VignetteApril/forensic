@@ -121,6 +121,16 @@ class UsersController < ApplicationController
     @user.confirm_stage = :confirm
     respond_to do |format|
       if @user.save
+        data = {
+          keyword1: {
+              "value": "#{@user.login}"
+          },
+          keyword2: {
+              value: "已审核通过"
+          }
+        }
+        send_wx_msg(@user, data)
+
         format.html { redirect_to confirm_users_users_path, notice: '已审核通过该用户' }
       else
         format.html { redirect_to confirm_users_users_path, notice: '未审核通过该用户' }
@@ -133,6 +143,16 @@ class UsersController < ApplicationController
     @user.confirm_stage = :cancel
     respond_to do |format|
       if @user.save
+        data = {
+          "keyword1": {
+              "value": "#{@user.login}"
+          },
+          "keyword2": {
+              "value": "已被驳回"
+          }
+        }
+        send_wx_msg(@user,data) 
+
         format.html { redirect_to confirm_users_users_path, notice: '已驳回用户申请信息' }
       else
         format.html { redirect_to confirm_users_users_path, notice: '未驳回该用户' }
@@ -227,6 +247,27 @@ class UsersController < ApplicationController
   end
 
   private
+  def send_wx_msg(user,data)
+    app_id = "wx5e9e5d5e051dcd16"
+    secret = "370a22bff4b187b86aed5158489ff671"
+
+    token_url  = URI("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{app_id}&secret=#{secret}")
+    token_res  = Net::HTTP.get_response(token_url)
+    token = JSON.parse(token_res.body)["access_token"].to_s
+
+    msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
+    req_data = {
+      "data": data, 
+      "page":"pages/auth/auth",
+      "touser": user.open_id,
+      "template_id": "DmlBLeL8AJsT3tnJcXtQgNhIXTHLq8I3HTagSlurBsU",
+      "form_id":user.form_id
+    }
+    response = Net::HTTP.post msg_url,req_data.to_json,"Content-Type" => "application/json"
+    Rails.logger.info req_data.to_json
+    Rails.logger.info "发送通知"
+    Rails.logger.info response.body
+  end
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])

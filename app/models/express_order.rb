@@ -19,12 +19,34 @@ class ExpressOrder < ApplicationRecord
   }
 
   def my_cases_collection(user)
-		rs = []
-		my_cases = MainCase.where(:wtr_id=>user.id).try(:all)
-		my_cases.each do |c|
-			rs << [c.case_no, c.id]
+  	if user.client_entrust_user?
+			rs = []
+			my_cases = MainCase.where(:wtr_id=>user.id).try(:all)
+			my_cases.each do |c|
+				rs << [c.case_no, c.id]
+			end
+			return rs
+		else 
+			if user.departments.nil？
+       	if (user.center_director_user? || user.center_admin_user? || center_archivist_user? || center_finance_user?)
+       		# 返回机构案件
+       		org_cases = @current_user.organization.main_cases
+		   		org_cases.each do |c|
+						rs << [c.case_no, c.id]
+					end
+					return rs    		
+				else
+					return
+				end
+			else
+				# 返回科室案件
+				department_cases = MainCase.where(:department_id => @current_user.departments.split(','))
+	   		department_cases.each do |c|
+					rs << [c.case_no, c.id]
+				end
+				return rs    
+			end
 		end
-		rs
   end
 
 	class << self

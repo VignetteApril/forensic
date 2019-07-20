@@ -7,6 +7,7 @@ class ApisController < ApplicationController
 	skip_before_action :verify_authenticity_token
 
 	def wx_msg_code_to_session
+		# code2Session
 		app_id = "wx5e9e5d5e051dcd16"
 		secret = "370a22bff4b187b86aed5158489ff671"
 		jscode = params["jscode"]
@@ -19,7 +20,7 @@ class ApisController < ApplicationController
 		end
 	end
 
-	def wx_msg_send
+	def wx_msg_send(form_id,tem_id,data)
 		app_id = "wx5e9e5d5e051dcd16"
 		secret = "370a22bff4b187b86aed5158489ff671"
 
@@ -27,20 +28,26 @@ class ApisController < ApplicationController
 		token_res  = Net::HTTP.get_response(token_url)
 		token = JSON.parse(token_res.body)["access_token"].to_s
 
-		msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
-		res = Net::HTTP.post_form(msg_url, 'touser' => params['touser'], 'template_id' => params['template_id'], 'form_id' => params['form_id'])
+		# msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
+		# data = {
+  #     "keyword1": {
+  #         "value": "创建委托单成功！"
+  #     },
+  #     "keyword2": {
+  #         "value": "#{Time.now.strftime('%Y-%m-%d')}"
+  #     },
 
-		respond_to do |format|
-			format.json { render json:res.body }
-		end	
+		# res = Net::HTTP.post_form(msg_url, 'touser' => params['touser'], 'template_id' => tem_id, 'form_id' => form_id)
+  #   p "发送通知"
+ 	# 	p res.body 
 	end
 
 
 	def register 
 		province_id = Area.find(params["city_id"]).parent.id
 		# 分两次提交图片请求，通过params判断是不是一个user
-		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline']).exists?
-	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
+		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline'],:name=>params['name']).exists?
+	    user = User.new(:confirm_stage=>:not_confirm,:login=>params['login'],:form_id=>params['form_id'],:open_id=>params['open_id'],:name=>params['name'],:password => params['password'], :password_confirmation => params['password'],:mobile_phone=>params['phone'],:landline=>params['landline'])
 	
 	    org = Organization.where(:name=>params["organization"]).try(:first)
 	    if Organization.where(:name =>params["organization"]).exists?
@@ -383,6 +390,7 @@ class ApisController < ApplicationController
   	entrust_order.appraised_unit = AppraisedUnit.find_by(:id=>params["appraised_unit_id"])
 
     if entrust_order.save
+    	# wx_msg_send(params["form_id"])
 	    respond_to do |format|
 				format.json { render json:{"code": "0","messages":"创建委托单成功"}.to_json }
 		  end	
