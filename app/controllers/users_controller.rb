@@ -122,11 +122,11 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         data = {
-          "keyword1": {
+          keyword1: {
               "value": "#{@user.login}"
           },
-          "keyword2": {
-              "value": "已审核通过"
+          keyword2: {
+              value: "已审核通过"
           }
         }
         send_wx_msg(@user, data)
@@ -256,10 +256,17 @@ class UsersController < ApplicationController
     token = JSON.parse(token_res.body)["access_token"].to_s
 
     msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
-
-    res = Net::HTTP.post_form(msg_url,'data'=> data,'touser' =>user.open_id, 'template_id' => 'DmlBLeL8AJsT3tnJcXtQgNhIXTHLq8I3HTagSlurBsU', 'form_id' => user.form_id)
-    p "发送通知"
-    p res.body 
+    req_data = {
+      "data": data, 
+      "page":"pages/auth/auth",
+      "touser": user.open_id,
+      "template_id": "DmlBLeL8AJsT3tnJcXtQgNhIXTHLq8I3HTagSlurBsU",
+      "form_id":user.form_id
+    }
+    response = Net::HTTP.post msg_url,req_data.to_json,"Content-Type" => "application/json"
+    Rails.logger.info req_data.to_json
+    Rails.logger.info "发送通知"
+    Rails.logger.info response.body
   end
   # Use callbacks to share common setup or constraints between actions.
   def set_user
