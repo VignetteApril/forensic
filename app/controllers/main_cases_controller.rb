@@ -512,7 +512,10 @@ class MainCasesController < ApplicationController
   def user_search
     user_name = params[:user_name]
 
-    res = User.includes(:organization).where.not(user_type: :center_user).where('name like ?', "%#{user_name}%")
+    res = User.includes(:organization).where.not(user_type: :center_user).where('name like ?', "%#{user_name}%").map do |user|
+      user.name = "#{ user.name } 所属机构：#{ user.organization.name }"
+      user
+    end
 
     render json: { users: res }
   end

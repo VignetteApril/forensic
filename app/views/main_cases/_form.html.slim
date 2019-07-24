@@ -41,6 +41,7 @@
             = f.input :user_name, label: '委托人'
           .col-md-4
             = f.input :wtr_phone, label: '委托人电话'
+            small class="form-text text-muted" 该字段会作为委托人的唯一登录名，不允许重复
         .row
           .col-md-8
             = f.input :organization_addr, label: '委托方地址'
@@ -170,8 +171,7 @@ javascript:
             option: function (item, escape) {
                 console.log(item);
                 return '<div>' +
-                         '<span>' + escape(item.name) + '</span>' + '&nbsp;' +
-                         '<span>' + '所属法院：' + escape(item.organization_name) + '</span>' +
+                         '<span>' + escape(item.name) + '</span>'
                        '</div>';
             }
         },
