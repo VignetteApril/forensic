@@ -89,8 +89,8 @@
   end
 
   g.column in_csv: false do |payment_order|
-    # 当缴费是未提交状态，且缴费单已经和到账记录关联上了，才可以发起缴费单提交申请
-    if can?('payment_orders', 'submit_current_order') && payment_order.not_submit? && payment_order.incoming_record.present?
+    # 当缴费单是未提交状态
+    if can?('payment_orders', 'submit_current_order') && payment_order.not_submit?
       link_to '提交', submit_current_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-secondary btn-sm'
     end
   end

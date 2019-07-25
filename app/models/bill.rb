@@ -4,7 +4,7 @@ class Bill < ApplicationRecord
 
   # 默认状态为未开
   enum bill_stage: [ :unBilled, :billed, :taked_away ]
-  BILL_STAGE_MAP = { unBilled: '未开', billed: '已开', taked_away: '已领走' }
+  BILL_STAGE_MAP = { unBilled: '未开票', billed: '已开票', taked_away: '已领走' }
 
   # 发票类型
   enum bill_type: [ :vat_ordinary, :vat_special ]

@@ -126,14 +126,17 @@ $(document).on('turbolinks:load', function() {
 
             // 单位和个人的radios button
             $('input[type=radio][name="main_case[appraised_unit_attributes][unit_type]"]').change(function() {
-                console.log('!!!');
                 if (this.value == 'unit') {
                     $('.user-fields').addClass("d-none");
                     $('.company-fields').removeClass("d-none");
+                    $('.user-fields :input').attr('disabled', 'disabled');
+                    $('.company-fields :input').removeAttr('disabled');
                 }
                 else if (this.value == 'user') {
                     $('.user-fields').removeClass("d-none");
                     $('.company-fields').addClass("d-none");
+                    $('.user-fields :input').removeAttr('disabled');
+                    $('.company-fields :input').attr('disabled', 'disabled');
                 }
             });
         } // if

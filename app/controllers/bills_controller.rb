@@ -101,7 +101,7 @@ class BillsController < ApplicationController
   # 更新发票状态为已领走
   def to_taked_away
     respond_to do |format|
-      if @bill.update(bill_stage: :taked_away)
+      if @bill.update(bill_stage: :taked_away, recipient: params[:bill][:recipient], recipient_date: Time.now)
         users = User.where(id: @bill.main_case.ident_users.split(','))
 
         users.each do |user|
@@ -117,6 +117,7 @@ class BillsController < ApplicationController
   end
 
   def dyn_form_modal
+    @come_from = params[:come_from]
     respond_to do |format|
       format.js
     end
