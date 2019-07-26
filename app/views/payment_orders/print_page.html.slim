@@ -1,0 +1,114 @@
+css:
+  body {
+    background-color: #E0E0E0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page {
+    padding: 20px;
+    width: 800px;
+    height: 320px;
+    background-color: white;
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .title-text {
+    font-size: 25px;
+  }
+
+  .number-text {
+    font-size: 10px;
+  }
+
+  .pull-right {
+    float: right;
+  }
+
+  table {
+    font-size: 10px;
+    width: 100%;
+  }
+
+  td {
+    border: solid #000 1px;
+  }
+
+  .print-footer {
+    font-size: 10px;
+  }
+
+body
+  .page
+    .title
+      span.title-text 缴费单
+    .numbers
+      span.number-text = "案件流水号：#{@payment_order.main_case.serial_no}"
+      span.number-text.pull-right = "案件编号：#{@payment_order.main_case.case_no_display}"
+    .table-content
+      table cellspacing="0" cellpadding="5"
+        tr
+          td 缴款人
+          td = @payment_order.payer
+          td 缴款人联系人
+          td = @payment_order.payer_contacts
+          td 缴款联系人电话
+          td = @payment_order.payer_contacts_phone
+        tr
+          td 委托人
+          td = @payment_order.consigner
+          td 委托人联系人
+          td = @payment_order.consiggner_contacts
+          td 委托联系人电话
+          td = @payment_order.consiggner_contacts_phone
+        tr
+          td 鉴定费
+          td = @payment_order.appraisal_cost
+          td 差旅费
+          td = @payment_order.business_cost
+          td 出庭费
+          td = @payment_order.appear_court_cost
+        tr
+          td 调查费
+          td = @payment_order.investigation_cost
+          td 咨询费
+          td = @payment_order.consult_cost
+          td 其他
+          td = @payment_order.other_cost
+        tr
+          td 缴费合计
+          td = @payment_order.total_cost
+          td 大写金额
+          td 预付金额
+          td = @payment_order.payment_in_advance
+          td 大写金额
+        tr
+          td 汇款金额
+          td = @payment_order.remit_pay
+          td 汇款日期
+          td = @payment_order.payment_date.strftime('%Y年%m月%d日')
+          td 汇款人
+          td = @payment_order.payment_people
+        tr
+          td 现金金额
+          td = @payment_order.cash_pay
+          td 刷卡金额
+          td = @payment_order.card_pay
+          td 电子支付金额
+          td = @payment_order.mobile_pay
+        tr
+          td 支票金额
+          td = @payment_order.check_pay
+          td 支票号码
+          td = @payment_order.check_num
+          td 委托受理方式
+          td = @payment_order.payment_accept_type
+    .print-footer
+      .today
+        span = Time.now.strftime('%Y年%m月%d日')
+        = image_tag url_for(@payment_order.main_case.barcode_image), style: 'height: 50px; float: right' if @payment_order.main_case.barcode_image

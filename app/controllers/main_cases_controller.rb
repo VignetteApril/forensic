@@ -75,14 +75,12 @@ class MainCasesController < ApplicationController
 
   # 已付款待立案页面
   # 通过财务状态：【已付款】和案件状态：【待立案】，筛选本中心的所有案件
-  # 本页面属于角色为立案人
+  # 本页面属于角色为财务人员
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
 
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
-
-    render :index
+    @main_cases = initialize_grid(data, per_page: 20, name: 'finance_main_cases_grid')
   end
 
   # 案件状态为【申请归档】的案件列表页面

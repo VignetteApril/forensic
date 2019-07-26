@@ -6,7 +6,8 @@ class PaymentOrdersController < ApplicationController
                                             :submit_current_order,
                                             :confirm_order,
                                             :cancel_order,
-                                            :finance_show ]
+                                            :finance_show,
+                                            :print_page ]
 
   # 财务管理人员看到的缴费单列表页面
   # 能够看到当前机构下的所有缴费的提交清单
@@ -152,6 +153,11 @@ class PaymentOrdersController < ApplicationController
   # 财务人员查看缴费单详情页
   def finance_show
     @main_case = @payment_order.main_case
+  end
+
+  # 财务人员打印缴费单的页面
+  def print_page
+    render :layout => false
   end
 
 	private
