@@ -203,7 +203,10 @@ class UsersController < ApplicationController
 
   #委托人创建
   def create_consignor
+    wtr_role = Role.where(name:'client_entrust_user').first
+
     if !Organization.where(:name=>params["user"]["organization_name"]).exists?
+
       org = Organization.new(:is_confirm=>false, :name=>params["user"]["organization_name"],:org_type=>:court,:province_id=>params['user']['province_id'],:city_id=>params['user']['city_id'],:district_id=>params['user']['district_id'],:area_id=>params['user']['district_id'])
       if org.save
         user = org.users.new(:confirm_stage=>:not_confirm, :name=>params["user"]["name"],:login=>params["user"]["login"],:email=>params["user"]["email"],:mobile_phone=>params["user"]["mobile_phone"],:password=>params["user"]["password"],:password_confirmation=>params["user"]["password_confirmation"])
@@ -213,6 +216,7 @@ class UsersController < ApplicationController
         end
         user.departments = dep.id.to_s
         if user.save
+          wtr_role.user_roles.find_or_create_by user_id: user.id, role_id: wtr_role.id
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
           redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.messages}" }
@@ -220,7 +224,9 @@ class UsersController < ApplicationController
       else
         redirect_to '/users/new_consignor' ,flash: { danger: "创建单位失败，#{org.errors}"}
       end
+
     else
+
       org = Organization.where(:name=>params["user"]["organization_name"]).first
       if org.users.where(:login=>params["user"]["login"]).exists?
         user = org.users.where(:login=>params["user"]["login"]).first
@@ -238,6 +244,7 @@ class UsersController < ApplicationController
         end
         user.departments = dep.id.to_s
         if user.save 
+          wtr_role.user_roles.find_or_create_by user_id: user.id, role_id: wtr_role.id
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
           redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.messages}" }

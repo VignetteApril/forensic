@@ -30,7 +30,7 @@ features:
   - [日志管理,sys_logs,"index,show,search", 'admin_user']
   - [任务管理,delayed_jobs,"index", 'admin_user']
   - [参数配置,sys_configs,"index,show,new,create,edit,update,destroy", 'admin_user']
-  - [个人事务提醒,notifications,"index,show,edit,all_readed", 'all']
+  - [个人事务提醒,notifications,"index,show,edit,all_readed,set_one_readed", 'all']
   - [机构管理, organizations,"index, new, edit, create, destroy, update", 'admin_user']
   - [编辑机构, organizations, 'edit, update', 'center_admin_user, center_director_user']
   - [科室模板管理, department_docs, "index, new, edit, create, destroy", 'center_admin_user, center_director_user']

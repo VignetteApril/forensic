@@ -212,3 +212,8 @@ javascript:
       $('#nested_modal').find('.unit-btn').text("");
       $('#nested_modal').find('.unit-btn').attr("data","")
     })
+
+    if($('body').attr('data-controller') == 'main_cases' && $('body').attr('data-action') == 'new'){
+      console.log('新建案件页面')
+      $('.nested-fields-close').click()
+    }

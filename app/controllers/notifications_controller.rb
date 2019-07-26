@@ -29,6 +29,14 @@ class NotificationsController < ApplicationController
     end
   end
 
+  def set_one_readed
+    notification = Notification.find(params[:id])
+    notification.status = true
+    if notification.save
+      render json: {"msg":"success"}.to_json
+    end
+  end
+
   def all_readed
     errors = []
     @current_user.notifications.where(:status=>false).each do |notification|

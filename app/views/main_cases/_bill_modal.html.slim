@@ -15,7 +15,7 @@
               = f.input :code, label: '税号'
           .row
             .col-md-12
-              = f.input :amount, label: '金额'
+              = f.input :amount, label: '金额', input_html: { class: 'bill-count' }
           #hidden_fields class="#{ f.object.bill_type == 'vat_special' ? '' : 'd-none' }"
             .row
               .col-md-12

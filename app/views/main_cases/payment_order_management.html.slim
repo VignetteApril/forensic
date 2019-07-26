@@ -22,7 +22,7 @@
       = render 'payment_orders/payment_orders_grid'
   .row
     .col-md-12
-      button.pull-right type="button" class="btn btn-primary" data-toggle="modal" data-target="#bill_modal" 开发票
+      button.pull-right type="button" class="btn btn-primary open-bill-modal" data-toggle="modal" data-target="#bill_modal" 开发票
 
 .row.mt-3
   .col-md-12
@@ -56,20 +56,29 @@ javascript:
 
   $(document).on('turbolinks:load', function() {
     //费用管理最早的页面有一个请求动态设置发票模态框（“编辑”功能）
-    $(".open-bill-modal").bind("click",function(e){
-      console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
-      //请求数据设置模态框
-      $.get("/main_cases/request_bill?payment_order="+$(e.target).attr("data-id"),function(data,status){
-        $(".bill-paymentorder-id").val($(e.target).attr("data-id"))
-        $(".bill-type").val(data['type'])
-        $(".bill-org").val(data['organization'])
-        $(".bill-code").val(data['code'])
-        $(".bill-address").val(data['address'])
-        $(".bill-tel").val(data['phone'])
-        $(".bill-bank").val(data['bank'])
-      
-      });
-    });
+    //$(".open-bill-modal").bind("click",function(e){
+    //   console.log("/main_cases/request_bill?payment_order_id="+$(e.target).attr("data-id"))
+    //   //请求数据设置模态框
+    //   $.get("/main_cases/request_bill?payment_order="+$(e.target).attr("data-id"),function(data,status){
+    //     $(".bill-paymentorder-id").val($(e.target).attr("data-id"))
+    //     $(".bill-type").val(data['type'])
+    //    $(".bill-org").val(data['organization'])
+    //    $(".bill-code").val(data['code'])
+    //    $(".bill-address").val(data['address'])
+    //     $(".bill-tel").val(data['phone'])
+    //     $(".bill-bank").val(data['bank']) 
+    //   });
+    // });
+     
+     $(".open-bill-modal").bind("click",function(e){
+        var boxs = $('#payment_orders').find('tbody').find(":checked")
+        var total = 0
+        for(var i =0;i<boxs.length;i++){
+          total += parseFloat($(boxs[i]).closest('tr').find('td:eq(5)').text())
+        }
+        $("#bill_modal").find('.bill-count').val(total)
+     });
+
   });
 
   //鉴定人之外的人看案件信息里的所有可点按钮为disable状态（此方法在四个页面里都有）

@@ -44,6 +44,7 @@ class ApisController < ApplicationController
 
 
 	def register 
+		wtr_role = Role.where(name:'client_entrust_user').first
 		province_id = Area.find(params["city_id"]).parent.id
 		# 分两次提交图片请求，通过params判断是不是一个user
 		if !User.where(:login=>params['login'],:mobile_phone=>params['phone'],:landline=>params['landline'],:name=>params['name']).exists?
@@ -89,6 +90,7 @@ class ApisController < ApplicationController
 			user.negative.attach params["negative"]
 			json = {"code":"0","msg":"上传背面相片成功,提交注册信息成功","errors":{}}
 			if user.save
+				wtr_role.user_roles.find_or_create_by user_id: user.id, role_id: wtr_role.id
 				respond_to do |format|
 					format.json { render json:json.to_json }
 				end

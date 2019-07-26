@@ -9,7 +9,13 @@ class EntrustOrdersController < ApplicationController
   def index
     @entrust_orders = initialize_grid(@current_user.entrust_orders.includes(:organization),
                                       name: 'entrust_orders',
+                                      enable_export_to_csv: true,
+                                      csv_field_separator: ';',
+                                      csv_file_name: 'entrust_orders_csv',
                                       per_page: 20)
+    export_grid_if_requested('entrust_orders' => 'entrust_orders_grid') do
+      # usual render or redirect code executed if the request is not a CSV export request
+    end
   end
 
   # 鉴定中心查看委托单功能

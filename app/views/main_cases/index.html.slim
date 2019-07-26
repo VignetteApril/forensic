@@ -49,6 +49,9 @@
         span 经办人姓名:
       .col-md-9
         = grid_filter @main_cases, :pass_user_filter
+.row
+  .col-md-4
+    button class="btn btn-primary wg-external-csv-export-button" data-grid-name='main_cases_grid'  导出 CSV        
 .row.no-gutters.mt-2
   .external-buttons.mb-2 style="margin-left: auto"
     button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="main_cases_grid" 搜索
@@ -164,16 +167,6 @@ javascript:
       $('.turn-card-btn').text('列表模式')
       localStorage.s='false' 
 
-    $('.case-item').click(function (e) {
-      var id = $(e.target).attr('data-id')
-      var url = "/main_cases/"+id+"/edit"
-      if (id == undefined){
-        id = $($(e.target).closest('.case-item')).attr('data-id')
-      }
-
-      window.location.href = url;
-    })  
-
     }else{
       $('.cases').css('display','none')
       $('.card-table').find('thead').css('display','')
@@ -183,6 +176,18 @@ javascript:
       $('.turn-card-btn').text('卡片模式')
       localStorage.s='true'     
     }
+
+    $('.case-item').unbind()
+    $('.case-item').click(function (e) {
+      var id = $(e.target).attr('data-id')
+      if (id == undefined){
+        console.log('what')
+        id = $($(e.target).closest('.case-item')).attr('data-id')
+      }
+      var url = "/main_cases/"+id+"/edit"
+      window.location.href = url;
+    })  
+
   });
 
 

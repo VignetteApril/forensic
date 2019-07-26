@@ -28,7 +28,7 @@ header class="app-header"
         .app-notification__content
           - @current_user.notifications.where(:status=>false).each do |notice|
             li
-              a.app-notification__item href="#{notice.url}"
+              a.app-notification__item data-id="#{notice.id}"
                 span.app-notification__icon
                   span.fa-stack.fa-lg
                     i.fa.fa-circle.fa-stack-2x.text-primary
@@ -72,4 +72,22 @@ header class="app-header"
           = link_to(logout_path, class: "dropdown-item") do
             i.dropdown-icon.fa.fa-sign-out
             | 登出
+
+javascript:
+
+  $('.app-notification__item').click(function (e){
+
+    $.ajax({
+      url: "#{set_one_readed_notifications_path}",
+      type: 'POST',
+      data: { id: $(e.target).closest('.app-notification__item').attr('data-id') },
+      error: function () {
+          callback();
+      },
+      success: function (res) {
+        location.reload() 
+      }
+  });
+
+  })            
 

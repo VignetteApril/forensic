@@ -39,7 +39,15 @@ class MainCasesController < ApplicationController
       data = MainCase.where(id: case_ids)
     end
 
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data, 
+                        enable_export_to_csv: true,
+                        csv_field_separator: ';',
+                        csv_file_name: 'main_cases_csv',
+                        per_page: 20, 
+                        name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid') do
+      # usual render or redirect code executed if the request is not a CSV export request
+    end
 
   end
 

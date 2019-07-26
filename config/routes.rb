@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :favorites
   resources :notifications do
     get :all_readed, :on => :collection
+    post :set_one_readed, :on => :collection
   end
   resources :sys_configs
   resources :sys_logs do
