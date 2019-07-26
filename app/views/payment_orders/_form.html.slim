@@ -12,18 +12,17 @@
 
   hr
   .row
-    .col-md-4
+    .col-md-2
       = f.input :payer, label: '交款人'
-    .col-md-4
+    .col-md-2
       = f.input :payer_contacts, label: '交款联系人'
-    .col-md-4
+    .col-md-2
       = f.input :payer_contacts_phone, label: '交款联系人电话'
-  .row
-    .col-md-4
+    .col-md-2
       = f.input :consigner, label: '委托人'
-    .col-md-4
+    .col-md-2
       = f.input :consiggner_contacts, label: '委托人联系人'
-    .col-md-4
+    .col-md-2
       = f.input :consiggner_contacts_phone, label: '委托人联系人电话'
   .row
     .col-md-2
@@ -39,48 +38,37 @@
     .col-md-2
       = f.input :other_cost, label: '其他'
   .row
-    .col-md-4
+    .col-md-2
       = f.input :total_cost, label: '缴费合计', input_html: { class: 'payment-total-cost-input' }
-    .col-md-4
+    .col-md-2
       = f.input :payment_in_advance, label: '预付金额',input_html: { class: 'payment-advance-input'}
   .row
-    .col-md-4
+    .col-md-2
       span 大写金额:
       span class='payment-total-cost'
-    .col-md-4
+    .col-md-2
       span 大写金额:
       span class='payment-advance'
   hr
   .row
-    .col-md-4
+    .col-md-2
             = f.input :remit_pay, label: '汇款金额'
-    .col-md-4
+    .col-md-2
       = f.input :payment_date, label: '汇款日期', as: :date, html5: true
-    .col-md-4
+    .col-md-2
       = f.input :payment_people, label: '汇款人'
-  .row
-    .col-md-4
+    .col-md-2
             = f.input :cash_pay, label: '现金金额'
-    .col-md-4
-    .col-md-4
-  .row
-    .col-md-4
+    .col-md-2
             = f.input :card_pay, label: '刷卡金额'
-    .col-md-4
-    .col-md-4
+    .col-md-2
+            = f.input :mobile_pay, label: '电子支付金额'            
   .row
-    .col-md-4
+    .col-md-2
             = f.input :check_pay, label: '支票金额'
-    .col-md-4
+    .col-md-2
         = f.input :check_num, label: '支票号码'
-    .col-md-4
-  .row
-    .col-md-4
-            = f.input :mobile_pay, label: '电子支付金额'
-    .col-md-4
-    .col-md-4    
-  .row
-    .col-md-4
+    .col-md-2
       = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection  
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
