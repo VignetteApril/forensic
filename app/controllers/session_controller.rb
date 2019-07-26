@@ -44,8 +44,8 @@ class SessionController < ApplicationController
       # 委托人             => 我的案件（委托人）
       # 鉴定中心立案人员    => 委托单（认领操作）
       # 鉴定中心管理员      => 科室管理
-      # 鉴定中心主任        => 统计页面 由于暂无统计页面，暂且跳转到本中心的所有案件
-      # 鉴定中心科室主任    => 统计页面 由于暂无统计页面，暂且跳转到本科室的所有案件
+      # 鉴定中心主任        => 统计页面
+      # 鉴定中心科室主任    => 统计页面
       # 鉴定人            => 我的案件（鉴定人）
       # 鉴定中心助理       => 我的案件（和鉴定人一样）
       # 鉴定中心档案管理员  => 待归档的案件列表
@@ -60,9 +60,9 @@ class SessionController < ApplicationController
       elsif user.center_filing_user?
         redirect_to org_orders_entrust_orders_url
       elsif user.center_director_user?
-        redirect_to center_cases_main_cases_url
+        redirect_to personal_count_main_cases_url
       elsif user.center_department_director_user?
-        redirect_to department_cases_main_cases_url
+        redirect_to personal_count_main_cases_url
       elsif user.center_ident_user?
         redirect_to main_cases_url
       elsif user.center_assistant_user?

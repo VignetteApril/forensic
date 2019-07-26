@@ -102,12 +102,15 @@ Rails.application.routes.draw do
       get :submit_current_order, on: :member
       get :finance_index, on: :collection
       get :confirm_order, on: :member
+      get :finance_show, on: :member
       patch :cancel_order, on: :member
     end
 
     # 发票
     resources :bills do
       get :finance_index, on: :collection
+      get :finance_unBilled_index, on: :collection
+      post :finance_create, on: :collection
       post :dyn_form_modal, on: :member
       patch :to_billed, on: :member
       patch :to_taked_away, on: :member

@@ -1,0 +1,8 @@
+#dyn_bill_modal_box
+.row.mb-2.no-gutters
+  .col-md-12
+    .btn-group.btn-group-sm role="group" aria-label="..."
+      button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='bills_grid' 过滤
+      button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='bills_grid' 清除过滤条件
+.row.no-gutters
+  = render partial: 'bills_grid'

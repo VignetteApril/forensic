@@ -146,10 +146,6 @@ aside.app-sidebar
                 i.app-menu__icon
                 span.app-menu__label 到账记录管理
             li
-              a.treeview-item href="#{finance_index_main_case_bills_path(-1)}" class="#{active_class_with_action(controller, 'bills', 'finance_index')}"
-                i.app-menu__icon
-                span.app-menu__label 发票管理
-            li
               a.treeview-item href="#{finance_index_main_case_payment_orders_path(-1)}" class="#{active_class_with_action(controller, 'payment_orders', 'finance_index')}"
                 i.app-menu__icon
                 span.app-menu__label 缴费单管理
@@ -157,6 +153,18 @@ aside.app-sidebar
               a.treeview-item href="#{finance_index_main_case_refund_orders_path(-1)}" class="#{active_class_with_action(controller, 'refund_orders', 'finance_index')}"
                 i.app-menu__icon
                 span.app-menu__label 退费单管理
+          a.app-menu__item.text-white
+            i class="app-menu__icon fa fa-laptop"
+            span class="app-menu__label" 财务管理
+          ul.treeview-menu
+            li
+              a.treeview-item href="#{finance_unBilled_index_main_case_bills_path(-1)}" class="#{active_class_with_action(controller, 'bills', 'finance_unBilled_index')}"
+                i.app-menu__icon
+                span.app-menu__label 待开发票
+            li
+              a.treeview-item href="#{finance_index_main_case_bills_path(-1)}" class="#{active_class_with_action(controller, 'bills', 'finance_index')}"
+                i.app-menu__icon
+                span.app-menu__label 全部发票
 
         - if can?('main_cases', 'personal_count')
           li

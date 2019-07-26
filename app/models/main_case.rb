@@ -274,6 +274,11 @@ class MainCase < ApplicationRecord
     # self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
   end
 
+  # 暂时的ident_user?方法，因为ident_user控制着全局的js暂且用这个
+  def temp_ident_user?(user)
+    self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
+  end
+
   # 判断当前user是否是案件的委托人
   def wtr?(user)
     self.wtr_id == user.id

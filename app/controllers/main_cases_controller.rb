@@ -128,8 +128,9 @@ class MainCasesController < ApplicationController
                                   main_case_params[:city_id],
                                   main_case_params[:district_id])
     respond_to do |format|
+      # 案件创建后跳转到待立案的案件
       if @main_case.save
-        format.html { redirect_to main_cases_url, notice: '案件已经成功创建了！' }
+        format.html { redirect_to pending_cases_main_cases_path, notice: '案件已经成功创建了！' }
         format.json { render :show, status: :created, location: @main_case }
       else
         format.html { render :new }
@@ -637,7 +638,7 @@ class MainCasesController < ApplicationController
   # 委托人可以看到可见范围是 案件 和 本案件和领导的便签
   # 鉴定中心的科室主任的可见范围是 本案件和领导
   def case_memos
-    @case_memos = if @main_case.ident_user?(@current_user)
+    @case_memos = if @main_case.temp_ident_user?(@current_user)
       @main_case.case_memos.where.not(visibility_range: :only_me)
     elsif @main_case.wtr?(@current_user)
       @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
@@ -651,7 +652,10 @@ class MainCasesController < ApplicationController
   end
 
   # 在案件下新建一个便签
+  # 如果用户不是：鉴定人 or 委托人 or 该案件的科室主任，则系统不允许该用户创建便签
   def create_case_memo
+    redirect_to case_memos_main_case_url(@main_case), alert: '您的没有在该案件创建便签的权限！' and return if not (@main_case.temp_ident_user?(@current_user) || @main_case.wtr?(@current_user) || @current_user.center_department_director_user?)
+
     @case_memo = @main_case.case_memos.new(case_memo_params)
     @case_memo.user = @current_user
 

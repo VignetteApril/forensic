@@ -16,7 +16,6 @@ class PaymentOrder < ApplicationRecord
       cancel: '作废',
   }
 
-
 	enum payment_accept_type: [:roll, :to_send, :check]
   PAYMENT_ACCEPT_MAP = {
       roll:'摇号',

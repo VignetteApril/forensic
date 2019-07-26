@@ -1,0 +1,16 @@
+.modal.fade id="finance_bill_modal" tabindex="-1" role="dialog" aria-labelledby="finace_bill_modal" aria-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header 发票信息
+      .modal-body
+        .form-inputs
+          .row
+            .col-md-12
+              = f.input :recipient, label: '领票人'
+          .row
+            .col-md-12
+              = f.input :bill_type, label: '发票类型', collection: Bill.bill_type_collection
+        .modal-footer
+          button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+          .form-actions
+            = f.button :submit, '更新发票信息', class: 'btn btn-success'

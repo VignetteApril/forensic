@@ -10,13 +10,24 @@ class BillsController < ApplicationController
     @bills = Bill.all
   end
 
+  # 全部发票页面
   def finance_index
     data = @current_user.organization.bills
     @bills = initialize_grid(data,
                              order: 'created_at',
                              order_direction: 'desc',
                              per_page: 10,
-                             name: 'bills')
+                             name: 'bills_grid')
+  end
+
+  # 待开发票页面
+  def finance_unBilled_index
+    data = @current_user.organization.bills.unBilled
+    @bills = initialize_grid(data,
+                             order: 'created_at',
+                             order_direction: 'desc',
+                             per_page: 10,
+                             name: 'bills_grid')
   end
 
   # GET /bills/1
@@ -120,6 +131,33 @@ class BillsController < ApplicationController
     @come_from = params[:come_from]
     respond_to do |format|
       format.js
+    end
+  end
+
+  def finance_create
+    if params[:payment_orders].nil? || params[:payment_orders][:selected].empty?
+      redirect_to finance_index_main_case_payment_orders_url(-1), notice: '请勾选缴费单！' and return
+    end
+
+    @main_case = PaymentOrder.find_by_id(params[:payment_orders][:selected].first).main_case
+
+    @bill = @main_case.bills.new({ recipient: params[:bill][:recipient],
+                                   bill_type:  params[:bill][:bill_type],
+                                   recipient_date: Time.now,
+                                   bill_stage: :taked_away })
+    payment_order_ids = params[:payment_orders][:selected]
+
+    respond_to do |format|
+      if @bill.save
+        payment_orders = PaymentOrder.where(id: payment_order_ids)
+        payment_orders.update_all(bill_id: @bill.id, order_stage: :confirm)
+
+        format.html { redirect_to finance_index_main_case_payment_orders_url(@main_case), notice: '发票已经创建成功了！' }
+        format.json { render :show, status: :created, location: @bill }
+      else
+        format.html { render :new }
+        format.json { render json: @bill.errors, status: :unprocessable_entity }
+      end
     end
   end
 

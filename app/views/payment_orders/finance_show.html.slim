@@ -1,0 +1,67 @@
+.row
+  .col-md-2
+    span = "案由：#{@main_case.anyou}"
+  .col-md-2
+    span = "鉴定类型：#{@main_case.case_type}"
+  .col-md-2
+    span = "案件编号：#{@main_case.case_no}"
+  .col-md-2
+    span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
+hr
+.row
+  .col-md-4
+    span = "交款人：#{@payment_order.payer}"
+  .col-md-4
+    span = "交款联系人：#{@payment_order.payer_contacts}"
+  .col-md-4
+    span = "交款联系人电话：#{@payment_order.payer_contacts_phone}"
+.row
+  .col-md-4
+    span = "委托人：#{@payment_order.consigner}"
+  .col-md-4
+    span = "委托人联系人：#{@payment_order.consiggner_contacts}"
+  .col-md-4
+    span = "委托人联系人电话：#{@payment_order.consiggner_contacts_phone}"
+.row
+  .col-md-2
+    span = "鉴定费：#{@payment_order.appraisal_cost}"
+  .col-md-2
+    span = "差旅费：#{@payment_order.business_cost}"
+  .col-md-2
+    span = "出庭费：#{@payment_order.appear_court_cost}"
+  .col-md-2
+    span = "调查费：#{@payment_order.investigation_cost}"
+  .col-md-2
+    span = "咨询费：#{@payment_order.consult_cost}"
+  .col-md-2
+    span = "其他：#{@payment_order.other_cost}"
+.row
+  .col-md-4
+    span = "缴费合计：#{@payment_order.total_cost}"
+  .col-md-4
+    span = "预付金额：#{@payment_order.payment_in_advance}"
+hr
+.row
+  .col-md-4
+    span = "汇款金额：#{@payment_order.remit_pay}"
+  .col-md-4
+    span = "汇款日期：#{@payment_order.payment_date}"
+  .col-md-4
+    span = "汇款人：#{@payment_order.payment_people}"
+.row
+  .col-md-4
+    span = "现金金额：#{@payment_order.cash_pay}"
+.row
+  .col-md-4
+    span = "刷卡金额：#{@payment_order.card_pay}"
+.row
+  .col-md-4
+    span = "支票金额：#{@payment_order.check_pay}"
+  .col-md-4
+    span = "支票号码：#{@payment_order.check_num}"
+.row
+  .col-md-4
+    span = "电子支付金额：#{@payment_order.mobile_pay}"
+.row
+  .col-md-4
+    span = "委托受理方式：#{@payment_order.payment_accept_type}"
