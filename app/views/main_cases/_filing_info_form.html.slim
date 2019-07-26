@@ -19,9 +19,16 @@
         .row
           .col-md-12
             - @main_case.case_docs.where(case_stage: :add_materials).each do |doc|
-              = image_tag('word.png', style: 'height: 20px; width: 15px')
-              span.ml-2 = doc.name
-              i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+              = image_tag('word.png',height: '40', width: '32')
+              //span.ml-2 = doc.name
+              // i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+              .doc-msg style="display:inline-block;position:relative;top:15px;"
+                span.ml-2 = doc.name
+                br
+                span 　　
+                span.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                span 　　
+                span.edit-doc style='cursor: pointer;' aria-hidden="true" 下载              
 
 = simple_form_for(@main_case, method: :patch, url: update_filing_main_case_path) do |f|
   .form-inputs
@@ -61,9 +68,14 @@
           .col-md-12
             #filed_case_docs
               - @main_case.case_docs.where(case_stage: :filed).each do |doc|
-                = image_tag('word.png', style: 'height: 20px; width: 15px')
-                span.ml-2 = doc.name
-                i.fa.fa-pencil-square-o.ml-2.mr-4.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+                = image_tag('word.png',height: '40', width: '32')
+                .doc-msg style="display:inline-block;position:relative;top:15px;"
+                  span.ml-2 = doc.name
+                  br
+                  span 　　
+                  span.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                  span 　　
+                  span.edit-doc style='cursor: pointer;' aria-hidden="true" 下载
 
 = simple_form_for(@main_case, method: :patch, url: update_reject_main_case_path) do |f|
   .form-inputs
