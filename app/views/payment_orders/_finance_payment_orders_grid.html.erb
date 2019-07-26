@@ -1,5 +1,9 @@
 <%= grid(@payment_orders, hide_submit_button: true, hide_reset_button: true) do |g|
 
+  g.row_attributes do |a|
+    { 'data-href': finance_show_main_case_payment_order_path(a.main_case, a), class: 'clickable-row' }
+  end
+
   g.action_column html_check_box: false, html: {style: "width:80px;"} do |a|
     (a.confirm? && a.bill_id.nil? ) || (@current_user.center_finance_user? && a.not_confirm?)
   end
@@ -16,80 +20,12 @@
     a.payer
   end
 
-  g.column name: '交款联系人', custom_filter: false do |a|
-    a.payer_contacts
-  end
-
-  g.column name: '交款联系人电话', custom_filter: false do |a|
-    a.payer_contacts_phone
-  end
-
   g.column name: '委托人', custom_filter: false do |a|
     a.consigner
   end
 
-  g.column name: '委托人联系人', custom_filter: false do |a|
-    a.consiggner_contacts
-  end
-
-  g.column name: '委托人联系人电话', custom_filter: false do |a|
-    a.consiggner_contacts_phone
-  end
-
-  g.column name: '鉴定费', custom_filter: false do |a|
-    a.appraisal_cost
-  end
-
-  g.column name: '差旅费', custom_filter: false do |a|
-    a.business_cost
-  end
-
-  g.column name: '出庭费', custom_filter: false do |a|
-    a.appear_court_cost
-  end
-
-  g.column name: '调查费', custom_filter: false do |a|
-    a.investigation_cost
-  end
-
-  g.column name: '咨询费', custom_filter: false do |a|
-    a.consult_cost
-  end
-
-  g.column name: '其他', custom_filter: false do |a|
-    a.other_cost
-  end
-
-  g.column name: '缴费合计', custom_filter: false do |a|
-    a.total_cost
-  end
-
-  g.column name: '现金金额', custom_filter: false do |a|
-    a.cash_pay
-  end
-  g.column name: '支票金额', custom_filter: false do |a|
-    a.check_pay
-  end
-  g.column name: '支票号码', custom_filter: false do |a|
-    a.check_num
-  end
-  g.column name: '刷卡金额', custom_filter: false do |a|
-    a.card_pay
-  end
-  g.column name: '汇款金额', custom_filter: false do |a|
-    a.remit_pay
-  end
-  g.column name: '汇款日期', custom_filter: false do |a|
-    a.payment_date.strftime('%Y年%m月%d日') if a.payment_date
-  end
-  g.column name: '汇款人', custom_filter: false do |a|
-    a.payment_people
-  end
-  g.column name: '电子支付金额', custom_filter: false do |a|
-    a.mobile_pay
-  end
-  g.column name: '委托受理方式', custom_filter: false do |a|
-    PaymentOrder::PAYMENT_ACCEPT_MAP[a.try(:payment_accept_type).try(:to_sym)]
+  g.column name: '委托方', custom_filter: false do |a|
+    a.main_case.organization_name
   end
 
   g.column in_csv: false do |payment_order|
@@ -127,3 +63,13 @@
   end
 
 end -%>
+
+<script>
+    $(".clickable-row").click(function (e) {
+        // 通过当前点击元素判断是否点击的是带有id的元素
+        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
+        if (e.target.id == '') {
+            window.location = $(this).data("href");
+        }
+    });
+</script>

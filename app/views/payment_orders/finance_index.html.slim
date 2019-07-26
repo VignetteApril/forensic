@@ -4,4 +4,10 @@
       button class="btn btn-primary btn-sm wg-external-submit-button" data-grid-name='payment_orders_grid' 过滤
       button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='payment_orders_grid' 清除过滤条件
 .row.no-gutters
-  = render partial: 'payment_orders_grid'
+  .col-md-12
+    = simple_form_for(:bill, url: finance_create_main_case_bills_path(-1), method: :post) do |f|
+      = render partial: 'finance_bill_modal', locals: {f: f}
+      = render partial: 'finance_payment_orders_grid'
+.row.no-gutters
+  .col-md-12
+    button.pull-right type="button" class="btn btn-primary" data-toggle="modal" data-target="#finance_bill_modal" 开发票

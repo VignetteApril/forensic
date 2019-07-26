@@ -1,4 +1,9 @@
 // 通过动态的方式渲染modal
-$('#dyn_bill_modal_box').html("<%= escape_javascript(render partial: 'form_modal') %>")
+<% if @come_from == 'ensure_bill' %>
+  $('#dyn_bill_modal_box').html("<%= escape_javascript(render partial: 'ensure_form_modal') %>")
+<% else %>
+  $('#dyn_bill_modal_box').html("<%= escape_javascript(render partial: 'form_modal') %>")
+<% end %>
+
 // 启动对应的modal
 $('#dyn_doc_modal').modal('show');

@@ -27,6 +27,7 @@ class MainCase < ApplicationRecord
   has_one_attached :entrust_doc # 案件下的委托书
 
   validates :matter, presence: { message: '不能为空' }
+  validates :province_id, :city_id, :district_id, presence: true
 
   # 将科室内部的所有文档都拷贝到当前的案件下
   after_create :create_case_docs
@@ -271,6 +272,11 @@ class MainCase < ApplicationRecord
     # TODO: 先打开所有的权限，等权限系统全部完成后再打开
     return true
     # self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
+  end
+
+  # 暂时的ident_user?方法，因为ident_user控制着全局的js暂且用这个
+  def temp_ident_user?(user)
+    self.ident_users.split(',').include?(user.id.to_s) if self.ident_users
   end
 
   # 判断当前user是否是案件的委托人

@@ -41,6 +41,7 @@
             = f.input :user_name, label: '委托人'
           .col-md-4
             = f.input :wtr_phone, label: '委托人电话'
+            small class="form-text text-muted" 该字段会作为委托人的唯一登录名，不允许重复
         .row
           .col-md-8
             = f.input :organization_addr, label: '委托方地址'
@@ -132,9 +133,13 @@
         = f.simple_fields_for :appraised_unit do |appraised_unit|
           .row
             .col-md-12
-              = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
-                      collection: AppraisedUnit.unit_types_arr, :item_wrapper_class => 'form-check form-check-inline'
-          .user-fields class="#{appraised_unit.object.unit_type == 'user' ? '' : 'd-none'}"
+              - if appraised_unit.object.unit_type.nil?
+                = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
+                        collection: AppraisedUnit.unit_types_arr, checked: AppraisedUnit.unit_types_arr.first, :item_wrapper_class => 'form-check form-check-inline'
+              - else
+                = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
+                        collection: AppraisedUnit.unit_types_arr, :item_wrapper_class => 'form-check form-check-inline'
+          .user-fields class="#{appraised_unit.object.unit_type == 'unit' ? 'd-none' : ''}"
             .row
               .col-md-2
                 = appraised_unit.input :name, label: '名称'
@@ -147,14 +152,20 @@
               .col-md-4
                 = appraised_unit.input :id_num, label: '证件号码'
             .row
-              .col-md-12
+              .col-md-6
                 = appraised_unit.input :addr, label: '联系地址'
-          .company-fields class="#{appraised_unit.object.unit_type == 'user' ? 'd-none' : ''}"
+          .company-fields class="#{appraised_unit.object.unit_type == 'unit' ? '' : 'd-none'}"
             .row
-              .col-md-1
-                = appraised_unit.input :name, label: '名称'
-              .col-md-11
-                = appraised_unit.input :addr, label: '联系地址'
+              - if appraised_unit.object.unit_type == 'unit'
+                .col-md-4
+                  = appraised_unit.input :name, label: '名称'
+                .col-md-8
+                  = appraised_unit.input :addr, label: '联系地址'
+              - else
+                .col-md-4
+                  = appraised_unit.input :name, label: '名称', input_html: {disabled: 'disabled'}
+                .col-md-8
+                  = appraised_unit.input :addr, label: '联系地址', input_html: {disabled: 'disabled'}
 
   .form-actions
     = f.button :submit, '提交', class: 'btn btn-success'
@@ -175,8 +186,7 @@ javascript:
             option: function (item, escape) {
                 console.log(item);
                 return '<div>' +
-                         '<span>' + escape(item.name) + '</span>' + '&nbsp;' +
-                         '<span>' + '所属法院：' + escape(item.organization_name) + '</span>' +
+                         '<span>' + escape(item.name) + '</span>'
                        '</div>';
             }
         },

@@ -5,7 +5,8 @@ class PaymentOrdersController < ApplicationController
                                             :destroy,
                                             :submit_current_order,
                                             :confirm_order,
-                                            :cancel_order ]
+                                            :cancel_order,
+                                            :finance_show ]
 
   # 财务管理人员看到的缴费单列表页面
   # 能够看到当前机构下的所有缴费的提交清单
@@ -146,7 +147,12 @@ class PaymentOrdersController < ApplicationController
         format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '当前缴费单已经关联了发票，请删除对应的发票！' }
       end
     end
-	end
+  end
+
+  # 财务人员查看缴费单详情页
+  def finance_show
+    @main_case = @payment_order.main_case
+  end
 
 	private
 	  def payment_order_params

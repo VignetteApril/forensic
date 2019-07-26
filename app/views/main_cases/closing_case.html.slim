@@ -10,8 +10,27 @@
         / button type="button" class="btn btn-primary pull-right ml-2" data-toggle="modal" data-target="#case_doc_modal" 上传文件
         button#close type="button" class="btn btn-primary pull-right ml-2" 结案
         button#return type="button" class="btn btn-primary pull-right " 退回
+    h5 结案阶段文档
+    hr
+    // 显示处于结案阶段的案件
+    .row.no-gutters
+      - @main_case.case_docs.where(case_stage: :archived).each do |case_doc|
+        .col-md-4.mt-2
+          - unless case_doc.attachment.attached?
+            span data-toggle="tooltip" data-placement="right" title="未关联文件" = case_doc.name
+            = link_to display_dynamic_file_modal_main_case_path(@main_case, case_doc_id: case_doc.id), remote: true, method: 'POST' do
+              span#upload_file.fa.fa-upload.ml-2
+          - else
+            = image_tag('word.png', style: 'height: 20px; width: 15px', class: 'mr-1')
+            span data-toggle="tooltip" data-placement="right" title="#{case_doc.attachment.blob.filename}" = case_doc.name
+            i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{case_doc.id}"
+
+    br
+    // 显示勾选了结案检查的案件
+    h5 归档检查
+    hr
     .row#closing_case_docs.no-gutters
-      - @main_case.case_docs.where(case_stage: :archived).order(:check_archived_no).each do |case_doc|
+      - @main_case.case_docs.where(check_archived: :archived).order(:check_archived_no).each do |case_doc|
         - unless case_doc.attachment.attached?
           .col-md-2
             span data-toggle="tooltip" data-placement="right" title="未关联文件" = case_doc.name
