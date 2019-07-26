@@ -1,0 +1,185 @@
+= render 'finance_main_cases_grid'
+#barcode_modal_container
+
+.row.no-gutters
+  .col-md-4
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 流水号:
+      .col-md-9
+        = grid_filter @main_cases, :serial_no_filter
+    .row.no-gutters
+      .col-md-2
+        span 案件号:
+      .col-md-9
+        = grid_filter @main_cases, :case_no_display_filter
+  .col-md-4
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 委托联系人:
+      .col-md-9
+        = grid_filter @main_cases, :user_name_filter
+    .row.no-gutters
+      .col-md-2
+        span 被鉴定人:
+      .col-md-9
+        = grid_filter @main_cases, :appraised_unit_name_filter
+  .col-md-4
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 案件状态:
+      .col-md-9
+        = grid_filter @main_cases, :case_stage_filter
+    .row.no-gutters
+      .col-md-2
+        span 所属科室:
+      .col-md-9
+        = grid_filter @main_cases, :department_name_filter
+
+.row.no-gutters
+  .col-md-4
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 付款状态:
+      .col-md-9
+        = grid_filter @main_cases, :financial_stage_filter
+.row.no-gutters.mt-2
+  .external-buttons.mb-2 style="margin-left: auto"
+    button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="finance_main_cases_grid" 搜索
+    button.btn.btn-outline-secondary.wg-external-reset-button data-grid-name="finance_main_cases_grid" 重置
+    - if can?('main_cases', 'new')
+      = link_to '新建案件', new_main_case_path, class: 'btn btn-primary ml-2'
+
+    button.btn.btn-outline-secondary.wg-external-reset-button.turn-card-btn style='margin-left:4px' data-status="false" 卡片模式
+
+.row.no-gutters.cases
+  -@main_cases.current_page_records.each do |e|
+    .case-item data-id="#{e.id}"
+      .status style="background-color:#{e.stage_color};"
+        span =MainCase::CASE_STAGE_MAP[e.case_stage.to_sym]
+      br
+      p style='color:#256188;border-bottom:1px solid #CCCCCC;' =e.serial_no
+
+      .case-info
+        span 案件号：
+        span =e.case_no
+        br
+        span 委托方：
+        span =e.organization_name
+        br
+        span 被鉴定人：
+        span =e.appraised_unit.try(:name)
+        br
+        span 登记日期：
+        span =e.created_at.strftime('%Y-%m-%d')
+        br
+        br
+      .case-bottom style='color:#256188;border-top:1px solid #CCCCCC;width:119%;position:relative;right:9.5%'
+        span style="color:red;padding-left:18px" ="#{get_distance_of_time(e)}"
+
+.row.no-gutters
+  == render_grid(@main_cases)
+
+css:
+  .cases{
+    display:none;
+    width:100%;
+  / display:flex;
+    flex-wrap: wrap;
+  }
+  .case-item{
+    padding:1.2%;
+    margin: 2.0%;
+    background-color: #f1f0ea;
+    width:15%;
+  / border-bottom:1px solid #CCCCCC;
+  }
+  .case-item:hover{
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  }
+  .case-info{
+    margin: 2.0%;
+    padding-left:10px;
+  }
+  .status{
+    text-align:center;
+    float:right;
+    width:60px;
+    height:20px;
+  /background-color:#7143B4;
+    position:relative;top:-11px;right:-11px;
+    border-radius：2px;
+    color:white
+  }
+
+javascript:
+
+    var status = 'false'
+    if(localStorage.s){
+        status = localStorage.s
+    }
+    if (status == 'false'){
+        $('.cases').css('display','flex')
+        $('.card-table').find('thead').css('display','none')
+        $('.card-table').find('tbody').css('display','none')
+
+        $('.turn-card-btn').attr('data-status','true')
+        $('.turn-card-btn').text('列表模式')
+        localStorage.s='false'
+
+        $('.case-item').click(function (e) {
+            var id = $(e.target).attr('data-id')
+            if (id == undefined){
+                id = $($(e.target).closest('.case-item')).attr('data-id')
+            }
+
+            var url = "/main_cases/"+id+"/edit"
+            window.location.href = url;
+        })
+
+    }else{
+        $('.cases').css('display','none')
+        $('.card-table').find('thead').css('display','')
+        $('.card-table').find('tbody').css('display','')
+
+        $('.turn-card-btn').attr('data-status','false')
+        $('.turn-card-btn').text('卡片模式')
+        localStorage.s='true'
+    }
+
+    $('.turn-card-btn').click(function (e) {
+        var status = $('.turn-card-btn').attr('data-status')
+        if (status == 'false'){
+            $('.cases').css('display','flex')
+            $('.card-table').find('thead').css('display','none')
+            $('.card-table').find('tbody').css('display','none')
+
+            $('.turn-card-btn').attr('data-status','true')
+            $('.turn-card-btn').text('列表模式')
+            localStorage.s='false'
+
+            $('.case-item').click(function (e) {
+                var id = $(e.target).attr('data-id')
+                var url = "/main_cases/"+id+"/edit"
+                if (id == undefined){
+                    id = $($(e.target).closest('.case-item')).attr('data-id')
+                }
+
+                window.location.href = url;
+            })
+
+        }else{
+            $('.cases').css('display','none')
+            $('.card-table').find('thead').css('display','')
+            $('.card-table').find('tbody').css('display','')
+
+            $('.turn-card-btn').attr('data-status','false')
+            $('.turn-card-btn').text('卡片模式')
+            localStorage.s='true'
+        }
+    });
+
+
+
+
+

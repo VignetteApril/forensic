@@ -147,6 +147,11 @@ class MainCase < ApplicationRecord
     state :not_fully_paid, :paid, :refunded
     after_all_transitions :notify_user_financial_stage_changed
 
+    # 转换到 未支付状态
+    event :turn_unpaid do
+      transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :unpaid
+    end
+
     # 转换到 未完全支付状态
     event :turn_not_fully_paid do
       transitions from: MainCase.financial_stages.keys.map(&:to_sym), to: :not_fully_paid

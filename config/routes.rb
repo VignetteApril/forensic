@@ -104,6 +104,7 @@ Rails.application.routes.draw do
       get :finance_index, on: :collection
       get :confirm_order, on: :member
       get :finance_show, on: :member
+      get :print_page, on: :member
       patch :cancel_order, on: :member
     end
 

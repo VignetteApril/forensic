@@ -1,0 +1,52 @@
+<%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true) do |g|
+  g.row_attributes do |main_case|
+     { 'data-href': edit_main_case_path(main_case), class: 'clickable-row' }
+  end
+
+  g.column name: '流水号', attribute: 'serial_no', detach_with_id: :serial_no_filter, ordering: false do |main_case|
+    main_case.serial_no
+  end
+
+  g.column name: '案号', attribute: 'case_no_display', detach_with_id: :case_no_display_filter, ordering: false do |main_case|
+    main_case.case_no_display
+  end
+
+  g.column name: '委托方', attribute: 'organization_name', detach_with_id: :organization_name_filter, ordering: false do |main_case|
+    main_case.organization_name
+  end
+
+  g.column name: '联系人', attribute: 'user_name', detach_with_id: :user_name_filter, ordering: false do |main_case|
+    main_case.user_name
+  end
+
+  g.column name: '被鉴定人', attribute: 'name', assoc: :appraised_unit, detach_with_id: :appraised_unit_name_filter, ordering: false do |main_case|
+    main_case.appraised_unit.try(:name)
+  end
+
+  g.column name: '科室', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
+  custom_filter: department_collection, allow_multiple_selection: false, ordering: false do |main_case|
+    main_case.department.name
+  end
+
+  g.column name: '状态', attribute: 'case_stage', detach_with_id: :case_stage_filter, custom_filter: case_stages_collection,
+  allow_multiple_selection: false, ordering: false do |main_case|
+    MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
+  end
+
+  g.column name: '财务状态', attribute: 'financial_stage', detach_with_id: :financial_stage_filter, custom_filter: financial_stage_collection,
+   allow_multiple_selection: false, ordering: false do |main_case|
+    MainCase::FINANCIAL_STAGE_MAP[main_case.financial_stage.to_sym]
+  end
+
+  g.column name: '未缴费', detach_with_id: :unpaid_filter, ordering: false do |main_case|
+    main_case.payment_orders.where.not(order_stage: :confirm).sum(:total_cost)
+  end
+
+  g.column name: '已缴费', detach_with_id: :paid_filter, ordering: false do |main_case|
+    main_case.payment_orders.confirm.sum(:total_cost)
+  end
+
+  g.column name: '金额', attribute: 'amount', detach_with_id: :amount_filter, ordering: false do |main_case|
+    main_case.amount
+  end
+end -%>
