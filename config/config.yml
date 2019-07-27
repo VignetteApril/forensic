@@ -61,10 +61,10 @@ features:
   - [鉴定中心查看委托单, entrust_orders, 'org_orders, org_orders_unclaimed, show', 'center_director_user, center_filing_user, center_admin_user']
   - [到账记录管理, incoming_records, 'index, new, edit, update, show, create, destroy', 'center_finance_user, center_admin_user, center_director_user']
   - [到账记录认领, incoming_records, 'claim_record_list, claim_record_index, get_payment_order, claim_record', 'center_department_director_user, center_ident_user, center_assistant_user']
-  - [案件缴费单管理, payment_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 'center_department_director_user, center_ident_user, center_assistant_user']
+  - [案件缴费单管理, payment_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 'center_department_director_user, center_ident_user, center_assistant_user, center_admin_user, center_director_user']
   - [案件退费单管理, refund_orders, 'index, new, create, edit, destroy, update, submit_current_order, cancel_order', 'center_department_director_user,
                                                                                                                     center_ident_user,
-                                                                                                                    center_assistant_user']
+                                                                                                                    center_assistant_user, center_admin_user, center_director_user']
   - [财务确认缴费单, payment_orders, 'finance_index, confirm_order, finance_show, print_page', 'center_finance_user, center_admin_user, center_director_user']
   - [财务确认退费单, refund_orders, 'finance_index, confirm_order', 'center_finance_user, center_admin_user, center_director_user']
   - [申请开发票, bills, 'index, create, update, edit, new, destroy, dyn_form_modal', 'center_department_director_user, center_ident_user, center_assistant_user']
