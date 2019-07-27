@@ -19,16 +19,12 @@
         .row
           .col-md-12
             - @main_case.case_docs.where(case_stage: :add_materials).each do |doc|
-              = image_tag('word.png',height: '40', width: '32')
-              //span.ml-2 = doc.name
-              // i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+              = image_tag('word.png', height: '40', width: '32')
               .doc-msg style="display:inline-block;position:relative;top:15px;"
                 span.ml-2 = doc.name
                 br
-                span 　　
-                span.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                span 　　
-                span style='cursor: pointer;' aria-hidden="true" 下载              
+                span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
 
 = simple_form_for(@main_case, method: :patch, url: update_filing_main_case_path) do |f|
   .form-inputs
@@ -72,10 +68,8 @@
                 .doc-msg style="display:inline-block;position:relative;top:15px;"
                   span.ml-2 = doc.name
                   br
-                  span 　　
-                  span.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                  span 　　
-                  span style='cursor: pointer;' aria-hidden="true" 下载
+                  span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                  span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
 
 = simple_form_for(@main_case, method: :patch, url: update_reject_main_case_path) do |f|
   .form-inputs
@@ -91,9 +85,12 @@
         .row
           .col-md-12
             - @main_case.case_docs.where(case_stage: :reject_case).each do |doc|
-              = image_tag('word.png', style: 'height: 20px; width: 15px')
-              span.ml-2 = doc.name
-              i.fa.fa-pencil-square-o.ml-2.edit-doc style='cursor: pointer;' aria-hidden="true" data-doc-id="#{doc.id}"
+              = image_tag('word.png', height: '40', width: '32')
+              .doc-msg style="display:inline-block;position:relative;top:15px;"
+                span.ml-2 = doc.name
+                br
+                span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
 
 javascript:
   // 为了避免selectiz 的自动order机制需要手动的设置鉴定人的值
