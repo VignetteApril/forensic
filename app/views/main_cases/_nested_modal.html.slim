@@ -1,5 +1,6 @@
 .modal.fade id="nested_modal" tabindex="-1" role="dialog" aria-labelledby="case_doc_main_case_label" aria-hidden="true"
-  = simple_form_for(@main_case.transfer_docs.first, method: :get, url:'') do |f|
+  - instance = @main_case.transfer_docs.first.nil? ? :transfer_docs : @main_case.transfer_docs.first
+  = simple_form_for(instance, method: :get, url:'') do |f|
     .modal-dialog role="document"
       .modal-content
         .modal-header 移交材料
