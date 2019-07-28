@@ -63,6 +63,11 @@ aside.app-sidebar
               a.treeview-item href="#{center_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'center_cases')}"
                 i.app-menu__icon
                 span.app-menu__label 本中心案件
+          - if can?('main_cases', 'finance_check_cases')
+            li
+              a.treeview-item href="#{finance_check_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'finance_check_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 财务人员案件查询
           - if can?('main_cases', 'filed_unpaid_cases')
             li
               a.treeview-item href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"

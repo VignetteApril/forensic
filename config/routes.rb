@@ -75,6 +75,7 @@ Rails.application.routes.draw do
     get :center_cases, on: :collection
     get :wtr_cases, on: :collection
     get :filed_unpaid_cases, on: :collection
+    get :finance_check_cases, on: :collection
     get :apply_filing_cases, on: :collection
     get :payment_order_management, on: :member
     get :request_bill, on: :collection

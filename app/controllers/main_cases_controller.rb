@@ -87,8 +87,16 @@ class MainCasesController < ApplicationController
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
 
-    @main_cases = initialize_grid(data, per_page: 20, name: 'finance_main_cases_grid')
+    render :index
+  end
+
+  # 财务人员查看所有案件的
+  def finance_check_cases
+    current_org_cases = @current_user.organization.main_cases
+
+    @main_cases = initialize_grid(current_org_cases, per_page: 20, name: 'finance_main_cases_grid')
   end
 
   # 案件状态为【申请归档】的案件列表页面
