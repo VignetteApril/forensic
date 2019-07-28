@@ -91,7 +91,7 @@ body
           td 汇款金额
           td = @payment_order.remit_pay
           td 汇款日期
-          td = @payment_order.payment_date.strftime('%Y年%m月%d日')
+          td = @payment_order.payment_date.nil? ? '' : @payment_order.payment_date.strftime('%Y年%m月%d日')
           td 汇款人
           td = @payment_order.payment_people
         tr
