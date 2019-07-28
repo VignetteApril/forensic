@@ -13,9 +13,7 @@ class EntrustOrdersController < ApplicationController
                                       csv_field_separator: ';',
                                       csv_file_name: 'entrust_orders_csv',
                                       per_page: 20)
-    export_grid_if_requested('entrust_orders' => 'entrust_orders_grid') do
-      # usual render or redirect code executed if the request is not a CSV export request
-    end
+    export_grid_if_requested
   end
 
   # 鉴定中心查看委托单功能

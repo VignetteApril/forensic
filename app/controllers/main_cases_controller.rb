@@ -5,7 +5,7 @@ class MainCasesController < ApplicationController
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_financial_stage,
                                        :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
-                                       :case_process_records]
+                                       :case_process_records, :show_payment_order]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -39,16 +39,12 @@ class MainCasesController < ApplicationController
       data = MainCase.where(id: case_ids)
     end
 
-    @main_cases = initialize_grid(data, 
-                        enable_export_to_csv: true,
-                        csv_field_separator: ';',
-                        csv_file_name: 'main_cases_csv',
-                        per_page: 20, 
-                        name: 'main_cases_grid')
-    export_grid_if_requested('main_cases_grid' => 'main_cases_grid') do
-      # usual render or redirect code executed if the request is not a CSV export request
-    end
-
+    @main_cases = initialize_grid(data,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  per_page: 20,
+                                  name: 'main_cases')
+    export_grid_if_requested
   end
 
   # 本科室案件页面
@@ -776,11 +772,14 @@ class MainCasesController < ApplicationController
         this_month_end = this_month_begin
         this_month_begin = this_month_begin - 1.month
         @data['month_mycase_count'] << {"count":department_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
-
-      end 
-
+      end
     end
+  end
 
+  # 案件详情页
+  def show_payment_order
+    @payment_order = PaymentOrder.find_by_id(params[:payment_order_id])
+    render 'payment_orders/finance_show'
   end
 
   private
