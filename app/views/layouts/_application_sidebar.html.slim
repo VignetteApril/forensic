@@ -90,24 +90,23 @@ aside.app-sidebar
           ul.treeview-menu
             - if can?('material_cycles', 'index')
               li
-                a href="#{material_cycles_path}" class="#{active_class(controller, 'material_cycles')}"
+                a.treeview-item href="#{material_cycles_path}" class="#{active_class(controller, 'material_cycles')}"
                   i.app-menu__icon
                   span.app-menu__label 补充材料周期管理
 
             - if can?('identification_cycles', 'index')
               li
-                a href="#{identification_cycles_path}" class="#{active_class(controller, 'identification_cycles')}"
+                a.treeview-item href="#{identification_cycles_path}" class="#{active_class(controller, 'identification_cycles')}"
                   i.app-menu__icon
                   span.app-menu__label 鉴定周期管理
-
             - if can?('organizations', 'edit') && @current_user.center_admin_user?
               li
-                a href="#{edit_organization_path(@current_user.organization.id)}" class="#{active_class(controller, 'organizations')}"
+                a.treeview-item href="#{edit_organization_path(@current_user.organization.id)}" class="#{active_class(controller, 'organizations')}"
                   i.app-menu__icon
                   span.app-menu__label 机构信息编辑
             - if can?('departments', 'index') && !@current_user.admin?
               li
-                a href="#{departments_path}" class="#{active_class(controller, 'departments')}"
+                a.treeview-item href="#{departments_path}" class="#{active_class(controller, 'departments')}"
                   i.app-menu__icon.fa
                   span.app-menu__label 科室管理
             - if can?('users', 'index')

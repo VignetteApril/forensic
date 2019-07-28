@@ -6,43 +6,24 @@
         .modal-header 移交材料
         .modal-body.text-center
           .row style='padding-top:20px'
-            .col-md-3 检材名称：
-            .col-md-6
-              / input class="form-control string optional name-input" 
-              = f.input :name, label: false, input_html: { class: 'form-control string optional name-input'}
+            .col-md-4.offset-2
+              = f.input :name, label: '检材名称', input_html: { class: 'form-control string optional name-input'}
+            .col-md-4
+              = f.input :doc_type, label: '类型', input_html: { class: 'form-control string optional doctype-input'}
           .row style='padding-top:20px'    
-            .col-md-3 类型：
-            .col-md-6
-              / input class="form-control string optional doctype-input"
-              = f.input :doc_type, label: false, input_html: { class: 'form-control string optional doctype-input'}
-          .row style='padding-top:20px'    
-            .col-md-3 数量：
-            .col-md-6
-              / input class="form-control string optional num-input" 
-              = f.input :num, label: false, input_html: { class: 'form-control string optional num-input'}
-            .col-md-3 class="num-input-warning" style="color:red"
-          .row style='padding-top:20px'          
-            .col-md-3 单位：
-            .col-md-6
-              /  原生写法的select 失效 页面实际上解析成了另一批组件dom
-              / select class="form-control string optional unit-select" style= "border: 2px solid #ced4da" 
-              /   | xxxxxx
-              /   - TransferDoc.collection_select_arr.each do |e|      
-              /     option class="option-unit" data="#{e[1]}"  #{e[0]}
-              = f.input :unit, label: false, collection: TransferDoc.collection_select_arr,input_html: { class: 'form-control string optional unit-input', readonly: "readonly" }
+            .col-md-4.offset-2
+              = f.input :num, label: '数量', input_html: { class: 'form-control string optional num-input'}
+            .col-md-4
+              = f.input :unit, label: '单位', collection: TransferDoc.collection_select_arr,input_html: { class: 'form-control string optional unit-input', readonly: "readonly" }
     
           .row style='padding-top:20px'          
-            .col-md-3 性状：
-            .col-md-6
-              input class="form-control string optional traits-input"
-          .row style='padding-top:20px'          
-            .col-md-3 状况：
-            .col-md-6
-              input class="form-control string optional status-input"
-          .row style='padding-top:20px'          
-            .col-md-3 收到时间：
-            .col-md-6
-              input class="form-control string optional receivedate-input"  type="date"                                       
+            .col-md-4.offset-2
+              = f.input :traits, label: '性状', input_html: { class: 'form-control string optional traits-input'}
+            .col-md-4
+              = f.input :status, label: '状况', input_html: { class: 'form-control string optional status-input'}
+          .row style='padding-top:20px'
+            .col-md-8.offset-2
+              = f.input :receive_date, label: '收到时间', as: :date, html5: true,input_html: { class: 'form-control string receivedate-input'}
         .modal-footer
           .form-actions
           button type="button" class="btn btn-success" id="nested_submit" 保存
