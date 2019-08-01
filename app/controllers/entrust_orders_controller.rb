@@ -13,7 +13,10 @@ class EntrustOrdersController < ApplicationController
                                       csv_field_separator: ';',
                                       csv_file_name: 'entrust_orders_csv',
                                       per_page: 20)
-    export_grid_if_requested
+
+    export_grid_if_requested do
+      render :index
+    end
   end
 
   # 鉴定中心查看委托单功能

@@ -557,7 +557,8 @@ class MainCasesController < ApplicationController
                              name: user_name,
                              email: "#{wtr_phone}@forensic.com",
                              password: 'Fc123456',
-                             password_confirmation: 'Fc123456')
+                             password_confirmation: 'Fc123456',
+                             mobile_phone: wtr_phone)
         if user.save
           flash.now[:success] = "委托方和委托人创建成功！请用户使用账号：#{wtr_phone}和密码：Fc123456 登录"
           format.js { render 'layouts/display_flash' }
@@ -780,6 +781,11 @@ class MainCasesController < ApplicationController
   def show_payment_order
     @payment_order = PaymentOrder.find_by_id(params[:payment_order_id])
     render 'payment_orders/finance_show'
+  end
+
+  # 导出CSV方法
+  def export_csv
+
   end
 
   private
