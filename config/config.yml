@@ -43,22 +43,28 @@ features:
                            save_payment_order, request_bill, update_bill, update_case_stage,
                            case_executing, display_dynamic_file_modal, pending_cases, closing_case,
                            update_doc_is_passed, case_memos, create_case_memo, case_process_records,
-                           update_financial_stage, personal_count, show_payment_order",
+                           update_financial_stage, personal_count, show_payment_order, print_transfer_doc_barcode",
                            'center_filing_user, center_department_director_user, center_ident_user, center_assistant_user, center_admin_user, center_director_user']
-  - [我的案件, main_cases, "index, open_barcode_image, edit, filing_info, payment_order_management,
+  - [我的案件, main_cases, "index, open_barcode_image, edit, filing_info, payment_order_management, print_transfer_doc_barcode,
                           case_executing, closing_case, case_memos, case_process_records", 'center_ident_user,
                                                                                             center_assistant_user,
                                                                                             center_department_director_user']
-  - [本科室案件, main_cases, "department_cases, open_barcode_image, edit, update, filing_info,
+  - [本科室案件, main_cases, "department_cases, open_barcode_image, edit, update, filing_info, print_transfer_doc_barcode,
                             payment_order_management, case_executing, closing_case, case_memos, case_process_records", 'center_department_director_user, center_filing_user, center_ident_user, center_assistant_user']
-  - [本机构的案件, main_cases, "center_cases, open_barcode_image, edit, filing_info, payment_order_management,
+  - [本机构的案件, main_cases, "center_cases, open_barcode_image, edit, filing_info, payment_order_management, print_transfer_doc_barcode,
                               case_executing, closing_case, case_memos, case_process_records", 'center_admin_user, center_director_user, center_director_user']
-  - [已立案待付款案件, main_cases, "filed_unpaid_cases, open_barcode_image, edit, filing_info,
+  - [已立案待付款案件, main_cases, "filed_unpaid_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
                                  payment_order_management, case_executing, closing_case, case_memos, case_process_records, update_financial_stage", 'center_finance_user']
-  - [财务人员案件查询, main_cases, "finance_check_cases, open_barcode_image, edit, filing_info,
+  - [财务人员案件查询, main_cases, "finance_check_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
                                  payment_order_management, case_executing, closing_case, case_memos, case_process_records, update_financial_stage", 'center_finance_user']
-  - [待结案的案件, main_cases, "apply_filing_cases, open_barcode_image, edit, filing_info,
+  - [待结案的案件, main_cases, "apply_filing_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
                               payment_order_management, case_executing, closing_case, case_memos, case_process_records", 'center_archivist_user']
+  - [本科室已结案案件, main_cases, "department_closed_cases, open_barcode_image, edit, filing_info, payment_order_management, print_transfer_doc_barcode,
+                                 case_executing, closing_case, case_memos, case_process_records", 'center_admin_user, center_director_user,
+                                 center_director_user, center_filing_user, center_department_director_user, center_ident_user, center_assistant_user']
+  - [我的已结案案件, main_cases, "my_closed_cases, open_barcode_image, edit, filing_info, payment_order_management, print_transfer_doc_barcode,
+                               case_executing, closing_case, case_memos, case_process_records", 'center_admin_user, center_director_user,
+                               center_director_user, center_filing_user, center_department_director_user, center_ident_user, center_assistant_user']
   - [鉴定周期管理, identification_cycles, 'index, new, edit, update, show, create, destroy', 'center_admin_user, center_director_user']
   - [补充材料周期管理, material_cycles, 'index, new, edit, update, show, create, destroy', 'center_admin_user, center_director_user']
   - [委托单管理, entrust_orders, 'index, new, edit, update, show, create, destroy', 'client_entrust_user']
@@ -113,3 +119,208 @@ accept_type:
   - 摇号
   - 送达
   - 自选
+
+nationality:
+  - 中国
+  - 中国香港
+  - 中国澳门
+  - 中国台湾
+  - 美国
+  - 安道尔共和国
+  - 阿拉伯联合酋长国
+  - 阿富汗
+  - 安提瓜岛及巴布达岛
+  - 安圭拉岛
+  - 阿尔巴尼亚
+  - 亚美尼亚
+  - 荷兰安的列斯群岛
+  - 安哥拉
+  - 南极洲
+  - 阿根廷
+  - 美国萨摩亚群岛
+  - 奥地利
+  - 澳大利亚
+  - 阿鲁巴岛
+  - 阿塞拜疆
+  - 波斯尼亚
+  - 巴巴多斯岛
+  - 孟加拉国
+  - 比利时
+  - 布基纳法索
+  - 保加利亚
+  - 巴林岛
+  - 布隆迪
+  - 贝宁
+  - 百慕大群岛
+  - 玻利维亚
+  - 巴西
+  - 巴哈马
+  - 不丹
+  - 布维岛
+  - 博茨瓦纳
+  - 伯利兹城
+  - 加拿大
+  - 可可岛
+  - 中非共和国
+  - 刚果
+  - 瑞士
+  - 象牙海岸
+  - 库克岛
+  - 智利
+  - 喀麦隆
+  - 哥伦比亚
+  - 哥斯达黎加
+  - 前捷克斯洛伐克
+  - 古巴
+  - 佛得角
+  - 圣诞节岛
+  - 塞浦路斯
+  - 捷克共和国
+  - 德国
+  - 丹麦
+  - 多米尼加
+  - 多米尼加共和国
+  - 阿尔及利亚
+  - 厄瓜多尔
+  - 爱沙尼亚
+  - 埃及
+  - 西撒哈拉
+  - 西班牙
+  -  埃塞俄比亚
+  - 芬兰
+  - 斐济
+  - 福克兰群岛
+  - 密克罗西尼亚
+  - 法罗群岛
+  - 法国
+  - 加蓬
+  - 英国
+  - 格林纳达
+  - 乔治亚州
+  - 法属圭亚那
+  - 加纳
+  - 直布罗陀
+  - 格林兰
+  - 冈比亚
+  - 几内亚
+  - 瓜德罗普岛
+  - 赤道几内亚
+  - 希腊
+  - 危地马拉
+  - 关岛
+  - 几内亚比绍
+  - 圭亚那
+  - 洪都拉斯
+  - 克罗地亚
+  - 海地
+  - 匈牙利
+  - 印度尼西亚
+  - 爱尔兰
+  - 以色列
+  - 印度
+  - 伊拉克共和国
+  - 伊朗
+  - 冰岛
+  - 意大利
+  - 牙买加
+  - 约旦
+  - 日本
+  - 肯尼亚
+  - 吉尔吉斯坦
+  - 柬埔寨
+  - 基里巴斯
+  - 克摩罗斯
+  - 朝鲜
+  - 韩国
+  - 科威特
+  - 科曼群岛
+  - 哈撒克斯坦
+  - 老挝
+  - 黎巴嫩
+  - 圣卢西亚岛
+  - 列支敦士登
+  - 斯里兰卡
+  - 利比里亚
+  - 莱索托
+  - 立陶宛
+  - 卢森堡公国
+  - 拉脱维亚
+  - 利比亚
+  - 摩洛哥
+  - 摩纳哥
+  - 摩尔达维亚
+  - 马达加斯加岛
+  - 马绍尔群岛
+  - 马其顿王国
+  - 马里
+  - 缅甸
+  - 蒙古
+  - 马提尼克岛
+  - 毛利塔尼亚
+  - 蒙特拉特岛
+  - 马耳他
+  - 毛里求斯
+  - 马尔代夫群岛
+  - 马拉维
+  - 墨西哥
+  - 马来西亚
+  - 莫桑比克
+  - 纳米比亚
+  - 新苏格兰
+  - 尼日尔
+  - 诺福克岛
+  - 尼日利亚
+  - 尼加拉瓜
+  - 荷兰
+  - 挪威
+  - 尼泊尔
+  - 瑙鲁
+  - 中立区
+  - 纽埃岛
+  - 新西兰
+  - 阿曼
+  - 巴拿马
+  - 秘鲁
+  - 玻利尼西亚
+  - 巴布亚新几内亚
+  - 菲律宾
+  - 巴基斯坦
+  - 波兰
+  - 皮特克恩岛
+  - 玻尔多尼加
+  - 葡萄牙
+  - 帕劳群岛
+  - 巴拉圭
+  - 卡塔尔
+  - 罗马尼亚
+  - 俄罗斯联邦
+  - 卢旺达
+  - 沙特阿拉伯
+  - 所罗门群岛
+  - 塞舌尔群岛
+  - 苏丹
+  - 瑞典
+  - 新加坡
+  - 圣特海伦拉
+  - 斯洛文尼亚
+  - 斯洛伐克共和国
+  - 塞拉利昂
+  - 圣马里诺
+  - 塞内加尔
+  - 索马里
+  - 苏里拉马
+  - 萨尔瓦多
+  - 叙利亚共和国
+  - 斯威士兰
+  - 乍得
+  - 多哥
+  - 泰国
+  - 塔吉克斯坦
+  - 托克劳
+  - 土库曼斯坦
+  - 突尼斯
+  - 东蒂汶
+  - 土尔其
+  - 特立尼达和多巴哥
+  - 图瓦卢
+  - 坦桑尼亚

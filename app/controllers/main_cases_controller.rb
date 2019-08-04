@@ -40,11 +40,29 @@ class MainCasesController < ApplicationController
     end
 
     @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   per_page: 20,
                                   name: 'main_cases')
     export_grid_if_requested
+  end
+
+  def my_closed_cases
+    current_org_cases = @current_user.organization.main_cases
+    case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
+    data = MainCase.where(id: case_ids, case_stage: :close)
+
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
+  end
+
+  def department_closed_cases
+    data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :close)
+    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+
+    render :index
   end
 
   # 本科室案件页面
@@ -156,7 +174,11 @@ class MainCasesController < ApplicationController
                                   main_case_params[:district_id])
     respond_to do |format|
       if @main_case.update(main_case_params)
-        format.html { redirect_to main_cases_url, notice: '案件已经成功更新了！' }
+        if main_case_params[:appraisal_opinion].nil?
+          format.html { redirect_to edit_main_case_url(@main_case), notice: '案件已经成功更新了！' }
+        else
+          format.html { redirect_to case_executing_main_case_url(@main_case), notice: '案件已经成功更新了！' }
+        end
         format.json { render :show, status: :ok, location: @main_case }
       else
         format.html { render :edit }
@@ -346,6 +368,7 @@ class MainCasesController < ApplicationController
   def open_barcode_image
     if params[:transfer_doc_id]
       @transfer_doc = TransferDoc.find(params[:transfer_doc_id])
+      @main_case = @transfer_doc.main_case
       @barcode_image = @transfer_doc.barcode_image
     elsif params[:main_case_id]
       @main_case = MainCase.find(params[:main_case_id])
@@ -551,17 +574,26 @@ class MainCasesController < ApplicationController
                                          province_id: params[:province_id],
                                          city_id: params[:city_id],
                                          district_id: params[:district_id])
+
     respond_to do |format|
       if org.present?
-        user = org.users.new(login: wtr_phone,
-                             name: user_name,
-                             email: "#{wtr_phone}@forensic.com",
-                             password: 'Fc123456',
-                             password_confirmation: 'Fc123456',
-                             mobile_phone: wtr_phone)
-        if user.save
-          flash.now[:success] = "委托方和委托人创建成功！请用户使用账号：#{wtr_phone}和密码：Fc123456 登录"
-          format.js { render 'layouts/display_flash' }
+        org_user = org.users.find_by_login(user_name)
+        if org_user.nil?
+          system_user = User.find_by_login(user_name)
+          current_user_login = system_user.nil? ? user_name : (system_user.login + '01')
+          @user = org.users.new(login: current_user_login,
+                                name: user_name,
+                                email: "#{wtr_phone}@forensic.com",
+                                password: '123456',
+                                password_confirmation: '123456',
+                                mobile_phone: wtr_phone)
+          if @user.save
+            flash.now[:success] = "委托方和委托人创建成功！请用户使用账号：#{current_user_login}和密码：123456 登录"
+            format.js
+          else
+            flash.now[:danger] = '系统中已经存在该委托方信息，请使用上面的下拉列表选择之后点击【导入】按钮'
+            format.js { render 'layouts/display_flash' }
+          end
         else
           flash.now[:danger] = '系统中已经存在该委托方信息，请使用上面的下拉列表选择之后点击【导入】按钮'
           format.js { render 'layouts/display_flash' }
@@ -788,13 +820,26 @@ class MainCasesController < ApplicationController
 
   end
 
+  def print_transfer_doc_barcode
+    if params[:transfer_doc_id]
+      @transfer_doc = TransferDoc.find(params[:transfer_doc_id])
+      @main_case = @transfer_doc.main_case
+      @barcode_image = @transfer_doc.barcode_image
+    elsif params[:main_case_id]
+      @main_case = MainCase.find(params[:main_case_id])
+      @barcode_image = @main_case.barcode_image
+    end
+
+    render :layout => false
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
       @main_case = MainCase.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    # Never trust parameters from the scary intercase_executingnet, only allow the white list through.
     def main_case_params
       params.require(:main_case).permit(:serial_no,
                                         :case_no,
@@ -815,12 +860,15 @@ class MainCasesController < ApplicationController
                                         :anyou,
                                         :case_property,
                                         :commission_date,
-                                        :entrust_doc,
+                                        { entrust_docs: [] },
                                         { matter: [] },
                                         :matter_demand,
                                         :base_info,
                                         :entrust_order_id,
                                         :wtr_id,
+                                        :appraisal_opinion,
+                                        :original_appraisal_opinion,
+                                        :is_repeat,
                                         transfer_docs_attributes: [:id,
                                                                    :name,
                                                                    :doc_type,
@@ -840,6 +888,7 @@ class MainCasesController < ApplicationController
                                                                     :birthday,
                                                                     :id_type,
                                                                     :id_num,
+                                                                    :nationality,
                                                                     :_destroy])
     end
 

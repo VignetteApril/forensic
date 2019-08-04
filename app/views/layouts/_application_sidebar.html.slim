@@ -83,6 +83,16 @@ aside.app-sidebar
               a.treeview-item href="#{apply_filing_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'apply_filing_cases')}"
                 i.app-menu__icon
                 span.app-menu__label 待结案的案件
+          - if can?('main_cases', 'my_closed_cases')
+            li
+              a.treeview-item href="#{my_closed_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'my_closed_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 我的已结案的案件
+          - if can?('main_cases', 'department_closed_cases')
+            li
+              a.treeview-item href="#{department_closed_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'department_closed_cases')}"
+                i.app-menu__icon
+                span.app-menu__label 本科室已结案案件
         - if @current_user.center_admin_user? || @current_user.center_director_user?
           a.app-menu__item.text-white
             i class="app-menu__icon fa fa-laptop"
@@ -111,12 +121,12 @@ aside.app-sidebar
                   span.app-menu__label 科室管理
             - if can?('users', 'index')
               li
-                a href="#{users_path}" class="#{active_class_with_action(controller, 'users', 'index')}"
+                a.treeview-item href="#{users_path}" class="#{active_class_with_action(controller, 'users', 'index')}"
                   i.app-menu__icon.fa
                   span.app-menu__label 用户管理
             - if can?('roles', 'index')
               li
-                a href="#{roles_path}" class="#{active_class(controller, 'roles')}"
+                a.treeview-item href="#{roles_path}" class="#{active_class(controller, 'roles')}"
                   i.app-menu__icon.fa
                   span.app-menu__label 用户角色管理
 

@@ -9,9 +9,13 @@
         = image_tag url_for(barcode_image)
         - if transfer_doc
           h5 = transfer_doc.barcode
+          h5 = "#{main_case.serial_no} - #{transfer_doc.serial_no}"
         - elsif main_case
           h5 = main_case.serial_no
 
       .modal-footer
-        .d-inline-block = link_to '下载条码', rails_blob_path(barcode_image, disposition: "attachment"), class: 'btn btn-success'
+        - if transfer_doc
+          = link_to '打印条码', print_transfer_doc_barcode_main_cases_path(transfer_doc_id: transfer_doc.id), class: 'btn btn-success d-inline-block', data: { turbolinks: false }
+        - elsif main_case
+          = link_to '打印条码', print_transfer_doc_barcode_main_cases_path(main_case_id: main_case.id), class: 'btn btn-success d-inline-block', data: { turbolinks: false }
         button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭

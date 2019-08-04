@@ -5,9 +5,9 @@
       button class="btn btn-secondary btn-sm wg-external-reset-button" data-grid-name='entrust_orders_grid' 清除过滤条件
     - if can?('entrust_orders', 'new')
       = link_to '新建委托单', new_entrust_order_path, class: 'btn btn-primary pull-right'
-.row
-  .col-md-4
-    button class="btn btn-primary wg-external-csv-export-button" data-grid-name='entrust_orders'  导出 CSV
+/ .row
+/   .col-md-4
+/     button class="btn btn-primary wg-external-csv-export-button" data-grid-name='entrust_orders'  导出 CSV
 .row.no-gutters
   = render partial: 'entrust_orders_grid'
 .row

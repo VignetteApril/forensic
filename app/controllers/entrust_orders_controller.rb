@@ -115,6 +115,7 @@ class EntrustOrdersController < ApplicationController
                                                                         :birthday,
                                                                         :id_type,
                                                                         :id_num,
+                                                                        :nationality,
                                                                         :_destroy])
     end
 

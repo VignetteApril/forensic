@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_25_142045) do
+ActiveRecord::Schema.define(version: 2019_08_04_131106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 2019_07_25_142045) do
     t.integer "wtr_id"
     t.string "unit_contact"
     t.string "mobile_phone"
+    t.string "nationality"
     t.index ["entrust_order_id"], name: "index_appraised_units_on_entrust_order_id"
     t.index ["main_case_id"], name: "index_appraised_units_on_main_case_id"
   end
@@ -247,6 +248,8 @@ ActiveRecord::Schema.define(version: 2019_07_25_142045) do
     t.bigint "payment_order_id"
     t.bigint "organization_id"
     t.string "check_num"
+    t.string "remarks"
+    t.integer "claim_user_id"
     t.index ["organization_id"], name: "index_incoming_records_on_organization_id"
     t.index ["payment_order_id"], name: "index_incoming_records_on_payment_order_id"
   end
@@ -292,6 +295,10 @@ ActiveRecord::Schema.define(version: 2019_07_25_142045) do
     t.float "amount"
     t.string "wtr_phone"
     t.bigint "entrust_order_id"
+    t.datetime "filed_date"
+    t.string "appraisal_opinion"
+    t.string "original_appraisal_opinion"
+    t.boolean "is_repeat", default: false
     t.index ["department_id"], name: "index_main_cases_on_department_id"
     t.index ["entrust_order_id"], name: "index_main_cases_on_entrust_order_id"
   end

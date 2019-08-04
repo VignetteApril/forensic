@@ -53,47 +53,12 @@
    end
 
    g.column name: '倒计时', attribute: 'commission_date', filter: false, ordering: false do |main_case|
-     case main_case.case_stage.to_sym
-     when :pending
-       content_tag :div, class: "text-success" do
-         '已过' + distance_of_time_in_words(Time.now, main_case.created_at, scope: 'datetime.distance_in_words')
-       end
-     when :add_material
-       if main_case.identification_cycle.nil?
-         '请选择补充材料周期'
-       else
-         date_bool = Time.now <=> (main_case.created_at + main_case.material_cycle.days)
-         date_pre_str = date_bool ? '还剩' : '已过'
-         date_distance = distance_of_time_in_words(Time.now, main_case.created_at + main_case.material_cycle.days, scope: 'datetime.distance_in_words')
-         if date_bool
-           content_tag :div, class: "text-warning" do
-             date_pre_str + date_distance
-           end
-         else
-           content_tag :div, class: "text-muted" do
-             date_pre_str + date_distance
-           end
-         end
-       end
-     when :filed
-       if main_case.identification_cycle.nil?
-         '请选择鉴定周期'
-       else
-         date_bool = Time.now <=> (main_case.acceptance_date + main_case.identification_cycle.days)
-         date_pre_str = date_bool ? '还剩' : '已过'
-         date_distance = distance_of_time_in_words(Time.now, main_case.acceptance_date + main_case.identification_cycle.days, scope: 'datetime.distance_in_words')
-         if date_bool
-           content_tag :div, class: "text-danger" do
-             date_pre_str + date_distance
-           end
-         else
-           content_tag :div, class: "text-muted" do
-             date_pre_str + date_distance
-           end
-         end
-       end
-     when :close
-     end
+     get_distance_of_time(main_case)
+   end
+
+   g.column name: '条码值', attribute: 'barcode', assoc: :transfer_docs, detach_with_id: :barcode_filter do |main_case|
+     transfer_docs = main_case.transfer_docs
+     transfer_docs.map { |transfer_doc| transfer_doc.barcode }.join(',') if transfer_docs.length > 0
    end
 
    g.column name: '条码' do |main_case|

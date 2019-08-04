@@ -32,7 +32,7 @@
         = f.input :payment_order_id, label: '缴费单', as: :select, collection: @payment_orders
     .row
       .col-md-4.offset-4
-        = link_to '新建缴费单', new_main_case_payment_order_path({main_case_id: @main_case, incoming_record_id: @incoming_record.id}),
+        = link_to '新建缴费单', new_main_case_payment_order_path({main_case_id: @main_case, incoming_record_id: @incoming_record.id, claim_user_id: @current_user.id}),
                 class: 'btn btn-primary w-100',
                 id: 'new_payment_order'
         / = f.button :submit, '新建缴费单', class: 'btn btn-primary w-100'

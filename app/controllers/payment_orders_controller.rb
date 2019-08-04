@@ -51,6 +51,8 @@ class PaymentOrdersController < ApplicationController
 				new_params.merge!({ card_pay: @incoming_record.amount })
 			end
 
+			@claim_user_id = params[:claim_user_id]
+
       @payment_order = @main_case.payment_orders.new(new_params)
     end
 	end
@@ -185,7 +187,8 @@ class PaymentOrdersController < ApplicationController
 	                                           :mobile_pay,
 	                                           :payment_accept_type,
 	                                           :check_num,
-                                             :incoming_record_id)
+                                             :incoming_record_id,
+                                             :claim_user_id)
 
 
 		end

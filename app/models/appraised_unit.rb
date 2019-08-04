@@ -8,7 +8,7 @@ class AppraisedUnit < ApplicationRecord
 
   UNIT_TYPE_MAP = { unit: '单位', user: '个人' }
   GENDER_MAP = { male: '男', female: '女' }
-  ID_TYPE = { user_id: '身份证', other: '其他' }
+  ID_TYPE = { user_id: '身份证', passport: '护照', hong_kong_and_macau_pass: '港澳通行证', other: '其他' }
 
   class << self
     def unit_types_arr

@@ -39,6 +39,8 @@ javascript:
       app.Selection.Find.Execute('@#鉴定事项及要求@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:matter_demand)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:base_info)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#案号@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_no_display)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:base_info)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定意见@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraisal_opinion)}", 2, false, false, false, false);
       // 鉴定人信息替换
       app.Selection.Find.Execute('@#被鉴定人类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_unit_type}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:name)}", 2, false, false, false, false);
