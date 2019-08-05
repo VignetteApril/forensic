@@ -54,5 +54,5 @@ RELEASE_NOTES = YAML.load_file(Rails.root.join("config","release.yml"))["release
 ANYOU = YAML.load_file(Rails.root.join("config","config.yml"))["anyou"]
 CASE_PROPERTY = YAML.load_file(Rails.root.join("config","config.yml"))["case_property"]
 ACCEPT_TYPE = YAML.load_file(Rails.root.join("config","config.yml"))["accept_type"]
-
+NATIONALITY = YAML.load_file(Rails.root.join("config","config.yml"))["nationality"]
 

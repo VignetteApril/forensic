@@ -24,7 +24,7 @@ class MainCase < ApplicationRecord
   has_one :appraised_unit, inverse_of: :main_case, dependent: :destroy # 机构中有一个【被鉴定人】
   accepts_nested_attributes_for :appraised_unit, reject_if: :all_blank, allow_destroy: true
   has_one_attached :barcode_image
-  has_one_attached :entrust_doc # 案件下的委托书
+  has_many_attached :entrust_docs # 案件下的委托书
 
   validates :matter, presence: { message: '不能为空' }
   validates :province_id, :city_id, :district_id, presence: true
@@ -107,7 +107,7 @@ class MainCase < ApplicationRecord
     after_all_transitions :record_case_process, :notify_user_case_stage_changed
 
     # 转换到 立案状态
-    event :turn_filed do
+    event :turn_filed, after: :update_filed_date do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :filed
     end
 
@@ -245,6 +245,11 @@ class MainCase < ApplicationRecord
                                  description: "案件#{self.serial_no}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{CASE_STAGE_MAP[self.case_stage.to_sym]}状态",
                                  main_case_id: self.id, url: Rails.application.routes.url_helpers.edit_main_case_url(self, only_path: true))
     end
+  end
+
+  # 当案件改变为立案阶段时更新立案日期
+  def update_filed_date
+    self.update(filed_date: Time.now)
   end
 
   # 从科室的模板中拷贝文档

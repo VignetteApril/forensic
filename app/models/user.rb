@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :name,  :length => {:maximum => 20}
   validates :email, :length => {:maximum => 100}, :format => { :with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_nil: true, allow_blank: true
   validates :gender, :length => {:maximum => 10}
-  validates :mobile_phone, :length => {:maximum => 100}, :uniqueness => true # 用户的手机号字段是唯一的，因为将来会跟小程序联动 #TODO(委托人注册)
+  validates :mobile_phone, :length => {:maximum => 100}
   validates :password, :confirmation => true
   validates :password, :presence => true, on: :create
   validates :password, :length => {:minimum => 6, :maximum => 20}, allow_nil: true # 密码的位数 6 <= password <= 20

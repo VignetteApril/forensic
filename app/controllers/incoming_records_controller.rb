@@ -101,8 +101,8 @@ class IncomingRecordsController < ApplicationController
     respond_to do |format|
       if order_id.present?
         if PaymentOrder.find(order_id).incoming_record.present?
-          format.html { redirect_to claim_record_index_incoming_record_url(@incoming_record), notice: '该缴费单已经认领过到账记录了！' }
-        elsif @incoming_record.update(claim_record_params.merge({ status: :claimed }))
+          format.html { redirect_to claim_record_index_incoming_record_url(@incoming_record), notice: '该缴费单已经认领过到账记录了！' and return }
+        elsif @incoming_record.update(claim_record_params.merge({ status: :claimed, claim_user_id: @current_user.id }))
           format.html { redirect_to claim_record_list_incoming_records_url, notice: '到账记录已经成功的和缴费单关联！' }
           format.json { render :show, status: :ok, location: @incoming_record }
         else
@@ -145,7 +145,8 @@ class IncomingRecordsController < ApplicationController
                                               :pay_date,
                                               :pay_type,
                                               :organization_id,
-                                              :check_num)
+                                              :check_num,
+                                              :remarks)
     end
 
     def claim_record_params

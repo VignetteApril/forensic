@@ -77,6 +77,8 @@ Rails.application.routes.draw do
     get :filed_unpaid_cases, on: :collection
     get :finance_check_cases, on: :collection
     get :apply_filing_cases, on: :collection
+    get :department_closed_cases, on: :collection
+    get :my_closed_cases, on: :collection
     get :payment_order_management, on: :member
     get :request_bill, on: :collection
     get :case_executing, on: :member
@@ -86,6 +88,8 @@ Rails.application.routes.draw do
     get :case_memos, on: :member
     get :case_process_records, on: :member
     get :show_payment_order, on: :member
+    get :print_transfer_doc_barcode, on: :collection
+    post :export_csv, on: :collection
     post :create_case_memo, on: :member
     post :update_doc_is_passed, on: :collection
     post :display_dynamic_file_modal, on: :member

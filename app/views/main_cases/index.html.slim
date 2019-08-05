@@ -49,9 +49,16 @@
         span 经办人姓名:
       .col-md-9
         = grid_filter @main_cases, :pass_user_filter
-.row
   .col-md-4
-    button class="btn btn-primary wg-external-csv-export-button" data-grid-name='main_cases_grid'  导出 CSV
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 移交材料条码值：
+      .col-md-9
+        = grid_filter @main_cases, :barcode_filter
+
+/ .row
+/   .col-md-4
+/     button class="btn btn-primary wg-external-csv-export-button" data-grid-name='main_cases_grid'  导出 CSV
 .row.no-gutters.mt-2
   .external-buttons.mb-2 style="margin-left: auto"
     button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="main_cases_grid" 搜索
@@ -79,12 +86,19 @@
         span 被鉴定人：
         span =e.appraised_unit.try(:name)
         br
+        span 鉴定事项：
+        span = JSON.parse(e.matter).join(',') if e.matter
+        br
+        span 立案日期：
+        span = e.filed_date.strftime('%Y-%m-%d') if e.filed_date
+        br
         span 登记日期：
         span =e.created_at.strftime('%Y-%m-%d')
         br
         br
       .case-bottom style='color:#256188;border-top:1px solid #CCCCCC;width:119%;position:relative;right:9.5%'
-        span style="color:red;padding-left:18px" ="#{get_distance_of_time(e)}"
+        div style="padding-left:18px"
+          = get_distance_of_time(e)
 
 .row.no-gutters 
   == render_grid(@main_cases)

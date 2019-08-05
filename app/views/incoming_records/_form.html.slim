@@ -18,6 +18,9 @@
         = f.input :amount, label: '付款金额'
       .col-md-4
         = f.input :check_num, label: '支票号'
+    .row
+      .col-md-12
+        = f.input :remarks, label: '备注', as: :text, input_html: { rows: 5 }
 
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'

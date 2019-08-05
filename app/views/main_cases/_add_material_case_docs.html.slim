@@ -1,4 +1,4 @@
-- main_case.case_docs.where(case_stage: :filed).each do |doc|
+- main_case.case_docs.where(case_stage: :add_materials).each do |doc|
   = image_tag('word.png', height: '40', width: '32')
   .doc-msg style="display:inline-block;position:relative;top:15px;"
     span.ml-2 = doc.name

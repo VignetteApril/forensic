@@ -80,15 +80,23 @@
           .col-md-6
             = f.input :base_info, label: '基本案情', as: :text, :input_html => {:rows => 5}
         .row
-          .col-md-4
+          .col-md-12
+            = f.input :is_repeat, label: '是否重复鉴定', as: :boolean
+          .col-md-12
+            = f.input :original_appraisal_opinion, label: '原鉴定意见', as: :text, input_html: { rows: 2 }
+        .row
+          .col-md-12
             .attachment_upload
-              = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: {direct_upload: true}
-              - if @main_case.entrust_doc.attached?
-                span = "当前委托书：#{@main_case.entrust_doc.blob.filename}"
-                // 只有当位图书为图片类型时才渲染modal
-                - if @main_case.entrust_doc.blob.content_type.match? (/png|jpg|jpeg/)
-                  button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览委托书
-                  = render partial: 'preview_image_modal', locals: {wts_image_url: @main_case.entrust_doc}
+              = f.input :entrust_docs, label: '上传委托书', as: :file, input_html: {direct_upload: true, multiple: true}
+              span.h5 当前委托书
+              ul
+              - @main_case.entrust_docs.each do |entrust_doc|
+                li.mt-2
+                  span = "#{entrust_doc.blob.filename}"
+                  // 只有当位图书为图片类型时才渲染modal
+                  - if entrust_doc.blob.content_type.match? (/png|jpg|jpeg/)
+                    button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览
+                    = render partial: 'preview_image_modal', locals: {wts_image_url: entrust_doc}
     // 移交材料card
     .card.gray-card
       .card-header
@@ -145,11 +153,13 @@
                 = appraised_unit.input :name, label: '名称'
               .col-md-1
                 = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
-              .col-md-3
+              .col-md-2
                 = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
               .col-md-2
+                = appraised_unit.input :nationality, label: '国籍', collection: NATIONALITY, selected: appraised_unit.object.nationality.nil? ? '中国' : appraised_unit.object.nationality
+              .col-md-2
                 = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
-              .col-md-4
+              .col-md-3
                 = appraised_unit.input :id_num, label: '证件号码'
             .row
               .col-md-6
@@ -232,4 +242,19 @@ javascript:
     if($('body').attr('data-controller') == 'main_cases' && $('body').attr('data-action') == 'new'){
       console.log('新建案件页面')
       $('.nested-fields-close').click()
+    }
+
+    $('#main_case_is_repeat').click(function (e) {
+        if (e.currentTarget.checked == false) {
+            $('#main_case_original_appraisal_opinion').addClass('d-none');
+            $('#main_case_original_appraisal_opinion').val('');
+        } else {
+            $('#main_case_original_appraisal_opinion').removeClass('d-none');
+        }
+    });
+
+    if ($('#main_case_is_repeat')[0].checked == true) {
+        $('#main_case_original_appraisal_opinion').removeClass('d-none');
+    } else {
+        $('#main_case_original_appraisal_opinion').addClass('d-none');
     }

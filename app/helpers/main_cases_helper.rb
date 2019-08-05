@@ -11,38 +11,44 @@ module MainCasesHelper
         MainCase.financial_stages.map { |key, value| [ MainCase::FINANCIAL_STAGE_MAP[key.to_sym], value ] }
     end
 
-    def get_distance_of_time(e)
-    	item = ''
-      case e.case_stage.to_sym
-
+    def get_distance_of_time(main_case)
+      case main_case.case_stage.to_sym
       when :pending
-        item='已过' + distance_of_time_in_words(Time.now, e.created_at, scope: 'datetime.distance_in_words')
-
+        content_tag :div, class: "text-success" do
+          '距离登记已过' + distance_of_time_in_words(Time.now, main_case.created_at, scope: 'datetime.distance_in_words')
+        end
       when :add_material
-        if e.identification_cycle.nil?
-          item='请选择补充材料周期'
+        if main_case.identification_cycle.nil?
+          '请选择补充材料周期'
         else
-          date_bool = Time.now <=> (e.created_at + e.material_cycle.days)
-          date_pre_str = date_bool ? '还剩' : '已过'
-          date_distance = distance_of_time_in_words(Time.now, e.created_at + e.material_cycle.days, scope: 'datetime.distance_in_words')
+          date_bool = Time.now <=> (main_case.created_at + main_case.material_cycle.days)
+          date_pre_str = date_bool ? '距离补充材料到期还剩' : '距补充材料规定日期已过'
+          date_distance = distance_of_time_in_words(Time.now, main_case.created_at + main_case.material_cycle.days, scope: 'datetime.distance_in_words')
           if date_bool
-             item = date_pre_str + date_distance
+            content_tag :div, class: "text-warning" do
+              date_pre_str + date_distance
+            end
           else
-             item = date_pre_str + date_distance
+            content_tag :div, class: "text-muted" do
+              date_pre_str + date_distance
+            end
           end
         end
-
-      when :filed
-        if e.identification_cycle.nil?
-          item = '请选择鉴定周期'
+      else
+        if main_case.identification_cycle.nil?
+          '请选择鉴定周期'
         else
-          date_bool = Time.now <=> (e.acceptance_date + e.identification_cycle.days)
-          date_pre_str = date_bool ? '还剩' : '已过'
-          date_distance = distance_of_time_in_words(Time.now, e.acceptance_date + e.identification_cycle.days, scope: 'datetime.distance_in_words')
+          date_bool = Time.now <=> (main_case.acceptance_date + main_case.identification_cycle.days)
+          date_pre_str = date_bool ? '距离结案还剩' : '结案已过'
+          date_distance = distance_of_time_in_words(Time.now, main_case.acceptance_date + main_case.identification_cycle.days, scope: 'datetime.distance_in_words')
           if date_bool
-            item = date_pre_str + date_distance
+            content_tag :div, class: "text-danger" do
+              date_pre_str + date_distance
+            end
           else
-            item = date_pre_str + date_distance
+            content_tag :div, class: "text-muted" do
+              date_pre_str + date_distance
+            end
           end
         end
       end

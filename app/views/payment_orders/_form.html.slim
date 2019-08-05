@@ -1,5 +1,6 @@
 = simple_form_for(@payment_order, method: @request_type, url: @path) do |f|
   = f.input :incoming_record_id, as: :hidden, input_html: {value: @incoming_record.try(:id)}
+  = f.input :claim_user_id, as: :hidden, input_html: { value: @claim_user_id }
   .row
     .col-md-2
       span = "案由：#{@main_case.anyou}"
@@ -19,11 +20,13 @@
     .col-md-2
       = f.input :payer_contacts_phone, label: '交款联系人电话'
     .col-md-2
-      = f.input :consigner, label: '委托人'
+      - wtr_user = User.find_by_id(@main_case.wtr_id)
+      - org = wtr_user.try(:organization)
+      = f.input :consigner, label: '委托方', input_html: { value: org.try(:name) }
     .col-md-2
-      = f.input :consiggner_contacts, label: '委托人联系人'
+      = f.input :consiggner_contacts, label: '委托方联系人', input_html: { value: wtr_user.try(:name) }
     .col-md-2
-      = f.input :consiggner_contacts_phone, label: '委托人联系人电话'
+      = f.input :consiggner_contacts_phone, label: '委托方联系人电话', input_html: { value: wtr_user.try(:mobile_phone) }
   .row
     .col-md-2
       = f.input :appraisal_cost, label: '鉴定费'
@@ -52,22 +55,22 @@
   hr
   .row
     .col-md-2
-            = f.input :remit_pay, label: '汇款金额'
+      = f.input :remit_pay, label: '汇款金额'
     .col-md-2
       = f.input :payment_date, label: '汇款日期', as: :date, html5: true
     .col-md-2
       = f.input :payment_people, label: '汇款人'
     .col-md-2
-            = f.input :cash_pay, label: '现金金额'
+      = f.input :cash_pay, label: '现金金额'
     .col-md-2
-            = f.input :card_pay, label: '刷卡金额'
+      = f.input :card_pay, label: '刷卡金额'
     .col-md-2
-            = f.input :mobile_pay, label: '电子支付金额'            
+      = f.input :mobile_pay, label: '电子支付金额'
   .row
     .col-md-2
-            = f.input :check_pay, label: '支票金额'
+      = f.input :check_pay, label: '支票金额'
     .col-md-2
-        = f.input :check_num, label: '支票号码'
+      = f.input :check_num, label: '支票号码'
     .col-md-2
       = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection  
   .form-actions

@@ -9,6 +9,7 @@
     g.column name:  '支付方式', attribute: 'pay_type' do |incoming_record|
       IncomingRecord::PAY_TYPE_MAP[incoming_record.pay_type.to_sym]
     end
+    g.column name:  '备注', attribute: 'remarks'
     g.column name:  '认领状态', attribute: 'status' do |incoming_record|
 
       case incoming_record.status.to_sym
@@ -22,6 +23,10 @@
         end
       end
 
+    end
+
+    g.column name:  '认领人', attribute: 'claim_user_id' do |incoming_record|
+      User.find_by_id(incoming_record.claim_user_id).try(:name)
     end
 
     g.column in_csv: false, html: {style: "width:15px;"}  do |incoming_record|

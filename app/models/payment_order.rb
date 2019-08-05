@@ -1,5 +1,6 @@
 class PaymentOrder < ApplicationRecord
   attr_accessor :incoming_record_id
+	attr_accessor :claim_user_id
 
 	belongs_to :main_case
 	belongs_to :bill, required: false 
@@ -40,15 +41,16 @@ class PaymentOrder < ApplicationRecord
   def update_incoming_record_claimed
     # 如果当前缴费单保存成功，并且传来的参数里还有到账记录id的字段
     # 那么则更新该到账记录为已关联状态，并且
+		binding.pry
     if !self.incoming_record_id.blank?
       incoming_record = IncomingRecord.find(self.incoming_record_id)
-      incoming_record.update(status: :claimed, payment_order_id: self.id)
+      incoming_record.update(status: :claimed, payment_order_id: self.id, claim_user_id: self.claim_user_id)
     end
 	end
 
   def update_incoming_record_nil
 		if !self.incoming_record.nil?
-			self.incoming_record.update(payment_order_id: nil, status: :unclaimed)
+			self.incoming_record.update(payment_order_id: nil, status: :unclaimed, claim_user_id: nil)
 		end
 	end
 

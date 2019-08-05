@@ -8,7 +8,6 @@ class TransferDoc < ApplicationRecord
 
   before_create :set_barcode_hex
   after_destroy :purge_barcode_image
-  # before_save :set_serial_no
 
   # 设置移交材料的序号
   before_validation( :on => :create ) do
