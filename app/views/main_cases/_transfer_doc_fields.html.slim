@@ -1,19 +1,19 @@
 .nested-fields
   .row.pt-1
-    .col-md-1
+    .col-md-1 
       span class= 'nested-name-input border-0 serial-no pl-4' readonly= "readonly" = f.object.serial_no
     .col-md-1
-      = f.input :name, label: false, input_html: { class: 'nested-name-input border-0', readonly: "readonly" }
+      = f.input :name, as: :text, label: false, input_html: { class: 'nested-name-input border-0 n', readonly: "readonly" }
     .col-md-1
-      = f.input :doc_type, label: false, input_html: { class: 'nested-doctype-input border-0', readonly: "readonly" }
+      = f.input :doc_type, as: :text, label: false, input_html: { class: 'nested-doctype-input border-0 n', readonly: "readonly" }
     .col-md-1
-      = f.input :num, label: false, input_html: { class: 'nested-num-input border-0', readonly: "readonly" }
+      = f.input :num, as: :text, label: false, input_html: { class: 'nested-num-input border-0 n', readonly: "readonly" }
     .col-md-1
-      = f.input :unit, label: false,input_html: { class: 'nested-unit-input border-0', readonly: "readonly" }
+      = f.input :unit, as: :text, label: false,input_html: { class: 'nested-unit-input border-0 n', readonly: "readonly" }
     .col-md-1
-      = f.input :traits, label: false, input_html: { class: 'nested-traits-input border-0', readonly: "readonly" }
+      = f.input :traits, as: :text, label: false, input_html: { class: 'nested-traits-input border-0 n', readonly: "readonly" }
     .col-md-1
-      = f.input :status, label: false, input_html: { class: 'nested-status-input border-0', readonly: "readonly" }
+      = f.input :status, as: :text, label: false, input_html: { class: 'nested-status-input border-0 n', readonly: "readonly" }
     .col-md-3
       = f.input :receive_date, as: :date, label: false, html5: true, input_html: { class: 'nested-receivedate-input border-0 text-center', readonly: "readonly" }
     .col-md-1
@@ -34,7 +34,12 @@ css:
     padding-top:10px
   }
 
+  .n{
+    resize:none;
+  }
+
   .border-nest-field {
+    overflow-x:visible;overflow-y:visible;
     border-style: solid;
     border-width: 0px 1px 1px 1px;
     border-color:#6c757d;

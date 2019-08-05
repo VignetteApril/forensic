@@ -175,6 +175,22 @@ css:
     overflow-x: inherit;
   }    
 javascript:
+    $('#transfer_docs')
+      .on('cocoon:after-insert', function(e, added_task) {
+        console.log(111)
+
+        function setHeight(element) {
+          $(element).css({'height':'auto','overflow-y':'hidden'}).height(element.scrollHeight);
+        }
+        $('#transfer_docs').find('textarea').each(function () {
+          setHeight(this);
+        }).on('input', function () {
+          setHeight(this);
+        });
+
+
+      })
+
     // 导入用户用到的事件
     $('#user_select').selectize({
         valueField: 'id',
