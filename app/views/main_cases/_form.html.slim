@@ -41,7 +41,7 @@
             = f.input :user_name, label: '委托人'
           .col-md-4
             = f.input :wtr_phone, label: '委托人电话'
-            small class="form-text text-muted" 该字段会作为委托人的唯一登录名，不允许重复
+            small class="form-text text-muted"
         .row
           .col-md-8
             = f.input :organization_addr, label: '委托方地址'
@@ -178,7 +178,7 @@
                   = appraised_unit.input :addr, label: '联系地址', input_html: {disabled: 'disabled'}
 
   .form-actions
-    = f.button :submit, '提交', class: 'btn btn-success'
+    = f.button :submit, '保存', class: 'btn btn-success'
 
 css:
   .table-responsive{
@@ -248,13 +248,17 @@ javascript:
         if (e.currentTarget.checked == false) {
             $('#main_case_original_appraisal_opinion').addClass('d-none');
             $('#main_case_original_appraisal_opinion').val('');
+            $('.main_case_original_appraisal_opinion').addClass('d-none');
         } else {
             $('#main_case_original_appraisal_opinion').removeClass('d-none');
+            $('.main_case_original_appraisal_opinion').removeClass('d-none');
         }
     });
 
     if ($('#main_case_is_repeat')[0].checked == true) {
         $('#main_case_original_appraisal_opinion').removeClass('d-none');
+        $('.main_case_original_appraisal_opinion').removeClass('d-none');
     } else {
         $('#main_case_original_appraisal_opinion').addClass('d-none');
+        $('.main_case_original_appraisal_opinion').addClass('d-none');
     }

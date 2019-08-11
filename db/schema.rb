@@ -165,7 +165,6 @@ ActiveRecord::Schema.define(version: 2019_08_04_131106) do
     t.string "case_types"
     t.string "abbreviation"
     t.integer "case_start_no"
-    t.string "transfer_columns"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
