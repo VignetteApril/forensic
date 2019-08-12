@@ -38,6 +38,7 @@ Rails.application.routes.draw do
     delete :remove_user_from_department, :on => :member
   end
   resources :users do
+    get :ban, :on => :member
     get :edit_self, :on => :member
     put :update_edit_self, :on => :member
     get :new_consignor, :on => :collection

@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
   skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
-  before_action :set_user, only: [:edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user, :update_confirm_user_org, :edit_self]
+  before_action :set_user, only: [:ban, :edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user, :update_confirm_user_org, :edit_self]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create, :edit_self]
   before_action :set_new_areas, only: [:new, :create,:new_consignor,:edit_org]
@@ -105,6 +105,13 @@ class UsersController < ApplicationController
       flash[:danger] = "#{@user.errors.messages}"
       render :edit_password
     end
+  end
+
+  #禁用
+  def ban
+    @user.is_ban = !@user.is_ban
+    @user.save
+    redirect_to "/users", notice: "设置成功"
   end
 
   #委托人审核

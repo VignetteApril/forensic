@@ -51,4 +51,16 @@
       end
      end
   end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |user|
+    if user.login != 'admin'
+      if can?("users", "ban")
+        if user.is_ban
+          link_to '禁用', ban_user_path(user), data: {confirm: '您确认要禁用该用户吗？' }, class: 'btn btn-secondary btn-sm'
+        else
+          link_to '解除禁用', ban_user_path(user), data: {confirm: '您确认要解禁该用户吗？' }, class: 'btn btn-secondary btn-sm'
+        end
+      end
+    end
+  end
 end -%>

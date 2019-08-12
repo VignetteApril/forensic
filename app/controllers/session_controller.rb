@@ -28,6 +28,7 @@ class SessionController < ApplicationController
     if user = User.authenticate(params[:login], params[:password])
       redirect_to :login, flash: { danger: '用户被锁定，请联系管理员' } and return  if user.is_locked == true
       redirect_to :login, flash: { danger: '用户权限正在审核，请联系管理员' } and return  unless user.confirm? 
+      redirect_to :login, flash: { danger: '用户被禁用，请联系管理员' } and return  if user.is_ban == true
 
       session[:user_id] = user.id
 
