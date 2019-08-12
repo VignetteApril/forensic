@@ -41,6 +41,6 @@ body
       = image_tag url_for(@barcode_image)
       - if @transfer_doc
         h4 = @transfer_doc.barcode
-        h4 = "#{@main_case.serial_no} - #{@transfer_doc.serial_no}"
+        h4 = "#{@main_case.case_no_display} - #{@transfer_doc.serial_no}"
       - elsif @main_case
         h4 = @main_case.serial_no
