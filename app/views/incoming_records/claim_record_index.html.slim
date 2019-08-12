@@ -12,7 +12,7 @@
           span = @incoming_record.pay_account
         .row
           label.h6 付款时间：
-          span = @incoming_record.pay_date.strftime('%Y-%m-%d')
+          span = @incoming_record.pay_date.blank? ? "" :@incoming_record.pay_date.strftime('%Y-%m-%d')
         .row
           label.h6 付款金额：
           span = @incoming_record.amount

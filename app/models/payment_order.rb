@@ -41,7 +41,6 @@ class PaymentOrder < ApplicationRecord
   def update_incoming_record_claimed
     # 如果当前缴费单保存成功，并且传来的参数里还有到账记录id的字段
     # 那么则更新该到账记录为已关联状态，并且
-		binding.pry
     if !self.incoming_record_id.blank?
       incoming_record = IncomingRecord.find(self.incoming_record_id)
       incoming_record.update(status: :claimed, payment_order_id: self.id, claim_user_id: self.claim_user_id)
