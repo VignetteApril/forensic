@@ -226,10 +226,10 @@ class UsersController < ApplicationController
           wtr_role.user_roles.find_or_create_by user_id: user.id, role_id: wtr_role.id
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
-          redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.messages}" }
+          redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.full_messages.join('、')}" }
         end
       else
-        redirect_to '/users/new_consignor' ,flash: { danger: "创建单位失败，#{org.errors}"}
+        redirect_to '/users/new_consignor' ,flash: { danger: "创建单位失败，#{org.errors.full_messages.join('、')}"}
       end
 
     else
@@ -254,7 +254,7 @@ class UsersController < ApplicationController
           wtr_role.user_roles.find_or_create_by user_id: user.id, role_id: wtr_role.id
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
-          redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.messages}" }
+          redirect_to '/users/new_consignor' ,flash: { danger: "创建委托人失败，#{user.errors.full_messages.join('、')}" }
         end
       end
     end

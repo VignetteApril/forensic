@@ -1,4 +1,39 @@
 cn:
+  activerecord:
+    attributes:
+      user:
+        login: "帐号"
+        name: "姓名"
+        mobile_phone: "电话"
+        email: "邮箱"
+        password: "密码"
+        password_confirmation: "重复密码"
+      organization:
+        name: "名称"
+    errors:
+      models:
+        user:
+          attributes:
+            password_confirmation:
+              confirmation: "输入不一致"
+            email:
+              invalid: "格式不正确"
+            login:
+              blank: "不得为空"
+              taken: "已被使用"
+              too_short: "长度太短"
+            password:
+              blank: "不得为空"
+              too_short: "太短"
+        organization:
+          attributes:
+            name:
+              blank: "不得为空"
+        main_case:
+          attributes:
+            department:
+              required: "需要存在"
+
   date:
     abbr_day_names:
     - 周日
@@ -246,6 +281,11 @@ cn:
       notification: "个人事务提醒"
       organization: '机构'
     attributes:
+      main_case:
+        matter: "鉴定事项"
+        city_id: "所在城市"
+        district_id: "所在地区"
+        department: "受委托科室"
       user:
         login: "登录名"
         name: "真实姓名"
@@ -298,6 +338,32 @@ cn:
         status: 状态
         user_id: 被提醒人
       organization:
+        city: "所在城市"
+        district: "所在地区"
+        name: "单位名称"
         payee: '收款人'
         open_account_bank: '开户行'
         account_number: '收款人账号'
+    errors:
+      models:
+        user:
+          attributes:
+            password_confirmation:
+              confirmation: "输入不一致"
+            email:
+              invalid: "格式不正确"
+            login:
+              blank: "不得为空"
+              taken: "已被使用"
+              too_short: "长度太短"
+            password:
+              blank: "不得为空"
+              too_short: "太短"
+        organization:
+          attributes:
+            name:
+              blank: "不得为空"
+        main_case:
+          attributes:
+            department:
+              required: "需要存在"

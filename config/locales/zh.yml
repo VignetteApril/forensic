@@ -1,0 +1,31 @@
+zh:
+  activerecord:
+    attributes:
+      user:
+        login: "帐号"
+        name: "姓名"
+        mobile_phone: "电话"
+        email: "邮箱"
+        password: "密码"
+        password_confirmation: "重复密码"
+      organization:
+        name: "单位名称"
+    errors:
+      models:
+        user:
+          attributes:
+            password_confirmation:
+              confirmation: "输入不一致"
+            email:
+              invalid: "格式不正确"
+            login:
+              blank: "不得为空"
+              taken: "已被使用"
+              too_short: "长度太短"
+            password:
+              blank: "不得为空"
+              too_short: "太短"
+        organization:
+          attributes:
+            name:
+              blank: "不得为空"

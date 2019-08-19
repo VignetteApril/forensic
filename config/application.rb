@@ -12,6 +12,7 @@ module Shike
     # I18n config
     config.load_defaults 5.0
     config.i18n.default_locale = :cn
+    config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
 
     # Time Zone config
     config.time_zone = 'Beijing'

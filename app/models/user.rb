@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validates :password, :confirmation => true
   validates :password, :presence => true, on: :create
   validates :password, :length => {:minimum => 6, :maximum => 20}, allow_nil: true # 密码的位数 6 <= password <= 20
-  validate  :password_must_be_present
+  # validate  :password_must_be_present
   # validates :city_id, :presence => true
   # validates :district_id, :presence => true
 
@@ -181,9 +181,10 @@ class User < ApplicationRecord
 
   private
 
-  def password_must_be_present
-    errors.add(:password, "缺少密码") unless hashed_password.present?
-  end
+  # 18n代替
+  # def password_must_be_present
+  #   errors.add(:password, "缺少密码") unless hashed_password.present?
+  # end
 
   def generate_salt
     self.salt = self.object_id.to_s + rand.to_s

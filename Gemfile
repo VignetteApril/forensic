@@ -44,6 +44,7 @@ gem 'bcrypt',                                '~> 3.1.7'
 gem 'chunky_png'
 gem 'barby'
 gem 'jwt'
+gem 'rails-i18n'
 
 group :development, :test do
   gem 'minitest-rails'

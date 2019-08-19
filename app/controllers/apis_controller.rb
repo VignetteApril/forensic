@@ -80,7 +80,7 @@ class ApisController < ApplicationController
 			else
 				json["code"] = "1"
 				json["msg"] = "提交注册信息并且上传正面相片失败"
-				json["errors"] = user.errors.messages
+				json["errors"] = user.errors.full_messages
 				respond_to do |format|
 					format.json { render json:json.to_json }
 				end
