@@ -189,8 +189,8 @@ class MainCase < ApplicationRecord
   # 如果已经有了案号则不能重复生成
   def get_case_no
     center = self.department.organization
-    dep_abbreviation = self.department.abbreviation
-    org_abbreviation = center.abbreviation
+    dep_abbreviation = self.department.try(:abbreviation).blank? ? "" : self.department.try(:abbreviation)
+    org_abbreviation = center.try(:abbreviation).blank? ? "" : center.try(:abbreviation)
     beginning_of_year = Date.today.beginning_of_year
     end_of_year = Date.today.end_of_year
     # 找到当前年份 当前科室 所有的case_no不为nil的案件 按照案件的编号排序
