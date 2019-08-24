@@ -970,8 +970,8 @@ class MainCasesController < ApplicationController
         @department_matters = []
         @selected_matters = []
       else
-        @department_matters = JSON.parse(@main_case.matter).map { |matter| [matter, matter] }
-        @selected_matters = @department_matters.nil? ? [] : @department_matters.map(&:first)
+        @department_matters = @main_case.department.matter.split(',').map { |matter| [matter, matter] }
+        @selected_matters = JSON.parse(@main_case.matter).map { |matter| matter }
       end
     end
 
