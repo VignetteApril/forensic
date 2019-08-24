@@ -29,10 +29,10 @@
         = f.input :mobile_phone, label: '手机号'
       .col-md-4
         = f.input :email, label: '邮箱'
-    .row
-      .col-md-4
-        = f.input :city_id, collection: @cities, label: '市', include_blank: true
-      .col-md-4
-        = f.input :district_id, collection: @districts, label: '区县', include_blank: true
+    / .row
+    /   .col-md-4
+    /     = f.input :city_id, collection: @cities, label: '市', include_blank: true
+    /   .col-md-4
+    /     = f.input :district_id, collection: @districts, label: '区县', include_blank: true
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
