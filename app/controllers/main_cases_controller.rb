@@ -338,7 +338,7 @@ class MainCasesController < ApplicationController
                            payer_phone: params[:main_case][:payer_phone],
                            amount: params[:main_case][:amount],
                            case_stage: :filed,
-                           acceptance_date: Date.today)
+                           acceptance_date: Time.now)
         @main_case.turn_filed!
         format.html { redirect_to filing_info_main_case_url(@main_case), notice: '案件已经进入立案阶段' }
         format.json { render :show, status: :ok, location: @main_case }

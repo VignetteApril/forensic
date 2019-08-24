@@ -71,34 +71,32 @@
 .row.no-gutters.cases    
   -@main_cases.current_page_records.each do |e|
     .case-item data-id="#{e.id}"
-      .status style="background-color:#{e.stage_color};"
-        span =MainCase::CASE_STAGE_MAP[e.case_stage.to_sym]
-      br
-      p style='color:#256188;border-bottom:1px solid #CCCCCC;' =e.serial_no
-      
-      .case-info
-        span 案件号：
-        span =e.case_no
-        br
-        span 委托方：
-        span =e.organization_name
-        br    
-        span 被鉴定人：
-        span =e.appraised_unit.try(:name)
-        br
-        span 鉴定事项：
-        span = JSON.parse(e.matter).join(',') if e.matter
-        br
-        span 立案日期：
-        span = e.filed_date.strftime('%Y-%m-%d') if e.filed_date
-        br
-        span 登记日期：
-        span =e.created_at.strftime('%Y-%m-%d')
-        br
-        br
-      .case-bottom style='color:#256188;border-top:1px solid #CCCCCC;width:119%;position:relative;right:9.5%'
-        div style="padding-left:18px"
-          = get_distance_of_time(e)
+      .card style='width: 230px; background-color: #{e.case_background_color}'
+        .card-header
+          .status style="background-color:#{e.stage_color};"
+            span = MainCase::CASE_STAGE_MAP[e.case_stage.to_sym]
+          span = e.serial_no
+        .card-body
+          span 案件号：
+          span =e.case_no
+          br
+          span 委托方：
+          span =e.organization_name
+          br
+          span 被鉴定人：
+          span =e.appraised_unit.try(:name)
+          br
+          span 鉴定事项：
+          span = JSON.parse(e.matter).join(',') if e.matter
+          br
+          span 立案日期：
+          span = e.acceptance_date.strftime('%Y-%m-%d') if e.acceptance_date
+          br
+          span 登记日期：
+          span =e.created_at.strftime('%Y-%m-%d')
+        .card-footer
+          div style="padding-left:18px"
+            = get_distance_of_time(e)
 
 .row.no-gutters 
   == render_grid(@main_cases)
@@ -111,11 +109,12 @@ css:
     flex-wrap: wrap;
   }
   .case-item{
-    padding:1.2%;
-    margin: 2.0%;
-    background-color: #f1f0ea;
-    width:15%;
-    / border-bottom:1px solid #CCCCCC;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 230px;
   }
   .case-item:hover{
    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);

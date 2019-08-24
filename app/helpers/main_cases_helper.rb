@@ -18,11 +18,11 @@ module MainCasesHelper
           '距离登记已过' + distance_of_time_in_words(Time.now, main_case.created_at, scope: 'datetime.distance_in_words')
         end
       when :add_material
-        if main_case.identification_cycle.nil?
+        if main_case.material_cycle.nil?
           '请选择补充材料周期'
         else
           date_bool = Time.now <=> (main_case.created_at + main_case.material_cycle.days)
-          date_pre_str = date_bool ? '距离补充材料到期还剩' : '距补充材料规定日期已过'
+          date_pre_str = date_bool > 0 ?  '距补充材料规定日期已过' : '距离补充材料到期还剩'
           date_distance = distance_of_time_in_words(Time.now, main_case.created_at + main_case.material_cycle.days, scope: 'datetime.distance_in_words')
           if date_bool
             content_tag :div, class: "text-warning" do
@@ -39,7 +39,7 @@ module MainCasesHelper
           '请选择鉴定周期'
         else
           date_bool = Time.now <=> (main_case.acceptance_date + main_case.identification_cycle.days)
-          date_pre_str = date_bool ? '距离结案还剩' : '结案已过'
+          date_pre_str = date_bool > 0 ?  '结案已过' : '距离结案还剩'
           date_distance = distance_of_time_in_words(Time.now, main_case.acceptance_date + main_case.identification_cycle.days, scope: 'datetime.distance_in_words')
           if date_bool
             content_tag :div, class: "text-danger" do

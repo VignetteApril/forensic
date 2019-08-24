@@ -62,6 +62,12 @@ class MainCase < ApplicationRecord
     close: '#EFAA98'  
   }
 
+  CASE_BACKGROUND_COLOR = {
+    filed: '#d5fccb',
+    pending: '#cbd3fc',
+    apply_filing: '#fcf0cb'
+  }
+
   FINANCIAL_STAGE_MAP = {
     unpaid: '未支付',
     not_fully_paid: '未完全支付',
@@ -71,6 +77,29 @@ class MainCase < ApplicationRecord
 
   def stage_color
     MainCase::CASE_STAGE_COLOR_MAP[self.case_stage.to_sym]
+  end
+
+  def case_background_color
+    if self.is_delayed?
+      '#fccbcb'
+    else
+      MainCase::CASE_BACKGROUND_COLOR[self.case_stage.to_sym]
+    end
+  end
+
+  # 判断当前的案子是否延期
+  # 能够延期的案子有两种情况
+  # 1、当案件处于补充材料期，Time.now超过了created_at + 补充材料周期
+  # 2、当案件处于其他阶段，Time.now超过了acceptance_date + identification_cycle.days
+  # 这两个条件有一个过期就算过期
+  # 如果两个周期的前提条件都没有，则直接判为不过期
+  def is_delayed?
+    if self.add_material?
+      bool_first =  self.material_cycle.nil? ? false : Time.now > (self.created_at + self.material_cycle.days)
+    else
+      bool_second = self.identification_cycle.nil? ? false : Time.now > (self.acceptance_date + self.identification_cycle.days)
+    end
+    bool_first || bool_second
   end
 
   class << self
