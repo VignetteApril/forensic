@@ -56,9 +56,6 @@
       .col-md-9
         = grid_filter @main_cases, :barcode_filter
 
-/ .row
-/   .col-md-4
-/     button class="btn btn-primary wg-external-csv-export-button" data-grid-name='main_cases_grid'  导出 CSV
 .row.no-gutters.mt-2
   .external-buttons.mb-2 style="margin-left: auto"
     button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="main_cases_grid" 搜索
@@ -136,7 +133,6 @@ css:
   }
 
 javascript:
-
     var status = 'false'
     if(localStorage.s){
         status = localStorage.s
@@ -202,6 +198,14 @@ javascript:
             window.location.href = url;
         })
 
+    });
+
+    $(".clickable-row").click(function (e) {
+        // 通过当前点击元素判断是否点击的是带有id的元素
+        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
+        if (e.target.id == '') {
+            window.location = $(this).data("href");
+        }
     });
 
 

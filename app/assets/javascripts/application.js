@@ -29,11 +29,9 @@
 //= require custom_js/organizations
 //= require custom_js/direct_uploads
 //= require custom_js/doc_templates
-//= require custom_js/departments
 //= require custom_js/department_docs
 //= require custom_js/main_cases
 //= require custom_js/users
-//= require custom_js/incoming_records
 
 // nested form js
 //= require cocoon
@@ -42,20 +40,8 @@
 //= require weboffice/issetup
 //= require weboffice/url
 
-// 处理select2在turbolinks的bug
-// 处理selectize在turbolinks中重复渲染的bug
-$(document).on("turbolinks:before-cache", function() {
-    $('.selectized').each(function(){
-        if (this.selectize != undefined) {
-            this.selectize.destroy()
-        }
-    });
 
-    $('select.select2-hidden-accessible').select2('destroy');
-});
-
-// 处理组件在turbolinks中初始化中的bug
-$(document).on('turbolinks:load', function () {
+$(document).ready(function () {
     $('select').selectize({
         valueField: 'id',
         labelField: 'name'
@@ -67,7 +53,10 @@ $(document).on('turbolinks:load', function () {
         autoclose: true,
         todayHighlight: true
     });
-});
+})
+
+
+
 
 // change select2 data via ajax, target select2 element data will refresh depend the change of original select2 element
 // request_url:               the method will send the ajax post request to this url, and get data from the action

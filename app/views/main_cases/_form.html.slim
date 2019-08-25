@@ -38,7 +38,7 @@
           .col-md-4
             = f.input :organization_name, label: '委托方名称（请书写委托方全称）'
           .col-md-4
-            = f.input :user_name, label: '委托联系人'
+            = f.input :user_name, label: '委托人'
           .col-md-4
             = f.input :wtr_phone, label: '委托人电话'
             small class="form-text text-muted"
@@ -73,7 +73,7 @@
           .col-md-4
             = f.input :matter, label: '鉴定事项', collection: @department_matters, selected: @selected_matters, include_hidden: false, include_blank: true, input_html: { multiple: true }
           .col-md-4
-            = f.input :case_type, label: '案件类型', collection: @collection_case_types, selected: @selected_case_type
+            = f.input :case_type, label: '案件类型', collection: @collection_case_types, selected: @case_type
         .row
           .col-md-6
             = f.input :matter_demand, label: '鉴定事项及要求', as: :text, :input_html => {:rows => 5}
