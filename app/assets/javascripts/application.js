@@ -15,7 +15,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require bootstrap
-//= require turbolinks
 //= require wice_grid
 //= require select2
 //= require select2_locale_zh-CN

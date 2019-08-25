@@ -43,9 +43,10 @@ class MainCasesController < ApplicationController
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
+                                  csv_field_separator: ';',
                                   per_page: 20,
-                                  name: 'main_cases')
-    export_grid_if_requested
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   def my_closed_cases
@@ -53,16 +54,27 @@ class MainCasesController < ApplicationController
     case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
     data = MainCase.where(id: case_ids, case_stage: :close)
 
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
-
-    render :index
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ',',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   def department_closed_cases
     data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :close)
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ',',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
 
-    render :index
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   # 本科室案件页面
@@ -72,7 +84,14 @@ class MainCasesController < ApplicationController
   # 针对本中心的人没有权限
   def department_cases
     data = MainCase.where(department_id: @current_user.departments.split(','))
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ';',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
     render :index
   end
@@ -82,15 +101,28 @@ class MainCasesController < ApplicationController
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
     data = @current_user.organization.main_cases
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ',',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
 
-    render :index
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   # 委托人查看案件
   def wtr_cases
     data = MainCase.where(wtr_id: @current_user.id)
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ';',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
     render :index
   end
@@ -101,7 +133,14 @@ class MainCasesController < ApplicationController
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ';',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
     render :index
   end
@@ -110,7 +149,14 @@ class MainCasesController < ApplicationController
   def finance_check_cases
     current_org_cases = @current_user.organization.main_cases
 
-    @main_cases = initialize_grid(current_org_cases, per_page: 20, name: 'finance_main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ';',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   # 案件状态为【申请归档】的案件列表页面
@@ -119,7 +165,14 @@ class MainCasesController < ApplicationController
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :apply_filing)
 
-    @main_cases = initialize_grid(data, per_page: 20, name: 'main_cases_grid')
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ';',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
     render :index
   end
@@ -628,9 +681,17 @@ class MainCasesController < ApplicationController
   def pending_cases
     current_org = @current_user.organization
     redirect_to root_path, notice: '请您关联相关机构' and return if current_org.nil?
-    @main_cases = initialize_grid(current_org.main_cases.pending, per_page: 20, name: 'main_cases_grid')
 
-    render :index
+    data = current_org.main_cases.pending
+    @main_cases = initialize_grid(data,
+                                  include: :transfer_docs,
+                                  enable_export_to_csv: true,
+                                  csv_file_name: 'main_cases',
+                                  csv_field_separator: ',',
+                                  per_page: 20,
+                                  name: 'main_cases_grid')
+
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   # 用户在委托单中点击【认领】按钮，系统会跳转到该action

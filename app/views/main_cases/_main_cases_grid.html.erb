@@ -1,6 +1,7 @@
 <%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true) do |g|
    g.row_attributes do |main_case|
       { 'data-href': edit_main_case_path(main_case), class: 'clickable-row' }
+
    end
 
    g.column name: '流水号', attribute: 'serial_no', detach_with_id: :serial_no_filter, ordering: false do |main_case|
@@ -52,16 +53,16 @@
      end
    end
 
-   g.column name: '倒计时', attribute: 'commission_date', filter: false, ordering: false do |main_case|
+   g.column name: '倒计时', attribute: 'commission_date', filter: false, ordering: false, in_csv: false do |main_case|
      get_distance_of_time(main_case)
    end
 
-   g.column name: '条码值', attribute: 'barcode', assoc: :transfer_docs, detach_with_id: :barcode_filter do |main_case|
+   g.column name: '条码值', attribute: 'barcode', assoc: :transfer_docs, detach_with_id: :barcode_filter, in_csv: false  do |main_case|
      transfer_docs = main_case.transfer_docs
      transfer_docs.map { |transfer_doc| transfer_doc.barcode }.join(',') if transfer_docs.length > 0
    end
 
-   g.column name: '条码' do |main_case|
+   g.column name: '条码', in_csv: false  do |main_case|
      if main_case.barcode_image.attached?
        link_to open_barcode_image_main_cases_path(main_case_id: main_case.id), remote: true do
          image_tag("barcode.png", alt: "条码", style: 'height: 35px;创建委托人 width: auto;', id: 'barcode-btn' )
