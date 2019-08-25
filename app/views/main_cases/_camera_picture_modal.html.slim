@@ -1,0 +1,54 @@
+.modal.fade id="camera_picture_modal" tabindex="-1" role="dialog" aria-labelledby="camera_picture_modal_label" aria-hidden="true"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" 调用系统摄像头
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-body
+        .row
+          .col-md-6
+            div id="results"
+          .col-md-6
+            div id="my_camera"
+
+      .modal-footer
+        button type="button" class="btn btn-secondary" onClick="take_snapshot()" 照相
+
+css:
+  h2, h3 {
+    margin-top: 0;
+  }
+
+  form {
+    margin-top: 15px;
+  }
+
+  form > input {
+    margin-right: 15px;
+  }
+
+  #results {
+    float: right;
+    padding: 20px;
+    border: 1px solid;
+  }
+
+javascript:
+  Webcam.set({
+          width: 320,
+          height: 240,
+          image_format: 'jpeg',
+          jpeg_quality: 90
+        });
+        Webcam.attach( '#my_camera' );
+
+  function take_snapshot() {
+      // take snapshot and get image data
+      Webcam.snap(function (data_uri) {
+          // display results in page
+          document.getElementById('results').innerHTML =
+              '<h5>委托书图像：</h2>' +
+              '<img src="' + data_uri + '"/>';
+      });
+  }

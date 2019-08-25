@@ -1,5 +1,6 @@
 // render 移交材料的modal
 = render "nested_modal"
+= render 'main_cases/camera_picture_modal'
 = simple_form_for(@main_case) do |f|
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
@@ -25,7 +26,7 @@
               label 选择已有的委托方信息导入
               #user_select
             .col-md-4
-              button class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
+              button type="button"  class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
       .card-body.principal
         .row
           .col-md-4
@@ -85,7 +86,7 @@
           .col-md-12
             = f.input :original_appraisal_opinion, label: '原鉴定意见', as: :text, input_html: { rows: 2 }
         .row
-          .col-md-12
+          .col-md-6
             .attachment_upload
               = f.input :entrust_docs, label: '上传委托书', as: :file, input_html: {direct_upload: true, multiple: true}
               span.h5 当前委托书
@@ -97,6 +98,9 @@
                   - if entrust_doc.blob.content_type.match? (/png|jpg|jpeg/)
                     button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览
                     = render partial: 'preview_image_modal', locals: {wts_image_url: entrust_doc}
+          .col-md-6
+            button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#camera_picture_modal" 从摄像头中上传
+
     // 移交材料card
     .card.gray-card
       .card-header

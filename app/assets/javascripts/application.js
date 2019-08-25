@@ -25,6 +25,7 @@
 //= require third_party_js/bootstrap.file-input
 //= require third_party_js/valid_admin
 //= require third_party_js/highcharts
+//= require third_party_js/webcam.js
 
 //= require custom_js/organizations
 //= require custom_js/direct_uploads
