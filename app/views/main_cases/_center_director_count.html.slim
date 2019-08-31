@@ -1,7 +1,10 @@
 .card
   .card-header
-    .card-title style='text-align:center;font-size:16ptfont-size:16pt'本鉴定中心案件统计分析
+    .card-title style='text-align:center;font-size:16ptfont-size:16pt' 本鉴定中心案件统计分析
   .card-body
+    .row
+      .col-md-6
+        .per-chart id='container3' style="height:500px;width:100%"
     .row
       .col-md-6
         .per-chart id='container' style="height:500px;width:100%"
@@ -54,7 +57,7 @@ javascript:
          cursor: 'pointer',
          dataLabels: {
             enabled: true,
-            format: '<b>{point.name}</b>: {point.percentage:.1f}% ',
+            format: '<b>{point.name}</b>: {point.y}',
             style: {
                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
             }
@@ -252,4 +255,89 @@ javascript:
 
    $('#container2').highcharts(json2);
 
+
+      // --------------
+      // container3
+      var colors = Highcharts.getOptions().colors,
+          categories = json_data.province_count_count.province_count_cate,
+          data = json_data.province_count_count.data,
+          browserData = [],
+          versionsData = [],
+          i,
+          j,
+          dataLen = data.length,
+          drillDataLen,
+          brightness;
+      // 构建数据数组
+      for (i = 0; i < dataLen; i += 1) {
+          // 添加浏览器数据
+          browserData.push({
+              name: categories[i],
+              y: data[i].y,
+              color: data[i].color
+          });
+          // 添加版本数据
+          drillDataLen = data[i].drilldown.data.length;
+          for (j = 0; j < drillDataLen; j += 1) {
+              brightness = 0.2 - (j / drillDataLen) / 5;
+              versionsData.push({
+                  name: data[i].drilldown.categories[j],
+                  y: data[i].drilldown.data[j],
+                  color: Highcharts.Color(data[i].color).brighten(brightness).get()
+              });
+          }
+      }
+      // 创建图表
+      $('#container3').highcharts({
+          chart: {
+              type: 'pie'
+          },
+          title: {
+              text: '省市维度查看案件数量'
+          },
+          subtitle: {
+              text: '内环为省，外环为市'
+          },
+          yAxis: {
+              title: {
+                  text: '总百分比市场份额'
+              }
+          },
+          plotOptions: {
+              pie: {
+                  shadow: false,
+                  center: ['50%', '50%']
+              }
+          },
+          tooltip: {
+              valueSuffix: '%'
+          },
+          series: [{
+              name: '案件数量',
+              data: browserData,
+              size: '60%',
+              dataLabels: {
+                  formatter: function () {
+                      return this.y > 5 ? this.point.name : null;
+                  },
+                  color: 'white',
+                  distance: -30          // 距离值为负时显示在在扇区里面
+              }
+          }, {
+              name: '版本',
+              data: versionsData,
+              size: '80%',
+              innerSize: '60%',
+              dataLabels: {
+                  softConnector: false,   // 是否使用曲线
+                  connectorColor: 'red', // 连接线颜色，默认是扇区颜色
+                  distance: 20, // 数据标签与扇区距离
+                  connectorPadding: 20,  // 数据标签与连接线的距离
+                  formatter: function () {
+                      // 通过函数判断是否显示数据标签，为了防止数据标签过于密集
+                      return this.y > 1 ? '<b>' + this.point.name + ':</b> ' + this.y + '%' : null;
+                  }
+              }
+          }]
+      });
   });

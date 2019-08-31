@@ -859,7 +859,37 @@ class MainCasesController < ApplicationController
         this_month_end = this_month_begin
         this_month_begin = this_month_begin - 1.month
         @data['month_mycase_count'] << {"count":center_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
-      end  
+      end
+
+      # 组合图二维饼图的数据(省市查看案件数据量)
+      province_count_hash = center_cases.group(:province_id).count
+      province_count_cate = []
+      @data['province_count_count'] = {}
+      @data['province_count_count']['data'] = province_count_hash.map do |key, value|
+        province = Area.find_by_id key
+        city_cate = []
+        city_value = []
+        if province.present?
+          province_count_cate << province.name
+          city_ids = province.children.pluck(:id)
+          city_cases = center_cases.where(city_id: city_ids).group(:city_id).count
+          city_cases.each do |key, value|
+            city = province = Area.find_by_id key
+            city_cate << city.name
+            city_value << value
+          end
+        end
+
+        {
+            y: value,
+            drilldown: {
+                name: province.name,
+                categories: city_cate,
+                data: city_value,
+            }
+        }
+      end
+      @data['province_count_count']['province_count_cate'] = province_count_cate
     end
 
     if  @current_user.center_department_director_user?
