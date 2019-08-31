@@ -141,8 +141,6 @@ class MainCasesController < ApplicationController
                                   per_page: 20,
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
-
-    render :index
   end
 
   # 财务人员查看所有案件的
