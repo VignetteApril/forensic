@@ -46,7 +46,8 @@
 .row.no-gutters.mt-2
   .external-buttons.mb-2 style="margin-left: auto"
     button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="finance_main_cases_grid" 搜索
-    button.btn.btn-outline-secondary.wg-external-reset-button data-grid-name="finance_main_cases_grid" 重置
+    button.btn.btn-outline-secondary.wg-external-reset-button.mr-1 data-grid-name="finance_main_cases_grid" 重置
+    button.btn.btn-primary.wg-external-csv-export-button data-grid-name="finance_main_cases_grid" 导出电子表格
     - if can?('main_cases', 'new')
       = link_to '新建案件', new_main_case_path, class: 'btn btn-primary ml-2'
 
@@ -182,6 +183,14 @@ javascript:
             $('.turn-card-btn').attr('data-status','false')
             $('.turn-card-btn').text('卡片模式')
             localStorage.s='true'
+        }
+    });
+
+    $(".clickable-row").click(function (e) {
+        // 通过当前点击元素判断是否点击的是带有id的元素
+        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
+        if (e.target.id == '') {
+            window.location = $(this).data("href");
         }
     });
 

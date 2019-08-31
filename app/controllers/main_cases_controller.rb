@@ -45,6 +45,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ';',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
@@ -60,6 +62,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
@@ -72,6 +76,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
 
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
@@ -90,6 +96,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ';',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
@@ -107,6 +115,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
 
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
@@ -121,6 +131,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ';',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
@@ -139,13 +151,15 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ';',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   # 财务人员查看所有案件的
   def finance_check_cases
-    current_org_cases = @current_user.organization.main_cases
+    data = @current_user.organization.main_cases
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
@@ -153,8 +167,10 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ';',
                                   per_page: 20,
-                                  name: 'main_cases_grid')
-    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
+                                  order: 'created_at',
+                                  order_direction: 'desc',
+                                  name: 'finance_main_cases_grid')
+    export_grid_if_requested('finance_main_cases_grid' => 'finance_main_cases_grid')
   end
 
   # 案件状态为【申请归档】的案件列表页面
@@ -169,6 +185,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ';',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
 
@@ -687,6 +705,8 @@ class MainCasesController < ApplicationController
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
                                   per_page: 20,
+                                  order: 'created_at',
+                                  order_direction: 'desc',
                                   name: 'main_cases_grid')
 
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')

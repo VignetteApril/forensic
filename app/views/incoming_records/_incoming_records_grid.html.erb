@@ -2,6 +2,15 @@
 
     g.column name:  '对方付款人名称', attribute: 'pay_person_name'
     g.column name:  '对方付款人账号', attribute: 'pay_account'
+    g.column name:  '案件号' do |incoming_record|
+      incoming_record.payment_order.main_case.case_no_display if incoming_record.payment_order.present?
+    end
+
+    g.column name:  '认领人' do |incoming_record|
+      current_user = User.find_by_id(incoming_record.claim_user_id)
+      current_user.nil? ? '' : current_user.name
+    end
+
     g.column name:  '付款时间', attribute: 'pay_date' do |incoming_record|
       incoming_record.pay_date.try{|e| e.strftime('%Y-%m-%d')}
     end
