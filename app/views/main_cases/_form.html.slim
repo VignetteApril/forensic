@@ -99,7 +99,9 @@
                     button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览
                     = render partial: 'preview_image_modal', locals: {wts_image_url: entrust_doc}
           .col-md-6
-            button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#camera_picture_modal" 从摄像头中上传
+            .alert.alert-warning.d-none id='camera_alert' role="alert" 当前设备没有摄像头，请使用带有摄像头设备的进行该操作
+            button.mt-2 type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#camera_picture_modal" 从摄像头中上传
+
 
     // 移交材料card
     .card.gray-card

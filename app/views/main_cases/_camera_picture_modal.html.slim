@@ -35,6 +35,10 @@ css:
   }
 
 javascript:
+  Webcam.on('error', function (err) {
+    $("#camera_alert").removeClass('d-none');
+  });
+
   Webcam.set({
           width: 320,
           height: 240,
