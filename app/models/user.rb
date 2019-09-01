@@ -22,16 +22,16 @@ class User < ApplicationRecord
   # validates :district_id, :presence => true
 
   # 关联
-  has_many   :entrust_orders
+  has_many   :entrust_orders, dependent: :destroy
   has_many   :express_orders
   has_many   :recive_express_orders
-  has_many   :case_talks
-  has_many   :user_roles, dependent: :delete_all
+  has_many   :case_talks, dependent: :destroy
+  has_many   :user_roles, dependent: :destroy
   has_many   :roles, :through => :user_roles
-  has_many   :notifications
+  has_many   :notifications, dependent: :destroy
   has_many   :sys_logs
-  has_many   :favorites
-  has_many   :case_memos
+  has_many   :favorites, dependent: :destroy
+  has_many   :case_memos, dependent: :destroy
   has_one    :case_user
   belongs_to :department, required: false   
   belongs_to :organization # 每一个用户只能同时属于一个机构

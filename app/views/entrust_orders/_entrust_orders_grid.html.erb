@@ -1,6 +1,6 @@
 <%= grid(@entrust_orders, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
     g.blank_slate partial:  'layouts/empty_grid'
-    g.column name:  '鉴定中心', attribute: 'name', assoc: :organization
+    g.column name:  '鉴定中心', attribute: 'name', assoc: :organization if @current_user.organization.is_court?
     g.column name:  '委托人', attribute: 'name', assoc: :user
     g.column name:  '案件性质', attribute: 'case_property'
     g.column name:  '案由', attribute: 'anyou'
@@ -16,6 +16,11 @@
           EntrustOrder::STATUS_MAP[entrust_order.status.to_sym]
         end
       end
+    end
+
+    g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
+      check_bool = entrust_order.entrust_doc.attached? && (entrust_order.entrust_doc.blob.content_type.match? (/png|jpg|jpeg|JPG|PNG|JPEG/))
+      button_tag '预览', type: 'button', data: { toggle: 'modal', target: '#preview_image', imageUrl: url_for(entrust_order.entrust_doc) }, class: 'btn btn-primary btn-sm ml-2 preview_button' if check_bool
     end
 
     g.column in_csv: false, html: {style: "width:15px;"}  do |entrust_order|
@@ -36,3 +41,11 @@
       end
     end
 end -%>
+
+<script>
+
+ $('.preview_button').click(function(e){
+   $('#preview_image_image').attr('src',e.target.dataset.imageurl);
+ })
+
+</script>

@@ -107,6 +107,7 @@ class EntrustOrdersController < ApplicationController
                                             :base_info,
                                             :anyou,
                                             :organization_id,
+                                            :entrust_doc,
                                             appraised_unit_attributes: [:id,
                                                                         :unit_type,
                                                                         :name,
