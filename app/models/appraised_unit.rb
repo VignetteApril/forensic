@@ -6,7 +6,7 @@ class AppraisedUnit < ApplicationRecord
   enum gender: [:male, :female]
   enum id_type: [:user_id, :other, :passport, :hong_kong_and_macau_pass]
 
-  before_save :set_birthday
+  before_save :set_birthday, if: -> { self.user? }
 
   UNIT_TYPE_MAP = { unit: '单位', user: '个人' }
   GENDER_MAP = { male: '男', female: '女' }
