@@ -383,17 +383,22 @@ class ApisController < ApplicationController
 			format.json { render json:{"code": "0","data"=>units}.to_json }
 	  end	
   end
+
   #创建委托单
-  def cerate_entrust_order
+  def create_entrust_order
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])  	
-  	entrust_order = EntrustOrder.new(:case_property=>params["case_property"],:matter_demand=>params["matter_demand"],:base_info=>params["base_info"],:anyou=>params["anyou"])
+  	entrust_order = EntrustOrder.new(:case_property=>params["case_property"],
+                                     :matter_demand=>params["matter_demand"],
+                                     :base_info=>params["base_info"],
+                                     :anyou=>params["anyou"],
+                                     matter: params[:matter].split(','))
   	entrust_order.organization_id = params["organization_id"]
   	entrust_order.user = user 
   	entrust_order.entrust_doc.attach params["entrust_doc"]
   	#必须要先save不然entrust_order.appraised_unit 使用 EntrustOrder.last.appraised_unit读取会发现没有持久化传入的被鉴定人却绑定了一个空的新的被鉴定人
   	entrust_order.save
-  	entrust_order.appraised_unit = AppraisedUnit.find_by(:id=>params["appraised_unit_id"])
+		entrust_order.appraised_unit.create(unit_type: params[:unit_type], name: params[:name])
 
     if entrust_order.save
     	# wx_msg_send(params["form_id"])
@@ -407,12 +412,50 @@ class ApisController < ApplicationController
 		end  	
   end
 
+  def departments_through_org_id
+    organization = Organization.find_by_id params[:id]
+
+    if organization.present?
+      data = organization.departments.map do |department|
+        { name: department.name, id: department.id }
+      end
+      message = '请求接口成功！'
+      code = 0
+    else
+      data = []
+      message = '没找到对应的机构！'
+      code = 1
+    end
+
+    respond_to do |format|
+      format.json { render json:{ code: code, messages: message, data: data }.to_json }
+    end
+  end
+
+  def matter_through_dep_id
+    department = Department.find_by_id params[:id]
+
+    if department.present?
+      data = department.matter.empty? ? [] : department.matter.split(',')
+      message = '请求接口成功！'
+      code = 0
+    else
+      data = []
+      message = '没找到对应的科室！'
+      code = 1
+    end
+
+    respond_to do |format|
+      format.json { render json:{ code: code, messages: message, data: data }.to_json }
+    end
+  end
+
   #查看委托人下的所有案件的鉴定中心的集合
   def get_entrust_orgs
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 
-		organization_ids = MainCase.where(:wtr_id=>user.id).map{|e|e.organization_id}.compact
+		organization_ids = MainCase.where(:wtr_id=>user.id).map{|e|e.department.organization.id}.compact
 		orgs_hash =[]
 		organization_ids.each do |id|
 			orgs_hash << {"center_name": Organization.find_by(:id=>id).name, "id":id}

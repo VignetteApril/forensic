@@ -182,10 +182,12 @@ Rails.application.routes.draw do
   get 'apis/get_organization'
   post 'apis/create_appraised_unit'
   get  'apis/get_appraised_unit'
-  post 'apis/cerate_entrust_order'
+  post 'apis/create_entrust_order'
   get  'apis/get_entrust_orgs'
   post 'apis/create_talk'
   get  'apis/get_case_notice_list'
+  get 'apis/departments_through_org_id'
+  get 'apis/matter_through_dep_id'
 
   root 'session#index'
 end
