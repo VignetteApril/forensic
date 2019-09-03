@@ -398,7 +398,7 @@ class ApisController < ApplicationController
   	entrust_order.entrust_doc.attach params["entrust_doc"]
   	#必须要先save不然entrust_order.appraised_unit 使用 EntrustOrder.last.appraised_unit读取会发现没有持久化传入的被鉴定人却绑定了一个空的新的被鉴定人
   	entrust_order.save
-		entrust_order.build_appraised_unit(unit_type: params[:unit_type], name: params[:name])
+		entrust_order.build_appraised_unit(unit_type: params[:unit_type].to_i, name: params[:name])
 
     if entrust_order.save
     	# wx_msg_send(params["form_id"])
