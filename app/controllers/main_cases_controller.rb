@@ -1109,10 +1109,10 @@ class MainCasesController < ApplicationController
         redirect_to organizations_path, notice: '管理员无权对案件进行管理！'
       end
     end
-    #
-    # def check_if_has_department
-    #   redirect_to root_path, notice: '请您关联相关科室或鉴定中心' and return if @current_user.departments.nil? || @current_user.organization.nil?
-    # end
+
+    def check_if_has_department
+      redirect_to root_path, notice: '请您关联相关科室' and return if @current_user.departments.nil?
+    end
 
     # 新建和编辑页面需要对应将科室的选择框限定在当前用户所属于的科室
     # 如果当前用户没有科室，却能点进到案件的编辑中，则说明是领导，则要返回所有的科室列表
