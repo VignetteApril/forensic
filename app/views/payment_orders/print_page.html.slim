@@ -9,8 +9,9 @@ css:
   .page {
     padding: 20px;
     width: 800px;
-    height: 320px;
+    height: 464px;
     background-color: white;
+    padding-top: 100px;
   }
 
   .title {
@@ -43,12 +44,20 @@ css:
     font-size: 10px;
   }
 
+  .footer-info {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
 body
   .page
     .title
       span.title-text 缴费单
     .numbers
       span.number-text = "案件流水号：#{@payment_order.main_case.serial_no}"
+      span.number-text = " 日期：" + Time.now.strftime('%Y年%m月%d日')
       span.number-text.pull-right = "案件编号：#{@payment_order.main_case.case_no_display}"
     .table-content
       table cellspacing="0" cellpadding="5"
@@ -107,8 +116,11 @@ body
           td 支票号码
           td = @payment_order.check_num
           td 委托受理方式
-          td = @payment_order.payment_accept_type
+          td = PaymentOrder::PAYMENT_ACCEPT_MAP[@payment_order.payment_accept_type.to_sym]
     .print-footer
+      .footer-info
+        span = "收款单位：#{@main_case.department.organization.name}"
+        span = "经办人：_____________"
+        span = "交款人：_____________"
       .today
-        span = Time.now.strftime('%Y年%m月%d日')
         = image_tag url_for(@payment_order.main_case.barcode_image), style: 'height: 50px; float: right' if @payment_order.main_case.barcode_image

@@ -15,7 +15,7 @@
 
       .modal-footer
         - if transfer_doc
-          = link_to '打印条码', print_transfer_doc_barcode_main_cases_path(transfer_doc_id: transfer_doc.id), class: 'btn btn-success d-inline-block', data: { turbolinks: false }
+          = link_to '打印条码', print_transfer_doc_barcode_main_cases_path(transfer_doc_id: transfer_doc.id), class: 'btn btn-success d-inline-block', target: :_blank, data: { turbolinks: false }
         - elsif main_case
-          = link_to '打印条码', print_transfer_doc_barcode_main_cases_path(main_case_id: main_case.id), class: 'btn btn-success d-inline-block', data: { turbolinks: false }
+          = link_to '打印条码', print_transfer_doc_barcode_main_cases_path(main_case_id: main_case.id), class: 'btn btn-success d-inline-block', target: :_blank, data: { turbolinks: false }
         button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭

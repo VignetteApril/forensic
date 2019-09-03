@@ -133,7 +133,7 @@
   end
 
   g.column in_csv: false, html: {style: "width:15px;"} do |payment_order|
-    if can?('payment_orders', 'confirm_order')
+    if can?('payment_orders', 'confirm_order') && !payment_order.confirm?
       link_to '确认缴费单', confirm_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm'
     end
   end

@@ -57,14 +57,14 @@
   end
 
   g.column in_csv: false do |payment_order|
-    if can?('payment_orders', 'confirm_order')
+    if can?('payment_orders', 'confirm_order') && !payment_order.confirm?
       link_to '确认缴费单', confirm_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm', id: 'confirm_order'
     end
   end
 
   g.column in_csv: false do |payment_order|
     if can?('payment_orders', 'print_page')
-      link_to '打印缴费单', print_page_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm', id: 'print_page', data: { turbolinks: false }
+      link_to '打印缴费单', print_page_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm', id: 'print_page', target: :_blank, data: { turbolinks: false }
     end
   end
 
