@@ -71,12 +71,13 @@
           .col-md-12
             #filed_case_docs
               - @main_case.case_docs.where(case_stage: :filed).each do |doc|
-                = image_tag('word.png',height: '40', width: '32')
-                .doc-msg style="display:inline-block;position:relative;top:15px;"
-                  span.ml-2 = doc.name
-                  br
-                  span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                  span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
+                - if doc.attachment.attached?
+                  = image_tag('word.png',height: '40', width: '32')
+                  .doc-msg style="display:inline-block;position:relative;top:15px;"
+                    span.ml-2 = doc.name
+                    br
+                    span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                    span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
 
 = simple_form_for(@main_case, method: :patch, url: update_reject_main_case_path) do |f|
   .form-inputs
