@@ -1,4 +1,14 @@
 css:
+  @media print {
+    #non-printable {
+      display: none;
+    }
+
+    #printable {
+      display: block;
+    }
+  }
+
   body {
     background-color: #E0E0E0;
     display: flex;
@@ -52,7 +62,7 @@ css:
   }
 
 body
-  .page
+  .page#printable
     .title
       span.title-text 缴费单
     .numbers
@@ -116,7 +126,7 @@ body
           td 支票号码
           td = @payment_order.check_num
           td 委托受理方式
-          td = PaymentOrder::PAYMENT_ACCEPT_MAP[@payment_order.payment_accept_type.to_sym]
+          td = @payment_order.payment_accept_type.nil? ? '' : PaymentOrder::PAYMENT_ACCEPT_MAP[@payment_order.payment_accept_type.to_sym]
     .print-footer
       .footer-info
         span = "收款单位：#{@main_case.department.organization.name}"
