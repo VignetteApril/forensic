@@ -948,7 +948,6 @@ class MainCasesController < ApplicationController
   def upload_base64_image
     data_str = params[:data_str]
     @main_case.decode_base64_image data_str
-    binding.pry
   end
 
   private
