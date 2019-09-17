@@ -4,6 +4,18 @@
     g.column name:  '委托人', attribute: 'name', assoc: :user
     g.column name:  '案件性质', attribute: 'case_property'
     g.column name:  '案由', attribute: 'anyou'
+    g.column name: '被鉴定人' do |entrust_order|
+      entrust_order.appraised_unit.try(:name)
+    end
+
+    g.column name: '部门' do |entrust_order|
+      entrust_order.department.try(:name)
+    end
+
+    g.column name: '鉴定事项' do |entrust_order|
+      JSON.parse(entrust_order.matter).join(',') if entrust_order.matter
+    end
+
 
     g.column name:  '认领状态', attribute: 'status' do |entrust_order|
       case entrust_order.status.to_sym

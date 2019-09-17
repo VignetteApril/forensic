@@ -93,6 +93,7 @@ Rails.application.routes.draw do
     get :case_process_records, on: :member
     get :show_payment_order, on: :member
     get :print_transfer_doc_barcode, on: :collection
+    post :upload_base64_image, on: :member
     post :export_csv, on: :collection
     post :create_case_memo, on: :member
     post :update_doc_is_passed, on: :collection

@@ -31,7 +31,19 @@ class EntrustOrdersController < ApplicationController
   # 鉴定中心查看委托单功能
   # 查看用户所在机构下所有未认领的委托单
   def org_orders_unclaimed
-    @entrust_orders = initialize_grid( @current_user.organization.entrust_orders.unclaimed.includes(:organization),
+    # 如果是
+    if @current_user.center_filing_user?
+      department_ids = @current_user.departments
+      # 当前用户所在的科室的委托书
+      data1 = EntrustOrder.where(department_id: department_ids.split(',')).unclaimed.includes(:organization)
+      # 当前用户所在机构下所有没有认领的切没有指定科室的委托书
+      data2 = @current_user.organization.entrust_orders.where(department_id: nil).unclaimed.includes(:organization)
+      data = data1 + data2
+    else
+      data = @current_user.organization.entrust_orders.unclaimed.includes(:organization)
+    end
+
+    @entrust_orders = initialize_grid( data,
                                        name: 'entrust_orders',
                                        per_page: 20)
     render :index
@@ -131,6 +143,6 @@ class EntrustOrdersController < ApplicationController
       @center_collection = Organization.center
       @department_collection = @center_collection.first.departments
       @department_matters = @department_collection.first.matter.split(',').map { |matter| [matter, matter] } if @department_collection.first
-      @selected_matters = JSON.parse(@entrust_order.matter)
+      @selected_matters =  @entrust_order.nil? || @entrust_order.matter.nil? ? [] : JSON.parse(@entrust_order.matter)
     end
 end

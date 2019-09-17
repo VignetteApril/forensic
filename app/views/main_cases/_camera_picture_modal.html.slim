@@ -13,6 +13,7 @@
             div id="my_camera"
 
       .modal-footer
+        button#submit type='button' class="btn btn-primary" 上传
         button type="button" class="btn btn-secondary" onClick="take_snapshot()" 照相
 
 css:
@@ -53,6 +54,23 @@ javascript:
           // display results in page
           document.getElementById('results').innerHTML =
               '<h5>委托书图像：</h2>' +
-              '<img src="' + data_uri + '"/>';
+              '<img id="shot" src="' + data_uri + '"/>';
       });
   }
+
+  // 上传base64类型图片
+  $('#submit').click(function () {
+      var image_data_str = ($('#shot').attr('src'));
+      var request_url_matters = window.location.origin + '/main_cases/'+ "#{@main_case.id}" + '/upload_base64_image.json';
+      console.log(request_url_matters)
+      // $.ajax({
+      //     url: request_url_matters,
+      //     type: "POST",
+      //     data: {
+      //         'data_str': image_data_str,
+      //     },
+      //     dataType: 'json',
+      //     success: function (data) {
+      //     }
+      // });
+  });

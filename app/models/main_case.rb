@@ -322,4 +322,17 @@ class MainCase < ApplicationRecord
   def wtr?(user)
     self.wtr_id == user.id
   end
+
+  def decode_base64_image data_str
+    content_type = data_str[/(image\/[a-z]{3,4})|(application\/[a-z]{3,4})/]
+    content_type = content_type[/\b(?!.*\/).*/]
+    contents = data_str.sub /data:((image|application)\/.{3,}),/, ''
+    decoded_data = Base64.decode64(contents)
+    filename = 'doc_' + Time.zone.now.to_s + '.' + content_type
+    File.open("#{Rails.root}/tmp#{filename}", 'wb') do |f|
+      f.write(decoded_data)
+    end
+    self.entrust_docs.attach(io: File.open("#{Rails.root}/tmp/#{filename}"), filename: filename)
+    FileUtils.rm("#{Rails.root}/tmp/#{filename}")
+  end
 end

@@ -52,7 +52,7 @@
         // 只有当前案件没有对应的委托单时才可以关联委托单
         - if @main_case.entrust_order.nil?
           .row.no-gutters
-            .col-md-4
+            .col-md-8
               = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
         - else
           = f.input :entrust_order_id, :as => :hidden, html: { value: @main_case.entrust_order.id }
@@ -85,6 +85,7 @@
             = f.input :is_repeat, label: '是否重复鉴定', as: :boolean
           .col-md-12
             = f.input :original_appraisal_opinion, label: '原鉴定意见', as: :text, input_html: { rows: 2 }
+        hr
         .row
           .col-md-6
             .attachment_upload
@@ -193,8 +194,6 @@ css:
 javascript:
     $('#transfer_docs')
       .on('cocoon:after-insert', function(e, added_task) {
-        console.log(111)
-
         function setHeight(element) {
           $(element).css({'height':'auto','overflow-y':'hidden'}).height(element.scrollHeight);
         }

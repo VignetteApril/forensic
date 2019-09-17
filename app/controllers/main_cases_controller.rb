@@ -944,6 +944,13 @@ class MainCasesController < ApplicationController
     render :layout => false
   end
 
+  # 通过摄像头上传base64 的image
+  def upload_base64_image
+    data_str = params[:data_str]
+    @main_case.decode_base64_image data_str
+    binding.pry
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -1101,7 +1108,7 @@ class MainCasesController < ApplicationController
       @entrust_orders = []
       unless entrust_orders.empty?
         @entrust_orders = entrust_orders.map do|order|
-          ["#{order.user.try(:name)} #{order.appraised_unit.try(:name)} #{order.created_at.strftime("%Y-%m-%d")}", order.id]
+          ["委托联系人：#{order.user.try(:name)} 被鉴定人：#{order.appraised_unit.try(:name)} 科室：#{order.department.try(:name)} 鉴定事项：#{ order.matter.nil? ? '' : JSON.parse(order.matter).join(',')}", order.id]
         end
       end
     end

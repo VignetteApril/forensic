@@ -13,6 +13,7 @@ class Department < ApplicationRecord
   has_ancestry
   has_many :department_docs, as: :docable
   has_many :main_cases, dependent: :destroy
+  has_many :entrust_orders
   belongs_to :organization
 
   def user_array
