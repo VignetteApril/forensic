@@ -15,7 +15,7 @@ class PaymentOrdersController < ApplicationController
 		data = PaymentOrder.none
     if !@current_user.organization.nil?
       main_case_ids = @current_user.organization.main_cases.pluck(:id)
-      data = PaymentOrder.where(main_case_id: main_case_ids).not_confirm
+      data = PaymentOrder.where(main_case_id: main_case_ids)
 		end
 
 		@payment_orders = initialize_grid(data,

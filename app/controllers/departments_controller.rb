@@ -1,7 +1,8 @@
 # -*- encoding : utf-8 -*-
 class DepartmentsController < ApplicationController
-  before_action :set_department, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_department]
+  before_action :set_department, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_department, :matters]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_department]
+  skip_before_action :authorize, :can, only: [:matters]
 
   def index
     @departments = initialize_grid(@current_user.organization.departments, per_page: 20, name: 'departments_grid')
@@ -80,6 +81,18 @@ class DepartmentsController < ApplicationController
       # format.html { render "department", locals: {department: @department} }
       format.html { redirect_to departments_path(id: @department.id) }
       format.js
+    end
+  end
+
+  def matters
+    if @department.matter
+      matters = @department.matter.split(',').map { |matter| { name: matter, id: matter } }
+    else
+      matters = []
+    end
+
+    respond_to do |format|
+      format.json { render json: matters }
     end
   end
 

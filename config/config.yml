@@ -79,7 +79,7 @@ features:
   - [财务确认退费单, refund_orders, 'finance_index, confirm_order', 'center_finance_user, center_admin_user, center_director_user']
   - [申请开发票, bills, 'index, create, update, edit, new, destroy, dyn_form_modal', 'center_department_director_user, center_ident_user, center_assistant_user']
   - [财务发票管理, bills, 'to_taked_away, to_billed, finance_index, dyn_form_modal, finance_create, finance_unBilled_index', 'center_finance_user, center_admin_user, center_director_user']
-  - [认领委托单, main_cases, 'new_with_entrust_order, update, matter_demands_and_case_types, create', 'center_filing_user']
+  - [认领委托单, main_cases, 'new_with_entrust_order, update, matter_demands_and_case_types, create', 'center_filing_user, center_director_user, center_admin_user']
   - [发送快递, express_orders, 'index,create,edit,new,destroy,update', 'all']
   - [收到快递, recive_express_orders, 'index,create,edit,new,destroy,update', 'all']
   - [委托人查看案件, main_cases, 'wtr_cases, edit, case_memos, create_case_memo, case_process_records', 'client_entrust_user']

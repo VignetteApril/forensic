@@ -729,7 +729,9 @@ class MainCasesController < ApplicationController
                                                   organization_name: wtr_org.name,
                                                   user_name: @wtr.name,
                                                   wtr_phone: @wtr.mobile_phone,
-                                                  organization_addr: wtr_org.addr})
+                                                  organization_addr: wtr_org.addr,
+                                                  matter: @entrust_order.matter,
+                                                  department_id: @entrust_order.department.id})
     @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
     @main_case.transfer_docs.build
 

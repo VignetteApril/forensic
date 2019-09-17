@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get :department, :on => :member
     get :add_users, :on => :member
     get :add_users_submit, :on => :member
+    get :matters, on: :member
     delete :remove_user_from_department, :on => :member
   end
   resources :users do
@@ -62,7 +63,9 @@ Rails.application.routes.draw do
     post :aosignin, on: :collection
   end
 
-  resources :organizations
+  resources :organizations do
+    get :departments, on: :member
+  end
   resources :doc_templates
   resources :main_cases do
     get :personal_count,  :on => :collection

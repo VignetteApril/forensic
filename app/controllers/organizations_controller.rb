@@ -1,7 +1,8 @@
 class OrganizationsController < ApplicationController
-  before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :set_organization, only: [:show, :edit, :update, :destroy, :departments]
   before_action :set_new_areas, only: [:new, :create]
   before_action :set_edit_areas, only: [:edit, :update]
+  skip_before_action :authorize, :can, only: [:departments]
 
   # GET /organizations
   # GET /organizations.json
@@ -66,6 +67,15 @@ class OrganizationsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to organizations_url, notice: '组织已经被成功的删除！' }
       format.json { head :no_content }
+    end
+  end
+
+  def departments
+    departments = @organization.departments
+    matter = departments.first.nil? ? [] : departments.first.matter.split(',')
+
+    respond_to do |format|
+      format.json { render json: { departments: departments, matters: matter } }
     end
   end
 

@@ -15,7 +15,12 @@
     .row
       .col-md-4
         = f.input :organization_id, label: '鉴定中心', collection: @center_collection, include_blank: false
-      .col-md-8
+      .col-md-4
+        = f.input :department_id, label: '科室', collection: @department_collection, include_blank: false
+      .col-md-4
+        = f.input :matter, label: '鉴定事项', collection: @department_matters, selected: @selected_matters, include_hidden: false, include_blank: true, input_html: {multiple: true}
+    .row
+      .col-md-4
         .attachment_upload
           = f.input :entrust_doc, label: '上传委托书', as: :file, input_html: {direct_upload: true}
           - if @entrust_order.entrust_doc.attached?
@@ -92,5 +97,43 @@ javascript:
           $('.company-fields').addClass("d-none");
           $('.user-fields :input').removeAttr('disabled');
           $('.company-fields :input').attr('disabled', 'disabled');
+      }
+  });
+
+  var organization_select2 = $("#entrust_order_organization_id");
+  var department_select2 = $("#entrust_order_department_id");
+  var matter_select2 = $("#entrust_order_matter");
+
+  organization_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function (value) {
+          $.ajax({
+              url: window.location.origin + '/organizations/' + value + '/departments.json',
+              type: "GET",
+              data: {},
+              dataType: 'json',
+              success: function (data) {
+                  console.log(data);
+                  reloadSelectize(department_select2, data.departments, default_select_id = '');
+                  reloadSelectize(matter_select2, data.matters, default_select_id = '')
+              }
+          });
+      }
+  });
+
+  department_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      onChange: function (value) {
+          $.ajax({
+              url: window.location.origin + '/departments/' + value + '/matters.json',
+              type: "GET",
+              data: {},
+              dataType: 'json',
+              success: function (data) {
+                  reloadSelectize(matter_select2, data, default_select_id = '')
+              }
+          });
       }
   });

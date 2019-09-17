@@ -108,6 +108,8 @@ class EntrustOrdersController < ApplicationController
                                             :anyou,
                                             :organization_id,
                                             :entrust_doc,
+                                            :department_id,
+                                            matter: [],
                                             appraised_unit_attributes: [:id,
                                                                         :unit_type,
                                                                         :name,
@@ -127,5 +129,8 @@ class EntrustOrdersController < ApplicationController
 
     def center_collection
       @center_collection = Organization.center
+      @department_collection = @center_collection.first.departments
+      @department_matters = @department_collection.first.matter.split(',').map { |matter| [matter, matter] } if @department_collection.first
+      @selected_matters = JSON.parse(@entrust_order.matter)
     end
 end
