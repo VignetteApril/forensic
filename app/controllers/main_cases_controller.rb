@@ -224,6 +224,8 @@ class MainCasesController < ApplicationController
     @main_case.area_id = _area_id(main_case_params[:province_id],
                                   main_case_params[:city_id],
                                   main_case_params[:district_id])
+    attach_data_str(@main_case, main_case_params[:data_str]) if main_case_params[:data_str].present?
+
     respond_to do |format|
       # 案件创建后跳转到待立案的案件
       if @main_case.save
@@ -241,6 +243,8 @@ class MainCasesController < ApplicationController
     @main_case.area_id = _area_id(main_case_params[:province_id],
                                   main_case_params[:city_id],
                                   main_case_params[:district_id])
+    attach_data_str(@main_case, main_case_params[:data_str]) if main_case_params[:data_str].present?
+
     respond_to do |format|
       if @main_case.update(main_case_params)
         if main_case_params[:appraisal_opinion].nil?
@@ -944,12 +948,6 @@ class MainCasesController < ApplicationController
     render :layout => false
   end
 
-  # 通过摄像头上传base64 的image
-  def upload_base64_image
-    data_str = params[:data_str]
-    @main_case.decode_base64_image data_str
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_main_case
@@ -986,6 +984,7 @@ class MainCasesController < ApplicationController
                                         :appraisal_opinion,
                                         :original_appraisal_opinion,
                                         :is_repeat,
+                                        :data_str,
                                         transfer_docs_attributes: [:id,
                                                                    :name,
                                                                    :doc_type,
@@ -1137,5 +1136,10 @@ class MainCasesController < ApplicationController
       else
         @departments = departments.map { |department| [department.name, department.id] }
       end
+    end
+
+    # 将摄像头上传的数据attach
+    def attach_data_str(main_case, data_str)
+      main_case.decode_base64_image data_str
     end
 end

@@ -12,6 +12,7 @@
           li
             = message
   .form-inputs
+    = f.input :data_str, as: :hidden
     - if @wtr.nil?
       = f.input :wtr_id, :as => :hidden
     - else

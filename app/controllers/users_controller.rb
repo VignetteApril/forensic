@@ -302,7 +302,8 @@ class UsersController < ApplicationController
                                  :organization_id,
                                  :province_id,
                                  :city_id,
-                                 :district_id)
+                                 :district_id,
+                                 :ident_number)
   end
 
   def set_selected_departments

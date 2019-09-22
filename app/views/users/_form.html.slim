@@ -29,6 +29,17 @@
         = f.input :mobile_phone, label: '手机号'
       .col-md-4
         = f.input :email, label: '邮箱'
+    .row
+      .col-md-4
+        = f.input :ident_number, label: '鉴定人编号'
+      .col-md-4
+        = f.input :positive, label: '证件证明', as: :file, input_html: {direct_upload: true, multiple: true}
+        - if @user.positive.attached?
+          = image_tag url_for(@user.positive)
+      .col-md-4
+        = f.input :negative, label: '证件反面', as: :file, input_html: {direct_upload: true, multiple: true}
+        - if @user.negative.attached?
+          = image_tag url_for(@user.negative)
     / .row
     /   .col-md-4
     /     = f.input :city_id, collection: @cities, label: '市', include_blank: true

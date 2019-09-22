@@ -53,3 +53,12 @@ css:
       div style="display: flex; flex-direction: row-reverse; "
         = f.button :submit, '创建便签', class: 'btn btn-success btn-sm', style: 'height: 100%; margin-left: 10px; margin-top: 2px'
         = f.input :visibility_range, label: false, collection: CaseMemo.visibility_range_collection, wrapper_html: {style: 'width: 150px;'}
+      .alert.alert-success role="alert"
+        h5 可见范围提示
+        ul
+          li 案件内部：经办人、所有鉴定人
+          li 本案件：经办人、所有鉴定人、委托联系人
+          li 本案件和领导：经办人、所有鉴定人、科室主任、委托联系人
+
+javascript:
+

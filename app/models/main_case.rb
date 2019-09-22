@@ -4,6 +4,7 @@ require 'barby/outputter/png_outputter'
 
 class MainCase < ApplicationRecord
   include AASM
+  attr_accessor :data_str # 用于暂时存放从摄像头上传委托书的数据
 
   # 虚拟字段用户接受关联的委托单参数
   belongs_to :department
@@ -27,7 +28,7 @@ class MainCase < ApplicationRecord
   has_many_attached :entrust_docs # 案件下的委托书
 
   validates :matter, presence: { message: '不能为空' }
-  validates :province_id, :city_id, :district_id, presence: true
+  validates :province_id, :city_id, :district_id, :organization_name, presence: true
 
   # 将科室内部的所有文档都拷贝到当前的案件下
   after_create :create_case_docs
@@ -329,7 +330,7 @@ class MainCase < ApplicationRecord
     contents = data_str.sub /data:((image|application)\/.{3,}),/, ''
     decoded_data = Base64.decode64(contents)
     filename = 'doc_' + Time.zone.now.to_s + '.' + content_type
-    File.open("#{Rails.root}/tmp#{filename}", 'wb') do |f|
+    File.open("#{Rails.root}/tmp/#{filename}", 'wb') do |f|
       f.write(decoded_data)
     end
     self.entrust_docs.attach(io: File.open("#{Rails.root}/tmp/#{filename}"), filename: filename)

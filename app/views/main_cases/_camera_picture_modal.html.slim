@@ -13,8 +13,8 @@
             div id="my_camera"
 
       .modal-footer
-        button#submit type='button' class="btn btn-primary" 上传
-        button type="button" class="btn btn-secondary" onClick="take_snapshot()" 照相
+        button#submit type='button' class="btn btn-primary" 使用该照片
+        button type="button" class="btn btn-primary" onClick="take_snapshot()" 照相
 
 css:
   h2, h3 {
@@ -61,16 +61,11 @@ javascript:
   // 上传base64类型图片
   $('#submit').click(function () {
       var image_data_str = ($('#shot').attr('src'));
-      var request_url_matters = window.location.origin + '/main_cases/'+ "#{@main_case.id}" + '/upload_base64_image.json';
-      console.log(request_url_matters)
-      // $.ajax({
-      //     url: request_url_matters,
-      //     type: "POST",
-      //     data: {
-      //         'data_str': image_data_str,
-      //     },
-      //     dataType: 'json',
-      //     success: function (data) {
-      //     }
-      // });
+      console.log(image_data_str);
+      if (image_data_str == undefined || image_data_str == '') {
+          alert('请先照相！')
+      } else {
+          $('#main_case_data_str').val(image_data_str);
+          $('#camera_picture_modal').modal('hide');
+      }
   });
