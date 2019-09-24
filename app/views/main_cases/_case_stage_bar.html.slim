@@ -1,7 +1,8 @@
 .row
   .col-md-4
     / = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2 back'
-    span.h6.ml-3 = "#{'案件流水号：' + main_case.serial_no}"
+    .mt-3
+      span.h6.ml-3 = "#{'案件流水号：' + main_case.serial_no}"
   .col-md-8 style="display: flex; flex-direction: row-reverse"
     div.mt-2
       span.mr-2.mt-2.h6 = "案件编号：#{@main_case.case_no_display}"
