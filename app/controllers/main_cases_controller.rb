@@ -656,7 +656,7 @@ class MainCasesController < ApplicationController
           current_user_login = system_user.nil? ? user_name : (system_user.login + '01')
           @user = org.users.new(login: current_user_login,
                                 name: user_name,
-                                email: "#{wtr_phone}@forensic.com",
+                                email: "boot@forensic.com",
                                 password: '123456',
                                 password_confirmation: '123456',
                                 mobile_phone: wtr_phone)
