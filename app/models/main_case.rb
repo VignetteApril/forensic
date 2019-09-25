@@ -28,7 +28,7 @@ class MainCase < ApplicationRecord
   has_many_attached :entrust_docs # 案件下的委托书
 
   validates :matter, presence: { message: '不能为空' }
-  validates :province_id, :city_id, :district_id, :organization_name, presence: true
+  validates :province_id, :city_id, :organization_name, presence: true
 
   # 将科室内部的所有文档都拷贝到当前的案件下
   after_create :create_case_docs
