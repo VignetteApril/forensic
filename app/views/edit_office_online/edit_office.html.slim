@@ -59,9 +59,10 @@ javascript:
       // BUG: 因为每次会往同样的位置加入条形码，用户保存后，下一次进来会在同一个位置再加入条形码
       if ("#{@barcode_path}" != '') {
           var pageCount = current_word.ComputeStatistics(2);
+          alert(pageCount);
           if (pageCount > 1) {
               for (var i = 0; i <= pageCount; i++) {
-                  current_word.GoTo(1, i + 1).Select();
+                  current_word.GoTo(1, 1, i + 1).Select();
                   var Shape = app.Selection.InlineShapes.AddPicture("#{@barcode_path}", false, true).ConvertToShape();
                   Shape.RelativeHorizontalPosition = 5;
                   Shape.RelativeVerticalPosition = 5;
