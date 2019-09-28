@@ -62,4 +62,12 @@ module ApplicationHelper
   def court_user?
     @current_user.organization && @current_user.organization.org_type == 'court'
   end
+
+  def stringify_time(time_str)
+    if time_str
+      time_str.to_time.strftime('%Y年%m月%d日')
+    else
+      ''
+    end
+  end
 end

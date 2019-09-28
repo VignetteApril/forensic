@@ -1,7 +1,6 @@
-<%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true) do |g|
+<%= define_grid(@main_cases, hide_submit_button: true, hide_reset_button: true, hide_csv_button: true) do |g|
    g.row_attributes do |main_case|
       { 'data-href': edit_main_case_path(main_case), class: 'clickable-row' }
-
    end
 
    g.column name: '流水号', attribute: 'serial_no', detach_with_id: :serial_no_filter, ordering: false do |main_case|

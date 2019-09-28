@@ -32,7 +32,7 @@ javascript:
       // 委托鉴定事项替换
       app.Selection.Find.Execute('@#案由@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:anyou)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#案件性质@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_property)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:commission_date)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{stringify_time(@main_case.try(:commission_date))}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#受委托科室@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:department).try(:name)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#鉴定事项@#', false, false, false, false, false, 1, false, false, "#{@case_matter}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#案件类型@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_type)}", 2, false, false, false, false);
