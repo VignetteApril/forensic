@@ -4,24 +4,24 @@
   .card-body
     .row
       .col-md-6
-        .per-chart id='container3' style="height:500px;width:100%"
+        .per-chart id='center_director_container3' style="height:500px;width:100%"
     .row
       .col-md-6
-        .per-chart id='container' style="height:500px;width:100%"
+        .per-chart id='center_director_container' style="height:500px;width:100%"
       .col-md-6
-        .per-chart id='container0' style="height:500px;width:100%"  
+        .per-chart id='center_director_container0' style="height:500px;width:100%"
     .row      
       .col-md-6
-        .per-chart id='container1' style="height:500px;width:100%"
+        .per-chart id='center_director_container1' style="height:500px;width:100%"
       .col-md-6
-        .per-chart id='container2' style="height:500px;width:100%"
+        .per-chart id='center_director_container2' style="height:500px;width:100%"
 
 
 javascript:
   $(document).ready(function() {  
    var data = $('.hidden').text()
    console.log(data)
-   var json_data = JSON.parse(data)
+   var json_data = JSON.parse(data).center_director_user
 
    var chart = {
        plotBackgroundColor: null,
@@ -72,7 +72,7 @@ javascript:
    json.tooltip = tooltip;  
    json.series = series;
    json.plotOptions = plotOptions;
-   $('#container').highcharts(json); 
+   $('#center_director_container').highcharts(json);
 
 
   // ---------------
@@ -126,7 +126,7 @@ javascript:
    json0.tooltip = tooltip0;  
    json0.series = series0;
    json0.plotOptions = plotOptions0;
-   $('#container0').highcharts(json0); 
+   $('#center_director_container0').highcharts(json0);
 
 
   // --------------- 
@@ -194,7 +194,7 @@ javascript:
    json1.series = series1;
    json1.plotOptions = plotOptions1;  
    json1.credits = credits1;
-   $('#container1').highcharts(json1);
+   $('#center_director_container1').highcharts(json1);
 
    //--------------
    //输入数据
@@ -253,7 +253,7 @@ javascript:
    json2.legend = legend2;
    json2.series = series2;
 
-   $('#container2').highcharts(json2);
+   $('#center_director_container2').highcharts(json2);
 
 
       // --------------
@@ -288,7 +288,7 @@ javascript:
           }
       }
       // 创建图表
-      $('#container3').highcharts({
+      $('#center_director_container3').highcharts({
           chart: {
               type: 'pie'
           },

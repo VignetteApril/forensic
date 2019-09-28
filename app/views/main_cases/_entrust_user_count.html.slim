@@ -4,16 +4,16 @@
   .card-body
     .row
       .col-md-4
-        .per-chart id='container' style="height:500px;width:100%"
+        .per-chart id='entrust_user_container' style="height:500px;width:100%"
       .col-md-4
-        .per-chart id='container1' style="height:500px;width:100%"
+        .per-chart id='entrust_user_container1' style="height:500px;width:100%"
       .col-md-4
-        .per-chart id='container2' style="height:500px;width:100%"
+        .per-chart id='entrust_user_container2' style="height:500px;width:100%"
 
 javascript:
   $(document).ready(function() {  
    var data = $('.hidden').text();
-   var json_data = JSON.parse(data);
+   var json_data = JSON.parse(data).entrust_user;
 
    var chart = {
        plotBackgroundColor: null,
@@ -64,7 +64,7 @@ javascript:
    json.tooltip = tooltip;  
    json.series = series;
    json.plotOptions = plotOptions;
-   $('#container').highcharts(json); 
+   $('#entrust_user_container').highcharts(json);
 
 
   // ---------------
@@ -132,7 +132,7 @@ javascript:
    json1.series = series1;
    json1.plotOptions = plotOptions1;  
    json1.credits = credits1;
-   $('#container1').highcharts(json1);
+   $('#entrust_user_container1').highcharts(json1);
 
    //--------------
    //输入数据
@@ -191,6 +191,6 @@ javascript:
    json2.legend = legend2;
    json2.series = series2;
 
-   $('#container2').highcharts(json2);
+   $('#entrust_user_container2').highcharts(json2);
 
   });
