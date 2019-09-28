@@ -22,36 +22,36 @@ javascript:
       var current_word = WebOffice.ActiveDocument;
       var app = current_word.Application;
       // 委托方信息替换
-      app.Selection.Find.Execute('@#省@#', false, false, false, false, false, 1, false, false, "#{@province_name}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#市@#', false, false, false, false, false, 1, false, false, "#{@city_name}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#区@#', false, false, false, false, false, 1, false, false, "#{@district_name}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托方名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:organization_name)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托人姓名@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:user_name)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托人电话@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:wtr_phone)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托方地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:organization_addr)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#省@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@province_name)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#市@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@city_name)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#区@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@district_name)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托方名称@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:organization_name))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托人姓名@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:user_name))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托人电话@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:wtr_phone))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托方地址@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:organization_addr))}", 2, false, false, false, false);
       // 委托鉴定事项替换
-      app.Selection.Find.Execute('@#案由@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:anyou)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#案件性质@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_property)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{stringify_time(@main_case.try(:commission_date))}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#受委托科室@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:department).try(:name)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#鉴定事项@#', false, false, false, false, false, 1, false, false, "#{@case_matter}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#案件类型@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_type)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#鉴定事项及要求@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:matter_demand)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:base_info)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#案号@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:case_no_display)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:base_info)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#鉴定意见@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraisal_opinion)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案由@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:anyou))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案件性质@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:case_property))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#委托日期@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(stringify_time(@main_case.try(:commission_date)))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#受委托科室@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:department).try(:name))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定事项@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@case_matter)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案件类型@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:case_type))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定事项及要求@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:matter_demand))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:base_info))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#案号@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:case_no_display))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#基本案情@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:base_info))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#鉴定意见@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraisal_opinion))}", 2, false, false, false, false);
       // 鉴定人信息替换
-      app.Selection.Find.Execute('@#被鉴定人类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_unit_type}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:name)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人性别@#', false, false, false, false, false, 1, false, false, "#{@appraised_gender}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:birthday)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人证件类型@#', false, false, false, false, false, 1, false, false, "#{@appraised_id_type}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人联系地址@#', false, false, false, false, false, 1, false, false, "#{@main_case.try(:appraised_unit).try(:addr)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人类型@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@appraised_unit_type)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:name))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人性别@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@appraised_gender)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:birthday))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人证件类型@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@appraised_id_type)}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人联系地址@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:addr))}", 2, false, false, false, false);
 
       // TODO: 移交材料相关信息替换
       // 等待需求确认
-      app.Selection.Find.Execute('@#移交材料@#', false, false, false, false, false, 1, false, false, "#{@transfer_docs}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#移交材料@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@transfer_docs)}", 2, false, false, false, false);
 
       // 加入条形码图片
       // 获取总页数
@@ -59,7 +59,6 @@ javascript:
       // BUG: 因为每次会往同样的位置加入条形码，用户保存后，下一次进来会在同一个位置再加入条形码
       if ("#{@barcode_path}" != '') {
           var pageCount = current_word.ComputeStatistics(2);
-          alert(pageCount);
           if (pageCount > 1) {
               for (var i = 0; i <= pageCount; i++) {
                   current_word.GoTo(1, 1, i + 1).Select();
