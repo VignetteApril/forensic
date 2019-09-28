@@ -1,6 +1,6 @@
 module MainCasesHelper
     def department_collection
-        Department.all.map { |department| [department.name, department.id] }
+        Department.all.map { |department| [department.name, department.name] }
     end
 
     def case_stages_collection
