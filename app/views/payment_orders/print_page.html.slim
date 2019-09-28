@@ -132,3 +132,6 @@ body
         span = "交款人：_____________"
       .today
         = image_tag url_for(@payment_order.main_case.barcode_image), style: 'height: 50px; float: right' if @payment_order.main_case.barcode_image
+        
+javascript:
+    window.print();
