@@ -140,8 +140,8 @@ javascript:
                 id = $($(e.target).closest('.case-item')).attr('data-id')
             }
 
-            var url = "/main_cases/"+id+"/edit"
-            window.location.href = url;
+            var url = "/main_cases/"+id+"/edit";
+            window.open(url, '_blank');
         })
 
     }else{
