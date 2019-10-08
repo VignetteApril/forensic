@@ -45,7 +45,7 @@ javascript:
       app.Selection.Find.Execute('@#被鉴定人类型@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@appraised_unit_type)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人名称@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:name))}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人性别@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@appraised_gender)}", 2, false, false, false, false);
-      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:birthday))}", 2, false, false, false, false);
+      app.Selection.Find.Execute('@#被鉴定人生日@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:birthday).to_s)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人证件类型@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@appraised_id_type)}", 2, false, false, false, false);
       app.Selection.Find.Execute('@#被鉴定人联系地址@#', false, false, false, false, false, 1, false, false, "#{escape_javascript(@main_case.try(:appraised_unit).try(:addr))}", 2, false, false, false, false);
 
