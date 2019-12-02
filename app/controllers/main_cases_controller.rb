@@ -296,7 +296,7 @@ class MainCasesController < ApplicationController
 
     @organization_name = user.organization.name
     @wtr_phone = user.mobile_phone
-    @organization_addr = user.organization.addr
+    @organization_addr = user.addr
     @user_name = user.name
 
     rs_current_province = { name: @current_province.name, id: @current_province.id }
