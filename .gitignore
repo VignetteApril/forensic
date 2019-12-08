@@ -82,3 +82,5 @@ config/database.yml
 Gemfile.lock
 
 /public/.well-known/*
+
+.ruby-version
