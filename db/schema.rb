@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_22_081451) do
+ActiveRecord::Schema.define(version: 2019_12_08_065224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,7 +165,6 @@ ActiveRecord::Schema.define(version: 2019_09_22_081451) do
     t.string "case_types"
     t.string "abbreviation"
     t.integer "case_start_no"
-    t.string "transfer_columns"
     t.index ["ancestry"], name: "index_departments_on_ancestry"
     t.index ["organization_id"], name: "index_departments_on_organization_id"
     t.index ["sort_no"], name: "index_departments_on_sort_no"
@@ -228,6 +227,7 @@ ActiveRecord::Schema.define(version: 2019_09_22_081451) do
     t.string "role_names"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "app"
     t.index ["controller_name"], name: "index_features_on_controller_name"
   end
 
