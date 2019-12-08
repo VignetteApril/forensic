@@ -26,8 +26,8 @@ class ExpressOrder < ApplicationRecord
 				rs << [c.case_no, c.id]
 			end
 			return rs
-		else 
-			if user.departments.nil？
+		else
+			if user.departments.nil?
        	if (user.center_director_user? || user.center_admin_user? || center_archivist_user? || center_finance_user?)
        		# 返回机构案件
        		org_cases = @current_user.organization.main_cases
@@ -40,7 +40,7 @@ class ExpressOrder < ApplicationRecord
 				end
 			else
 				# 返回科室案件
-				department_cases = MainCase.where(:department_id => @current_user.departments.split(','))
+				department_cases = MainCase.where(:department_id => user.departments.split(','))
 	   		department_cases.each do |c|
 					rs << [c.case_no, c.id]
 				end

@@ -69,6 +69,8 @@ class MainCasesController < ApplicationController
   end
 
   def department_closed_cases
+    redirect_to main_cases_path, flash: { alert: '请设置科室！' } and return if @current_user.departments.nil?
+
     data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :close)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
