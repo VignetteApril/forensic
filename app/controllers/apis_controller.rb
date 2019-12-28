@@ -333,35 +333,6 @@ class ApisController < ApplicationController
 	  end			
 	end
 
-  def get_case_talk
-		decoded_token = JWT.decode params[:token], nil, false
-		user = User.find_by(:id=>decoded_token[0]["id"])
-		if user.blank?
-			json = {"code": "1","messages":"根据token找不到用户"}
-			respond_to do |format|
-				format.json { render json:json.to_json }
-		  end	 
-		else
-			cases = MainCase.find_by(:id=>params["caseid"])
-			if cases.blank?
-				json = {"code": "1","messages":"未找到case"}
-				respond_to do |format|
-					format.json { render json:json.to_json }
-			  end	
-			else
-				talks = cases.case_talks.map do |talk|
-					is_me = (talk.user == user)? true : false
-					{"time":talk.created_at.strftime('%Y/%m/%d'),"detail": talk.detail,"is_me":is_me,"talk_name":talk.try(:user).try(:name)}
-				end
-				json = {"code": "0","messages":"请求成功","data": talks}
-				respond_to do |format|
-					format.json { render json:json.to_json }
-			  end	 
-			end
-		end
-   	
-  end 
-
   #创建被鉴定人
   def create_appraised_unit
   	decoded_token = JWT.decode params[:token], nil, false
@@ -477,7 +448,11 @@ class ApisController < ApplicationController
   	decoded_token = JWT.decode params[:token], nil, false
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		my_case = MainCase.find_by(:id=>params["caseid"])
-		talk = my_case.case_talks.new(:detail=>params["detail"])
+
+
+		@case_memo = my_case.case_memos.new({ content: params["detail"], visibility_range: :all })
+		@case_memo.user = user
+
 		talk.user = user 
     if talk.save
 	    respond_to do |format|
@@ -488,5 +463,46 @@ class ApisController < ApplicationController
 				format.json { render json:{"code": "1","messages":"发送消息失败"}.to_json }
 		  end	
 		end  			
-  end
+	end
+
+	# 获取对话信息
+	def get_case_talk
+		decoded_token = JWT.decode params[:token], nil, false
+		user = User.find_by(:id=>decoded_token[0]["id"])
+		if user.blank?
+			json = {"code": "1","messages":"根据token找不到用户"}
+			respond_to do |format|
+				format.json { render json:json.to_json }
+			end
+		else
+			@main_case = MainCase.find_by(:id=>params["caseid"])
+			@case_memos = if @main_case.temp_ident_user?(@current_user)
+											@main_case.case_memos.where.not(visibility_range: :only_me)
+										elsif @main_case.wtr?(@current_user)
+											@main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
+										elsif @current_user.center_department_director_user?
+											@main_case.case_memos.where(visibility_range: :current_case_and_leader)
+										else
+											MainCase.none
+										end.or(@main_case.case_memos.where(user_id: @current_user.id), visibility_range: :all).order(:created_at).uniq
+
+
+			if @main_case.blank?
+				json = {"code": "1","messages":"未找到case"}
+				respond_to do |format|
+					format.json { render json:json.to_json }
+				end
+			else
+				memos = @case_memos.map do |memo|
+					is_me = (memo.user == user)? true : false
+					{ time: memo.created_at.strftime('%Y/%m/%d'), detail: memo.content, is_me: is_me, talk_name: memo.try(:user).try(:name), tail_user_id: memo.try(:user).try(:id) }
+				end
+				json = {"code": "0","messages":"请求成功","data": memos}
+				respond_to do |format|
+					format.json { render json: json.to_json }
+				end
+			end
+		end
+
+	end
 end
