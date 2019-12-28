@@ -475,15 +475,15 @@ class ApisController < ApplicationController
 			end
 		else
 			@main_case = MainCase.find_by(:id=>params["caseid"])
-			@case_memos = if @main_case.temp_ident_user?(@current_user)
+			@case_memos = if @main_case.temp_ident_user?(user)
 											@main_case.case_memos.where.not(visibility_range: :only_me)
-										elsif @main_case.wtr?(@current_user)
+										elsif @main_case.wtr?(user)
 											@main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
-										elsif @current_user.center_department_director_user?
+										elsif user.center_department_director_user?
 											@main_case.case_memos.where(visibility_range: :current_case_and_leader)
 										else
 											MainCase.none
-										end.or(@main_case.case_memos.where(user_id: @current_user.id), visibility_range: :all).order(:created_at).uniq
+										end.or(@main_case.case_memos.where(user_id: user.id), visibility_range: :all).order(:created_at).uniq
 
 
 			if @main_case.blank?
