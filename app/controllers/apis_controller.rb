@@ -483,7 +483,7 @@ class ApisController < ApplicationController
 											@main_case.case_memos.where(visibility_range: :current_case_and_leader)
 										else
 											MainCase.none
-										end.or(@main_case.case_memos.where(user_id: user.id), visibility_range: :all).order(:created_at).uniq
+										end.or(@main_case.case_memos.where(user_id: user.id, visibility_range: :all)).order(:created_at).uniq
 
 
 			if @main_case.blank?
