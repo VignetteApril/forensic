@@ -2,11 +2,6 @@ require 'jwt'
 require "net/http" 
 
 class ApisController < ApplicationController
-	include ApplicationHelper
-	include ActionView::Helpers::DateHelper
-	include ActionView::Helpers::TagHelper
-	include ActionView::Context
-
 	skip_before_action :can
 	skip_before_action :authorize
 	skip_before_action :verify_authenticity_token
@@ -507,4 +502,38 @@ class ApisController < ApplicationController
 		end
 
 	end
+
+	private
+		def get_distance_of_time(main_case)
+			case main_case.case_stage.to_sym
+			when :pending
+				'距离登记已过' + distance_of_time_in_words(Time.now, main_case.created_at, scope: 'datetime.distance_in_words')
+			when :add_material
+				if main_case.material_cycle.nil?
+					'请选择补充材料周期'
+				else
+					date_bool = Time.now <=> (main_case.created_at + main_case.material_cycle.days)
+					date_pre_str = date_bool > 0 ?  '距补充材料规定日期已过' : '距离补充材料到期还剩'
+					date_distance = distance_of_time_in_words(Time.now, main_case.created_at + main_case.material_cycle.days, scope: 'datetime.distance_in_words')
+					if date_bool
+						date_pre_str + date_distance
+					else
+						date_pre_str + date_distance
+					end
+				end
+			else
+				if main_case.identification_cycle.nil?
+					'请选择鉴定周期'
+				else
+					date_bool = Time.now <=> (main_case.acceptance_date + main_case.identification_cycle.days)
+					date_pre_str = date_bool > 0 ?  '结案已过' : '距离结案还剩'
+					date_distance = distance_of_time_in_words(Time.now, main_case.acceptance_date + main_case.identification_cycle.days, scope: 'datetime.distance_in_words')
+					if date_bool
+						date_pre_str + date_distance
+					else
+						date_pre_str + date_distance
+					end
+				end
+			end
+		end
 end
