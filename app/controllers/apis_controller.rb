@@ -4,7 +4,9 @@ require "net/http"
 class ApisController < ApplicationController
 	include ApplicationHelper
 	include ActionView::Helpers::DateHelper
-	
+	include ActionView::Helpers::TagHelper
+	include ActionView::Context
+
 	skip_before_action :can
 	skip_before_action :authorize
 	skip_before_action :verify_authenticity_token
