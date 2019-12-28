@@ -2,6 +2,8 @@ require 'jwt'
 require "net/http" 
 
 class ApisController < ApplicationController
+	include ActionView::Helpers::DateHelper
+
 	skip_before_action :can
 	skip_before_action :authorize
 	skip_before_action :verify_authenticity_token
@@ -316,7 +318,7 @@ class ApisController < ApplicationController
 			"time": e.created_at.strftime('%Y-%m-%d'),
 			"anyou":e.anyou,
 			"appraised_unit":e.appraised_unit,
-			ident_users: User.where(id: e.ident_users).map(&:name),
+			ident_users: User.where(id: e.ident_users).map(&:name).join(','),
 			pass_user: User.find(e.pass_user).try(:name),
 			filed_date: e.filed_date.strftime("%Y年 %m月 %d日"),
 			distance_of_time: get_distance_of_time(e),
