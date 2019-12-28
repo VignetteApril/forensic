@@ -449,12 +449,10 @@ class ApisController < ApplicationController
 		user = User.find_by(:id=>decoded_token[0]["id"])
 		my_case = MainCase.find_by(:id=>params["caseid"])
 
-
 		@case_memo = my_case.case_memos.new({ content: params["detail"], visibility_range: :all })
 		@case_memo.user = user
 
-		talk.user = user 
-    if talk.save
+    if @case_memo.save
 	    respond_to do |format|
 				format.json { render json:{"code": "0","messages":"发送消息成功"}.to_json }
 		  end	
