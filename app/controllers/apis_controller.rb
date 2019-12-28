@@ -2,6 +2,7 @@ require 'jwt'
 require "net/http" 
 
 class ApisController < ApplicationController
+	include ApplicationHelper
 	skip_before_action :can
 	skip_before_action :authorize
 	skip_before_action :verify_authenticity_token

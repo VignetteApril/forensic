@@ -10,8 +10,4 @@ module MainCasesHelper
     def financial_stage_collection
         MainCase.financial_stages.map { |key, value| [ MainCase::FINANCIAL_STAGE_MAP[key.to_sym], value ] }
     end
-
-    def get_distance_of_time(main_case)
-        main_case.distance_of_time
-    end
 end

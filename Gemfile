@@ -43,7 +43,7 @@ gem 'chunky_png'
 gem 'barby'
 gem 'jwt'
 gem 'rails-i18n'
-gem 'pg'
+gem 'pg', '1.1.2'
 
 group :development, :test do
   gem 'minitest-rails'
