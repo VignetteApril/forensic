@@ -44,6 +44,7 @@ gem 'barby'
 gem 'jwt'
 gem 'rails-i18n'
 gem 'pg', '1.1.2'
+gem 'httparty'
 
 group :development, :test do
   gem 'minitest-rails'
