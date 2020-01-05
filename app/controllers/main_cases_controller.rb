@@ -5,7 +5,7 @@ class MainCasesController < ApplicationController
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
                                        :save_payment_order, :case_executing, :update_case_stage, :update_financial_stage,
                                        :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
-                                       :case_process_records, :show_payment_order]
+                                       :case_process_records, :show_payment_order, :express_orders]
   before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
   before_action :set_edit_areas, only: [:edit, :update]
   before_action :set_court_users, only: [:new, :edit, :create]
@@ -357,6 +357,8 @@ class MainCasesController < ApplicationController
       redirect_url = closing_case_main_case_url(@main_case)
     when 'case_memos'
       redirect_url = case_memos_main_case_url(@main_case)
+    when 'express_orders'
+      redirect_url = express_orders_main_case_url(@main_case)
     when 'edit'
       redirect_url = edit_main_case_url(@main_case)
     end
@@ -521,6 +523,8 @@ class MainCasesController < ApplicationController
       redirect_url = closing_case_main_case_url(@main_case)
     when 'case_memos'
       redirect_url = case_memos_main_case_url(@main_case)
+    when 'express_orders'
+      redirect_url = express_orders_main_case_url(@main_case)
     when 'edit'
       redirect_url = edit_main_case_url(@main_case)
     end
@@ -949,6 +953,11 @@ class MainCasesController < ApplicationController
     end
 
     render :layout => false
+  end
+
+  # 用户在案件中查看快递轨迹
+  def express_orders
+    @express_orders = @main_case.express_orders
   end
 
   private
