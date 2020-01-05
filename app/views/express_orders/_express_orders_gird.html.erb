@@ -29,7 +29,7 @@
   end
 
   g.column name: '发送日期', custom_filter: false do |a|
-    a.order_date.strftime('%Y-%m-%d')
+    a.order_date.strftime('%Y-%m-%d') if a.order_date
   end
 
   g.column name: '关联案件号',attribute: 'case_no' ,custom_filter: false do |a|

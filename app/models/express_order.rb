@@ -1,6 +1,7 @@
 class ExpressOrder < ApplicationRecord
 	belongs_to :main_case
 	belongs_to :user
+	attr_accessor :come_from
 
 	before_save :set_maincase_no, on: [:create, :update]
 
@@ -10,17 +11,14 @@ class ExpressOrder < ApplicationRecord
     self.case_no = self.main_case.case_no
   end
 
-	enum company_type: [:zt, :st, :sf ,:yt]
+	enum company_type: [:ems]
   COMPANY_TYPE_MAP = {
-      zt: '中通',
-      st: '申通',
-      sf: '顺丰',
-      yt: '圆通',
+			ems: 'EMS'
   }
 
   def my_cases_collection(user)
+		rs = []
   	if user.client_entrust_user?
-			rs = []
 			my_cases = MainCase.where(:wtr_id=>user.id).try(:all)
 			my_cases.each do |c|
 				rs << [c.case_no, c.id]

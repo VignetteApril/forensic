@@ -37,10 +37,18 @@ class ExpressOrdersController < ApplicationController
 
     respond_to do |format|
       if @express_order.save
-        format.html { redirect_to express_orders_path, notice: '创建发送快递记录成功' }
+        if express_order_params[:come_from]
+          format.html { redirect_to express_orders_main_case_url(express_order_params[:main_case_id]), notice: '创建发送快递记录成功' }
+        else
+          format.html { redirect_to express_orders_path, notice: '创建发送快递记录成功' }
+        end
         format.json { render :show, status: :created, location: @express_order }
       else
-        format.html { render :new }
+        if express_order_params[:come_from]
+          format.html { redirect_to express_orders_main_case_url(express_order_params[:main_case_id]), alert: '快递号已经存在' }
+        else
+          format.html { render :new }
+        end
         format.json { render json: @express_order.errors, status: :unprocessable_entity }
       end
     end
@@ -87,6 +95,7 @@ class ExpressOrdersController < ApplicationController
                                       :order_date,
                                       :content,
                                       :order_num,
-                                      :main_case_id )
+                                      :main_case_id,
+                                      :come_from)
     end
 end

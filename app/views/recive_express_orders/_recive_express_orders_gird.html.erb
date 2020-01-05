@@ -21,14 +21,12 @@
   end
 
   g.column name: '发送日期', custom_filter: false do |a|
-    a.order_date.strftime('%Y-%m-%d')
+    a.order_date.strftime('%Y-%m-%d') if a.order_date
   end
 
   g.column name: '关联案件号',attribute: 'case_no' ,custom_filter: false , ordering: false do |a|
     a.case_no
   end
-
-
 
   g.column in_csv: false do |recive_express_order|
     if can?('recive_express_orders', 'edit') 
@@ -41,6 +39,4 @@
       link_to '删除', recive_express_order_path(recive_express_order), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm'
     end
   end
-
-
 end -%>

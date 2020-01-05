@@ -20,7 +20,7 @@
     .col-md-4
       = f.input :content, label: '内容'  
     .col-md-4
-      = f.input :company_type, label: '快递单位' , collection: ExpressOrder.company_type_collection
+      = f.input :company_type, label: '快递单位' , collection: ExpressOrder.company_type_collection, selected: 0
     .col-md-4
       = f.input :order_date, label: '发送时间', as: :date, html5: true
       

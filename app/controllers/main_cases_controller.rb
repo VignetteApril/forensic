@@ -958,6 +958,8 @@ class MainCasesController < ApplicationController
   # 用户在案件中查看快递轨迹
   def express_orders
     @express_orders = @main_case.express_orders
+    @recive_express_order = ReciveExpressOrder.new
+    @express_order = ExpressOrder.new
   end
 
   private

@@ -1,3 +1,46 @@
 = render partial: 'case_stage_bar', locals: { main_case: @main_case, case_stage: 'express_orders' }
 = render partial: 'case_no_modal', locals: {main_case: @main_case}
 = render 'nav_bar'
+
+.card
+  .card-body
+    ul.nav.nav-tabs#myTab role="tablist"
+      li.nav-item
+        a.nav-link.active id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true" 发快递
+      li.nav-item
+        a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" 收快递
+    .tab-content id="myTabContent"
+      div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"
+        .mt-4
+          = simple_form_for(@recive_express_order) do |f|
+            = f.input :main_case_id, label: false, as: :hidden, input_html: { value: @main_case.id }
+            = f.input :company_type, label: false, as: :hidden, input_html: { value: 'ems' }
+            = f.input :come_from, label: false, as: :hidden, input_html: { value: 'case' }
+            .row
+              .col-md-8
+                = f.input :order_num, label: '快递单号'
+              .col-md-4
+                = f.button :submit, '关联', class: 'btn btn-success mt-4'
+          hr
+          h5 收到快递路由信息
+          ul
+            - @main_case.recive_express_orders.each do |recive|
+              li
+                = "快递单号：" + recive.order_num
+      div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"
+        .mt-4
+          = simple_form_for(@express_order) do |f|
+            = f.input :main_case_id, label: false, as: :hidden, input_html: {value: @main_case.id}
+            = f.input :company_type, label: false, as: :hidden, input_html: {value: 'ems'}
+            = f.input :come_from, label: false, as: :hidden, input_html: {value: 'case'}
+            .row
+              .col-md-8
+                = f.input :order_num, label: '快递单号'
+              .col-md-4
+                = f.button :submit, '关联', class: 'btn btn-success mt-4'
+          hr
+          h5 发出快递路由信息
+          ul
+            - @main_case.express_orders.each do |recive|
+              li
+                = "快递单号：" + recive.order_num
