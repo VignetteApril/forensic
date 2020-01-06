@@ -1,0 +1,2 @@
+$("#<%= 'inner_' + @express_num %>").html("<%= escape_javascript(render partial: "main_cases/express_route_info",
+                                                                        locals: { route_info: @result['responseItems'] }) %>")

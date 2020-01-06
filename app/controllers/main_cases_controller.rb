@@ -1,5 +1,5 @@
 class MainCasesController < ApplicationController
-  before_action :forbid_admin_user, except: :payment
+  before_action :forbid_admin_user, except: [:payment, :express_route]
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,
                                        :filing_info, :update_add_material, :update_filing,
                                        :update_reject, :payment, :create_case_doc, :payment_order_management,
@@ -13,10 +13,10 @@ class MainCasesController < ApplicationController
   before_action :set_department_matters, only: [:edit, :update]
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
-  # before_action :check_if_has_department, except: [:index, :payment, :wtr_cases]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
-  skip_before_action :authorize, only: :payment
-  skip_before_action :can, only: :payment
+  skip_before_action :authorize, only: [:payment, :express_route]
+  skip_before_action :can, only: [:payment, :express_route]
+  skip_before_action :verify_authenticity_token, only: :express_route
 
   # 我的案件页面
   # GET /main_cases
@@ -960,6 +960,35 @@ class MainCasesController < ApplicationController
     @express_orders = @main_case.express_orders
     @recive_express_order = ReciveExpressOrder.new
     @express_order = ExpressOrder.new
+  end
+
+  # 返回案件的快递信息
+  def express_route
+    @express_num = params[:express_num]
+    trace_hash = { "traceNo" => @express_num }.to_json
+    private_key = '74C258A9EB489431'
+    md5_digest = Digest::MD5.hexdigest(trace_hash + private_key)
+    dataDigest = Base64.strict_encode64(md5_digest)
+    msgBody = URI.encode(trace_hash)
+    _params = { dataDigest: dataDigest,
+                msgBody: msgBody,
+                serialNo: '2',
+                dataType: '1',
+                batchNo: '999',
+                receiveID: 'JDPT',
+                sendDate: Time.now.strftime('%Y%m%d%H%M%S'),
+                msgKind: 'zhijian_JDPT_TRACE',
+                proviceNo: '99',
+                sendID: 'zhijian',
+              }
+    url = URI('http://211.156.195.198/querypush-twswn/mailTrack/queryMailTrackWn/plus')
+    url.query = URI.encode_www_form(_params)
+    @result = HTTParty.post(url, headers: { 'Content-Type' => 'text/plain;charset=UTF-8' } )
+    @result = JSON.parse(@result)
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

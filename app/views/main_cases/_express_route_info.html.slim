@@ -1,0 +1,8 @@
+- unless route_info.empty?
+  ul
+    - route_info.each do |info|
+      li
+        = info['opTime'] + ':' + info['opDesc']
+- else
+  .alert.alert-warning role="alert"
+    | 未查到快递数据

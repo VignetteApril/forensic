@@ -26,7 +26,13 @@
           ul
             - @main_case.recive_express_orders.each do |recive|
               li
-                = "快递单号：" + recive.order_num
+                = link_to "快递单号：" + recive.order_num, express_route_main_cases_path({ express_num: recive.order_num }), class: 'btn btn-primary mt-2', data: { toggle: 'collapse', target: "#collapse_#{recive.order_num}" }, 'aria-expanded' => 'false', 'aria-controls' => 'collapseExample', remote: true, method: 'POST'
+                / button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target="#collapse_#{recive.order_num}" aria-expanded="false" aria-controls="collapseExample"
+                .collapse.mt-2 id="collapse_#{recive.order_num}"
+                  .card.card-body
+                    div id="inner_#{recive.order_num}"
+                      .spinner-border role="status"
+                        span class="sr-only" Loading...
       div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"
         .mt-4
           = simple_form_for(@express_order) do |f|
@@ -43,4 +49,10 @@
           ul
             - @main_case.express_orders.each do |recive|
               li
-                = "快递单号：" + recive.order_num
+                = link_to "快递单号：" + recive.order_num, express_route_main_cases_path({express_num: recive.order_num}), class: 'btn btn-primary mt-2', data: {toggle: 'collapse', target: "#collapse_#{recive.order_num}"}, 'aria-expanded' => 'false', 'aria-controls' => 'collapseExample', remote: true, method: 'POST'
+                / button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target="#collapse_#{recive.order_num}" aria-expanded="false" aria-controls="collapseExample"
+                .collapse.mt-2 id="collapse_#{recive.order_num}"
+                  .card.card-body
+                    div id="inner_#{recive.order_num}"
+                      .spinner-border role="status"
+                        span class="sr-only" Loading...
