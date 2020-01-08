@@ -17,7 +17,7 @@
       = f.input :receiver_phone, label: '收件人电话'
   .row
     .col-md-4
-      = f.input :reporter, label: '登记人'
+      = f.input :reporter, label: '发件人'
     .col-md-4
       = f.input :order_num, label: '快递单号' 
     .col-md-4
@@ -26,9 +26,9 @@
     .col-md-4
       = f.input :order_date, label: '发送时间', as: :date, html5: true
     .col-md-4
-      = f.input :content, label: '内容'
+      = f.input :content, label: '快递内容'
     .col-md-4
-      = f.input :main_case_id, label: '关联案件', collection: @express_order.my_cases_collection(@current_user)
+      = f.input :main_case_id, label: '关联案件流水号', collection: @express_order.my_cases_collection(@current_user)
   .row
     .col-md-12
       = f.button :submit, '保存', class: 'btn btn-success pull-right'

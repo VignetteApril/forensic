@@ -965,6 +965,7 @@ class MainCasesController < ApplicationController
   # 返回案件的快递信息
   def express_route
     @express_num = params[:express_num]
+    @express_type = params[:express_type]
     trace_hash = { "traceNo" => @express_num }.to_json
     private_key = '74C258A9EB489431'
     md5_digest = Digest::MD5.hexdigest(trace_hash + private_key)

@@ -21,7 +21,7 @@ class ExpressOrder < ApplicationRecord
   	if user.client_entrust_user?
 			my_cases = MainCase.where(:wtr_id=>user.id).try(:all)
 			my_cases.each do |c|
-				rs << [c.case_no, c.id]
+				rs << [c.serial_no, c.id]
 			end
 			return rs
 		else
@@ -30,7 +30,7 @@ class ExpressOrder < ApplicationRecord
        		# 返回机构案件
        		org_cases = @current_user.organization.main_cases
 		   		org_cases.each do |c|
-						rs << [c.case_no, c.id]
+						rs << [c.serial_no, c.id]
 					end
 					return rs    		
 				else
@@ -40,7 +40,7 @@ class ExpressOrder < ApplicationRecord
 				# 返回科室案件
 				department_cases = MainCase.where(:department_id => user.departments.split(','))
 	   		department_cases.each do |c|
-					rs << [c.case_no, c.id]
+					rs << [c.serial_no, c.id]
 				end
 				return rs    
 			end

@@ -17,22 +17,26 @@
             = f.input :company_type, label: false, as: :hidden, input_html: { value: 'ems' }
             = f.input :come_from, label: false, as: :hidden, input_html: { value: 'case' }
             .row
-              .col-md-8
+              .col-md-3
                 = f.input :order_num, label: '快递单号'
-              .col-md-4
+              .col-md-3
+                = f.input :reporter, label: '收件人'
+              .col-md-3
+                = f.input :content, label: '快递内容'
+              .col-md-3
                 = f.button :submit, '关联', class: 'btn btn-success mt-4'
           hr
           h5 收到快递路由信息
-          ul
-            - @main_case.recive_express_orders.each do |recive|
-              li
-                = link_to "快递单号：" + recive.order_num, express_route_main_cases_path({ express_num: recive.order_num }), class: 'btn btn-primary mt-2', data: { toggle: 'collapse', target: "#collapse_#{recive.order_num}" }, 'aria-expanded' => 'false', 'aria-controls' => 'collapseExample', remote: true, method: 'POST'
-                / button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target="#collapse_#{recive.order_num}" aria-expanded="false" aria-controls="collapseExample"
-                .collapse.mt-2 id="collapse_#{recive.order_num}"
-                  .card.card-body
-                    div id="inner_#{recive.order_num}"
-                      .spinner-border role="status"
-                        span class="sr-only" Loading...
+          .row
+            .col-md-6
+              ul
+                - @main_case.recive_express_orders.each do |recive|
+                  li
+                    = link_to "快递单号：#{recive.order_num}, 收件人: #{recive.reporter}, 快递内容: #{recive.content}", express_route_main_cases_path({express_num: recive.order_num, express_type: :recive}), class: 'btn btn-primary mt-2', remote: true, method: 'POST'
+            .col-md-6 style="border-left: groove"
+              .card.card-body
+                div id="inner_collapse_recive"
+
       div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"
         .mt-4
           = simple_form_for(@express_order) do |f|
@@ -40,19 +44,22 @@
             = f.input :company_type, label: false, as: :hidden, input_html: {value: 'ems'}
             = f.input :come_from, label: false, as: :hidden, input_html: {value: 'case'}
             .row
-              .col-md-8
+              .col-md-3
                 = f.input :order_num, label: '快递单号'
-              .col-md-4
+              .col-md-3
+                = f.input :reporter, label: '发件人'
+              .col-md-3
+                = f.input :content, label: '快递内容'
+              .col-md-3
                 = f.button :submit, '关联', class: 'btn btn-success mt-4'
           hr
           h5 发出快递路由信息
-          ul
-            - @main_case.express_orders.each do |recive|
-              li
-                = link_to "快递单号：" + recive.order_num, express_route_main_cases_path({express_num: recive.order_num}), class: 'btn btn-primary mt-2', data: {toggle: 'collapse', target: "#collapse_#{recive.order_num}"}, 'aria-expanded' => 'false', 'aria-controls' => 'collapseExample', remote: true, method: 'POST'
-                / button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target="#collapse_#{recive.order_num}" aria-expanded="false" aria-controls="collapseExample"
-                .collapse.mt-2 id="collapse_#{recive.order_num}"
-                  .card.card-body
-                    div id="inner_#{recive.order_num}"
-                      .spinner-border role="status"
-                        span class="sr-only" Loading...
+          .row
+            .col-md-6
+              ul
+                - @main_case.express_orders.each do |recive|
+                  li
+                    = link_to "快递单号：#{recive.order_num}, 发件人: #{recive.reporter}, 快递内容: #{recive.content}", express_route_main_cases_path({express_num: recive.order_num, express_type: :express}), class: 'btn btn-primary mt-2', remote: true, method: 'POST'
+            .col-md-6 style="border-left: groove"
+              .card.card-body
+                div id="inner_collapse_express"

@@ -12,13 +12,13 @@
     .col-md-4
       = f.input :sender, label: '发件人'
     .col-md-4
-     	= f.input :reporter, label: '登记人'
+      = f.input :reporter, label: '收件人'
     .col-md-4
       = f.input :order_num, label: '快递单号'
 
   .row
     .col-md-4
-      = f.input :content, label: '内容'  
+      = f.input :content, label: '快递内容'
     .col-md-4
       = f.input :company_type, label: '快递单位' , collection: ExpressOrder.company_type_collection, selected: 0
     .col-md-4
@@ -26,7 +26,7 @@
       
   .row
     .col-md-4
-      = f.input :main_case_id, label: '关联案件', collection: @recive_express_order.my_cases_collection(@current_user)
+      = f.input :main_case_id, label: '关联案件流水号', collection: @recive_express_order.my_cases_collection(@current_user)
     .col-md-7
     .col-md-1 style="display:flex;align-items:center;"
     	= f.button :submit, '保存', class: 'btn btn-success'

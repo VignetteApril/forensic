@@ -1,2 +1,3 @@
-$("#<%= 'inner_' + @express_num %>").html("<%= escape_javascript(render partial: "main_cases/express_route_info",
-                                                                        locals: { route_info: @result['responseItems'] }) %>")
+$("#<%= "inner_collapse_#{@express_type}" %>").html("<%= escape_javascript(render partial: "main_cases/express_route_info",
+                                                                        locals: { route_info: @result['responseItems'],
+                                                                                  express_num: @express_num}) %>")
