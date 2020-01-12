@@ -7,7 +7,9 @@ class PaymentOrdersController < ApplicationController
                                             :confirm_order,
                                             :cancel_order,
                                             :finance_show,
-                                            :print_page ]
+                                            :print_page,
+                                            :finance_edit,
+                                            :finance_update ]
 
   # 财务管理人员看到的缴费单列表页面
   # 能够看到当前机构下的所有缴费的提交清单
@@ -72,6 +74,23 @@ class PaymentOrdersController < ApplicationController
         format.json { render json: @payment_order.errors, status: :unprocessable_entity }
       end
     end
+	end
+
+  def finance_edit
+		@request_type = :PUT
+		@path = finance_update_main_case_payment_order_path
+	end
+
+  def finance_update
+		respond_to do |format|
+			if @payment_order.update(payment_order_params.merge({ order_stage: :confirm }))
+				format.html { redirect_to finance_index_main_case_payment_orders_path(@main_case, @payment_order), notice: '缴费单成功确认'}
+				format.json { render :show, status: :ok, location: @payment_order }
+			else
+				format.html { render :edit }
+				format.json { render json: @payment_order.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	def create

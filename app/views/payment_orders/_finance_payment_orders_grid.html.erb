@@ -9,23 +9,39 @@
   end
 
   g.column name: '案件流水号', custom_filter: false do |a|
-    a.main_case.case_no_display if a.main_case
+    link_to a.main_case.serial_no, edit_main_case_path(a.main_case) if a.main_case
+  end
+
+  g.column name: '案号', custom_filter: false do |a|
+    link_to a.main_case.case_no_display, edit_main_case_path(a.main_case) if a.main_case
+  end
+
+  g.column name: '委托方', custom_filter: false do |a|
+    a.main_case.organization_name
+  end
+
+  g.column name: '被鉴定人', custom_filter: false do |a|
+     a.main_case.appraised_unit.try(:name) if a.main_case
+  end
+
+  g.column name: '联系人', custom_filter: false do |a|
+     a.main_case.user_name
+  end
+
+  g.column name: '联系方式', custom_filter: false do |a|
+     a.main_case.organization_phone
+  end
+
+  g.column name: '鉴定事项', custom_filter: false do |a|
+     JSON.parse(a.main_case.matter).join(',') unless a.main_case && a.main_case.matter.blank?
   end
 
 	g.column name: '状态', html: {style: "width:50px;"}, custom_filter: false do |a|
 		PaymentOrder::ORDER_STAGE_MAP[a.try(:order_stage).try(:to_sym)]
   end
 
-  g.column name: '交款人', custom_filter: false do |a|
-    a.payer
-  end
-
-  g.column name: '委托人', custom_filter: false do |a|
-    a.consigner
-  end
-
-  g.column name: '委托方', custom_filter: false do |a|
-    a.main_case.organization_name
+  g.column in_csv: false do |a|
+    link_to '查看', finance_edit_main_case_payment_order_path(a.main_case, a), class: 'btn btn-secondary btn-sm'
   end
 
   g.column in_csv: false do |payment_order|
@@ -55,27 +71,14 @@
       link_to '作废', cancel_order_main_case_payment_order_path(payment_order.main_case, payment_order), method: :patch, class: 'btn btn-danger btn-sm', id: 'cancel_order'
     end
   end
-
-  g.column in_csv: false do |payment_order|
-    if can?('payment_orders', 'confirm_order') && !payment_order.confirm?
-      link_to '确认缴费单', confirm_order_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm', id: 'confirm_order'
-    end
-  end
-
-  g.column in_csv: false do |payment_order|
-    if can?('payment_orders', 'print_page')
-      link_to '打印缴费单', print_page_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-primary btn-sm', id: 'print_page', target: :_blank, data: { turbolinks: false }
-    end
-  end
-
 end -%>
 
-<script>
-    $(".clickable-row").click(function (e) {
-        // 通过当前点击元素判断是否点击的是带有id的元素
-        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
-        if (e.target.id == '') {
-            window.location = $(this).data("href");
-        }
-    });
-</script>
+<!--<script>-->
+<!--    $(".clickable-row").click(function (e) {-->
+<!--        // 通过当前点击元素判断是否点击的是带有id的元素-->
+<!--        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js-->
+<!--        if (e.target.id == '') {-->
+<!--            window.location = $(this).data("href");-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->

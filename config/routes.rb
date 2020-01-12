@@ -118,6 +118,8 @@ Rails.application.routes.draw do
       get :confirm_order, on: :member
       get :finance_show, on: :member
       get :print_page, on: :member
+      get :finance_edit, on: :member
+      put :finance_update, on: :member
       patch :cancel_order, on: :member
     end
 
