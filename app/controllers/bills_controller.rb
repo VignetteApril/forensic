@@ -142,9 +142,9 @@ class BillsController < ApplicationController
     @main_case = PaymentOrder.find_by_id(params[:payment_orders][:selected].first).main_case
 
     @bill = @main_case.bills.new({ recipient: params[:bill][:recipient],
-                                   bill_type:  params[:bill][:bill_type],
-                                   recipient_date: Time.now,
-                                   bill_stage: :taked_away })
+                                            bill_type:  params[:bill][:bill_type],
+                                            recipient_date: Time.now,
+                                            bill_stage: :taked_away })
     payment_order_ids = params[:payment_orders][:selected]
 
     respond_to do |format|
@@ -152,7 +152,11 @@ class BillsController < ApplicationController
         payment_orders = PaymentOrder.where(id: payment_order_ids)
         payment_orders.update_all(bill_id: @bill.id, order_stage: :confirm)
 
-        format.html { redirect_to finance_index_main_case_payment_orders_url(@main_case), notice: '发票已经创建成功了！' }
+        if params[:payment_orders][:selected].is_a? Array
+          format.html { redirect_to finance_index_main_case_payment_orders_url(@main_case), notice: '发票已经创建成功了！' }
+        else
+          format.html { redirect_to finance_edit_main_case_payment_order_path(@main_case, params[:payment_orders][:selected]), notice: '发票已经创建成功了！' }
+        end
         format.json { render :show, status: :created, location: @bill }
       else
         format.html { render :new }
@@ -173,7 +177,7 @@ class BillsController < ApplicationController
 
     # Never trust parameters from the scary intern\et, only allow the white list through.
     def bill_params
-      params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount)
+      params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount, :attachment)
     end
 
     # 当发票状态变为已开/已领走后就不能再edit和destroy

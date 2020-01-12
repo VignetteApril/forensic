@@ -190,4 +190,9 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  # 将摄像头上传的数据attach
+  def attach_data_str(instance, data_str)
+    instance.decode_base64_image data_str
+  end
 end

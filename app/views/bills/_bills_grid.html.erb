@@ -5,7 +5,7 @@
   end
 
   g.column name: '发票类型' do |a|
-    Bill::BILL_TYPE_MAP[a.bill_type.to_sym]
+    Bill::BILL_TYPE_MAP[a.bill_type.to_sym] if a.bill_type
   end
 
   g.column name: '公司名称', attribute: 'organization' do |a|

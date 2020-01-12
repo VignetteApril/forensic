@@ -1,12 +1,19 @@
-= simple_form_for(@payment_order, method: @request_type, url: @path) do |f|
+= render 'camera_picture_modal'
+= simple_form_for(@bill, url: finance_create_main_case_bills_path(-1), method: :post, html: { id: :new_bill }) do |bill|
+  = render partial: 'finance_bill_modal', locals: {f: bill, payment_order: @payment_order}
+  = bill.input :selected, label: false, as: :hidden, input_html: { name: 'payment_orders[selected]', value: [@payment_order.id] }
+
+= simple_form_for(@payment_order, method: @request_type, url: @path, html: { id: :edit_payment_order }) do |f|
   = f.input :incoming_record_id, as: :hidden, input_html: {value: @incoming_record.try(:id)}
   = f.input :claim_user_id, as: :hidden, input_html: { value: @claim_user_id }
+  = f.input :data_str, as: :hidden
+
   .row
     .col-md-2
       span = "案由：#{@main_case.anyou}"
     .col-md-2
       span = "鉴定类型：#{@main_case.case_type}"
-    .col-md-2
+    .col-md-4
       span = "案件编号：#{@main_case.case_no_display}"
     .col-md-2
       span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
@@ -73,10 +80,24 @@
       = f.input :check_num, label: '支票号码'
     .col-md-2
       = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection
+  hr
+  .row
+    .col-md-3
+      .row
+        = f.input :attachment, label: '上传缴费单', as: :file, input_html: {direct_upload: true}
+      .row
+        .alert.alert-warning.d-none id='camera_alert' role="alert" 当前设备没有摄像头，请使用带有摄像头设备的进行该操作
+        button.mt-2 type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#camera_picture_modal" 从摄像头中上传
+    .col-md-3
+      h5 预览当前缴费单
+      - if @payment_order.attachment.attached?
+        = image_tag(url_for(@payment_order.attachment), style: "width: 300px; height: auto")
+      - else
+        span 暂无缴费单
   .form-actions
-    = f.button :submit, '确认缴费单', class: 'btn btn-success mr-2'
-    = link_to '打印缴费单', print_page_main_case_payment_order_path(@payment_order.main_case, @payment_order), class: 'btn btn-primary', id: 'print_page', target: :_blank, data: { turbolinks: false }
-
+    = f.button :submit, '确认缴费单', class: 'btn btn-success mr-2', form: :edit_payment_order
+    = link_to '打印', print_page_main_case_payment_order_path(@payment_order.main_case, @payment_order), class: 'btn btn-primary mr-2', id: 'print_page', target: :_blank, data: { turbolinks: false }
+    button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finance_bill_modal" 开发票
 javascript:
     var digitUppercase = function(n) {
         var fraction = ['角', '分'];
@@ -110,18 +131,14 @@ javascript:
     }
 
 
-    $(document).on('turbolinks:load', function() {
-        $('.payment-total-cost-input').parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($('.payment-total-cost-input').val()))
-        $('.payment-advance-input').parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($('.payment-advance-input').val()))
+    $('.payment-total-cost-input').parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($('.payment-total-cost-input').val()))
+    $('.payment-advance-input').parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($('.payment-advance-input').val()))
 
-        $('.payment-total-cost-input').on('input',function(e){
-            $(e.target).parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($(e.target).val()))
-        })
+    $('.payment-total-cost-input').on('input',function(e){
+        $(e.target).parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($(e.target).val()))
+    })
 
-        $('.payment-advance-input').on('input',function(e){
-            $(e.target).parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($(e.target).val()))
-        })
-
-    });
-
+    $('.payment-advance-input').on('input',function(e){
+        $(e.target).parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($(e.target).val()))
+    })
 

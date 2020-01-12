@@ -1,12 +1,15 @@
 class PaymentOrder < ApplicationRecord
   attr_accessor :incoming_record_id
 	attr_accessor :claim_user_id
+	attr_accessor :data_str
 
 	belongs_to :main_case
 	belongs_to :bill, required: false 
   has_one :incoming_record # 缴费单和到账记录一一对应
+	has_one_attached :attachment
 
-  before_destroy :update_incoming_record_nil
+
+	before_destroy :update_incoming_record_nil
   after_save :update_incoming_record_claimed
 
   enum order_stage: [:not_submit, :not_confirm, :confirm ,:cancel]
@@ -51,6 +54,19 @@ class PaymentOrder < ApplicationRecord
 		if !self.incoming_record.nil?
 			self.incoming_record.update(payment_order_id: nil, status: :unclaimed, claim_user_id: nil)
 		end
+	end
+
+	def decode_base64_image data_str
+		content_type = data_str[/(image\/[a-z]{3,4})|(application\/[a-z]{3,4})/]
+		content_type = content_type[/\b(?!.*\/).*/]
+		contents = data_str.sub /data:((image|application)\/.{3,}),/, ''
+		decoded_data = Base64.decode64(contents)
+		filename = 'doc_' + Time.zone.now.to_s + '.' + content_type
+		File.open("#{Rails.root}/tmp/#{filename}", 'wb') do |f|
+			f.write(decoded_data)
+		end
+		self.attachment.attach(io: File.open("#{Rails.root}/tmp/#{filename}"), filename: filename)
+		FileUtils.rm("#{Rails.root}/tmp/#{filename}")
 	end
 
 	class << self

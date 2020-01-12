@@ -15,7 +15,7 @@ class PaymentOrdersController < ApplicationController
   # 能够看到当前机构下的所有缴费的提交清单
   def finance_index
 		data = PaymentOrder.none
-    if !@current_user.organization.nil?
+		if !@current_user.organization.nil?
       main_case_ids = @current_user.organization.main_cases.pluck(:id)
       data = PaymentOrder.where(main_case_id: main_case_ids)
 		end
@@ -79,11 +79,13 @@ class PaymentOrdersController < ApplicationController
   def finance_edit
 		@request_type = :PUT
 		@path = finance_update_main_case_payment_order_path
+		@bill = @main_case.bills.new
 	end
 
   def finance_update
 		respond_to do |format|
 			if @payment_order.update(payment_order_params.merge({ order_stage: :confirm }))
+				attach_data_str(@payment_order, payment_order_params[:data_str]) if payment_order_params[:data_str].present?
 				format.html { redirect_to finance_index_main_case_payment_orders_path(@main_case, @payment_order), notice: '缴费单成功确认'}
 				format.json { render :show, status: :ok, location: @payment_order }
 			else
@@ -207,7 +209,9 @@ class PaymentOrdersController < ApplicationController
 	                                           :payment_accept_type,
 	                                           :check_num,
                                              :incoming_record_id,
-                                             :claim_user_id)
+                                             :claim_user_id,
+																						 :attachment,
+																						 :data_str)
 
 
 		end
