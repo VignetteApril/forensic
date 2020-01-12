@@ -1,0 +1,22 @@
+.modal.fade id="upload_bill_modal" tabindex="-1" role="dialog" aria-labelledby="upload_bill_modal" aria-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header 上传发票
+      .modal-body
+        = simple_form_for(:bill, url: upload_main_case_bill_path(-1, -1), method: :put, id: :upload_form) do |f|
+          = f.input :data_str, as: :hidden
+          .form-inputs
+            .row
+              .col-md-8.offset-2
+                = f.input :recipient_date, label: '领取时间', as: :date, html5: true
+            .row
+              .col-md-8.offset-2
+                = f.input :attachment, label: '选择发票', as: :file, input_html: {direct_upload: true}
+            .row.mt-2
+              .col-md-8.offset-2
+                .alert.alert-warning.d-none id='camera_alert' role="alert" 当前设备没有摄像头，请使用带有摄像头设备的进行该操作
+                button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#camera_picture_modal" 从摄像头中上传
+          .modal-footer
+            button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭
+            .form-actions
+              = f.button :submit, '上传', class: 'btn btn-success'

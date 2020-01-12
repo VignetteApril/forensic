@@ -1,0 +1,71 @@
+.modal.fade id="camera_picture_modal" tabindex="-1" role="dialog" aria-labelledby="camera_picture_modal_label" aria-hidden="true"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" 调用系统摄像头
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-body
+        .row
+          .col-md-6
+            div id="results"
+          .col-md-6
+            div id="my_camera"
+
+      .modal-footer
+        button#submit type='button' class="btn btn-primary" 使用该照片
+        button type="button" class="btn btn-primary" onClick="take_snapshot()" 照相
+
+css:
+  h2, h3 {
+    margin-top: 0;
+  }
+
+  form {
+    margin-top: 15px;
+  }
+
+  form > input {
+    margin-right: 15px;
+  }
+
+  #results {
+    float: right;
+    padding: 20px;
+    border: 1px solid;
+  }
+
+javascript:
+    Webcam.on('error', function (err) {
+        $("#camera_alert").removeClass('d-none');
+    });
+
+    Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+    Webcam.attach( '#my_camera' );
+
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function (data_uri) {
+            // display results in page
+            document.getElementById('results').innerHTML =
+                '<h5>委托书图像：</h2>' +
+                '<img id="shot" src="' + data_uri + '"/>';
+        });
+    }
+
+    // 上传base64类型图片
+    $('#submit').click(function () {
+        var image_data_str = ($('#shot').attr('src'));
+        console.log(image_data_str);
+        if (image_data_str == undefined || image_data_str == '') {
+            alert('请先照相！')
+        } else {
+            $('#bill_data_str').val(image_data_str);
+            $('#camera_picture_modal').modal('hide');
+        }
+    });

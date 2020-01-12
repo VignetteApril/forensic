@@ -129,6 +129,7 @@ Rails.application.routes.draw do
       get :finance_unBilled_index, on: :collection
       post :finance_create, on: :collection
       post :dyn_form_modal, on: :member
+      put :upload, on: :member
       patch :to_billed, on: :member
       patch :to_taked_away, on: :member
     end

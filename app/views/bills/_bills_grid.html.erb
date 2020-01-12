@@ -37,6 +37,15 @@
   end
 
   g.column in_csv: false do |bill|
+    button_tag "上传", data: { put_url: upload_main_case_bill_path(bill.main_case, bill) }, class: 'btn btn-info btn-sm upload-button'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |bill|
+    check_bool = bill.attachment.attached? && (bill.attachment.blob.content_type.match? (/png|jpg|jpeg|JPG|PNG|JPEG/))
+    button_tag '预览', type: 'button', data: { toggle: 'modal', target: '#preview_image', imageUrl: url_for(bill.attachment) }, class: 'btn btn-primary btn-sm ml-2 preview_button' if check_bool
+  end
+
+  g.column in_csv: false do |bill|
     if can?('bills', 'to_billed')  && !bill.billed? && !bill.taked_away?
       link_to '已开票', to_billed_main_case_bill_path(bill.main_case, bill), method: :patch, class: 'btn btn-info btn-sm'
     end
@@ -61,3 +70,11 @@
   end
 
 end -%>
+
+<script>
+
+    $('.preview_button').click(function(e){
+        $('#preview_image_image').attr('src',e.target.dataset.imageurl);
+    })
+
+</script>

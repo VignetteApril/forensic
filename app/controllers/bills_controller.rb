@@ -1,6 +1,6 @@
 # 发票控制器
 class BillsController < ApplicationController
-  before_action :set_bill, only: [:show, :edit, :update, :destroy, :to_billed, :to_taked_away, :dyn_form_modal]
+  before_action :set_bill, only: [:show, :edit, :update, :destroy, :to_billed, :to_taked_away, :dyn_form_modal, :upload]
   before_action :set_main_case, except: [:finance_index, :to_billed, :to_taked_away, :dyn_form_modal]
   before_action :guard_edit_destroy, only: [:edit, :destroy]
 
@@ -91,6 +91,19 @@ class BillsController < ApplicationController
     end
   end
 
+  def upload
+    respond_to do |format|
+      binding.pry
+      if @bill.update(bill_params)
+        format.html { redirect_to finance_index_main_case_bills_url(@bill.main_case), notice: '发票已经上传！' }
+        format.json { render :show, status: :ok, location: @bill }
+      else
+        format.html { render redirect_to finance_index_main_case_bills_url(@bill.main_case), alert: '发票更新失败！' }
+        format.json { render json: @bill.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # 更新发票状态为已开
   def to_billed
     respond_to do |format|
@@ -177,7 +190,7 @@ class BillsController < ApplicationController
 
     # Never trust parameters from the scary intern\et, only allow the white list through.
     def bill_params
-      params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount, :attachment)
+      params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount, :attachment, :recipient_date, :data_str)
     end
 
     # 当发票状态变为已开/已领走后就不能再edit和destroy
