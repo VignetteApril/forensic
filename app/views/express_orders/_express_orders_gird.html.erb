@@ -1,6 +1,6 @@
-<%= grid(@express_orders, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
+<%= define_grid(@express_orders, hide_submit_button: false, hide_reset_button: false, show_filters: :false) do |g|
 
-  g.column name: '单号', attribute: 'order_num' do |a|
+  g.column name: '单号', attribute: 'order_num', detach_with_id: :order_num do |a|
     a.order_num
   end
 
@@ -35,8 +35,6 @@
   g.column name: '关联案件号',attribute: 'case_no' ,custom_filter: false do |a|
     a.case_no
   end
-
-
 
   g.column in_csv: false do |express_order|
     if can?('express_orders', 'edit') 

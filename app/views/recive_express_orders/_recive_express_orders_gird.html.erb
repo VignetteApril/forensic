@@ -1,6 +1,6 @@
-<%= grid(@recive_express_orders, hide_submit_button: false, hide_reset_button: false, show_filters: :when_filtered) do |g|
+<%= define_grid(@recive_express_orders, hide_submit_button: false, hide_reset_button: false, show_filters: :false) do |g|
 
-  g.column name: '单号', attribute: 'order_num' do |a|
+  g.column name: '单号', attribute: 'order_num', detach_with_id: :order_num do |a|
     a.order_num
   end
 
