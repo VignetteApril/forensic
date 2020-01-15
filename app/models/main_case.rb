@@ -70,9 +70,9 @@ class MainCase < ApplicationRecord
   }
 
   FINANCIAL_STAGE_MAP = {
-    unpaid: '未支付',
-    not_fully_paid: '未完全支付',
-    paid: '已支付',
+    unpaid: '未缴款',
+    not_fully_paid: '未完全缴款',
+    paid: '已缴款',
     refunded: '已退款'
   }
 
