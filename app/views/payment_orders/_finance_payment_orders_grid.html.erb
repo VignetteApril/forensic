@@ -1,4 +1,4 @@
-<%= grid(@payment_orders, hide_submit_button: true, hide_reset_button: true) do |g|
+<%= define_grid(@finance_payment_orders, hide_submit_button: true, hide_reset_button: true, hide_csv_button: true) do |g|
 
   g.row_attributes do |a|
     { 'data-href': finance_show_main_case_payment_order_path(a.main_case, a), class: 'clickable-row' }
@@ -8,11 +8,11 @@
     (a.confirm? && a.bill_id.nil? ) || (@current_user.center_finance_user? && a.not_confirm?)
   end
 
-  g.column name: '案件流水号', custom_filter: false do |a|
+  g.column name: '案件流水号', assoc: :main_case, attribute: 'serial_no', detach_with_id: :serial_no_filter do |a|
     link_to a.main_case.serial_no, edit_main_case_path(a.main_case) if a.main_case
   end
 
-  g.column name: '案号', custom_filter: false do |a|
+  g.column name: '案号', assoc: :main_case, attribute: 'case_no_display', detach_with_id: :case_no_display_filter do |a|
     link_to a.main_case.case_no_display, edit_main_case_path(a.main_case) if a.main_case
   end
 

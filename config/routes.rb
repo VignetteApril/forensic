@@ -119,6 +119,7 @@ Rails.application.routes.draw do
       get :finance_show, on: :member
       get :print_page, on: :member
       get :finance_edit, on: :member
+      get :canceled_payment_orders, on: :collection
       put :finance_update, on: :member
       patch :cancel_order, on: :member
     end

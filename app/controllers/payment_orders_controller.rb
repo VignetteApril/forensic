@@ -17,14 +17,28 @@ class PaymentOrdersController < ApplicationController
 		data = PaymentOrder.none
 		if !@current_user.organization.nil?
       main_case_ids = @current_user.organization.main_cases.pluck(:id)
-      data = PaymentOrder.where(main_case_id: main_case_ids)
+      data = PaymentOrder.where(main_case_id: main_case_ids).where.not(order_stage: :cancel)
 		end
 
-		@payment_orders = initialize_grid(data,
-																			order: 'created_at',
-																			order_direction: 'desc',
-																			per_page: 10,
-																			name: 'payment_orders')
+		@finance_payment_orders = initialize_grid(data,
+																							order: 'created_at',
+																							order_direction: 'desc',
+																							per_page: 10,
+																							name: 'finance_payment_orders')
+	end
+
+  def canceled_payment_orders
+		data = PaymentOrder.none
+		if !@current_user.organization.nil?
+			main_case_ids = @current_user.organization.main_cases.pluck(:id)
+			data = PaymentOrder.where(main_case_id: main_case_ids, order_stage: :cancel)
+		end
+
+		@finance_payment_orders = initialize_grid(data,
+																							order: 'created_at',
+																							order_direction: 'desc',
+																							per_page: 10,
+																							name: 'finance_payment_orders')
 	end
 
 	def new

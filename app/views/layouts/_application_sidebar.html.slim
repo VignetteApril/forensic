@@ -167,6 +167,10 @@ aside.app-sidebar
               a.treeview-item href="#{finance_index_main_case_refund_orders_path(-1)}" class="#{active_class_with_action(controller, 'refund_orders', 'finance_index')}"
                 i.app-menu__icon
                 span.app-menu__label 退费单管理
+            li
+              a.treeview-item href="#{canceled_payment_orders_main_case_payment_orders_path(-1)}" class="#{active_class_with_action(controller, 'payment_orders', 'canceled_payment_orders')}"
+                i.app-menu__icon
+                span.app-menu__label 作废的缴费单
           a.app-menu__item.text-white
             i class="app-menu__icon fa fa-laptop"
             span class="app-menu__label" 发票管理
