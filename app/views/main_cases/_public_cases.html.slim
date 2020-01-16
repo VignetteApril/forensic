@@ -97,7 +97,7 @@
           span =e.created_at.strftime('%Y-%m-%d')
         .card-footer
           div style="padding-left:18px"
-            = get_distance_of_time(e)
+            = e.close? ? '已归档结案' : get_distance_of_time(e)
 
 .row.no-gutters
   == render_grid(@main_cases)
