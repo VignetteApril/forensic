@@ -87,6 +87,9 @@
           span 鉴定事项：
           span = JSON.parse(e.matter).join(',') if e.matter
           br
+          span 委托日期：
+          span = e.commission_date.strftime('%Y-%m-%d') if e.commission_date
+          br
           span 立案日期：
           span = e.acceptance_date.strftime('%Y-%m-%d') if e.acceptance_date
           br

@@ -17,4 +17,16 @@
             = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, selected: @main_case.case_stage, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
           .item style="width:100px;"
             = f.button :submit, '提交', class: 'btn-success', wrapper_html: {style: 'display:inline'}
-
+.row.ml-1
+  .col-md-2
+    .d-flex.flex-row.align-items-center
+      span = "受理日期: "
+      span.ml-1 = @main_case.commission_date.strftime('%Y-%m-%d') if @main_case.commission_date
+  .col-md-2
+    .d-flex.flex-row.align-items-center
+      span = "立案日期: "
+      span = @main_case.acceptance_date.strftime('%Y-%m-%d') if @main_case.acceptance_date
+  .col-md-2
+    .d-flex.flex-row.align-items-center
+      span = "登记日期: "
+      span = @main_case.created_at.strftime('%Y-%m-%d')
