@@ -16,6 +16,7 @@ $(document).ready(function () {
             province_select2.selectize({
                 valueField: 'id',
                 labelField: 'name',
+                searchField: ['name'],
                 onChange: function(value) {
                     appendDataToSelect2(request_url_cities, value, city_select2, 'name', 'cities');
                     district_select2[0].selectize.clear();
@@ -26,6 +27,7 @@ $(document).ready(function () {
             city_select2.selectize({
                 valueField: 'id',
                 labelField: 'name',
+                searchField: ['name'],
                 onChange: function(value) {
                     appendDataToSelect2(request_url_districts, value, district_select2, 'name', 'districts');
                 }
@@ -33,7 +35,8 @@ $(document).ready(function () {
 
             district_select2.selectize({
                 valueField: 'id',
-                labelField: 'name'
+                labelField: 'name',
+                searchField: ['name'],
             });
 
             // 导入用户

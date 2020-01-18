@@ -1,0 +1,15 @@
+.modal.fade id="close_case_modal" tabindex="-1" role="dialog" aria-labelledby="close_case_modal" aria-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" id="close_case_modal_label" 确认结案申请
+      .modal-body
+        = simple_form_for(@main_case, method: :patch, url: update_case_stage_main_case_path) do |f|
+          = f.input :page_type, as: :hidden, input_html: {value: "closing_case"}
+          = f.input :case_stage, as: :hidden, input_html: {value: "close"}
+          .row
+            .col-md-12
+              = f.input :archive_location, label: '存档位置'
+          .modal-footer
+            = f.button :submit, '保存', class: 'btn btn-success'
+            button type="button" class="btn btn-secondary" data-dismiss="modal" 关闭

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_08_065224) do
+ActiveRecord::Schema.define(version: 2020_01_17_152232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -302,6 +302,7 @@ ActiveRecord::Schema.define(version: 2019_12_08_065224) do
     t.string "appraisal_opinion"
     t.string "original_appraisal_opinion"
     t.boolean "is_repeat", default: false
+    t.string "archive_location"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
     t.index ["entrust_order_id"], name: "index_main_cases_on_entrust_order_id"
   end

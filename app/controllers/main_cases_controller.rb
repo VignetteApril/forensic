@@ -507,6 +507,7 @@ class MainCasesController < ApplicationController
   def update_case_stage
     page_type = params[:main_case][:page_type]
     case_stage = params[:main_case][:case_stage]
+    archive_location = params[:main_case][:archive_location]
     # 这个是aasm的改变案件状态的方法名
     # 因为该方法名是turn_{case_stage}的形式的，需要用到动态派发的技术
     turn_case_stage_sym = "turn_#{case_stage}!".to_sym
@@ -532,6 +533,7 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       if @main_case.respond_to? turn_case_stage_sym
         @main_case.send turn_case_stage_sym
+        @main_case.update(archive_location: archive_location) unless archive_location.nil?
         format.html { redirect_to redirect_url, notice: '案件状态已经更新了！' }
       else
         format.html { redirect_to redirect_url, danger: '案件状态更新失败！' }
@@ -1029,6 +1031,7 @@ class MainCasesController < ApplicationController
                                         :original_appraisal_opinion,
                                         :is_repeat,
                                         :data_str,
+                                        :archive_location,
                                         transfer_docs_attributes: [:id,
                                                                    :name,
                                                                    :doc_type,
