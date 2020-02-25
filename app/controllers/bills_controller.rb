@@ -151,7 +151,8 @@ class BillsController < ApplicationController
     if params[:payment_orders].nil? || params[:payment_orders][:selected].empty?
       redirect_to finance_index_main_case_payment_orders_url(-1), notice: '请勾选缴费单！' and return
     end
-
+    
+    Rails.logger.info "+++++#{params}"
     @main_case = PaymentOrder.find_by_id(params[:payment_orders][:selected].first).main_case
 
     @bill = @main_case.bills.new({ recipient: params[:bill][:recipient],
