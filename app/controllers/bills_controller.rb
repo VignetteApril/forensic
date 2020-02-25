@@ -152,10 +152,7 @@ class BillsController < ApplicationController
       redirect_to finance_index_main_case_payment_orders_url(-1), notice: '请勾选缴费单！' and return
     end
 
-    Rails.logger.info "+++++#{params}"
-    Rails.logger.info "+++++#{params[:payment_orders][:selected]}"
-
-    @main_case = PaymentOrder.find_by_id(params[:payment_orders][:selected].first).main_case
+    @main_case = PaymentOrder.find_by_id(params[:payment_orders][:selected]).main_case
 
     @bill = @main_case.bills.new({ recipient: params[:bill][:recipient],
                                             bill_type:  params[:bill][:bill_type],
