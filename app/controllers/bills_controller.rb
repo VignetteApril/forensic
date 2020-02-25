@@ -157,7 +157,7 @@ class BillsController < ApplicationController
     @bill = @main_case.bills.new({ recipient: params[:bill][:recipient],
                                             bill_type:  params[:bill][:bill_type],
                                             recipient_date: Time.now,
-                                            bill_stage: :taked_away })
+                                            bill_stage: :unBilled })
     payment_order_ids = params[:payment_orders][:selected]
 
     respond_to do |format|
