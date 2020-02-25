@@ -1,6 +1,6 @@
-<%= grid(@bills, hide_submit_button: true, hide_reset_button: true, show_filters: :when_filtered) do |g|
+<%= define_grid(@bills, hide_submit_button: true, hide_reset_button: true, hide_csv_button: true) do |g|
 
-  g.column name: '案件号' do |bill|
+  g.column name: '案号', assoc: :main_case, attribute: 'case_no_display', detach_with_id: :case_no_display_filter do |bill|
     link_to bill.main_case.case_no_display, edit_main_case_path(bill.main_case) if bill.main_case
   end
 
@@ -8,31 +8,31 @@
     Bill::BILL_TYPE_MAP[a.bill_type.to_sym] if a.bill_type
   end
 
-  g.column name: '公司名称', attribute: 'organization' do |a|
+  g.column name: '公司名称', attribute: 'organization', detach_with_id: :organization_filter do |a|
     a.organization
   end
 
-  g.column name: '税号', attribute: 'code' do |a|
+  g.column name: '税号', custom_filter: false do |a|
     a.code
   end
 
-  g.column name: '开户行', attribute: 'bank' do |a|
+  g.column name: '开户行', custom_filter: false do |a|
     a.bank
   end
 
-  g.column name: '公司地址', attribute: 'address' do |a|
+  g.column name: '公司地址', custom_filter: false do |a|
     a.address
   end
 
-  g.column name: '发票金额', attribute: 'amount' do |a|
+  g.column name: '发票金额', custom_filter: false do |a|
     a.amount
   end
 
-  g.column name: '发票状态' do |a|
+  g.column name: '发票状态', custom_filter: false do |a|
     Bill::BILL_STAGE_MAP[a.bill_stage.to_sym]
   end
 
-  g.column name: '领取信息' do |bill|
+  g.column name: '领取信息', custom_filter: false do |bill|
     "已领取，#{bill.recipient}, #{bill.recipient_date.strftime('%Y年%m月%d日')}" if bill.taked_away?
   end
 

@@ -81,7 +81,7 @@
     .col-md-2
       = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection
   hr
-  .row
+  .row style="margin-left: 1px"
     .col-md-3
       .row
         = f.input :attachment, label: '上传缴费单', as: :file, input_html: {direct_upload: true}
@@ -94,10 +94,11 @@
         = image_tag(url_for(@payment_order.attachment), style: "width: 300px; height: auto")
       - else
         span 暂无缴费单
-  .form-actions
-    = f.button :submit, '确认缴费单', class: 'btn btn-success mr-2', form: :edit_payment_order
-    = link_to '打印', print_page_main_case_payment_order_path(@payment_order.main_case, @payment_order), class: 'btn btn-primary mr-2', id: 'print_page', target: :_blank, data: { turbolinks: false }
-    button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finance_bill_modal" 开发票
+  .row.mt-2
+    .col-md-3
+      = f.button :submit, '确认缴费单', class: 'btn btn-success mr-2', form: :edit_payment_order
+      = link_to '打印', print_page_main_case_payment_order_path(@payment_order.main_case, @payment_order), class: 'btn btn-primary mr-2', id: 'print_page', target: :_blank, data: { turbolinks: false }
+      button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finance_bill_modal" 开发票
 javascript:
     var digitUppercase = function(n) {
         var fraction = ['角', '分'];
