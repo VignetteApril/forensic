@@ -1,18 +1,1 @@
-#dyn_bill_modal_box
-= render 'bills_grid'
-.row.no-gutters.mb-2
-  .col-md-4.d-flex.flex-row.align-items-center
-    span 案件号:
-    .w-75.ml-2
-      = grid_filter @bills, :case_no_display_filter
-  .col-md-4.d-flex.flex-row.align-items-center
-    span 公司:
-    .w-75.ml-2
-      = grid_filter @bills, :organization_filter
-.row.mb-2.no-gutters
-  .col-md-12
-    .external-buttons.mb-2.float-right
-      button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="bills_grid" 搜索
-      button.btn.btn-outline-secondary.wg-external-reset-button.mr-1 data-grid-name="bills_grid" 重置
-.row.no-gutters
-  == render_grid(@bills)
+== render partial: "public_bill_index"

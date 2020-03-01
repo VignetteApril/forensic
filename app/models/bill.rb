@@ -1,5 +1,6 @@
 class Bill < ApplicationRecord
   attr_accessor :data_str
+  attr_accessor :current_action_name
 
 	belongs_to :main_case
 	has_many :payment_orders
@@ -14,7 +15,7 @@ class Bill < ApplicationRecord
   BILL_TYPE_MAP = { vat_ordinary: '增值税普通发票', vat_special: '增值税专用发票'  }
 
   before_destroy :update_payment_orders
-  after_create :notify_finance_user
+  # after_create :notify_finance_user
 
   # 当用户删除某一个发票时需要更新所有的缴费单的中bill_id字段为空
   def update_payment_orders

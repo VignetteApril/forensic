@@ -92,13 +92,21 @@ class BillsController < ApplicationController
   end
 
   def upload
+    if @bill.nil?
+      payment_order = PaymentOrder.find(params[:payment_order_id])
+      main_case = payment_order.main_case
+      @bill = Bill.create({ main_case: main_case })
+      payment_order.update(bill_id: @bill.id, order_stage: :confirm)
+    else
+      payment_order = nil
+    end
+
     respond_to do |format|
-      binding.pry
       if @bill.update(bill_params)
-        format.html { redirect_to finance_index_main_case_bills_url(@bill.main_case), notice: '发票已经上传！' }
+        format.html { redirect_to get_redirect_path_from_action_name(params[:bill][:current_action_name], payment_order), notice: '发票已经上传！' and return}
         format.json { render :show, status: :ok, location: @bill }
       else
-        format.html { render redirect_to finance_index_main_case_bills_url(@bill.main_case), alert: '发票更新失败！' }
+        format.html { render redirect_to get_redirect_path_from_action_name(params[:bill][:current_action_name], payment_order), alert: '发票更新失败！' and return }
         format.json { render json: @bill.errors, status: :unprocessable_entity }
       end
     end
@@ -154,10 +162,7 @@ class BillsController < ApplicationController
 
     @main_case = PaymentOrder.find_by_id(params[:payment_orders][:selected]).main_case
 
-    @bill = @main_case.bills.new({ recipient: params[:bill][:recipient],
-                                            bill_type:  params[:bill][:bill_type],
-                                            recipient_date: Time.now,
-                                            bill_stage: :unBilled })
+    @bill = @main_case.bills.new(bill_params.merge({ recipient_date: Time.now, bill_stage: :unBilled }))
     payment_order_ids = params[:payment_orders][:selected]
 
     respond_to do |format|
@@ -181,7 +186,7 @@ class BillsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bill
-      @bill = Bill.find(params[:id])
+      @bill = Bill.find(params[:id]) if params[:payment_order_id].nil?
     end
 
     def set_main_case
@@ -190,11 +195,22 @@ class BillsController < ApplicationController
 
     # Never trust parameters from the scary intern\et, only allow the white list through.
     def bill_params
-      params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount, :attachment, :recipient_date, :data_str)
+      params.require(:bill).permit(:bill_type, :organization, :code, :bank, :address, :amount, :attachment, :recipient_date, :data_str, :current_action_name)
     end
 
     # 当发票状态变为已开/已领走后就不能再edit和destroy
     def guard_edit_destroy
       redirect_to payment_order_management_main_case_path(@main_case), notice: '发票已开或已领走！' if @bill.billed? || @bill.taked_away?
+    end
+  
+    def get_redirect_path_from_action_name action_name, payment_order = nil
+      case action_name
+      when 'finance_index'
+        finance_index_main_case_bills_url(-1)
+      when 'finance_unBilled_index'
+        finance_unBilled_index_main_case_bills_url(-1)
+      when 'finance_edit'
+        finance_edit_main_case_payment_order_url(payment_order.main_case, payment_order)
+      end
     end
 end

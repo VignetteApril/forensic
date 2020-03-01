@@ -5,10 +5,11 @@
       .modal-body
         = simple_form_for(:bill, url: upload_main_case_bill_path(-1, -1), method: :put, id: :upload_form) do |f|
           = f.input :data_str, as: :hidden
+          = f.input :current_action_name, as: :hidden, input_html: { value: controller.action_name }
           .form-inputs
             .row
               .col-md-8.offset-2
-                = f.input :recipient_date, label: '领取时间', as: :date, html5: true
+                = f.input :recipient_date, label: '开票时间', as: :date, html5: true
             .row
               .col-md-8.offset-2
                 = f.input :attachment, label: '选择发票', as: :file, input_html: {direct_upload: true}
