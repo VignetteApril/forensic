@@ -97,13 +97,13 @@
       - else
         span 暂无缴费单
   .row.mt-2
-    .col-md-3
+    .col-md-12
       = f.button :submit, '确认缴费单', class: 'btn btn-success mr-2', form: :edit_payment_order
       = link_to '打印', print_page_main_case_payment_order_path(@payment_order.main_case, @payment_order), class: 'btn btn-primary mr-2', id: 'print_page', target: :_blank, data: { turbolinks: false }
       button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finance_bill_modal" 填写发票信息
-    .col-md-3
-      = button_tag "上传发票", type: :button, data: { put_url: upload_main_case_bill_path({payment_order_id: @payment_order, id: -1}) }, class: 'btn btn-info upload-button'
-      = link_to '领取', dyn_form_modal_main_case_bill_path(@payment_order.main_case, @payment_order.bill, come_from: 'ensure_bill'), method: :post, remote: true, class: 'btn btn-primary ml-1'
+      = button_tag "上传发票", type: :button, data: { put_url: upload_main_case_bill_path({payment_order_id: @payment_order, id: -1}) }, class: 'btn btn-info upload-button ml-2'
+      - if @payment_order.bill
+        = link_to '领取', dyn_form_modal_main_case_bill_path(@payment_order.main_case, @payment_order.bill, come_from: 'ensure_bill'), method: :post, remote: true, class: 'btn btn-primary ml-1'
 javascript:
     var digitUppercase = function(n) {
         var fraction = ['角', '分'];
