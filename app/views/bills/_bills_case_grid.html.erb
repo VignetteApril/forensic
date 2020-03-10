@@ -8,7 +8,7 @@
     Bill::BILL_TYPE_MAP[a.bill_type.to_sym] if a.bill_type
   end
 
-  g.column name: '公司名称', attribute: 'organization', custom_filter: false do |a|
+  g.column name: '公司名称', custom_filter: false do |a|
     a.organization
   end
 
@@ -34,10 +34,6 @@
 
   g.column name: '领取信息', custom_filter: false do |bill|
     "已领取，#{bill.recipient}, #{bill.recipient_date.strftime('%Y年%m月%d日')}" if bill.taked_away?
-  end
-
-  g.column in_csv: false do |bill|
-    button_tag "上传", data: { put_url: upload_main_case_bill_path(bill.main_case, bill) }, class: 'btn btn-info btn-sm upload-button'
   end
 
   g.column in_csv: false, html: {style: "width:15px;"}  do |bill|
