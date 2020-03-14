@@ -8,6 +8,8 @@ class ApisController < ApplicationController
 	skip_before_action :authorize
 	skip_before_action :verify_authenticity_token
 
+	before_action :set_token, only: [:get_notice_list_by_case_id, :get_notice_list_by_serise_no]
+
 	def wx_msg_code_to_session
 		# code2Session
 		app_id = "wx5e9e5d5e051dcd16"
@@ -260,6 +262,53 @@ class ApisController < ApplicationController
 		respond_to do |format|
 			format.json { render json:json.to_json }
 	  end				
+	end
+
+	# 按照案件分组的消息接口
+	def get_notice_list_by_serise_no
+		notifications = @user.notifications
+		data = {}
+		data["true"] = []
+		data["false"] =[]
+		notifications.each do |n|
+			data["#{n.status}"].each do |sub_no|
+				if n.main_case.id == sub_no["case_id"]
+					sub_no[:total_num] += 1
+				else
+					data["#{n.status}"].push(n.infos_for_api.merge({ total_num: 0 }))
+				end
+			end
+		end
+
+		json = {"code": "0","messages":"请求成功","data":data}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+		end
+	end
+
+	# 点击某个分组进入到某个案件消息的列表
+	def get_notice_list_by_case_id
+		notifications = @user.notifications
+		if !params[:case_id].blank?
+			notifications = notifications.where(:main_case_id => params[:case_id]).order("created_at desc")
+		end
+
+		# 如果是在未读的标签则更新未读的消息状态为已读
+		if params[:read] == 'false'
+			notifications.where(status: false).update(status: true)
+		end
+
+		data = {}
+		data["true"] = []
+		data["false"] =[]
+		notifications.each do |n|
+			data["#{n.status}"].push(n.infos_for_api)
+		end
+
+		json = {"code": "0","messages":"请求成功","data":data}
+		respond_to do |format|
+			format.json { render json:json.to_json }
+		end
 	end
 
 	def change_notice_status
@@ -537,5 +586,10 @@ class ApisController < ApplicationController
 					end
 				end
 			end
+		end
+
+		def set_token
+			@decoded_token = JWT.decode params[:token], nil, false
+			@user = User.find_by(:id=>decoded_token[0]["id"])
 		end
 end

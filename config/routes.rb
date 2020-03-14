@@ -198,6 +198,8 @@ Rails.application.routes.draw do
   get  'apis/get_case_notice_list'
   get 'apis/departments_through_org_id'
   get 'apis/matter_through_dep_id'
+  get 'apis/get_notice_list_by_case_id'
+  get 'apis/get_notice_list_by_serise_no'
 
   root 'session#index'
 end

@@ -44,7 +44,7 @@ class Notification < ApplicationRecord
         "case_code": self.main_case.try(:serial_no),
         "appraised_unit": self.main_case.try(:appraised_unit).try(:name),
         "center":Organization.find_by(self.main_case.try(:organization_id)).try(:name),
-    		"type": Notification::CHANNEL_MAP[self.channel.to_sym]
+    		"type": MainCase::CASE_STAGE_MAP[self.main_case.case_stage.to_sym]
     	}
    	end 
 
