@@ -590,6 +590,6 @@ class ApisController < ApplicationController
 
 		def set_token
 			@decoded_token = JWT.decode params[:token], nil, false
-			@user = User.find_by(:id=>decoded_token[0]["id"])
+			@user = User.find_by(:id=>@decoded_token[0]["id"])
 		end
 end
