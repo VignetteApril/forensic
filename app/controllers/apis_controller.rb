@@ -271,14 +271,11 @@ class ApisController < ApplicationController
 		data["true"] = []
 		data["false"] =[]
 		notifications.each do |n|
-			data["#{n.status}"].each do |sub_no|
-				if n.main_case.id == sub_no["case_id"]
-					sub_no[:total_num] += 1
-				else
-					data["#{n.status}"].push(n.infos_for_api.merge({ total_num: 0 }))
-				end
-			end
+			data["#{n.status}"].push(n.infos_for_api)
 		end
+
+		data["true"] = data["true"].group_by { |n| n[:case_id] }.map { |k, v| v.first.merge({ total_num: v.count }) }
+		data["false"] = data["false"].group_by { |n| n[:case_id] }.map { |k, v| v.first.merge({ total_num: v.count }) }
 
 		json = {"code": "0","messages":"请求成功","data":data}
 		respond_to do |format|
