@@ -293,16 +293,16 @@ class ApisController < ApplicationController
 			notifications = notifications.where(:main_case_id => params[:case_id]).order("created_at desc")
 		end
 
-		# 如果是在未读的标签则更新未读的消息状态为已读
-		if params[:read] == 'false'
-			notifications.where(status: false).update(status: true)
-		end
-
 		data = {}
 		data["true"] = []
 		data["false"] =[]
 		notifications.each do |n|
 			data["#{n.status}"].push(n.infos_for_api)
+		end
+
+		# 如果是在未读的标签则更新未读的消息状态为已读
+		if params[:read] == 'false'
+			notifications.where(status: false).update(status: true)
 		end
 
 		json = {"code": "0","messages":"请求成功","data":data}
