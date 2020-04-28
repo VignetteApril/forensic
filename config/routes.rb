@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     get :show_payment_order, on: :member
     get :print_transfer_doc_barcode, on: :collection
     get :express_orders, on: :member
+    get :print_express_order_page, on: :collection
     post :express_route, on: :collection
     post :upload_base64_image, on: :member
     post :export_csv, on: :collection

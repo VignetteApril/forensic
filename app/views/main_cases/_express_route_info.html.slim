@@ -1,4 +1,5 @@
-h5 = "快递单号: #{express_num}"
+span.h5 = "快递单号: #{express_num}"
+= link_to '打印快递单', print_express_order_page_main_cases_path(order_num: express_num), class: 'btn btn-primary btn-sm ml-2', id: 'print_page', target: :_blank, data: { turbolinks: false }
 - unless route_info.empty?
   ul
     - route_info.each do |info|

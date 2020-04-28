@@ -18,13 +18,23 @@
             = f.input :come_from, label: false, as: :hidden, input_html: { value: 'case' }
             .row
               .col-md-3
-                = f.input :order_num, label: '快递单号'
-              .col-md-3
                 = f.input :reporter, label: '收件人'
               .col-md-3
-                = f.input :content, label: '快递内容'
+                = f.input :receiver_phone, label: '收件人手机'
               .col-md-3
-                = f.button :submit, '关联', class: 'btn btn-success mt-4'
+                = f.input :receiver_mobile, label: '收件人座机'
+            .row
+              .col-md-3
+                = f.input :province_id, label: '省'
+              .col-md-3
+                = f.input :city_id, label: '市'
+              .col-md-3
+                = f.input :district_id, label: '区'
+            .row
+              .col-md-3
+                = f.input :receiver_addr, label: '收件人详细地址'
+              .col-md-3
+                = f.button :submit, '发送快递', class: 'btn btn-success mt-4'
           hr
           h5 收到快递路由信息
           .row

@@ -959,6 +959,7 @@ class MainCasesController < ApplicationController
 
   # 用户在案件中查看快递轨迹
   def express_orders
+    current_organization = @current_user.organization
     @express_orders = @main_case.express_orders
     @recive_express_order = ReciveExpressOrder.new
     @express_order = ExpressOrder.new
@@ -992,6 +993,11 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def print_express_order_page
+    @recive_express_order = ReciveExpressOrder.find_by(order_num: params[:order_num])
+    render :layout => false
   end
 
   private

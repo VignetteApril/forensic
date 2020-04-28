@@ -1,0 +1,66 @@
+css:
+  @media print {
+    #non-printable {
+      display: none;
+    }
+
+    #printable {
+      display: block;
+    }
+  }
+
+  body {
+    background-color: #E0E0E0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .page {
+    padding: 0px 20px 20px 20px;
+    width: 800px;
+    height: 464px;
+    background-color: white;
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .title-text {
+    font-size: 25px;
+  }
+
+  .number-text {
+    font-size: 10px;
+  }
+
+  .pull-right {
+    float: right;
+  }
+
+  table {
+    font-size: 10px;
+    width: 100%;
+  }
+
+  td {
+    border: solid #000 1px;
+  }
+
+  .print-footer {
+    font-size: 10px;
+  }
+
+  .footer-info {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+body
+  .page#printable
+
+javascript:
+    window.print();

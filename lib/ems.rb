@@ -1,3 +1,5 @@
+require 'hmac-sha1'
+
 module Ems
 	class HttpCaller
 		# 三段码参数
@@ -13,7 +15,7 @@ module Ems
 		ORDER_NUMBER_PRIVATE_KEY = 'key123xydJDPT'
 		# 下单取号xml请求报文
 		BODY_XML_STR = "<OrderNormal>
-							<created_time>2020-01-15 17:28:04#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}</created_time>
+							<created_time>#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}</created_time>
 							<logistics_provider>B</logistics_provider>
 							<ecommerce_no>MZSFJD</ecommerce_no>
 							<ecommerce_user_id>12</ecommerce_user_id>
@@ -116,8 +118,7 @@ module Ems
 				url = URI(ORDER_NUMBER_URL)
 				url.query = URI.encode_www_form(_params)
 				result = HTTParty.post(url, headers: { 'Content-Type' => 'text/plain;charset=UTF-8' }, verify: false )
-
-				result
+				Hash.from_xml(result)
 			end
 
 			# 三段码接口
@@ -142,7 +143,7 @@ module Ems
 				url = URI(THREE_SEGMENT_CODE_URL)
 				url.query = URI.encode_www_form(normal_params)
 				result = HTTParty.post(url, headers: headers, verify: false )
-				result
+				JSON.parse(result)
 			end
 
 			private

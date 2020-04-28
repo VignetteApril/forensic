@@ -45,6 +45,7 @@ gem 'jwt'
 gem 'rails-i18n'
 gem 'pg', '1.1.2'
 gem 'httparty'
+gem 'ruby-hmac'
 
 group :development, :test do
   gem 'minitest-rails'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_17_152232) do
+ActiveRecord::Schema.define(version: 2020_04_28_143159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -402,6 +402,14 @@ ActiveRecord::Schema.define(version: 2020_01_17_152232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reporter"
+    t.string "receiver_mobile"
+    t.string "receiver_phone"
+    t.string "receiver_addr"
+    t.integer "receiver_post_code"
+    t.integer "province_id"
+    t.integer "city_id"
+    t.integer "district_id"
+    t.string "three_segment_code"
     t.index ["main_case_id"], name: "index_recive_express_orders_on_main_case_id"
     t.index ["user_id"], name: "index_recive_express_orders_on_user_id"
   end
