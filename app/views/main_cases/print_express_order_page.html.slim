@@ -1,66 +1,298 @@
+
 css:
-  @media print {
-    #non-printable {
-      display: none;
+  @media print{
+    body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
+    body, button, input, select, textarea { font:12px/1.5  arial,"黑体", \5b8b\4f53; }
+    h1, h2, h3, h4, h5, h6{ font-size:100%; }
+    address, cite, dfn, em, var { font-style:normal; }
+    code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+    small{ font-size:12px; }
+    ul, ol { list-style:none; }
+    a { text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    sup { vertical-align:text-top; }
+    sub{ vertical-align:text-bottom; }
+    legend { color:#000; }
+    fieldset, img { border:0; }
+    button, input, select, textarea { font-size:100%; }
+    table { border-collapse:collapse; border-spacing:0; }
+
+    .no-print{
+        display:none;
+    }
+    @page{
+        size: 100mm 150mm;
+        margin: 1.75mm;
     }
 
-    #printable {
-      display: block;
+    #printPage {
+        width: 124mm;
+        height: 185mm;
+        position: relative;
+        border: 1px dotted #000000;
+        box-sizing: border-box;
     }
-  }
 
-  body {
-    background-color: #E0E0E0;
-    display: flex;
-    justify-content: center;
-  }
+    #printPage span{
+        margin-left: 2mm;
+    }
 
-  .page {
-    padding: 0px 20px 20px 20px;
-    width: 800px;
-    height: 464px;
-    background-color: white;
-  }
+    .left {
+        border-left: 1px dotted #000000;
+        border-right: 1px dotted #000000;
+        border-bottom: 1px dotted #000000;
+        left: 0;
+    }
 
-  .title {
-    display: flex;
-    justify-content: center;
-  }
+    .right {
+        border-right: 1px dotted #000000;
+        border-bottom: 1px dotted #000000;
+        /*right: 0;*/
+    }
 
-  .title-text {
-    font-size: 25px;
-  }
+    .deviation{
+        margin-left: 2mm;
+    }
 
-  .number-text {
-    font-size: 10px;
-  }
+    #emsType{
+        width: 56mm;
+        height: 14mm;
+        position: absolute;
+        top: 0;
+        padding-top: 6mm;
+        font-size: 20px;
+        border-top: 1px dotted #000000;
+    }
 
-  .pull-right {
-    float: right;
-  }
+    .time {
+      font-size: 5px;
+      position: absolute;
+      bottom: 0px;
+    }
 
-  table {
-    font-size: 10px;
-    width: 100%;
-  }
+    #barcode{
+        width: 83mm;
+        height: 20mm;
+        position: absolute;
+        top: 0;
+        left: 40mm;
+        border-top: 1px dotted #000000;
+    }
 
-  td {
-    border: solid #000 1px;
-  }
+    .barcode-image {
+        width: 60mm;
+        height: 15mm;
+        position: absolute;
+        top: 5;
+        right: 5mm;
+    }
 
-  .print-footer {
-    font-size: 10px;
-  }
+    .barcode-num {
+        position: absolute;
+        top: 15mm;
+        right: 23mm;
+        font-size: 10px;
+    }
 
-  .footer-info {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    #three-code{
+        width: 123mm;
+        height: 12mm;
+        font-size: 12px;
+        position: absolute;
+        top: 20mm;
+    }
+
+    #sender{
+        width: 123mm;
+        height: 13mm;
+        font-size: 12px;
+        position: absolute;
+        top: 32mm;
+    }
+
+    #area{
+        width: 67mm;
+        height: 25mm;
+        position: absolute;
+        top: 20mm;
+        left: 56mm;
+    }
+
+    #recipient{
+        width: 123mm;
+        height: 17mm;
+        position: absolute;
+        left: 0;
+        top: 45mm;
+        font-size: 12px;
+    }
+
+    #pay{
+        width: 56mm;
+        height: 20mm;
+        position: absolute;
+        top: 62mm;
+        font-size: 12px;
+    }
+
+    #delivers{
+        width: 67mm;
+        height: 20mm;
+        position: absolute;
+        top: 62mm;
+        left: 56mm;
+        font-size: 12px;
+    }
+
+    #order{
+        width: 123mm;
+        height: 20mm;
+        position: absolute;
+        left: 0;
+        top: 82mm;
+        font-size: 12px;
+    }
+
+    #divide{
+        width: 123mm;
+        height: 8mm;
+        position: absolute;
+        left: 0;
+        top: 102mm;
+    }
+
+    #number{
+        width: 123mm;
+        height: 19mm;
+        position: absolute;
+        left: 0;
+        top: 110mm;
+        font-size: 12px;
+    }
+
+    #send{
+        width: 56mm;
+        height: 20mm;
+        position: absolute;
+        top: 129mm;
+        font-size: 12px;
+    }
+
+    #pickup{
+        width: 67mm;
+        height: 20mm;
+        position: absolute;
+        top: 129mm;
+        left: 56mm;
+        font-size: 12px;
+    }
+
+    #remark{
+        width: 123mm;
+        height: 28mm;
+        position: absolute;
+        top: 149mm;
+        font-size: 12px;
+    }
+
+    #net{
+        width: 123mm;
+        height: 7mm;
+        position: absolute;
+        top: 177mm;
+        font-size: 12px;
+    }
+
+    #note{
+       font-size: 6px;
+    }
   }
 
 body
-  .page#printable
+  #printPage
+      #emsType.left
+          span.deviation
+          span.time = "时间: #{Time.now.strftime("%Y-%m-%d %H:%M")}"
+      #barcode.right
+        = image_tag url_for(@recive_express_order.barcode_image), class: 'barcode-image'
+        span.barcode-num = @recive_express_order.order_num
+      #three-code.left
+          span.deviation 三段码：
+
+      #sender.left
+          span.deviation 收件人：
+          br
+          span 地址：
+
+      #recipient.left
+          span.deviation 寄件人：张杰 电话：123213213
+          br
+          span.deviation 地址：
+
+      #pay.left
+          span.deviation 实际重量：
+          span &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          span 保价金额：
+          br
+          span.deviation 体积：
+          span &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          span 实收金额：
+          br
+          span.deviation 邮费：
+          br
+          span 其他费用：
+
+      #delivers.right
+          span.deviation 收件人\代收人：
+          span
+          br
+          span.deviation 签收时间：
+          span
+          span 年
+          span
+          span 月
+          span
+          span 日
+          span
+          span 时
+          br
+          span#note 快件送达收货人地址，经收件人或收件人允许的代收人签字，视为送达
+      #order.left
+          
+          span.deviation 件数：
+          span
+          span.deviation 重量（KG）：
+          span
+          span.deviation 订单号：
+          span
+          br
+          span.deviation 配货信息：物品
+
+      #divide.left
+
+      #number.left.right
+          span.deviation 条码
+
+      #send.left.right
+          span.deviation 收件人：
+          br
+          span 电话：
+          br
+          span 地址：
+
+      #pickup.right
+          span.deviation 寄件人：
+          br
+          span 电话：
+          br
+          span 地址：
+
+      #remark.left
+          span.deviation 备注：
+          span
+
+      #net.left
+          span.deviation www.ems.cn &nbsp;&nbsp;&nbsp;&nbsp; 客服电话：11183
 
 javascript:
     window.print();

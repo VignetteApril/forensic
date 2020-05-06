@@ -1,9 +1,15 @@
+require 'barby'
+require 'barby/barcode/code_128'
+require 'barby/outputter/png_outputter'
+
 class ReciveExpressOrder < ApplicationRecord
 	belongs_to :main_case
 	belongs_to :user
+	has_one_attached :barcode_image
 	attr_accessor :come_from
 
 	before_save :set_maincase_no, on: [:create, :update]
+	after_save :generate_barcode, on: :create
 
 	validates :order_num, :presence => true, :uniqueness => true
 
@@ -45,6 +51,15 @@ class ReciveExpressOrder < ApplicationRecord
 				return rs    
 			end
 		end
+  end
+
+  # 设置案件的顺序号
+  def generate_barcode
+    barcode = Barby::Code128.new(self.order_num)
+    blob = Barby::PngOutputter.new(barcode).to_png
+    self.barcode_image.attach io: StringIO.new(blob),
+                              filename: self.order_num + '.png',
+                              content_type: 'image/png'
   end
 
 
