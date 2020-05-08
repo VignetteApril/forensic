@@ -25,13 +25,15 @@
                 = f.input :receiver_mobile, label: '收件人座机'
             .row
               .col-md-3
-                = f.input :province_id, label: '省'
+                = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
               .col-md-3
-                = f.input :city_id, label: '市'
+                = f.input :city_id, collection: @cities, label: '市', include_blank: true
               .col-md-3
-                = f.input :district_id, label: '区'
+                = f.input :district_id, collection: @districts, label: '区县', include_blank: true
             .row
               .col-md-3
+                = f.input :town, label: '街道'
+              .col-md-6
                 = f.input :receiver_addr, label: '收件人详细地址'
               .col-md-3
                 = f.button :submit, '发送快递', class: 'btn btn-success mt-4'

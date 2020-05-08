@@ -27,6 +27,18 @@ class Organization < ApplicationRecord
                    center: '鉴定中心'}
   enum org_type: [:court, :center]
 
+  def province_name
+    Area.find(self.province_id).name
+  end
+
+  def city_name
+    Area.find(self.city_id).name
+  end
+
+  def district_name
+    Area.find(self.district_id).name
+  end
+
   class << self
     # 为前端的显示的方法
     def collection_select_arr

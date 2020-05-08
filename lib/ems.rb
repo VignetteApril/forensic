@@ -59,45 +59,38 @@ module Ems
 							<note></note>
 							<project_id></project_id>
 							<sender>
-								<name>陆安波</name>
-								<post_code>510000</post_code>
-								<phone>020-86210730</phone>
-								<mobile>020-86210730</mobile>
-								<prov>广东</prov>
-								<city>广州</city>
-								<county>白云区</county>
-								<address>广州市白云区均禾街道夏花二路66号401</address>
+								<name>@sender_name@</name>
+								<post_code>@sender_post_code@</post_code>
+								<phone>@sender_phone@</phone>
+								<mobile>@sender_mobile@</mobile>
+								<prov>@sender_province@</prov>
+								<city>@sender_city@</city>
+								<county>@sender_county@</county>
+								<address>@sender_address@</address>
 							</sender>
 							<pickup>
-								<name>陆安波</name>
-								<post_code>510000</post_code>
-								<phone>020-86210730</phone>
-								<mobile>020-86210730</mobile>
-								<prov>广东</prov>
-								<city>广州</city>
-								<county>白云区</county>
-								<address>广州市白云区均禾街道夏花二路66号401</address>
+								<name>@pickup_name@</name>
+								<post_code>@pickup_post_code@</post_code>
+								<phone>@pickup_phone@</phone>
+								<mobile>@pickup_mobile@</mobile>
+								<prov>@pickup_province@</prov>
+								<city>@pickup_city@</city>
+								<county>@pickup_county@</county>
+								<address>@pickup_address@</address>
 							</pickup>
 							<receiver>
-								<name>王丽婷</name>
-								<post_code></post_code>
-								<phone>18690972424</phone>
-								<mobile>18690972424</mobile>
-								<prov>新疆维吾尔自治区</prov>
-								<city>新疆维吾尔自治区</city>
-								<county>沙依巴克区</county>
-								<address>新疆维吾尔自治区乌鲁木齐市沙依巴克区西山街道沙区西环中路151号中山花苑小区</address>
+								<name>@receiver_name@</name>
+								<post_code>@receiver_post_code@</post_code>
+								<phone>@receiver_phone@</phone>
+								<mobile>@receiver_mobile@</mobile>
+								<prov>@receiver_province@</prov>
+								<city>@receiver_city@</city>
+								<county>@receiver_county@</county>
+								<address>@receiver_address@</address>
 							</receiver>
 							<cargos>
 								<Cargo>
-									<cargo_name>医用棉签(B型)</cargo_name>
-									<cargo_category></cargo_category>
-									<cargo_quantity></cargo_quantity>
-									<cargo_value></cargo_value>
-									<cargo_weight></cargo_weight>
-								</Cargo>
-								<Cargo>
-									<cargo_name>过氧苯甲酰凝胶</cargo_name>
+									<cargo_name></cargo_name>
 									<cargo_category></cargo_category>
 									<cargo_quantity></cargo_quantity>
 									<cargo_value></cargo_value>
@@ -107,12 +100,19 @@ module Ems
 						</OrderNormal>"
 		class << self
 			# 下单取号接口
-			def request_order_number
-				md5_digest = Digest::MD5.digest(BODY_XML_STR + ORDER_NUMBER_PRIVATE_KEY)
+			def request_order_number(current_order)
+				current_org = Organization.first
+				sender_province = Area.find(current_org.province_id).name
+				sender_city 	= Area.find(current_org.city_id).name
+				sender_county   = Area.find(current_org.district_id).name
+
+				xml_str = "#{BODY_XML_STR}"
+				xml_str.gsub('@sender_name@', current_order.reporter)
+				md5_digest = Digest::MD5.digest(xml_str + ORDER_NUMBER_PRIVATE_KEY)
 				data_digest = Base64.strict_encode64(md5_digest)
 				_params = { data_digest: data_digest,
 				            msg_type: 'ORDERCREATE',
-				            logistics_interface: BODY_XML_STR,
+				            logistics_interface: xml_str,
 				            ecCompanyId: 'MZSFJD'
 				          }
 				url = URI(ORDER_NUMBER_URL)
@@ -122,7 +122,7 @@ module Ems
 			end
 
 			# 三段码接口
-			def request_three_segment_code
+			def request_three_segment_code(current_order)
 				# 参数 logisticsInterface
 				logisticsInterface = [{"senderAddress":{"province":"浙江省","city":"杭州市","area":"余杭","town":"余杭街道","detail":"狮山路11号","zip":"123456"},
 									   "receiverAddress":{"province":"江苏省","city":"南京市","area":"江宁","town":"东山街道","detail":"东麒路33号A座","zip":"123456"},
