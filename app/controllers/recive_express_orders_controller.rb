@@ -34,7 +34,6 @@ class ReciveExpressOrdersController < ApplicationController
   # POST /recive_express_orders.json
   def create
     @recive_express_order = @current_user.recive_express_orders.new(recive_express_order_params)
-    
     respond_to do |format|
       if @recive_express_order.save
         if recive_express_order_params[:come_from]
