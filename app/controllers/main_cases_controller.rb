@@ -996,7 +996,8 @@ class MainCasesController < ApplicationController
   end
 
   def print_express_order_page
-    @recive_express_order = ReciveExpressOrder.find_by(order_num: params[:order_num])
+    @sender = Organization.first
+    @reciver = ReciveExpressOrder.find_by(order_num: params[:order_num])
     render :layout => false
   end
 

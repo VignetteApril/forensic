@@ -102,7 +102,8 @@ class OrganizationsController < ApplicationController
                                            :payee,
                                            :open_account_bank,
                                            :account_number, 
-                                           :town)
+                                           :town, 
+                                           :post_code)
     end
 
     def set_new_areas

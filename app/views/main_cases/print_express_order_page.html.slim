@@ -87,10 +87,25 @@ css:
         right: 5mm;
     }
 
+    .barcode-image-bottom {
+        width: 60mm;
+        height: 15mm;
+        position: absolute;
+        top: 5;
+        left: 5mm;
+    }
+
     .barcode-num {
         position: absolute;
         top: 15mm;
         right: 23mm;
+        font-size: 10px;
+    }
+
+    .barcode-num-bottom {
+        position: absolute;
+        top: 15mm;
+        left: 23mm;
         font-size: 10px;
     }
 
@@ -206,6 +221,14 @@ css:
     #note{
        font-size: 6px;
     }
+
+    .ems-png {
+        width: 60mm;
+        height: 15mm;
+        position: absolute;
+        top: 5;
+        right: 5mm;
+    }
   }
 
 body
@@ -214,20 +237,20 @@ body
           span.deviation
           span.time = "时间: #{Time.now.strftime("%Y-%m-%d %H:%M")}"
       #barcode.right
-        = image_tag url_for(@recive_express_order.barcode_image), class: 'barcode-image'
-        span.barcode-num = @recive_express_order.order_num
+        = image_tag url_for(@reciver.barcode_image), class: 'barcode-image'
+        span.barcode-num = @reciver.order_num
       #three-code.left
           span.deviation 
-
+          span style="font-size: 30" = @reciver.three_segment_code
       #sender.left
-          span.deviation 收件人：
+          span.deviation = "收件人：#{@reciver.reporter}"
           br
-          span 地址：
+          span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.town + @reciver.receiver_addr}"
 
       #recipient.left
-          span.deviation 寄件人：张杰 电话：123213213
+          span.deviation = "寄件人：#{@sender.name} 电话：#{@sender.phone}"
           br
-          span.deviation 地址：
+          span.deviation = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.town + @sender.addr}"
 
       #pay.left
           span.deviation 实际重量：
@@ -271,21 +294,23 @@ body
       #divide.left
 
       #number.left.right
-          span.deviation 条码
+        = image_tag url_for(@reciver.barcode_image), class: 'barcode-image-bottom'
+        span.barcode-num-bottom = @reciver.order_num
+        = image_tag asset_url('ems.png'), class: 'ems-png'
 
       #send.left.right
-          span.deviation 收件人：
+          span.deviation = "收件人：#{@reciver.reporter}"
           br
-          span 电话：
+          span = "电话：#{@reciver.receiver_phone}"
           br
-          span 地址：
+          span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.town + @reciver.receiver_addr}"
 
       #pickup.right
-          span.deviation 寄件人：
+          span.deviation = "寄件人：#{@sender.name}"
           br
-          span 电话：
+          span = "电话：#{@sender.phone}"
           br
-          span 地址：
+          span = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.town + @sender.addr}"
 
       #remark.left
           span.deviation 备注：

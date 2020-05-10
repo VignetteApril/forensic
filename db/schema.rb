@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_150157) do
+ActiveRecord::Schema.define(version: 2020_05_10_055050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -352,6 +352,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_150157) do
     t.string "level"
     t.boolean "is_confirm", default: true
     t.string "town"
+    t.string "post_code"
     t.index ["ancestry"], name: "index_organizations_on_ancestry"
     t.index ["area_id"], name: "index_organizations_on_area_id"
   end
@@ -412,6 +413,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_150157) do
     t.integer "district_id"
     t.string "three_segment_code"
     t.string "town"
+    t.string "post_code"
     t.index ["main_case_id"], name: "index_recive_express_orders_on_main_case_id"
     t.index ["user_id"], name: "index_recive_express_orders_on_user_id"
   end

@@ -10,10 +10,10 @@ class ReciveExpressOrder < ApplicationRecord
 	attr_accessor :come_from
 
 	before_save :set_maincase_no, on: [:create, :update]
-	after_save :generate_barcode, on: :create
+	# after_save :generate_barcode, on: :create
 	after_create :set_ems_message
 
-	validates :order_num, :presence => true, :uniqueness => true
+	validates :order_num, :uniqueness => true
 
   def set_maincase_no
 		self.case_no = self.main_case.case_no
@@ -66,7 +66,20 @@ class ReciveExpressOrder < ApplicationRecord
 
   # 根据当前的信息，去ems取订单号，三段码，如果失败则，订单创建失败
   def set_ems_message
-	
+	current_order_num = Ems::HttpCaller.request_order_number(self)
+
+	if current_order_num
+		self.order_num = current_order_num
+		current_three_segment_code = Ems::HttpCaller.request_three_segment_code(self)
+		self.three_segment_code = current_three_segment_code
+		if self.save
+			self.generate_barcode
+		else
+			raise "生成条码失败" 
+		end
+	else
+		raise "获取订单号失败"
+	end
   end
 
   def province_name

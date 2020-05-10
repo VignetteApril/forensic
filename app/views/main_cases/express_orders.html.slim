@@ -17,25 +17,27 @@
             = f.input :company_type, label: false, as: :hidden, input_html: { value: 'ems' }
             = f.input :come_from, label: false, as: :hidden, input_html: { value: 'case' }
             .row
-              .col-md-3
+              .col-md-4
                 = f.input :reporter, label: '收件人'
-              .col-md-3
+              .col-md-4
                 = f.input :receiver_phone, label: '收件人手机'
-              .col-md-3
+              .col-md-4
                 = f.input :receiver_mobile, label: '收件人座机'
             .row
-              .col-md-3
+              .col-md-4
                 = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
-              .col-md-3
+              .col-md-4
                 = f.input :city_id, collection: @cities, label: '市', include_blank: true
-              .col-md-3
+              .col-md-4
                 = f.input :district_id, collection: @districts, label: '区县', include_blank: true
             .row
-              .col-md-3
+              .col-md-4
                 = f.input :town, label: '街道'
-              .col-md-6
+              .col-md-4
                 = f.input :receiver_addr, label: '收件人详细地址'
-              .col-md-3
+              .col-md-2
+                = f.input :receiver_post_code, label: '收件人邮编'
+              .col-md-2
                 = f.button :submit, '发送快递', class: 'btn btn-success mt-4'
           hr
           h5 收到快递路由信息
