@@ -37,8 +37,7 @@ task :import_old_cases => :environment do
       # 根据
       temp_case_string = basic_case["case_no"].match(/[0-9].*鉴字/).to_s
       year = temp_case_string[0..3]
-      puts year
-      next if year != '2019'
+      next if year != '2018'
       department_short_word = temp_case_string[4..5]
       department_name = department_map[department_short_word]
       department = Department.find_by(name: department_name)
