@@ -30,12 +30,16 @@ task :import_old_cases => :environment do
     "病鉴" => "法医病理室"
   }
 
-  sql = "select * from cases_basic limit 1"
+  sql = "select * from cases_basic"
   begin
     result = ActiveRecord::Base.connection.execute(sql).to_a
     result.each do |basic_case|
+      binding.pry
       # 根据
-      department_short_word = basic_case["case_no"].match(/[0-9].*鉴字/).to_s[4..5]
+      temp_case_string = basic_case["case_no"].match(/[0-9].*鉴字/).to_s
+      year = temp_case_string[0..3]
+      next if year != '2019'
+      department_short_word = temp_case_string[4..5]
       department_name = department_map[department_short_word]
       department = Department.find_by(name: department_name)
       
