@@ -38,8 +38,13 @@ task :import_old_cases => :environment do
       department_short_word = basic_case["case_no"].match(/[0-9].*鉴字/).to_s[4..5]
       department_name = department_map[department_short_word]
       department = Department.find_by(name: department_name)
-      puts "当前科室：#{department.nil? ? '找不到科室！' : department.name}"
-      next if department.nil?
+      
+      if department.nil?
+        puts "找不到科室！"
+        next
+      else
+        puts "当前科室：#{department.name}"
+      end
 
       serial_no = basic_case["flow_no"]
       organization_name = basic_case["devolve_name"]
