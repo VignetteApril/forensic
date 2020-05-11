@@ -34,7 +34,6 @@ task :import_old_cases => :environment do
   begin
     result = ActiveRecord::Base.connection.execute(sql).to_a
     result.each do |basic_case|
-      binding.pry
       # 根据
       temp_case_string = basic_case["case_no"].match(/[0-9].*鉴字/).to_s
       year = temp_case_string[0..3]
