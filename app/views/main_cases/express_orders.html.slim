@@ -13,6 +13,8 @@
       div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab"
         .mt-4
           = simple_form_for(@recive_express_order) do |f|
+            = f.error_notification
+            = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
             = f.input :main_case_id, label: false, as: :hidden, input_html: { value: @main_case.id }
             = f.input :company_type, label: false, as: :hidden, input_html: { value: 'ems' }
             = f.input :come_from, label: false, as: :hidden, input_html: { value: 'case' }
