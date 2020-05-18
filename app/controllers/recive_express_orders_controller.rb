@@ -44,7 +44,7 @@ class ReciveExpressOrdersController < ApplicationController
         format.json { render :show, status: :created, location: @recive_express_order }
       else
         if recive_express_order_params[:come_from]
-          format.html { redirect_to express_orders_main_case_url(recive_express_order_params[:main_case_id]), alert: '快递单号已经存在' }
+          format.html { redirect_to express_orders_main_case_url(recive_express_order_params[:main_case_id]), alert: '快递单创建失败，请填写相关字段！' }
         else
           format.html { render :new }
         end
