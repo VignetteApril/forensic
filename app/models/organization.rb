@@ -16,7 +16,7 @@ class Organization < ApplicationRecord
   validates :name, uniqueness: true, presence: true  #机构名称唯一，必填
   validates :abbreviation, presence: { message: '不能为空' }, unless: :is_court?
   validates :org_type, presence: { message: '不能为空' }
-  validates :payee, :open_account_bank, :account_number, presence: { message: '不能为空' }, unless: :is_court?
+  # validates :payee, :open_account_bank, :account_number, presence: { message: '不能为空' }, unless: :is_court?
 
   def is_court?
     self.org_type == 'court'

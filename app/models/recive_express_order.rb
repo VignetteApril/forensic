@@ -14,7 +14,7 @@ class ReciveExpressOrder < ApplicationRecord
 	after_create :set_ems_message
 
 	validates :order_num, :uniqueness => true
-	validates :reporter, :receiver_phone, :receiver_mobile, :province_id, :city_id, :district_id, :town, :receiver_addr, :receiver_post_code, :presence => true
+	validates :reporter, :receiver_phone, :province_id, :receiver_addr, :presence => true
 
   def set_maincase_no
 		self.case_no = self.main_case.case_no

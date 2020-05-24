@@ -7,7 +7,7 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    @organizations = initialize_grid(Organization.all, per_page: 20, name: 'organization_grid')
+    @organizations = initialize_grid(Organization.all, per_page: 20, name: 'organization_grid', order: 'created_at')
   end
 
   # GET /organizations/1

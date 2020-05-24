@@ -191,8 +191,6 @@ class MainCasesController < ApplicationController
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
-
-    render :index
   end
 
   # GET /main_cases/1

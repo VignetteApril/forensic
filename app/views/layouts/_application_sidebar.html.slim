@@ -82,12 +82,12 @@ aside.app-sidebar
             li
               a.treeview-item href="#{apply_filing_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'apply_filing_cases')}"
                 i.app-menu__icon
-                span.app-menu__label 待结案的案件
+                span.app-menu__label 待归档的案件
           - if can?('main_cases', 'my_closed_cases')
             li
               a.treeview-item href="#{my_closed_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'my_closed_cases')}"
                 i.app-menu__icon
-                span.app-menu__label 我的已结案的案件
+                span.app-menu__label 已归档的案件
           - if can?('main_cases', 'department_closed_cases')
             li
               a.treeview-item href="#{department_closed_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'department_closed_cases')}"

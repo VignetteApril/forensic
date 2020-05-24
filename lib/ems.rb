@@ -87,7 +87,7 @@ module Ems
 									<name>#{current_order.reporter}</name>
 									<post_code>#{current_order.receiver_post_code}</post_code>
 									<phone>#{current_order.receiver_phone}</phone>
-									<mobile>#{current_order.receiver_mobile}</mobile>
+									<mobile>#{current_order.receiver_phone}</mobile>
 									<prov>#{current_order.province_name}</prov>
 									<city>#{current_order.city_name}</city>
 									<county>#{current_order.district_name}</county>
