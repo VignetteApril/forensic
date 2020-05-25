@@ -10,7 +10,7 @@ module Ems
 		THREE_SEGMENT_CODE_URL = 'http://211.156.195.42:8086/csb_ceshinew_1'
 
 		# 下单取号参数
-		ORDER_NUMBER_URL = 'https://211.156.195.199/iwaybillno-web/a/iwaybill/receive'
+		ORDER_NUMBER_URL = 'https://211.156.195.17/iwaybillno-web/a/iwaybill/receive'
 		# 下单取号private_key
 		ORDER_NUMBER_PRIVATE_KEY = 'key123xydJDPT'
 
