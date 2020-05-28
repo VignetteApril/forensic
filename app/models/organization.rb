@@ -28,15 +28,15 @@ class Organization < ApplicationRecord
   enum org_type: [:court, :center]
 
   def province_name
-    Area.find(self.province_id).name
+    Area.find(self.province_id).name rescue nil
   end
 
   def city_name
-    Area.find(self.city_id).name
+    Area.find(self.city_id).name rescue nil
   end
 
   def district_name
-    Area.find(self.district_id).name
+    Area.find(self.district_id).name rescue nil
   end
 
   class << self

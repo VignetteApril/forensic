@@ -22,9 +22,7 @@
               .col-md-4
                 = f.input :reporter, label: '收件人'
               .col-md-4
-                = f.input :receiver_phone, label: '收件人手机'
-              .col-md-4
-                = f.input :receiver_mobile, label: '收件人座机'
+                = f.input :receiver_phone, label: '联系电话'
             .row
               .col-md-4
                 = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
@@ -34,9 +32,9 @@
                 = f.input :district_id, collection: @districts, label: '区县', include_blank: true
             .row
               .col-md-4
-                = f.input :town, label: '街道'
-              .col-md-4
                 = f.input :receiver_addr, label: '收件人详细地址'
+              .col-md-4
+                = f.input :town, label: '备注快递内容'
               .col-md-2
                 = f.input :receiver_post_code, label: '收件人邮编'
               .col-md-2

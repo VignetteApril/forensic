@@ -95,7 +95,7 @@ module Ems
 								</receiver>
 								<cargos>
 									<Cargo>
-										<cargo_name>文件</cargo_name>
+										<cargo_name>#{current_order.town}</cargo_name>
 										<cargo_category></cargo_category>
 										<cargo_quantity></cargo_quantity>
 										<cargo_value></cargo_value>
@@ -114,7 +114,6 @@ module Ems
 				url.query = URI.encode_www_form(_params)
 				result = HTTParty.post(url, headers: { 'Content-Type' => 'text/plain;charset=UTF-8' }, verify: false )
 				rs = Hash.from_xml(result)
-
 				rs["responses"]["responseItems"]["response"]["waybill_no"]
 			end
 

@@ -67,32 +67,32 @@ class ReciveExpressOrder < ApplicationRecord
 
   # 根据当前的信息，去ems取订单号，三段码，如果失败则，订单创建失败
   def set_ems_message
-	current_order_num = Ems::HttpCaller.request_order_number(self)
+		current_order_num = Ems::HttpCaller.request_order_number(self)
 
-	if current_order_num
-		self.order_num = current_order_num
-		current_three_segment_code = Ems::HttpCaller.request_three_segment_code(self)
-		self.three_segment_code = current_three_segment_code
-		if self.save
-			self.generate_barcode
+		if current_order_num
+			self.order_num = current_order_num
+			current_three_segment_code = Ems::HttpCaller.request_three_segment_code(self)
+			self.three_segment_code = current_three_segment_code
+			if self.save
+				self.generate_barcode
+			else
+				raise "生成条码失败" 
+			end
 		else
-			raise "生成条码失败" 
+			raise "获取订单号失败"
 		end
-	else
-		raise "获取订单号失败"
-	end
   end
 
   def province_name
-		Area.find(self.province_id).name
+		Area.find(self.province_id).name rescue nil
   end
 
   def city_name
-		Area.find(self.city_id).name
+		Area.find(self.city_id).name rescue nil
   end
 
   def district_name
-		Area.find(self.district_id).name
+		Area.find(self.district_id).name rescue nil
   end
 
 	class << self
