@@ -95,7 +95,7 @@ module Ems
 								</receiver>
 								<cargos>
 									<Cargo>
-										<cargo_name>#{current_order.town || '文件'}</cargo_name>
+										<cargo_name>文件</cargo_name>
 										<cargo_category></cargo_category>
 										<cargo_quantity></cargo_quantity>
 										<cargo_value></cargo_value>
