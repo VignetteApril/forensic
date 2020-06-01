@@ -1,4 +1,6 @@
 = render 'finance_payment_orders_grid'
+= render 'layouts/preview_image_modal'
+
 .row.no-gutters.mb-2
   .col-md-4.d-flex.flex-row.align-items-center
     span 流水号:
@@ -16,3 +18,10 @@
 .row.no-gutters
   .col-md-12
     == render_grid(@finance_payment_orders)
+
+javascript:
+    $('.preview_button').click(function (e) {
+        console.log("!!!!");
+        console.log(e.target.dataset.imageurl);
+        $('#preview_image_image').attr('src', e.target.dataset.imageurl);
+    });

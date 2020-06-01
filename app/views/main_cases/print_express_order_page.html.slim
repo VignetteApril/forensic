@@ -313,7 +313,7 @@ body
           span = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.town + @sender.addr}"
 
       #remark.left
-          span.deviation 备注：
+          span.deviation = "备注：#{@sender.town}"
           span
 
       #net.left

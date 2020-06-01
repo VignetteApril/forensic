@@ -40,6 +40,11 @@
 		PaymentOrder::ORDER_STAGE_MAP[a.try(:order_stage).try(:to_sym)]
   end
 
+  g.column name: '预览', html: {style: "width:50px;"}, custom_filter: false do |a|
+    button_tag '预览', type: 'button', data: { toggle: 'modal', target: '#preview_image', imageUrl: url_for(a.attachment) }, class: 'btn btn-primary btn-sm ml-2 preview_button' if a.attachment.attached?
+  end
+
+
   g.column in_csv: false do |a|
     link_to '查看', finance_edit_main_case_payment_order_path(a.main_case, a), class: 'btn btn-secondary btn-sm'
   end

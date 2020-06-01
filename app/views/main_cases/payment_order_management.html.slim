@@ -8,6 +8,13 @@
 = render partial: 'case_no_modal', locals: {main_case: @main_case}
 = render 'layouts/preview_image_modal'
 
+css:
+  .wice-grid-container {
+    height: auto !important;
+    overflow-x: scroll;
+    overflow-y: scroll;
+  }
+
 // 动态更新发票的moadal
 #dyn_bill_modal_box
 

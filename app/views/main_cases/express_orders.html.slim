@@ -20,19 +20,19 @@
             = f.input :come_from, label: false, as: :hidden, input_html: { value: 'case' }
             .row
               .col-md-4
-                = f.input :reporter, label: '收件人'
+                = f.input :reporter, label: '收件人', input_html: { value: @main_case.try(:user_name) }
               .col-md-4
-                = f.input :receiver_phone, label: '联系电话'
+                = f.input :receiver_phone, label: '联系电话', input_html: { value: @main_case.try(:wtr_phone) }
             .row
               .col-md-4
-                = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
+                = f.input :province_id, collection: @provinces, label: '省份', include_blank: false, input_html: { value: @main_case.try(:province_id) }
               .col-md-4
-                = f.input :city_id, collection: @cities, label: '市', include_blank: true
+                = f.input :city_id, collection: @cities, label: '市', include_blank: true, input_html: { value: @main_case.try(:city_id) }
               .col-md-4
-                = f.input :district_id, collection: @districts, label: '区县', include_blank: true
+                = f.input :district_id, collection: @districts, label: '区县', include_blank: true, input_html: { value: @main_case.try(:district_id) }
             .row
               .col-md-4
-                = f.input :receiver_addr, label: '收件人详细地址'
+                = f.input :receiver_addr, label: '收件人详细地址', input_html: { value: @main_case.try(:organization_addr) }
               .col-md-4
                 = f.input :town, label: '备注快递内容'
               .col-md-2
