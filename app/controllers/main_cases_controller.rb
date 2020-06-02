@@ -53,8 +53,8 @@ class MainCasesController < ApplicationController
 
   def my_closed_cases
     current_org_cases = @current_user.organization.main_cases
-    case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
-    data = MainCase.where(id: case_ids, case_stage: :close)
+    # case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
+    data = MainCase.where(id: current_org_cases, case_stage: :close)
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,

@@ -243,7 +243,7 @@ body
           span.deviation 
           span style="font-size: 30" = @reciver.three_segment_code
       #sender.left
-          span.deviation = "收件人：#{@reciver.reporter}"
+          span.deviation = "收件人：#{@reciver.reporter} 电话：#{@reciver.receiver_phone}"
           br
           span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.town + @reciver.receiver_addr}"
 
@@ -313,6 +313,7 @@ body
           span = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.town + @sender.addr}"
 
       #remark.left
+          br
           span.deviation = "备注：#{@sender.town}"
           span
 
