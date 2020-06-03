@@ -86,6 +86,9 @@ javascript:
   function OpenDocument()
   {
     try{
+      // 正式版鉴权
+      document.getElementById('WebOffice').UserName="北京旌正科技有限公司";
+      document.getElementById('WebOffice').Authorizer="www.officectrl.com";
       document.getElementById('WebOffice').Open(strOpenUrl,true,"Word.Document");
       bOpen=true;//如果js代码能执行到此句，说明控件能正常打开文档,则设置打开文档的状态为真
     }catch(e)
@@ -104,6 +107,7 @@ javascript:
               WebOffice.HttpAddPostString("doc_id", "#{@department_doc.id}");
               WebOffice.HttpAddPostCurrFile("docfile", "");
               WebOffice.HttpAddPostString("doc_id", "#{@department_doc.id}");
+              WebOffice.HttpAddPostCurrFile("docfile", "");
               //strResults用于获得网页提交后的返回数据，可用以调试服务器端代码。
 
               var strResults = WebOffice.HttpPost("#{edit_office_online_save_doc_url}");
