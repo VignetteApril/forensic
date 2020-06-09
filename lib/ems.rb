@@ -7,7 +7,7 @@ module Ems
 		API_VERSION  = '1.0.0'
 		AccessKey 	 = 'dd979a77b2a44e54b65f01dcbc0bae04'
 		SecretKey 	 = 'kCZfusS4Zn300MTnYtIlWzhdoE8='
-		THREE_SEGMENT_CODE_URL = 'http://211.156.195.42:8086/csb_ceshinew_1'
+		THREE_SEGMENT_CODE_URL = 'http://211.156.195.187:8086/ceshi_csb_broker'
 
 		# 下单取号参数
 		ORDER_NUMBER_URL = 'https://211.156.195.17/iwaybillno-web/a/iwaybill/receive'
@@ -113,6 +113,7 @@ module Ems
 				url = URI(ORDER_NUMBER_URL)
 				url.query = URI.encode_www_form(_params)
 				result = HTTParty.post(url, headers: { 'Content-Type' => 'text/plain;charset=UTF-8' }, verify: false )
+				Rails.logger.info result
 				rs = Hash.from_xml(result)
 				rs["responses"]["responseItems"]["response"]["waybill_no"]
 			end
@@ -140,6 +141,7 @@ module Ems
 				url = URI(THREE_SEGMENT_CODE_URL)
 				url.query = URI.encode_www_form(normal_params)
 				result = HTTParty.post(url, headers: headers, verify: false )
+				Rails.logger.info result
 				rs = JSON.parse(result)
 				rs["body"]["result"][0]["routeCode"]
 			end
