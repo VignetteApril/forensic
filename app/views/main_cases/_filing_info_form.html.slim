@@ -31,7 +31,7 @@
                   span.ml-2 = doc.name
                   br
                   span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                  span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment') if doc.attachment.attached?
+                  span.ml-2 = link_to '下载', edit_office_online_download_doc_path(doc_id: doc.id) if doc.attachment.attached?
 
 = simple_form_for(@main_case, method: :patch, url: update_filing_main_case_path) do |f|
   .form-inputs
@@ -77,7 +77,7 @@
                     span.ml-2 = doc.name
                     br
                     span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                    span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
+                    span.ml-2 = link_to '下载', edit_office_online_download_doc_path(doc_id: doc.id) if doc.attachment.attached?
 
 = simple_form_for(@main_case, method: :patch, url: update_reject_main_case_path) do |f|
   .form-inputs
@@ -98,7 +98,7 @@
                 span.ml-2 = doc.name
                 br
                 span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                span.ml-2 = link_to '下载', rails_blob_path(doc.attachment, discosition: 'attachment')
+                span.ml-2 = link_to '下载', edit_office_online_download_doc_path(doc_id: doc.id) if doc.attachment.attached?
 
 javascript:
   // 为了避免selectiz 的自动order机制需要手动的设置鉴定人的值

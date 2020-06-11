@@ -77,4 +77,11 @@ class EditOfficeOnlineController < ApplicationController
   def download_weboffice
     send_file("#{Rails.root}/public/WebOffice.rar")
   end
+
+  def download_doc
+    doc_id = params[:doc_id]
+    doc = DepartmentDoc.find_by_id(doc_id) || DocTemplate.find_by_id(doc_id)
+    doc_path = url_for(doc.attachment)
+    redirect_to doc_path and return
+  end
 end

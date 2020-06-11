@@ -173,6 +173,8 @@ Rails.application.routes.draw do
   post 'edit_office_online/get_doc_url'
   # 下载控件
   get 'edit_office_online/download_weboffice'
+  # 下载文档
+  get 'edit_office_online/download_doc'
 
   # 小程序后台API
   post 'apis/wx_msg_send'

@@ -30,7 +30,7 @@
               span.ml-2 data-toggle="tooltip" data-placement="right" title="#{case_doc.attachment.blob.filename}" = case_doc.name
               br
               span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{case_doc.id}"编辑
-              span.ml-2 = link_to '下载', rails_blob_path(case_doc.attachment, discosition: 'attachment')
+              span.ml-2 = link_to '下载', edit_office_online_download_doc_path(doc_id: case_doc.id) if case_doc.attachment.attached?
     br
     // 显示勾选了结案检查的案件
     h5 归档检查
