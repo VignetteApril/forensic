@@ -6,8 +6,8 @@ class MainCasesController < ApplicationController
                                        :save_payment_order, :case_executing, :update_case_stage, :update_financial_stage,
                                        :display_dynamic_file_modal, :closing_case, :case_memos, :create_case_memo,
                                        :case_process_records, :show_payment_order, :express_orders]
-  before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order, :express_orders]
-  before_action :set_edit_areas, only: [:edit, :update]
+  before_action :set_new_areas, only: [:new, :organization_and_user, :create, :new_with_entrust_order]
+  before_action :set_edit_areas, only: [:edit, :update, :express_orders]
   before_action :set_court_users, only: [:new, :edit, :create]
   before_action :set_anyou_and_case_property, only: [:new, :edit, :create]
   before_action :set_department_matters, only: [:edit, :update]

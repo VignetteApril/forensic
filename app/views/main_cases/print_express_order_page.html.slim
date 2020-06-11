@@ -245,10 +245,10 @@ body
       #sender.left
           span.deviation = "收件人：#{@reciver.reporter} 电话：#{@reciver.receiver_phone}"
           br
-          span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.town + @reciver.receiver_addr}"
+          span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.receiver_addr}"
 
       #recipient.left
-          span.deviation = "寄件人：#{@sender.name} 电话：#{@sender.phone}"
+          span.deviation = "寄件人：#{@current_user.name} 电话：#{@sender.phone}"
           br
           span.deviation = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.town + @sender.addr}"
 
@@ -289,7 +289,7 @@ body
           span.deviation 订单号：
           span
           br
-          span.deviation 配货信息：物品
+          span.deviation = "配货信息：#{@reciver.town}"
 
       #divide.left
 
@@ -306,11 +306,11 @@ body
           span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.town + @reciver.receiver_addr}"
 
       #pickup.right
-          span.deviation = "寄件人：#{@sender.name}"
+          span.deviation = "寄件人：#{@current_user.name}"
           br
           span = "电话：#{@sender.phone}"
           br
-          span = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.town + @sender.addr}"
+          span = "地址：#{@sender.province_name + @sender.city_name + @sender.district_name + @sender.addr}"
 
       #remark.left
           br
