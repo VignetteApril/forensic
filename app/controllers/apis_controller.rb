@@ -479,6 +479,8 @@ class ApisController < ApplicationController
 		user = User.find_by(:id=>decoded_token[0]["id"])
 
 		organization_ids = MainCase.where(:wtr_id=>user.id).map{|e|e.department.organization.id}.compact
+		Rails.logger.info "user_id: #{user.id}"
+		Rails.logger.info "organization_ids: #{organization_ids}"
 		orgs_hash =[]
 		organization_ids.each do |id|
 			orgs_hash << {"center_name": Organization.find_by(:id=>id).name, "id":id}
@@ -548,7 +550,6 @@ class ApisController < ApplicationController
 				end
 			end
 		end
-
 	end
 
 	private
