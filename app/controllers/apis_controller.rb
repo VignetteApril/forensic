@@ -357,6 +357,8 @@ class ApisController < ApplicationController
 		  return
 		end
 
+		order_nums = e.recive_express_orders.pluck(:order_num)
+		order_nums.compact!
 		case_data = {
 			"id": e.id,
 			"case_code":e.serial_no,
@@ -372,7 +374,7 @@ class ApisController < ApplicationController
 			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name: "",
 			"organization_name"=>e.organization_name,
 			"organization_phone"=>e.organization_phone,
-			"ems_code" => e.recive_express_orders.pluck(:order_num).compact!
+			"ems_code" => order_nums
 		}
 
 		procress_data = e.case_process_records.map{|record| {"detail":record.detail,"created_at":record.created_at.strftime('%Y-%m-%d')}}
@@ -494,8 +496,10 @@ class ApisController < ApplicationController
 			orgs_hash << {"center_name": Organization.find_by(:id=>id).name, "id":id}
 		end
 
+		orgs_hash.compact!
+
 		respond_to do |format|
-			format.json { render json:{"code": "0","messages":"查询成功","data": orgs_hash.compact!}.to_json }
+			format.json { render json:{"code": "0","messages":"查询成功","data": orgs_hash}.to_json }
 	  end	
 
   end
