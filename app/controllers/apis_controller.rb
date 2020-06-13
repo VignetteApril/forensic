@@ -389,7 +389,7 @@ class ApisController < ApplicationController
 		rs = Ems::HttpCaller.get_ems_logistics ems_order_num
 		Rails.logger.info rs
 
-		render json: { code: 0, message: '请求成功', data: rs["responseItems"].to_json }
+		render json: { code: 0, message: '请求成功', data: rs["responseItems"] }
 	end
 
   #创建被鉴定人
