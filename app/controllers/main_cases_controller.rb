@@ -1,3 +1,5 @@
+require 'ems'
+
 class MainCasesController < ApplicationController
   before_action :forbid_admin_user, except: [:payment, :express_route]
   before_action :set_main_case, only: [:show, :edit, :update, :destroy, :generate_case_no,

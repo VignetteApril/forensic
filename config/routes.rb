@@ -203,6 +203,7 @@ Rails.application.routes.draw do
   get 'apis/matter_through_dep_id'
   get 'apis/get_notice_list_by_case_id'
   get 'apis/get_notice_list_by_serise_no'
+  get 'apis/get_ems_logistics'
 
   root 'session#index'
 end

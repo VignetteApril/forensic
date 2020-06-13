@@ -146,6 +146,29 @@ module Ems
 				rs["body"]["result"][0]["routeCode"]
 			end
 
+			def get_ems_logistics express_num
+				trace_hash = { "traceNo" => express_num }.to_json
+		    private_key = '74C258A9EB489431'
+		    md5_digest = Digest::MD5.hexdigest(trace_hash + private_key)
+		    dataDigest = Base64.strict_encode64(md5_digest)
+		    msgBody = URI.encode(trace_hash)
+		    _params = { dataDigest: dataDigest,
+		                msgBody: msgBody,
+		                serialNo: '2',
+		                dataType: '1',
+		                batchNo: '999',
+		                receiveID: 'JDPT',
+		                sendDate: Time.now.strftime('%Y%m%d%H%M%S'),
+		                msgKind: 'zhijian_JDPT_TRACE',
+		                proviceNo: '99',
+		                sendID: 'zhijian',
+		              }
+		    url = URI('http://211.156.195.29/querypush-twswn/mailTrack/queryMailTrackWn/plus')
+		    url.query = URI.encode_www_form(_params)
+		    result = HTTParty.post(url, headers: { 'Content-Type' => 'text/plain;charset=UTF-8' } )
+		    result
+			end
+
 			private
 				# 对参数进行加密
 				def sign_params(secret_key, signature)

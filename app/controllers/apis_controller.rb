@@ -1,5 +1,6 @@
 require 'jwt'
 require "net/http" 
+require 'ems'
 
 class ApisController < ApplicationController
 	include ActionView::Helpers::DateHelper
@@ -370,7 +371,8 @@ class ApisController < ApplicationController
 			distance_of_time: get_distance_of_time(e),
 			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name: "",
 			"organization_name"=>e.organization_name,
-			"organization_phone"=>e.organization_phone
+			"organization_phone"=>e.organization_phone,
+			"ems_code" => e.recive_express_orders.pluck(:order_num).compact!
 		}
 
 		procress_data = e.case_process_records.map{|record| {"detail":record.detail,"created_at":record.created_at.strftime('%Y-%m-%d')}}
@@ -378,6 +380,14 @@ class ApisController < ApplicationController
 		respond_to do |format|
 			format.json { render json:json.to_json }
 	  end			
+	end
+
+	def get_ems_logistics
+		ems_order_num = params[:ems_order_num]
+		rs = Ems::HttpCaller.get_ems_logistics ems_order_num
+		json =  { code: 0, message: '请求成功', data: rs }
+
+		render json: json.to_json
 	end
 
   #创建被鉴定人
@@ -479,15 +489,13 @@ class ApisController < ApplicationController
 		user = User.find_by(:id=>decoded_token[0]["id"])
 
 		organization_ids = MainCase.where(:wtr_id=>user.id).map{|e|e.department.organization.id}.compact
-		Rails.logger.info "user_id: #{user.id}"
-		Rails.logger.info "organization_ids: #{organization_ids}"
 		orgs_hash =[]
 		organization_ids.each do |id|
 			orgs_hash << {"center_name": Organization.find_by(:id=>id).name, "id":id}
 		end
 
 		respond_to do |format|
-			format.json { render json:{"code": "0","messages":"查询成功","data": orgs_hash}.to_json }
+			format.json { render json:{"code": "0","messages":"查询成功","data": orgs_hash.compact!}.to_json }
 	  end	
 
   end
