@@ -92,6 +92,8 @@
    end
 
    g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
-     link_to '删除', main_case, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm', id: 'destroy-case'
+    if can?("main_cases", "destroy")
+      link_to '删除', main_case, method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm', id: 'destroy-case'
+    end
    end
 end -%>
