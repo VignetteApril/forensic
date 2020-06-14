@@ -3,6 +3,7 @@ class SessionController < ApplicationController
   layout "login", only: [:new, :aologin]
   skip_before_action :authorize, only: [:create, :new, :destroy, :aosignin, :aologin]
   skip_before_action :can, only: [:index, :create, :new, :destroy, :ao, :aologin, :aosignin]
+  skip_before_action :verify_authenticity_token, only: :create
   
   # 显示系统登录之后的首页
   def index
