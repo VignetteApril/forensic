@@ -23,7 +23,7 @@ task :clean_all_data => :environment do
       ReciveExpressOrder.destroy_all
       RefundOrder.destroy_all
       TransferDoc.destroy_all
-
+      Organization.where.not(name: '北京明正司法鉴定中心').destroy_all
       User.update_all(department_names: nil, departments: nil)
     end
   rescue Exception => e
