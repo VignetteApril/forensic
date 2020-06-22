@@ -37,12 +37,30 @@
         = grid_filter @main_cases, :department_name_filter
 
 .row.no-gutters
-  .col-md-4
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
         span 付款状态:
       .col-md-9
         = grid_filter @main_cases, :financial_stage_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 省:
+      .col-md-9
+        = grid_filter @main_cases, :financial_province_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 市:
+      .col-md-9
+        = grid_filter @main_cases, :financial_city_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 区:
+      .col-md-9
+        = grid_filter @main_cases, :financial_district_filter
 .row.no-gutters.mt-2
   .external-buttons.mb-2 style="margin-left: auto"
     button.btn.btn-primary.wg-external-submit-button.mr-1 data-grid-name="finance_main_cases_grid" 搜索
@@ -195,6 +213,33 @@ javascript:
             window.open(new_page, '_blank');
         }
 
+    });
+
+    // filter 联动
+    var province_select = $("#finance_main_cases_grid_f_province_id");
+    var city_select = $("#finance_main_cases_grid_f_city_id");
+    var district_select = $("#finance_main_cases_grid_f_district_id");
+    var request_url_cities = window.location.origin + '/areas/cities.json';
+    var request_url_districts = window.location.origin + '/areas/districts.json';
+
+    province_select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        onChange: function(value) {
+          appendDataToSelect2(request_url_cities, value, city_select, 'name', 'cities');
+          district_select[0].selectize.clear();
+          district_select[0].selectize.clearOptions();
+        }
+    });
+
+    city_select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        onChange: function(value) {
+            appendDataToSelect2(request_url_districts, value, district_select, 'name', 'districts');
+        }
     });
 
 

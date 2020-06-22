@@ -33,7 +33,7 @@ class ReciveExpressOrder < ApplicationRecord
 				rs << [c.serial_no, c.id]
 			end
 			return rs
-		else 
+		else
 			if user.departments.nil?
 		if (user.center_director_user? || user.center_admin_user? || center_archivist_user? || center_finance_user?)
 			# 返回机构案件
@@ -41,7 +41,7 @@ class ReciveExpressOrder < ApplicationRecord
 				org_cases.each do |c|
 						rs << [c.serial_no, c.id]
 					end
-					return rs    		
+					return rs
 				else
 					return
 				end
@@ -51,7 +51,7 @@ class ReciveExpressOrder < ApplicationRecord
 			department_cases.each do |c|
 					rs << [c.serial_no, c.id]
 				end
-				return rs    
+				return rs
 			end
 		end
   end
@@ -76,7 +76,7 @@ class ReciveExpressOrder < ApplicationRecord
 			if self.save
 				self.generate_barcode
 			else
-				raise "生成条码失败" 
+				raise "生成条码失败"
 			end
 		else
 			raise "获取订单号失败"

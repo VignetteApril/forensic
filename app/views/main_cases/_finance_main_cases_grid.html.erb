@@ -49,4 +49,22 @@
   g.column name: '金额', attribute: 'amount', detach_with_id: :amount_filter, ordering: false do |main_case|
     main_case.amount
   end
+
+  g.column name: '省', attribute: 'province_id', detach_with_id: :financial_province_filter, ordering: false, custom_filter: province_collection, allow_multiple_selection: false do |main_case|
+     province_id = main_case.department.organization.province_id
+     province = Area.find_by_id province_id
+     province.nil? ? '' : province.name
+   end
+
+   g.column name: '市', attribute: 'city_id', ordering: false, detach_with_id: :financial_city_filter, custom_filter: [], allow_multiple_selection: false do |main_case|
+     city_id = main_case.department.organization.city_id
+     city = Area.find_by_id city_id
+     city.nil? ? '' : city.name
+   end
+
+   g.column name: '区', ordering: false, detach_with_id: :financial_district_filter, attribute: 'district_id', custom_filter: [], allow_multiple_selection: false do |main_case|
+     district_id = main_case.department.organization.district_id
+     district = Area.find_by_id district_id
+     district.nil? ? '' : district.name
+   end
 end -%>

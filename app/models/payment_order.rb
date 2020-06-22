@@ -4,7 +4,7 @@ class PaymentOrder < ApplicationRecord
 	attr_accessor :data_str
 
 	belongs_to :main_case
-	belongs_to :bill, required: false 
+	belongs_to :bill, required: false
   has_one :incoming_record # 缴费单和到账记录一一对应
 	has_one_attached :attachment
 
@@ -31,15 +31,6 @@ class PaymentOrder < ApplicationRecord
   def update_incoming_record
     self.incoming_record.update(payment_order_id: nil)
   end
-
-  # enum payment_type: [:cash, :card, :remit, :check]
-  #  PAYMENT_TYPE_MAP = {
-  #      cash: '现金',
-  #      card: '刷卡',
-  #      remit: '汇款',
-  #      check: '支票'
-  #      wechat: '微信'
-  #  }
 
   def update_incoming_record_claimed
     # 如果当前缴费单保存成功，并且传来的参数里还有到账记录id的字段

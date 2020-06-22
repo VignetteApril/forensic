@@ -13,7 +13,7 @@ class RefundOrdersController < ApplicationController
     data = RefundOrder.none
     if !@current_user.organization.nil?
       main_case_ids = @current_user.organization.main_cases.pluck(:id)
-      data = RefundOrder.where(main_case_id: main_case_ids).not_confirm
+      data = RefundOrder.where(main_case_id: main_case_ids)
     end
 
     @refund_orders = initialize_grid(data,

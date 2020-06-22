@@ -10,4 +10,8 @@ module MainCasesHelper
     def financial_stage_collection
         MainCase.financial_stages.map { |key, value| [ MainCase::FINANCIAL_STAGE_MAP[key.to_sym], value ] }
     end
+
+    def province_collection
+      Area.roots.map { |province| [province.name, province.id] }
+    end
 end

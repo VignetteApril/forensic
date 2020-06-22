@@ -4,33 +4,13 @@
     RefundOrder::ORDER_STAGE_MAP[a.try(:order_stage).try(:to_sym)]
   end
 
-  # g.column name: '鉴定费', custom_filter: false do |a|
-  #   a.appraisal_cost
-  # end
-
-  # g.column name: '差旅费', custom_filter: false do |a|
-  #   a.business_cost
-  # end
-
-  # g.column name: '出庭费', custom_filter: false do |a|
-  #   a.appear_court_cost
-  # end
-
-  # g.column name: '调查费', custom_filter: false do |a|
-  #   a.investigation_cost
-  # end
-
-  # g.column name: '咨询费', custom_filter: false do |a|
-  #   a.consult_cost
-  # end
-
   g.column name: '其他', custom_filter: false do |a|
     a.other_cost
   end
 
   g.column name: '总计', custom_filter: false do |a|
     a.total_cost
-  end  
+  end
 
   g.column name: '退费金额', custom_filter: false do |a|
     a.refund_cost
