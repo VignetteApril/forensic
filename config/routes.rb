@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     get :add_users, :on => :member
     get :add_users_submit, :on => :member
     get :matters, on: :member
+    get :users, on: :member
     delete :remove_user_from_department, :on => :member
   end
   resources :users do
@@ -135,7 +136,7 @@ Rails.application.routes.draw do
       patch :to_billed, on: :member
       patch :to_taked_away, on: :member
     end
-    
+
     # 退费单
     resources :refund_orders do
       get :submit_current_order, on: :member

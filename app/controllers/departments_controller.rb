@@ -7,7 +7,7 @@ class DepartmentsController < ApplicationController
   def index
     @departments = initialize_grid(@current_user.organization.departments, per_page: 20, name: 'departments_grid')
   end
-    
+
   # 管理员点击部门列表页面中的“新增部门”按钮，系统显示“新增部门”表单页面。
   def new
     @department = Department.new
@@ -59,7 +59,7 @@ class DepartmentsController < ApplicationController
       @users = initialize_grid( User, per_page: 20, name: 'users' )
     end
   end
-  
+
   # 管理员通过姓名的关键字模糊搜索对列表进行过滤，然后选择某一个人员，点击“加入”按钮，系统将该人员加入该部门，并返回人员列表页面。
   def add_users_submit
     if params[:users] && params[:users][:selected]
@@ -71,7 +71,7 @@ class DepartmentsController < ApplicationController
     end
     redirect_to departments_path(id: @department.id), notice: "新的用户已经加入了该角色！"
   end
-  
+
   # 管理员在角色人员列表页面中，针对某一个人员点击“移除”按钮，系统在要求管理员确认之后，将该人员移出该部门，并返回人员列表页面。
   def remove_user_from_department
     # @department.user_departments.where(user_id: params[:user_id]).first.destroy
@@ -93,6 +93,15 @@ class DepartmentsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: matters }
+    end
+  end
+
+  def users
+    users = @department.user_array
+    if users.empty?
+      users = []
+    else
+      users = @department.user_array.map { |user| { name: user.name, id: user.id } }
     end
   end
 

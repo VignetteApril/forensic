@@ -2,39 +2,89 @@
 #barcode_modal_container
 
 .row.no-gutters
-  .col-md-4
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
         span 流水号:
       .col-md-9
         = grid_filter @main_cases, :serial_no_filter
-    .row.no-gutters
-      .col-md-2
-        span 案件号:
-      .col-md-9
-        = grid_filter @main_cases, :case_no_display_filter
-  .col-md-4
+  .col-md-3
+    .row.no-gutters.mb-2
+        .col-md-2
+          span 案件号:
+        .col-md-9
+          = grid_filter @main_cases, :case_no_display_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+        .col-md-2
+          span 委托方:
+        .col-md-9
+          = grid_filter @main_cases, :organization_name_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+        .col-md-2
+          span 委托联系人:
+        .col-md-9
+          = grid_filter @main_cases, :user_name_filter
+.row.no-gutters
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
-        span 委托联系人:
-      .col-md-9
-        = grid_filter @main_cases, :user_name_filter
-    .row.no-gutters
-      .col-md-2
-        span 被鉴定人:
+        span 被鉴定方:
       .col-md-9
         = grid_filter @main_cases, :appraised_unit_name_filter
-  .col-md-4
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
-        span 案件状态:
+        span 缴费义务人:
       .col-md-9
-        = grid_filter @main_cases, :case_stage_filter
-    .row.no-gutters
+        = grid_filter @main_cases, :payer_filter
+  .col-md-3
+    .row.no-gutters.mb-2
       .col-md-2
-        span 所属科室:
+        span 受委托科室:
       .col-md-9
         = grid_filter @main_cases, :department_name_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 鉴定事项:
+      .col-md-9
+        = grid_filter @main_cases, :matter_filter
+.row.no-gutters
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 经办人:
+      .col-md-9
+        = grid_filter @main_cases, :pass_user_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 鉴定人:
+      .col-md-9
+        = grid_filter @main_cases, :ident_users_filter
+
+
+    / .row.no-gutters.mb-2
+    /   .col-md-2
+    /     span 案件状态:
+    /   .col-md-9
+    /     = grid_filter @main_cases, :case_stage_filter
+
+    / .row.no-gutters
+    /   .col-md-2
+    /     span 所属科室:
+    /   .col-md-9
+    /     = grid_filter @main_cases, :department_name_filter
+
+    / .row.no-gutters
+    /
+    / .row.no-gutters
+    /   .col-md-2
+    /     span 委托联系人:
+    /   .col-md-9
+    /     = grid_filter @main_cases, :user_name_filter
 
 .row.no-gutters
   .col-md-3

@@ -8,7 +8,7 @@ class MainCase < ApplicationRecord
 
   # 虚拟字段用户接受关联的委托单参数
   belongs_to :department
-  belongs_to :entrust_order, required: false 
+  belongs_to :entrust_order, required: false
   has_many :case_talks, dependent: :destroy
   has_many :express_orders, dependent: :destroy
   has_many :recive_express_orders, dependent: :destroy
@@ -60,7 +60,7 @@ class MainCase < ApplicationRecord
     executing: '#48DD22',
     executed: '#2B8514',
     apply_filing: '#DEEF98',
-    close: '#EFAA98'  
+    close: '#EFAA98'
   }
 
   CASE_BACKGROUND_COLOR = {
@@ -335,5 +335,9 @@ class MainCase < ApplicationRecord
     end
     self.entrust_docs.attach(io: File.open("#{Rails.root}/tmp/#{filename}"), filename: filename)
     FileUtils.rm("#{Rails.root}/tmp/#{filename}")
+  end
+
+  def ident_user_names
+    self.ident_users
   end
 end

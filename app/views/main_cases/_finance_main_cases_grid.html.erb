@@ -23,9 +23,28 @@
     main_case.appraised_unit.try(:name)
   end
 
-  g.column name: '科室', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
+  g.column name: '缴费义务人', attribute: 'payer', detach_with_id: :payer_filter, ordering: false do |main_case|
+    main_case.payer
+  end
+
+  g.column name: '经办人', attribute: 'pass_user', detach_with_id: :pass_user_filter, ordering: false, custom_filter: [],
+  allow_multiple_selection: false do |main_case|
+    User.find(main_case.pass_user).try(:name)
+  end
+
+  g.column name: '鉴定人', attribute: 'ident_users', detach_with_id: :ident_users_filter, ordering: false, custom_filter: [],
+  allow_multiple_selection: false do |main_case|
+    User.where(id: main_case.ident_users).map { |user| user.name }.join(',')
+  end
+
+  g.column name: '受委托科室', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
   custom_filter: department_collection, allow_multiple_selection: false, ordering: false do |main_case|
     main_case.department.name
+  end
+
+  g.column name: '鉴定事项', attribute: 'matter', ordering: false, detach_with_id: :matter_filter, custom_filter: [],
+  allow_multiple_selection: false do |main_case|
+    JSON.parse(main_case.matter).join(',') unless main_case.matter.blank?
   end
 
   g.column name: '状态', attribute: 'case_stage', detach_with_id: :case_stage_filter, custom_filter: case_stages_collection,
@@ -50,21 +69,15 @@
     main_case.amount
   end
 
-  g.column name: '省', attribute: 'province_id', detach_with_id: :financial_province_filter, ordering: false, custom_filter: province_collection, allow_multiple_selection: false do |main_case|
-     province_id = main_case.department.organization.province_id
-     province = Area.find_by_id province_id
-     province.nil? ? '' : province.name
+  g.column name: '省', attribute: 'province_id', detach_with_id: :financial_province_filter, ordering: false, custom_filter: @provinces, allow_multiple_selection: false do |main_case|
+     Area.find_by_id(main_case.province_id).name
    end
 
-   g.column name: '市', attribute: 'city_id', ordering: false, detach_with_id: :financial_city_filter, custom_filter: [], allow_multiple_selection: false do |main_case|
-     city_id = main_case.department.organization.city_id
-     city = Area.find_by_id city_id
-     city.nil? ? '' : city.name
+   g.column name: '市', attribute: 'city_id', ordering: false, detach_with_id: :financial_city_filter, custom_filter: @cities, allow_multiple_selection: false do |main_case|
+     Area.find_by_id(main_case.city_id).name
    end
 
-   g.column name: '区', ordering: false, detach_with_id: :financial_district_filter, attribute: 'district_id', custom_filter: [], allow_multiple_selection: false do |main_case|
-     district_id = main_case.department.organization.district_id
-     district = Area.find_by_id district_id
-     district.nil? ? '' : district.name
+   g.column name: '区', ordering: false, detach_with_id: :financial_district_filter, attribute: 'district_id', custom_filter: @districts, allow_multiple_selection: false do |main_case|
+     Area.find_by_id(main_case.district_id).name
    end
 end -%>

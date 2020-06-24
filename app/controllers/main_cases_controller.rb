@@ -164,6 +164,14 @@ class MainCasesController < ApplicationController
   # 财务人员查看所有案件的
   def finance_check_cases
     data = @current_user.organization.main_cases
+    if params["finance_main_cases_grid"]
+      province_id = params["finance_main_cases_grid"]["f"]["province_id"][0] if params["finance_main_cases_grid"]["f"]["province_id"]
+      city_id = params["finance_main_cases_grid"]["f"]["city_id"][0] if params["finance_main_cases_grid"]["f"]["city_id"]
+    end
+
+    @provinces = Area.roots.map { |province| [province.name, province.id] }
+    @cities = province_id.nil? ? [] : Area.find(province_id).children.map { |item| [item.name, item.id] }
+    @districts = city_id.nil? ? [] : Area.find(city_id).children.map { |item| [item.name, item.id] }
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
