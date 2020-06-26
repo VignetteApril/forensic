@@ -41,6 +41,8 @@ class MainCasesController < ApplicationController
       data = MainCase.where(id: case_ids)
     end
 
+    data = set_filter_instance(data)
+
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -55,8 +57,8 @@ class MainCasesController < ApplicationController
 
   def my_closed_cases
     current_org_cases = @current_user.organization.main_cases
-    # case_ids = current_org_cases.map { |main_case| main_case.id if main_case.ident_users.present? && main_case.ident_users.split(',').include?(@current_user.id.to_s) }
     data = MainCase.where(id: current_org_cases, case_stage: :close)
+    data = set_filter_instance(data)
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
@@ -74,6 +76,7 @@ class MainCasesController < ApplicationController
     redirect_to main_cases_path, flash: { alert: '请设置科室！' } and return if @current_user.departments.nil?
 
     data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :close)
+    data = set_filter_instance(data)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -94,6 +97,7 @@ class MainCasesController < ApplicationController
   # 针对本中心的人没有权限
   def department_cases
     data = MainCase.where(department_id: @current_user.departments.split(','))
+    data = set_filter_instance(data)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -113,6 +117,7 @@ class MainCasesController < ApplicationController
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
     data = @current_user.organization.main_cases
+    data = set_filter_instance(data)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -129,6 +134,7 @@ class MainCasesController < ApplicationController
   # 委托人查看案件
   def wtr_cases
     data = MainCase.where(wtr_id: @current_user.id)
+    data = set_filter_instance(data)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -149,6 +155,7 @@ class MainCasesController < ApplicationController
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
+    data = set_filter_instance(data)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -165,17 +172,17 @@ class MainCasesController < ApplicationController
   def finance_check_cases
     data = @current_user.organization.main_cases
 
-    if params["finance_main_cases_grid"] && params["finance_main_cases_grid"]["export"].nil?
-      province_id = params["finance_main_cases_grid"]["f"]["province_id"][0] if params["finance_main_cases_grid"]["f"]["province_id"]
-      city_id = params["finance_main_cases_grid"]["f"]["city_id"][0] if params["finance_main_cases_grid"]["f"]["city_id"]
+    if params["main_cases_grid"] && params["main_cases_grid"]["export"].nil?
+      province_id = params["main_cases_grid"]["f"]["province_id"][0] if params["main_cases_grid"]["f"]["province_id"]
+      city_id = params["main_cases_grid"]["f"]["city_id"][0] if params["main_cases_grid"]["f"]["city_id"]
 
-      department_name = params["finance_main_cases_grid"]["f"]["departments.name"][0] if params["finance_main_cases_grid"]["f"]["departments.name"]
-      ident_users = params["finance_main_cases_grid"]["f"]["ident_users"][0] if params["finance_main_cases_grid"]["f"]["ident_users"]
-      pass_user = params["finance_main_cases_grid"]["f"]["pass_user"][0] if params["finance_main_cases_grid"]["f"]["pass_user"]
-      matter = params["finance_main_cases_grid"]["f"]["matter"][0] if params["finance_main_cases_grid"]["f"]["matter"]
+      department_name = params["main_cases_grid"]["f"]["departments.name"][0] if params["main_cases_grid"]["f"]["departments.name"]
+      ident_users = params["main_cases_grid"]["f"]["ident_users"][0] if params["main_cases_grid"]["f"]["ident_users"]
+      pass_user = params["main_cases_grid"]["f"]["pass_user"][0] if params["main_cases_grid"]["f"]["pass_user"]
+      matter = params["main_cases_grid"]["f"]["matter"][0] if params["main_cases_grid"]["f"]["matter"]
 
-      # 如果有params["finance_main_cases_grid"]["f"] payment_method 的key 则用自定义的搜索条件
-      @payment_method = params["finance_main_cases_grid"]["f"].delete("payment_method")[0] if params["finance_main_cases_grid"]["f"]["payment_method"]
+      # 如果有params["main_cases_grid"]["f"] payment_method 的key 则用自定义的搜索条件
+      @payment_method = params["main_cases_grid"]["f"].delete("payment_method")[0] if params["main_cases_grid"]["f"]["payment_method"]
       case @payment_method
       when '现金收款'
         data = data.select { |main_case| main_case.payment_orders.where.not(cash_pay: nil).length > 0 }
@@ -189,7 +196,7 @@ class MainCasesController < ApplicationController
         end
       end
 
-      pay_date = params["finance_main_cases_grid"]["f"].delete("pay_date") if params["finance_main_cases_grid"]["f"]["pay_date"]
+      pay_date = params["main_cases_grid"]["f"].delete("pay_date") if params["main_cases_grid"]["f"]["pay_date"]
       if pay_date
         pay_start_date = Date.new(*pay_date["fr"].split('-').map(&:to_i)).beginning_of_day
         pay_end_date = Date.new(*pay_date["to"].split('-').map(&:to_i)).end_of_day
@@ -198,7 +205,7 @@ class MainCasesController < ApplicationController
         @pay_date_to = pay_date["to"]
       end
 
-      @bill_status = params["finance_main_cases_grid"]["f"].delete("bill_status")[0] if params["finance_main_cases_grid"]["f"]["bill_status"]
+      @bill_status = params["main_cases_grid"]["f"].delete("bill_status")[0] if params["main_cases_grid"]["f"]["bill_status"]
       if @bill_status
         case @bill_status
         when '已开'
@@ -208,9 +215,9 @@ class MainCasesController < ApplicationController
         end
       end
 
-      @search_type = params["finance_main_cases_grid"]["f"].delete("search_type")[0] if params["finance_main_cases_grid"]["f"]["search_type"]
+      @search_type = params["main_cases_grid"]["f"].delete("search_type")[0] if params["main_cases_grid"]["f"]["search_type"]
       if @search_type
-        search_date = params["finance_main_cases_grid"]["f"].delete("search_date") if params["finance_main_cases_grid"]["f"]["search_date"]
+        search_date = params["main_cases_grid"]["f"].delete("search_date") if params["main_cases_grid"]["f"]["search_date"]
         if search_date
           search_start_date = Date.new(*search_date["fr"].split('-').map(&:to_i)).beginning_of_day
           search_end_date = Date.new(*search_date["to"].split('-').map(&:to_i)).end_of_day
@@ -256,8 +263,8 @@ class MainCasesController < ApplicationController
                                   per_page: 20,
                                   order: 'created_at',
                                   order_direction: 'desc',
-                                  name: 'finance_main_cases_grid')
-    export_grid_if_requested('finance_main_cases_grid' => 'finance_main_cases_grid')
+                                  name: 'main_cases_grid')
+    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
   # 案件状态为【申请归档】的案件列表页面
@@ -265,6 +272,7 @@ class MainCasesController < ApplicationController
   def apply_filing_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :apply_filing)
+    data = set_filter_instance(data)
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
@@ -1279,5 +1287,54 @@ class MainCasesController < ApplicationController
     # 将摄像头上传的数据attach
     def attach_data_str(main_case, data_str)
       main_case.decode_base64_image data_str
+    end
+
+    def set_filter_instance(data)
+      if params["main_cases_grid"] && params["main_cases_grid"]["export"].nil?
+        province_id = params["main_cases_grid"]["f"]["province_id"][0] if params["main_cases_grid"]["f"]["province_id"]
+        city_id = params["main_cases_grid"]["f"]["city_id"][0] if params["main_cases_grid"]["f"]["city_id"]
+
+        department_name = params["main_cases_grid"]["f"]["departments.name"][0] if params["main_cases_grid"]["f"]["departments.name"]
+        ident_users = params["main_cases_grid"]["f"]["ident_users"][0] if params["main_cases_grid"]["f"]["ident_users"]
+        pass_user = params["main_cases_grid"]["f"]["pass_user"][0] if params["main_cases_grid"]["f"]["pass_user"]
+        matter = params["main_cases_grid"]["f"]["matter"][0] if params["main_cases_grid"]["f"]["matter"]
+
+        @search_type = params["main_cases_grid"]["f"].delete("search_type")[0] if params["main_cases_grid"]["f"]["search_type"]
+        if @search_type
+          search_date = params["main_cases_grid"]["f"].delete("search_date") if params["main_cases_grid"]["f"]["search_date"]
+          if search_date
+            search_start_date = Date.new(*search_date["fr"].split('-').map(&:to_i)).beginning_of_day
+            search_end_date = Date.new(*search_date["to"].split('-').map(&:to_i)).end_of_day
+            case @search_type
+            when '受理'
+              data = data.where(commission_date: search_start_date..search_end_date)
+            when '立案'
+              data = data.where(acceptance_date: search_start_date..search_end_date)
+            when '结案'
+              data = data.where(close_case_date: search_start_date..search_end_date)
+            end
+
+            @search_date_fr = search_date["fr"]
+            @search_date_to = search_date["to"]
+          end
+        end
+      end
+
+      organizaton = @current_user.organization
+      @department = organizaton.departments.where(name: department_name).first
+      if @department && @department.matter
+        @matters = @department.matter.split(',').map { |matter| [ matter, matter ] }
+      else
+        @matters = []
+      end
+
+      users = @department.user_array if @department
+      if @department && !users.empty?
+        @users = users.map { |user| [ user.name, user.id ] }
+      else
+        @users = []
+      end
+
+      data
     end
 end

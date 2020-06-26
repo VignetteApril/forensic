@@ -2,7 +2,7 @@
 #barcode_modal_container
 
 .row.no-gutters
-  .col-md-4
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
         span 流水号:
@@ -10,49 +10,57 @@
         = grid_filter @main_cases, :serial_no_filter
     .row.no-gutters
       .col-md-2
-        span 案件号:
+        span 受委托科室:
       .col-md-9
-        = grid_filter @main_cases, :case_no_display_filter
-  .col-md-4
+        = grid_filter @main_cases, :department_name_filter
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
-        span 委托联系人:
+        span 案号:
       .col-md-9
-        = grid_filter @main_cases, :user_name_filter
-    .row.no-gutters
+        = grid_filter @main_cases, :case_no_display_filter
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 经办人:
+      .col-md-9
+        = grid_filter @main_cases, :pass_user_filter
+  .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 委托方:
+      .col-md-9
+        = grid_filter @main_cases, :organization_name_filter
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 鉴定人:
+      .col-md-9
+        = grid_filter @main_cases, :ident_users_filter
+
+  .col-md-3
+    .row.no-gutters.mb-2
       .col-md-2
         span 被鉴定人:
       .col-md-9
         = grid_filter @main_cases, :appraised_unit_name_filter
-  .col-md-4
     .row.no-gutters.mb-2
       .col-md-2
         span 案件状态:
       .col-md-9
         = grid_filter @main_cases, :case_stage_filter
-    .row.no-gutters
-      .col-md-2
-        span 所属科室:
-      .col-md-9
-        = grid_filter @main_cases, :department_name_filter
 
 .row.no-gutters
-  .col-md-4
-    .row.no-gutters.mb-2
+  .col-md-1
+    .row.no-gutters
+      .col-md-12
+        = grid_filter @main_cases, :search_type_filter
+  .col-md-2
+    .row.no-gutters.mr-2
+      .col-md-12
+        = grid_filter @main_cases, :search_date_filter
+  .col-md-3
+    .row.no-gutters.mr-2
       .col-md-2
-        span 付款状态:
-      .col-md-9
-        = grid_filter @main_cases, :financial_stage_filter
-  .col-md-4
-    .row.no-gutters.mb-2
-      .col-md-2
-        span 经办人姓名:
-      .col-md-9
-        = grid_filter @main_cases, :pass_user_filter
-  .col-md-4
-    .row.no-gutters.mb-2
-      .col-md-2
-        span 移交材料条码值：
+        span 条码值:
       .col-md-9
         = grid_filter @main_cases, :barcode_filter
 
@@ -212,6 +220,45 @@ javascript:
             window.open(new_page, '_blank');
         }
     });
+
+    // 受委托科室下拉列表联动
+    var departments_select  = $("#main_cases_grid_f_departments_name");
+    var pass_user_select    = $("#main_cases_grid_f_pass_user");
+    var ident_user_select   = $("#main_cases_grid_f_ident_users")
+    var request_url_matters = window.location.origin + '/departments/finance_matters.json';
+
+    departments_select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        onChange: function(value) {
+          $.ajax({
+                    url: request_url_matters,
+                    type: "GET",
+                    data: {
+                        'department_name': value,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        reloadSelectize(pass_user_select, data.pass_users, default_select_id = '')
+                        reloadSelectize(ident_user_select, data.ident_users, default_select_id = '')
+                    }
+                });
+        }
+    });
+
+     // 设置搜索类型搜索后默认显示的值
+    var search_type_selected = "#{@search_type}"
+    var search_type_select = $("#main_cases_grid_f_search_type").selectize();
+    set_default_selected(search_type_select, search_type_selected)
+
+    // 设置搜索日期搜索后默认显示的值
+    var search_start_date = $("#main_cases_grid_f_search_date_fr");
+    var search_end_date   = $("#main_cases_grid_f_search_date_to");
+    var search_date_fr = "#{@search_date_fr}"
+    var search_date_to = "#{@search_date_to}"
+    search_start_date.datepicker().datepicker("update", search_date_fr);
+    search_end_date.datepicker().datepicker("update", search_date_to);
 
 
 

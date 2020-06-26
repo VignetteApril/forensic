@@ -67,12 +67,12 @@ aside.app-sidebar
             li
               a.treeview-item href="#{finance_check_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'finance_check_cases')}"
                 i.app-menu__icon
-                span.app-menu__label 财务人员案件查询
+                span.app-menu__label 财务统计
           - if can?('main_cases', 'filed_unpaid_cases')
             li
               a.treeview-item href="#{filed_unpaid_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'filed_unpaid_cases')}"
                 i.app-menu__icon
-                span.app-menu__label 已立案待付款案件
+                span.app-menu__label 财务人员案件查询
           - if can?('main_cases', 'pending_cases')
             li
               a.treeview-item href="#{pending_cases_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'pending_cases')}"
@@ -196,7 +196,7 @@ aside.app-sidebar
               i.app-menu__icon.fa.fa-laptop
               span.app-menu__label 到账记录认领
 
-        - if can?('express_orders', 'index') && !@current_user.admin_user? 
+        - if can?('express_orders', 'index') && !@current_user.admin_user?
           li
             a.app-menu__item href="#{express_orders_path}" class="#{active_class(controller, 'express_orders')} #{active_class(controller, 'recive_express_orders')}"
               i.app-menu__icon.fa.fa-laptop

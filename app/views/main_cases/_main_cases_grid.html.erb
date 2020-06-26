@@ -15,25 +15,17 @@
      main_case.organization_name
    end
 
-   g.column name: '联系人', attribute: 'user_name', detach_with_id: :user_name_filter, ordering: false do |main_case|
-     main_case.user_name
-   end
-
-   g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
-     main_case.organization_phone
-   end
-
    g.column name: '被鉴定人', attribute: 'name', assoc: :appraised_unit, detach_with_id: :appraised_unit_name_filter, ordering: false do |main_case|
      main_case.appraised_unit.try(:name)
    end
 
-   g.column name: '鉴定事项', attribute: 'matter', filter: false, ordering: false do |main_case|
-     JSON.parse(main_case.matter).join(',') unless main_case.matter.blank?
-   end
-
-   g.column name: '受委托部门', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
+   g.column name: '受委托科室', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
    custom_filter: department_collection, allow_multiple_selection: false, ordering: false do |main_case|
      main_case.department.name
+   end
+
+   g.column name: '鉴定事项', attribute: 'matter', filter: false, ordering: false do |main_case|
+     JSON.parse(main_case.matter).join(',') unless main_case.matter.blank?
    end
 
    g.column name: '案件状态', attribute: 'case_stage', detach_with_id: :case_stage_filter, custom_filter: case_stages_collection,
@@ -41,18 +33,21 @@
      MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
    end
 
-   g.column name: '付款状态', attribute: 'financial_stage', detach_with_id: :financial_stage_filter, custom_filter: financial_stage_collection,
-    allow_multiple_selection: false, ordering: false do |main_case|
-     MainCase::FINANCIAL_STAGE_MAP[main_case.financial_stage.to_sym]
-   end
+   g.column name: '经办人', attribute: 'pass_user', detach_with_id: :pass_user_filter, ordering: false, custom_filter: @users,
+  allow_multiple_selection: false do |main_case|
+    User.find(main_case.pass_user).try(:name)
+  end
 
-   g.column name: '经办人', attribute: 'pass_user',  detach_with_id: :pass_user_filter, ordering: false do |main_case|
-     if main_case.pass_user
-       User.find(main_case.pass_user).name
-     end
-   end
+  g.column name: '鉴定人', attribute: 'ident_users', detach_with_id: :ident_users_filter, ordering: false, custom_filter: @users,
+  allow_multiple_selection: false do |main_case|
+    User.where(id: main_case.ident_users).map { |user| user.name }.join(',')
+  end
 
-   g.column name: '省', ordering: false do |main_case|
+  g.column name: '缴费总金额', attribute: 'amount', ordering: false, filter: false do |main_case|
+    main_case.amount
+  end
+
+  g.column name: '省', ordering: false do |main_case|
      province_id = main_case.department.organization.province_id
      province = Area.find_by_id province_id
      province.nil? ? '' : province.name
@@ -68,6 +63,14 @@
      district_id = main_case.department.organization.district_id
      district = Area.find_by_id district_id
      district.nil? ? '' : district.name
+   end
+
+   g.column name: '联系人', attribute: 'user_name', detach_with_id: :user_name_filter, ordering: false do |main_case|
+     main_case.user_name
+   end
+
+   g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
+     main_case.organization_phone
    end
 
    g.column name: '倒计时', attribute: 'commission_date', filter: false, ordering: false, in_csv: false do |main_case|
@@ -86,6 +89,14 @@
        end
      end
    end
+
+  g.column name: '搜索日期', attribute: 'search_date', detach_with_id: :search_date_filter, ordering: false, filter_type: :bootstrap_datepicker, html: {style: 'display: none'} do |main_case|
+    ''
+  end
+
+  g.column name: '搜索类型', attribute: 'search_type', detach_with_id: :search_type_filter, ordering: false, custom_filter: ['受理', '立案', '结案'], allow_multiple_selection: false, html: {style: 'display: none'} do |main_case|
+    ''
+  end
 
    g.column in_csv: false, html: {style: "width:15px;"}  do |main_case|
      link_to '编辑', edit_main_case_path(main_case), class: 'btn btn-secondary btn-sm'
