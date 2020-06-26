@@ -41,7 +41,7 @@ class MainCasesController < ApplicationController
       data = MainCase.where(id: case_ids)
     end
 
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
@@ -58,7 +58,7 @@ class MainCasesController < ApplicationController
   def my_closed_cases
     current_org_cases = @current_user.organization.main_cases
     data = MainCase.where(id: current_org_cases, case_stage: :close)
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
@@ -76,7 +76,7 @@ class MainCasesController < ApplicationController
     redirect_to main_cases_path, flash: { alert: '请设置科室！' } and return if @current_user.departments.nil?
 
     data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :close)
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -97,7 +97,7 @@ class MainCasesController < ApplicationController
   # 针对本中心的人没有权限
   def department_cases
     data = MainCase.where(department_id: @current_user.departments.split(','))
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -117,7 +117,7 @@ class MainCasesController < ApplicationController
   # 委托人没有这个页面；【鉴定中心管理员】和【鉴定中心主任】有这个菜单（由于权限是灵活的只要给正确的角色配正确的权限即可）
   def center_cases
     data = @current_user.organization.main_cases
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -134,7 +134,7 @@ class MainCasesController < ApplicationController
   # 委托人查看案件
   def wtr_cases
     data = MainCase.where(wtr_id: @current_user.id)
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -155,7 +155,7 @@ class MainCasesController < ApplicationController
   def filed_unpaid_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :filed, financial_stage: :unpaid)
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -272,7 +272,7 @@ class MainCasesController < ApplicationController
   def apply_filing_cases
     current_org_cases = @current_user.organization.main_cases
     data = current_org_cases.where(case_stage: :apply_filing)
-    data = set_filter_instance(data)
+    data = set_filter_instance(data, @current_user)
 
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
@@ -1289,7 +1289,7 @@ class MainCasesController < ApplicationController
       main_case.decode_base64_image data_str
     end
 
-    def set_filter_instance(data)
+    def set_filter_instance(data, current_user)
       if params["main_cases_grid"] && params["main_cases_grid"]["export"].nil?
         province_id = params["main_cases_grid"]["f"]["province_id"][0] if params["main_cases_grid"]["f"]["province_id"]
         city_id = params["main_cases_grid"]["f"]["city_id"][0] if params["main_cases_grid"]["f"]["city_id"]
@@ -1320,7 +1320,7 @@ class MainCasesController < ApplicationController
         end
       end
 
-      organizaton = @current_user.organization
+      organizaton = current_user.organization
       @department = organizaton.departments.where(name: department_name).first
       if @department && @department.matter
         @matters = @department.matter.split(',').map { |matter| [ matter, matter ] }
