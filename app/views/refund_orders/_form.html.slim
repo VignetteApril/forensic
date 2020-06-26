@@ -30,12 +30,12 @@
       = f.input :refund_cost, label: '退费金额', input_html: { class: 'refund-cost-input' }
     .col-md-4
       = f.input :refund_reason, label: '退费原因'
-  .row
+  .row.mb-2
     .col-md-4
-      span 大写金额:
+      span 大写金额: &nbsp
       span class='refund-total-cost'
     .col-md-4
-      span 大写金额:
+      span 大写金额: &nbsp
       span class='refund-cost'
   .row
     .col-md-4
@@ -49,48 +49,15 @@
     = f.button :submit, '确认', class: 'btn btn-success'
 
 javascript:
-  var digitUppercase = function(n) {
-    var fraction = ['角', '分'];
-    var digit = [
-        '零', '壹', '贰', '叁', '肆',
-        '伍', '陆', '柒', '捌', '玖'
-    ];
-    var unit = [
-        ['元', '万', '亿'],
-        ['', '拾', '佰', '仟']
-    ];
-    var head = n < 0 ? '欠' : '';
-    n = Math.abs(n);
-    var s = '';
-    for (var i = 0; i < fraction.length; i++) {
-        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
-    }
-    s = s || '整';
-    n = Math.floor(n);
-    for (var i = 0; i < unit[0].length && n > 0; i++) {
-        var p = '';
-        for (var j = 0; j < unit[1].length && n > 0; j++) {
-            p = digit[n % 10] + unit[1][j] + p;
-            n = Math.floor(n / 10);
-        }
-        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
-    }
-    return head + s.replace(/(零.)*零元/, '元')
-        .replace(/(零.)+/g, '零')
-        .replace(/^整$/, '零元整');
-    }
+  // 初始化字段
+  $('.refund-total-cost').text(digitUppercase($("#refund_order_total_cost").val()))
+  $('.refund-cost').text(digitUppercase($("#refund_order_total_cost").val()))
 
+  // 监听字段变化
+  $("#refund_order_total_cost").on("input", function(event) {
+    $('.refund-total-cost').text(digitUppercase(event.target.value))
+  });
 
-  $(document).on('turbolinks:load', function() {
-    $('.refund-total-cost-input').parent().parent().parent().parent().find('.refund-total-cost').text(digitUppercase($('.refund-total-cost-input').val()))
-    $('.refund-cost-input').parent().parent().parent().parent().find('.refund-cost').text(digitUppercase($('.refund-cost-input').val()))
-
-    $('.refund-total-cost-input').on('input',function(e){
-      $(e.target).parent().parent().parent().parent().find('.refund-total-cost').text(digitUppercase($(e.target).val()))
-    })
-
-    $('.refund-cost-input').on('input',function(e){
-      $(e.target).parent().parent().parent().parent().find('.refund-cost').text(digitUppercase($(e.target).val()))
-    })
-
+  $("#refund_order_refund_cost").on("input", function(event) {
+    $('.refund-cost').text(digitUppercase(event.target.value))
   });

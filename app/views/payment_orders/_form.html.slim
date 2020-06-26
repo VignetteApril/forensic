@@ -47,10 +47,10 @@
       = f.input :payment_in_advance, label: '预付金额',input_html: { class: 'payment-advance-input'}
   .row
     .col-md-2
-      span 大写金额:
+      span 大写金额:&nbsp
       span class='payment-total-cost'
     .col-md-2
-      span 大写金额:
+      span 大写金额:&nbsp
       span class='payment-advance'
   hr
   .row
@@ -72,55 +72,21 @@
     .col-md-2
       = f.input :check_num, label: '支票号码'
     .col-md-2
-      = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection  
+      = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
 
 javascript:
-  var digitUppercase = function(n) {
-    var fraction = ['角', '分'];
-    var digit = [
-        '零', '壹', '贰', '叁', '肆',
-        '伍', '陆', '柒', '捌', '玖'
-    ];
-    var unit = [
-        ['元', '万', '亿'],
-        ['', '拾', '佰', '仟']
-    ];
-    var head = n < 0 ? '欠' : '';
-    n = Math.abs(n);
-    var s = '';
-    for (var i = 0; i < fraction.length; i++) {
-        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
-    }
-    s = s || '整';
-    n = Math.floor(n);
-    for (var i = 0; i < unit[0].length && n > 0; i++) {
-        var p = '';
-        for (var j = 0; j < unit[1].length && n > 0; j++) {
-            p = digit[n % 10] + unit[1][j] + p;
-            n = Math.floor(n / 10);
-        }
-        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
-    }
-    return head + s.replace(/(零.)*零元/, '元')
-        .replace(/(零.)+/g, '零')
-        .replace(/^整$/, '零元整');
-    }
+  // 初始化字段
+  $('.payment-total-cost').text(digitUppercase($("#payment_order_total_cost").val()))
+  $('.payment-advance').text(digitUppercase($("#payment_order_payment_in_advance").val()))
 
-
-  $(document).on('turbolinks:load', function() {
-    $('.payment-total-cost-input').parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($('.payment-total-cost-input').val()))
-    $('.payment-advance-input').parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($('.payment-advance-input').val()))
-
-    $('.payment-total-cost-input').on('input',function(e){
-      $(e.target).parent().parent().parent().parent().find('.payment-total-cost').text(digitUppercase($(e.target).val()))
-    })
-
-    $('.payment-advance-input').on('input',function(e){
-      $(e.target).parent().parent().parent().parent().find('.payment-advance').text(digitUppercase($(e.target).val()))
-    })
-  
+  // 监听字段变化
+  $("#payment_order_total_cost").on("input", function(event) {
+    $('.payment-total-cost').text(digitUppercase(event.target.value))
   });
 
+  $("#payment_order_payment_in_advance").on("input", function(event) {
+    $('.payment-advance').text(digitUppercase(event.target.value))
+  });
 
