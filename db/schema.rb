@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_081924) do
+ActiveRecord::Schema.define(version: 2020_06_26_103616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -485,6 +485,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_081924) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "order_stage", default: 0
+    t.string "refund_reason"
     t.index ["main_case_id"], name: "index_refund_orders_on_main_case_id"
   end
 

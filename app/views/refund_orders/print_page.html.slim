@@ -1,0 +1,102 @@
+css:
+  @media print {
+    #non-printable {
+      display: none;
+    }
+
+    #printable {
+      display: block;
+    }
+  }
+
+  body {
+    background-color: #E0E0E0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .page {
+    padding: 0px 20px 20px 20px;
+    width: 800px;
+    height: 464px;
+    background-color: white;
+  }
+
+  .title {
+    display: flex;
+    justify-content: center;
+  }
+
+  .title-text {
+    font-size: 25px;
+  }
+
+  .number-text {
+    font-size: 10px;
+  }
+
+  .pull-right {
+    float: right;
+  }
+
+  table {
+    font-size: 10px;
+    width: 100%;
+  }
+
+  td {
+    border: solid #000 1px;
+  }
+
+  .print-footer {
+    font-size: 10px;
+  }
+
+  .footer-info {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+body
+  .page#printable
+    .title
+      span.title-text 退费单
+    .numbers
+      span.number-text = "案件流水号：#{@refund_order.main_case.serial_no}"
+      span.number-text = " 日期：" + Time.now.strftime('%Y年%m月%d日')
+      span.number-text.pull-right = "案件编号：#{@refund_order.main_case.case_no_display}"
+    .table-content
+      table cellspacing="0" cellpadding="5"
+        tr
+          td 鉴定费
+          td = @refund_order.appraisal_cost
+          td 差旅费
+          td = @refund_order.business_cost
+          td 出庭费
+          td = @refund_order.appear_court_cost
+        tr
+          td 调查费
+          td = @refund_order.investigation_cost
+          td 咨询费
+          td = @refund_order.consult_cost
+          td 其他
+          td = @refund_order.other_cost
+        tr
+          td 退费原因
+          td = @refund_order.refund_reason
+          td 总计
+          td = @refund_order.total_cost
+          td 退费金额
+          td = @refund_order.refund_cost
+    .print-footer
+      .footer-info
+        span = "收款单位：#{@refund_order.main_case.department.organization.name}"
+        span = "经办人：_____________"
+        span = "交款人：_____________"
+      .today
+        = image_tag url_for(@refund_order.main_case.barcode_image), style: 'height: 50px; float: right' if @refund_order.main_case.barcode_image
+
+javascript:
+    window.print();

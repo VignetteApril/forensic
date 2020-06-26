@@ -1,6 +1,7 @@
 class RefundOrdersController < ApplicationController
   before_action :set_refund_order, except: [:new, :create, :finance_index]
   before_action :set_main_case, except: [:finance_index]
+  skip_before_action :can, only: [:print_page]
 
   def new
     @refund_order = RefundOrder.new
@@ -97,7 +98,7 @@ class RefundOrdersController < ApplicationController
           end
         end
 
-        format.html { redirect_to finance_index_main_case_payment_orders_path(-1), notice: '退费单已经确认！' }
+        format.html { redirect_to finance_index_main_case_refund_orders_path(-1), notice: '退费单已经确认！' }
       end
     end
   end
@@ -109,6 +110,11 @@ class RefundOrdersController < ApplicationController
         format.html { redirect_to payment_order_management_main_case_path(@main_case), notice: '退费单已变为作废状态！' }
       end
     end
+  end
+
+  # 财务人员打印缴费单的页面
+  def print_page
+    render :layout => false
   end
 
   private
@@ -123,7 +129,8 @@ class RefundOrdersController < ApplicationController
                                             :refund_cost,
                                             :payee_id,
                                             :refund_dealer_id,
-                                            :refund_checker_id )
+                                            :refund_checker_id,
+                                            :refund_reason )
     end
 
     def set_refund_order

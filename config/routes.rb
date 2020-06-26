@@ -143,6 +143,7 @@ Rails.application.routes.draw do
       get :submit_current_order, on: :member
       get :finance_index, on: :collection
       get :confirm_order, on: :member
+      get :print_page, on: :member
       patch :cancel_order, on: :member
     end
   end

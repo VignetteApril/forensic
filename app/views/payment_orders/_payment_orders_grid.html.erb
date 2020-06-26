@@ -4,15 +4,6 @@
     (a.confirm? && a.bill_id.nil? ) || (@current_user.center_finance_user? && a.not_confirm?)
   end
 
-  # 跳转链接需要权限，且点击checkbox会触发
-  # g.row_attributes do |a|
-  #   { 'data-href': finance_show_main_case_payment_order_path(a.main_case, a), class: 'clickable-row' }
-  # end
-
-  # g.column name: '案件流水号', custom_filter: false do |a|
-  #   a.main_case.case_no_display if a.main_case
-  # end
-
 	g.column name: '状态', html: {style: "width:50px;"}, custom_filter: false do |a|
 		PaymentOrder::ORDER_STAGE_MAP[a.try(:order_stage).try(:to_sym)]
   end

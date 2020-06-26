@@ -13,7 +13,7 @@
   end
 
   g.column name: '案号', assoc: :main_case, attribute: 'case_no_display', detach_with_id: :case_no_display_filter do |a|
-    link_to a.main_case.case_no_display, edit_main_case_path(a.main_case) if a.main_case
+    link_to a.main_case.case_no_display || '案号暂未生成', edit_main_case_path(a.main_case) if a.main_case
   end
 
   g.column name: '委托方', custom_filter: false do |a|
