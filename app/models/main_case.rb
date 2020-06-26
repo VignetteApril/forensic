@@ -167,7 +167,7 @@ class MainCase < ApplicationRecord
     end
 
     # 转换到 结案状态
-    event :turn_close do
+    event :turn_close, after: :update_close_case_date do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :close
     end
   end
@@ -339,5 +339,9 @@ class MainCase < ApplicationRecord
 
   def ident_user_names
     self.ident_users
+  end
+
+  def update_close_case_date
+    self.update(close_case_date: Time.now)
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_25_103819) do
+ActiveRecord::Schema.define(version: 2020_06_26_081924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -350,6 +350,10 @@ ActiveRecord::Schema.define(version: 2020_06_25_103819) do
     t.string "archive_location"
     t.string "payment_method"
     t.date "pay_date"
+    t.string "bill_status"
+    t.date "search_date"
+    t.string "search_type"
+    t.date "close_case_date"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
     t.index ["entrust_order_id"], name: "index_main_cases_on_entrust_order_id"
   end

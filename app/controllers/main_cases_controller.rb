@@ -164,7 +164,8 @@ class MainCasesController < ApplicationController
   # 财务人员查看所有案件的
   def finance_check_cases
     data = @current_user.organization.main_cases
-    if params["finance_main_cases_grid"]
+
+    if params["finance_main_cases_grid"] && params["finance_main_cases_grid"]["export"].nil?
       province_id = params["finance_main_cases_grid"]["f"]["province_id"][0] if params["finance_main_cases_grid"]["f"]["province_id"]
       city_id = params["finance_main_cases_grid"]["f"]["city_id"][0] if params["finance_main_cases_grid"]["f"]["city_id"]
 
@@ -174,8 +175,8 @@ class MainCasesController < ApplicationController
       matter = params["finance_main_cases_grid"]["f"]["matter"][0] if params["finance_main_cases_grid"]["f"]["matter"]
 
       # 如果有params["finance_main_cases_grid"]["f"] payment_method 的key 则用自定义的搜索条件
-      payment_method = params["finance_main_cases_grid"]["f"].delete("payment_method")[0] if params["finance_main_cases_grid"]["f"]["payment_method"]
-      case payment_method
+      @payment_method = params["finance_main_cases_grid"]["f"].delete("payment_method")[0] if params["finance_main_cases_grid"]["f"]["payment_method"]
+      case @payment_method
       when '现金收款'
         data = data.select { |main_case| main_case.payment_orders.where.not(cash_pay: nil).length > 0 }
       when '银行汇款'
@@ -193,6 +194,38 @@ class MainCasesController < ApplicationController
         pay_start_date = Date.new(*pay_date["fr"].split('-').map(&:to_i)).beginning_of_day
         pay_end_date = Date.new(*pay_date["to"].split('-').map(&:to_i)).end_of_day
         data = data.select { |main_case| main_case.payment_orders.where(created_at: pay_start_date..pay_end_date).length > 0 }
+        @pay_date_fr = pay_date["fr"]
+        @pay_date_to = pay_date["to"]
+      end
+
+      @bill_status = params["finance_main_cases_grid"]["f"].delete("bill_status")[0] if params["finance_main_cases_grid"]["f"]["bill_status"]
+      if @bill_status
+        case @bill_status
+        when '已开'
+          data = data.select { |main_case| main_case.bills.billed.length > 0 }
+        when '未开'
+          data = data.select { |main_case| main_case.bills.unBilled.length > 0 }
+        end
+      end
+
+      @search_type = params["finance_main_cases_grid"]["f"].delete("search_type")[0] if params["finance_main_cases_grid"]["f"]["search_type"]
+      if @search_type
+        search_date = params["finance_main_cases_grid"]["f"].delete("search_date") if params["finance_main_cases_grid"]["f"]["search_date"]
+        if search_date
+          search_start_date = Date.new(*search_date["fr"].split('-').map(&:to_i)).beginning_of_day
+          search_end_date = Date.new(*search_date["to"].split('-').map(&:to_i)).end_of_day
+          case @search_type
+          when '受理'
+            data = data.where(commission_date: search_start_date..search_end_date)
+          when '立案'
+            data = data.where(acceptance_date: search_start_date..search_end_date)
+          when '结案'
+            data = data.where(close_case_date: search_start_date..search_end_date)
+          end
+
+          @search_date_fr = search_date["fr"]
+          @search_date_to = search_date["to"]
+        end
       end
     end
 
@@ -224,8 +257,6 @@ class MainCasesController < ApplicationController
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'finance_main_cases_grid')
-    # 恢复自定义搜索条件的默认选择的值
-    params["finance_main_cases_grid"]["f"]["payment_method"] = [payment_method] if payment_method
     export_grid_if_requested('finance_main_cases_grid' => 'finance_main_cases_grid')
   end
 

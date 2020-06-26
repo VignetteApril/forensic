@@ -90,24 +90,35 @@
           span 缴费日期:
         .col-md-9
           = grid_filter @main_cases, :pay_date_filter
-
-
-
+  .col-md-3
+      .row.no-gutters.mb-2
+        .col-md-2
+          span 开票状态:
+        .col-md-9
+          = grid_filter @main_cases, :bill_status_filter
 
 .row.no-gutters
+  .col-md-1
+    .row.no-gutters
+      .col-md-12
+        = grid_filter @main_cases, :search_type_filter
   .col-md-2
+    .row.no-gutters.mr-2
+      .col-md-12
+        = grid_filter @main_cases, :search_date_filter
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
         span 省:
       .col-md-9
         = grid_filter @main_cases, :financial_province_filter
-  .col-md-2
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
         span 市:
       .col-md-9
         = grid_filter @main_cases, :financial_city_filter
-  .col-md-2
+  .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
         span 区:
@@ -282,6 +293,7 @@ javascript:
           appendDataToSelect2(request_url_cities, value, city_select, 'name', 'cities');
           district_select[0].selectize.clear();
           district_select[0].selectize.clearOptions();
+          console.log(district_select[0].selectize);
         }
     });
 
@@ -322,7 +334,34 @@ javascript:
         }
     });
 
+    // 设置缴费方式搜索后默认显示的值
+    var pay_method_selected = "#{@payment_method}"
+    var pay_method_select = $("#finance_main_cases_grid_f_payment_method").selectize();
+    set_default_selected(pay_method_select, pay_method_selected)
 
+    // 设置开票状态搜索后默认显示的值
+    var bill_status_selected = "#{@bill_status}"
+    var bill_status_select = $("#finance_main_cases_grid_f_bill_status").selectize();
+    set_default_selected(bill_status_select, bill_status_selected)
 
+    // 设置缴费日期搜索后默认显示的值
+    var pay_start_date = $("#finance_main_cases_grid_f_pay_date_fr");
+    var pay_end_date   = $("#finance_main_cases_grid_f_pay_date_to");
+    var pay_date_fr = "#{@pay_date_fr}"
+    var pay_date_to = "#{@pay_date_to}"
+    pay_start_date.datepicker().datepicker("update", pay_date_fr);
+    pay_end_date.datepicker().datepicker("update", pay_date_to);
 
+    // 设置搜索类型搜索后默认显示的值
+    var search_type_selected = "#{@search_type}"
+    var search_type_select = $("#finance_main_cases_grid_f_search_type").selectize();
+    set_default_selected(search_type_select, search_type_selected)
+
+    // 设置搜索日期搜索后默认显示的值
+    var search_start_date = $("#finance_main_cases_grid_f_search_date_fr");
+    var search_end_date   = $("#finance_main_cases_grid_f_search_date_to");
+    var search_date_fr = "#{@search_date_fr}"
+    var search_date_to = "#{@search_date_to}"
+    search_start_date.datepicker().datepicker("update", search_date_fr);
+    search_end_date.datepicker().datepicker("update", search_date_to);
 
