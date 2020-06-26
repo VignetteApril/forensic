@@ -35,12 +35,12 @@
 
    g.column name: '经办人', attribute: 'pass_user', detach_with_id: :pass_user_filter, ordering: false, custom_filter: @users,
   allow_multiple_selection: false do |main_case|
-    User.find(main_case.pass_user).try(:name)
+    User.find(main_case.pass_user).try(:name) if main_case.pass_user
   end
 
   g.column name: '鉴定人', attribute: 'ident_users', detach_with_id: :ident_users_filter, ordering: false, custom_filter: @users,
   allow_multiple_selection: false do |main_case|
-    User.where(id: main_case.ident_users).map { |user| user.name }.join(',')
+    User.where(id: main_case.ident_users).map { |user| user.name }.join(',') if main_case.ident_users
   end
 
   g.column name: '缴费总金额', attribute: 'amount', ordering: false, filter: false do |main_case|
