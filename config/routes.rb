@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     get :add_users, :on => :member
     get :add_users_submit, :on => :member
     get :matters, on: :member
+    get :finance_matters, on: :collection
     get :users, on: :member
     delete :remove_user_from_department, :on => :member
   end

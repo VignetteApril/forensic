@@ -64,48 +64,50 @@
         span 鉴定人:
       .col-md-9
         = grid_filter @main_cases, :ident_users_filter
-
-
-    / .row.no-gutters.mb-2
-    /   .col-md-2
-    /     span 案件状态:
-    /   .col-md-9
-    /     = grid_filter @main_cases, :case_stage_filter
-
-    / .row.no-gutters
-    /   .col-md-2
-    /     span 所属科室:
-    /   .col-md-9
-    /     = grid_filter @main_cases, :department_name_filter
-
-    / .row.no-gutters
-    /
-    / .row.no-gutters
-    /   .col-md-2
-    /     span 委托联系人:
-    /   .col-md-9
-    /     = grid_filter @main_cases, :user_name_filter
-
-.row.no-gutters
   .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
-        span 付款状态:
+        span 案件状态:
       .col-md-9
-        = grid_filter @main_cases, :financial_stage_filter
+        = grid_filter @main_cases, :case_stage_filter
   .col-md-3
+    .row.no-gutters.mb-2
+      .col-md-2
+        span 缴费方式:
+      .col-md-9
+        = grid_filter @main_cases, :payment_method_filter
+
+.row.no-gutters
+  .col-md-3
+      .row.no-gutters.mb-2
+        .col-md-2
+          span 缴费状态:
+        .col-md-9
+          = grid_filter @main_cases, :financial_stage_filter
+  .col-md-3
+      .row.no-gutters.mb-2
+        .col-md-2
+          span 缴费日期:
+        .col-md-9
+          = grid_filter @main_cases, :pay_date_filter
+
+
+
+
+.row.no-gutters
+  .col-md-2
     .row.no-gutters.mb-2
       .col-md-2
         span 省:
       .col-md-9
         = grid_filter @main_cases, :financial_province_filter
-  .col-md-3
+  .col-md-2
     .row.no-gutters.mb-2
       .col-md-2
         span 市:
       .col-md-9
         = grid_filter @main_cases, :financial_city_filter
-  .col-md-3
+  .col-md-2
     .row.no-gutters.mb-2
       .col-md-2
         span 区:
@@ -289,6 +291,34 @@ javascript:
         searchField: ['name'],
         onChange: function(value) {
             appendDataToSelect2(request_url_districts, value, district_select, 'name', 'districts');
+        }
+    });
+
+    // 受委托科室下拉列表联动
+    var departments_select  = $("#finance_main_cases_grid_f_departments_name");
+    var matters_select      = $("#finance_main_cases_grid_f_matter")
+    var pass_user_select    = $("#finance_main_cases_grid_f_pass_user");
+    var ident_user_select   = $("#finance_main_cases_grid_f_ident_users")
+    var request_url_matters = window.location.origin + '/departments/finance_matters.json';
+
+    departments_select.selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: ['name'],
+        onChange: function(value) {
+          $.ajax({
+                    url: request_url_matters,
+                    type: "GET",
+                    data: {
+                        'department_name': value,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        reloadSelectize(matters_select, data.mastters, default_select_id = '')
+                        reloadSelectize(pass_user_select, data.pass_users, default_select_id = '')
+                        reloadSelectize(ident_user_select, data.ident_users, default_select_id = '')
+                    }
+                });
         }
     });
 

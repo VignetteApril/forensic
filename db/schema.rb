@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_10_055050) do
+ActiveRecord::Schema.define(version: 2020_06_25_103819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,51 @@ ActiveRecord::Schema.define(version: 2020_05_10_055050) do
     t.datetime "updated_at", null: false
     t.index ["main_case_id"], name: "index_case_users_on_main_case_id"
     t.index ["user_id"], name: "index_case_users_on_user_id"
+  end
+
+  create_table "cases_basic", id: :integer, default: nil, force: :cascade do |t|
+    t.string "flow_no", limit: 100, null: false
+    t.string "case_no", limit: 100, null: false
+    t.string "devolve_name", limit: 255, null: false
+    t.integer "city", null: false
+    t.string "accusers", limit: 255
+    t.string "appellees", limit: 255
+    t.integer "case_kind", limit: 2, null: false
+    t.integer "devolve_time", null: false
+    t.integer "appellate_time", null: false
+    t.integer "apprase_cyc", limit: 2, null: false
+    t.string "link_man", limit: 50
+    t.string "link_tel", limit: 20
+    t.string "link_mobile", limit: 20
+    t.integer "consign_type", limit: 2, null: false
+    t.string "devolve_caseno", limit: 50
+    t.integer "case_cause", limit: 2, null: false
+    t.integer "apprase_type", limit: 2, null: false
+    t.string "apprase_details", limit: 500
+    t.integer "by_apprase", limit: 2, null: false
+    t.string "by_apprase_name", limit: 255
+    t.string "by_linkman", limit: 50
+    t.string "by_linktel", limit: 20
+    t.integer "appellate_state", limit: 2, null: false
+    t.string "audit_user", limit: 20
+    t.integer "devolve_depart", null: false
+    t.integer "state", limit: 2, null: false
+    t.integer "state_time", null: false
+    t.integer "charge_state", limit: 2
+    t.float "charge_total"
+    t.float "charge_appraise"
+    t.float "charge_payed"
+    t.float "charge_back"
+    t.integer "uid", null: false
+    t.integer "efficient_time", null: false
+    t.integer "dateline", null: false
+    t.date "payment_time"
+    t.index ["case_no"], name: "case_no"
+    t.index ["devolve_depart"], name: "devolve_depart"
+    t.index ["efficient_time"], name: "efficient_time"
+    t.index ["flow_no"], name: "flow_no"
+    t.index ["state_time"], name: "state_time"
+    t.index ["uid"], name: "uid"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -303,6 +348,8 @@ ActiveRecord::Schema.define(version: 2020_05_10_055050) do
     t.string "original_appraisal_opinion"
     t.boolean "is_repeat", default: false
     t.string "archive_location"
+    t.string "payment_method"
+    t.date "pay_date"
     t.index ["department_id"], name: "index_main_cases_on_department_id"
     t.index ["entrust_order_id"], name: "index_main_cases_on_entrust_order_id"
   end

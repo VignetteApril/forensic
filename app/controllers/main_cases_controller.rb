@@ -167,12 +167,54 @@ class MainCasesController < ApplicationController
     if params["finance_main_cases_grid"]
       province_id = params["finance_main_cases_grid"]["f"]["province_id"][0] if params["finance_main_cases_grid"]["f"]["province_id"]
       city_id = params["finance_main_cases_grid"]["f"]["city_id"][0] if params["finance_main_cases_grid"]["f"]["city_id"]
+
+      department_name = params["finance_main_cases_grid"]["f"]["departments.name"][0] if params["finance_main_cases_grid"]["f"]["departments.name"]
+      ident_users = params["finance_main_cases_grid"]["f"]["ident_users"][0] if params["finance_main_cases_grid"]["f"]["ident_users"]
+      pass_user = params["finance_main_cases_grid"]["f"]["pass_user"][0] if params["finance_main_cases_grid"]["f"]["pass_user"]
+      matter = params["finance_main_cases_grid"]["f"]["matter"][0] if params["finance_main_cases_grid"]["f"]["matter"]
+
+      # 如果有params["finance_main_cases_grid"]["f"] payment_method 的key 则用自定义的搜索条件
+      payment_method = params["finance_main_cases_grid"]["f"].delete("payment_method")[0] if params["finance_main_cases_grid"]["f"]["payment_method"]
+      case payment_method
+      when '现金收款'
+        data = data.select { |main_case| main_case.payment_orders.where.not(cash_pay: nil).length > 0 }
+      when '银行汇款'
+        data = data.select { |main_case| main_case.payment_orders.where.not(remit_pay: nil).length > 0 }
+      when '其他'
+        data = data.select do |main_case|
+          main_case.payment_orders.where.not(card_pay: nil).length > 0 || \
+          main_case.payment_orders.where.not(mobile_pay: nil).length > 0 || \
+          main_case.payment_orders.where.not(check_pay: nil).length > 0
+        end
+      end
+
+      pay_date = params["finance_main_cases_grid"]["f"].delete("pay_date") if params["finance_main_cases_grid"]["f"]["pay_date"]
+      if pay_date
+        pay_start_date = Date.new(*pay_date["fr"].split('-').map(&:to_i)).beginning_of_day
+        pay_end_date = Date.new(*pay_date["to"].split('-').map(&:to_i)).end_of_day
+        data = data.select { |main_case| main_case.payment_orders.where(created_at: pay_start_date..pay_end_date).length > 0 }
+      end
     end
 
     @provinces = Area.roots.map { |province| [province.name, province.id] }
     @cities = province_id.nil? ? [] : Area.find(province_id).children.map { |item| [item.name, item.id] }
     @districts = city_id.nil? ? [] : Area.find(city_id).children.map { |item| [item.name, item.id] }
+    organizaton = @current_user.organization
+    @department = organizaton.departments.where(name: department_name).first
+    if @department && @department.matter
+      @matters = @department.matter.split(',').map { |matter| [ matter, matter ] }
+    else
+      @matters = []
+    end
 
+    users = @department.user_array if @department
+    if @department && !users.empty?
+      @users = users.map { |user| [ user.name, user.id ] }
+    else
+      @users = []
+    end
+
+    data = @current_user.organization.main_cases.where(id: data.map(&:id))
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
@@ -182,6 +224,8 @@ class MainCasesController < ApplicationController
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'finance_main_cases_grid')
+    # 恢复自定义搜索条件的默认选择的值
+    params["finance_main_cases_grid"]["f"]["payment_method"] = [payment_method] if payment_method
     export_grid_if_requested('finance_main_cases_grid' => 'finance_main_cases_grid')
   end
 
@@ -1036,6 +1080,7 @@ class MainCasesController < ApplicationController
                                         :anyou,
                                         :case_property,
                                         :commission_date,
+                                        :pay_date,
                                         { entrust_docs: [] },
                                         { matter: [] },
                                         :matter_demand,

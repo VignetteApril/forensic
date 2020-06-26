@@ -1,8 +1,9 @@
 # -*- encoding : utf-8 -*-
 class DepartmentsController < ApplicationController
   before_action :set_department, only: [:edit, :update, :destroy, :add_users, :add_users_submit, :remove_user_from_department, :matters]
+  before_action :set_finance_department, only: [:finance_matters]
   after_action :make_log, only: [:create, :update, :destroy, :add_users_submit, :remove_user_from_department]
-  skip_before_action :authorize, :can, only: [:matters]
+  skip_before_action :authorize, :can, only: [:matters, :finance_matters]
 
   def index
     @departments = initialize_grid(@current_user.organization.departments, per_page: 20, name: 'departments_grid')
@@ -105,7 +106,33 @@ class DepartmentsController < ApplicationController
     end
   end
 
+  # 财务人员的列表上的搜索框联动
+  def finance_matters
+    if @department.matter
+      matters = @department.matter.split(',').map { |matter| { name: matter, id: matter } }
+    else
+      matters = []
+    end
+
+    users = @department.user_array
+    if users.empty?
+      users = []
+    else
+      users = users.map { |user| { name: user.name, id: user.id } }
+    end
+
+    respond_to do |format|
+      format.json { render json: { mastters: matters, ident_users: users, pass_users: users } }
+    end
+  end
+
   private
+    def set_finance_department
+      current_user ||= User.find_by_id(session[:user_id])
+      organizaton = current_user.organization
+      @department = organizaton.departments.where(name: params[:department_name]).first
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_department
       @department = Department.find(params[:id])

@@ -55,6 +55,8 @@
         .row
           .col-md-2
             = f.input :amount, label: '缴费金额', input_html: { class: 'payment-cost-input' }
+          / .col-md-2
+          /   = f.input :pay_date, label: '缴费日期', as: :date, html5: true
           .col-md-2
             = f.input :payer, label: '缴费义务人'
           .col-md-2
