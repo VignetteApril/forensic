@@ -5,7 +5,7 @@
     .col-md-2
       span = "鉴定类型：#{@main_case.case_type}"
     .col-md-2
-      span = "案件编号：#{@main_case.case_no}"
+      span = "案件编号：#{@main_case.case_no_display}"
     .col-md-2
       span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
 
