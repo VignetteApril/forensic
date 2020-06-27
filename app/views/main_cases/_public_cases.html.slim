@@ -49,11 +49,13 @@
         = grid_filter @main_cases, :case_stage_filter
 
 .row.no-gutters
-  .col-md-1
+  .col-md-3
     .row.no-gutters
-      .col-md-12
+      .col-md-2
+        span 时间段:
+      .col-md-9
         = grid_filter @main_cases, :search_type_filter
-  .col-md-2
+  .col-md-3
     .row.no-gutters.mr-2
       .col-md-12
         = grid_filter @main_cases, :search_date_filter
