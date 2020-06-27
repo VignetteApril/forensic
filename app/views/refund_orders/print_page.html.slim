@@ -70,26 +70,54 @@ body
     .table-content
       table cellspacing="0" cellpadding="5"
         tr
-          td 鉴定费
-          td = @refund_order.appraisal_cost
-          td 差旅费
-          td = @refund_order.business_cost
-          td 出庭费
-          td = @refund_order.appear_court_cost
+          td 缴款人
+          td = @refund_order.payer
+          td 缴款联系人
+          td = @refund_order.payer_contract
+          td 联系电话
+          td = @refund_order.contract_phone
         tr
-          td 调查费
-          td = @refund_order.investigation_cost
-          td 咨询费
-          td = @refund_order.consult_cost
-          td 其他
-          td = @refund_order.other_cost
+          td 委托人
+          td = @refund_order.main_case.organization_name
+          td 委托联系人
+          td = @refund_order.main_case.user_name
+          td 联系电话
+          td = @refund_order.main_case.wtr_phone
+        tr
+          td 案由
+          td = @refund_order.main_case.anyou
+          td 案件类型
+          td colspan="3" = @refund_order.main_case.case_type
+        tr
+          td 鉴定事项
+          td colspan="5" = @refund_order.main_case.matter_display
+        tr
+          td 缴费项目
+          td colspan="5" = "鉴定费：#{@refund_order.appraisal_cost}，差旅费：#{@refund_order.business_cost}，出庭费：#{@refund_order.appear_court_cost}，调查费：#{@refund_order.investigation_cost}，咨询费：#{@refund_order.consult_cost}，其他：#{@refund_order.other_cost}"
+        tr
+          td 缴费合计
+          td#total_cost = @refund_order.total_cost
+          td 已付金额
+          td#paid_num = @refund_order.paid_num
+          td 退费金额
+          td#refund_cost = @refund_order.refund_cost
+        tr
+          td 大写
+          td#total_cost_big_num
+          td 大写
+          td#paid_num_big_num
+          td 大写
+          td#refund_cost_big_num
+        tr
+          td 退费经办人
+          td = User.find_by(id: @refund_order.refund_dealer_id).try(:name)
+          td 退费审核人
+          td = User.find_by(id: @refund_order.refund_checker_id).try(:name)
+          td 领款人
+          td = User.find_by(id: @refund_order.payee_id).try(:name)
         tr
           td 退费原因
-          td = @refund_order.refund_reason
-          td 总计
-          td = @refund_order.total_cost
-          td 退费金额
-          td = @refund_order.refund_cost
+          td colspan="5" = @refund_order.refund_reason
     .print-footer
       .footer-info
         span = "收款单位：#{@refund_order.main_case.department.organization.name}"
@@ -99,4 +127,51 @@ body
         = image_tag url_for(@refund_order.main_case.barcode_image), style: 'height: 50px; float: right' if @refund_order.main_case.barcode_image
 
 javascript:
+
     window.print();
+
+    function digitUppercase(n) {
+    var fraction = ['角', '分'];
+    var digit = [
+        '零', '壹', '贰', '叁', '肆',
+        '伍', '陆', '柒', '捌', '玖'
+    ];
+    var unit = [
+        ['元', '万', '亿'],
+        ['', '拾', '佰', '仟']
+    ];
+    var head = n < 0 ? '欠' : '';
+    n = Math.abs(n);
+    var s = '';
+    for (var i = 0; i < fraction.length; i++) {
+        s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+    }
+    s = s || '整';
+    n = Math.floor(n);
+    for (var i = 0; i < unit[0].length && n > 0; i++) {
+        var p = '';
+        for (var j = 0; j < unit[1].length && n > 0; j++) {
+            p = digit[n % 10] + unit[1][j] + p;
+            n = Math.floor(n / 10);
+        }
+        s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+    }
+    return head + s.replace(/(零.)*零元/, '元')
+        .replace(/(零.)+/g, '零')
+        .replace(/^整$/, '零元整');
+  }
+
+  // 初始化字段
+  var total_cost_big_num = document.getElementById('total_cost_big_num');
+  var paid_num_big_num = document.getElementById('paid_num_big_num');
+  var refund_cost_big_num = document.getElementById('refund_cost_big_num');
+
+  var total_cost = document.getElementById('total_cost').textContent;
+  var paid_num = document.getElementById('paid_num').textContent;
+  var refund_cost = document.getElementById('refund_cost').textContent;
+
+  console.log(total_cost);
+
+  total_cost_big_num.appendChild( document.createTextNode(digitUppercase(total_cost)) );
+  paid_num_big_num.appendChild( document.createTextNode(digitUppercase(paid_num)) );
+  refund_cost_big_num.appendChild( document.createTextNode(digitUppercase(refund_cost)) );

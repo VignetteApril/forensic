@@ -344,4 +344,8 @@ class MainCase < ApplicationRecord
   def update_close_case_date
     self.update(close_case_date: Time.now)
   end
+
+  def matter_display
+    JSON.parse(self.matter).join(',')
+  end
 end

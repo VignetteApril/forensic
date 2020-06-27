@@ -130,7 +130,10 @@ class RefundOrdersController < ApplicationController
                                             :payee_id,
                                             :refund_dealer_id,
                                             :refund_checker_id,
-                                            :refund_reason )
+                                            :refund_reason,
+                                            :contract_phone,
+                                            :payer,
+                                            :payer_contract )
     end
 
     def set_refund_order

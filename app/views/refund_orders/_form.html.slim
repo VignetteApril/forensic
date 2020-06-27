@@ -24,16 +24,21 @@
     .col-md-2
       = f.input :other_cost, label: '其他'
   .row
-    .col-md-4
-      = f.input :total_cost, label: '总计', input_html: { class: 'refund-total-cost-input' }
+    .col-md-2
+      = f.input :total_cost, label: '缴费总计', input_html: { class: 'refund-total-cost-input' }
+    .col-md-2
+      = f.input :paid_num, label: '已付金额'
     .col-md-4
       = f.input :refund_cost, label: '退费金额', input_html: { class: 'refund-cost-input' }
     .col-md-4
       = f.input :refund_reason, label: '退费原因'
   .row.mb-2
-    .col-md-4
+    .col-md-2
       span 大写金额: &nbsp
       span class='refund-total-cost'
+    .col-md-2
+      span 大写金额: &nbsp
+      span class='paid-total-cost'
     .col-md-4
       span 大写金额: &nbsp
       span class='refund-cost'
@@ -44,6 +49,13 @@
       = f.input :refund_checker_id, label: '退费审核人', collection: @main_case.department.user_array.map{|e|[e.name,e.id]}
     .col-md-4
       = f.input :refund_dealer_id, label: '退费经办人', collection: @main_case.department.user_array.map{|e|[e.name,e.id]}
+  .row
+    .col-md-4
+      = f.input :payer, label: '缴款人'
+    .col-md-4
+      = f.input :payer_contract, label: '缴款联系人'
+    .col-md-4
+      = f.input :contract_phone, label: '联系电话'
 
   .form-actions
     = f.button :submit, '确认', class: 'btn btn-success'
@@ -51,7 +63,9 @@
 javascript:
   // 初始化字段
   $('.refund-total-cost').text(digitUppercase($("#refund_order_total_cost").val()))
-  $('.refund-cost').text(digitUppercase($("#refund_order_total_cost").val()))
+  $('.refund-cost').text(digitUppercase($("#refund_order_refund_cost").val()))
+  $('.paid-total-cost').text(digitUppercase($("#refund_order_paid_num").val()))
+
 
   // 监听字段变化
   $("#refund_order_total_cost").on("input", function(event) {
@@ -60,4 +74,8 @@ javascript:
 
   $("#refund_order_refund_cost").on("input", function(event) {
     $('.refund-cost').text(digitUppercase(event.target.value))
+  });
+
+  $("#refund_order_paid_num").on("input", function(event) {
+    $('.paid-total-cost').text(digitUppercase(event.target.value))
   });

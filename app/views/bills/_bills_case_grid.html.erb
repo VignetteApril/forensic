@@ -1,7 +1,7 @@
 <%= grid(@bills, hide_submit_button: true, hide_reset_button: true, hide_csv_button: true) do |g|
 
   g.column name: '案号', assoc: :main_case, attribute: 'case_no_display', detach_with_id: :case_no_display_filter do |bill|
-    link_to bill.main_case.case_no_display, edit_main_case_path(bill.main_case) if bill.main_case
+    link_to bill.main_case.case_no_display || '案号暂未生成', edit_main_case_path(bill.main_case) if bill.main_case
   end
 
   g.column name: '发票类型' do |a|
