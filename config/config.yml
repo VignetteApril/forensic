@@ -35,7 +35,7 @@ features:
   - [编辑机构, organizations, 'edit, update', 'center_admin_user, center_director_user']
   - [科室模板管理, department_docs, "index, new, edit, create, destroy", 'center_admin_user, center_director_user']
   - [模板文档管理, doc_templates, "index, new, edit, create, destroy", 'admin_user']
-  - [案件管理, main_cases, "index, new, edit, update, show, create, destroy, express_orders,
+  - [案件管理, main_cases, "index, new, edit, update, show, create, express_orders,
                            organization_and_user, matter_demands, generate_case_no,
                            matter_demands_and_case_types, filing_info, update_add_material,
                            update_filing, update_reject, open_barcode_image, create_case_doc,
@@ -84,6 +84,7 @@ features:
   - [收到快递, recive_express_orders, 'index,create,edit,new,destroy,update', 'all']
   - [委托人查看案件, main_cases, 'wtr_cases, edit, case_memos, create_case_memo, case_process_records', 'client_entrust_user']
   - [统计, main_cases, 'personal_count', 'client_entrust_user,center_director_user,center_department_director_user']
+  - [删除案件, main_cases, 'destroy', 'center_admin_user, center_director_user, center_department_director_user']
 
 apps:
   - name: 系统管理
