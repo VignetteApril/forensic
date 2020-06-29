@@ -65,13 +65,13 @@
      district.nil? ? '' : district.name
    end
 
-   g.column name: '联系人', attribute: 'user_name', detach_with_id: :user_name_filter, ordering: false do |main_case|
-     main_case.user_name
-   end
+   # g.column name: '联系人', attribute: 'user_name', detach_with_id: :user_name_filter, ordering: false do |main_case|
+   #   main_case.user_name
+   # end
 
-   g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
-     main_case.organization_phone
-   end
+   # g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
+   #   main_case.organization_phone
+   # end
 
    g.column name: '倒计时', attribute: 'commission_date', filter: false, ordering: false, in_csv: false do |main_case|
      get_distance_of_time(main_case)
