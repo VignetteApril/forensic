@@ -48,17 +48,7 @@ $(document).ready(function () {
         valueField: 'id',
         labelField: 'name'
     });
-
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        language: 'zh-CN',
-        autoclose: true,
-        todayHighlight: true
-    });
-})
-
-
-
+});
 
 // change select2 data via ajax, target select2 element data will refresh depend the change of original select2 element
 // request_url:               the method will send the ajax post request to this url, and get data from the action
@@ -91,8 +81,10 @@ function reloadSelectize(select_elm, dataset, default_select_id = '') {
 }
 
 function set_default_selected(select_elm, value) {
-    var control = select_elm[0].selectize;
-    control.setValue(value, 'silent');
+    if (select_elm[0] != undefined) {
+        var control = select_elm[0].selectize;
+        control.setValue(value, 'silent');
+    };
 }
 
 function digitUppercase(n) {

@@ -19,6 +19,10 @@
     main_case.user_name
   end
 
+  g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
+     main_case.organization_phone
+  end
+
   g.column name: '被鉴定方', attribute: 'name', assoc: :appraised_unit, detach_with_id: :appraised_unit_name_filter, ordering: false do |main_case|
     main_case.appraised_unit.try(:name)
   end
@@ -28,7 +32,7 @@
   end
 
   g.column name: '受委托科室', attribute: 'name', assoc: :department, detach_with_id: :department_name_filter,
-  custom_filter: department_collection, allow_multiple_selection: false, ordering: false do |main_case|
+  custom_filter: department_collection, allow_multiple_selection: false, ordering: false, html: {class: 'finance_main_cases_grid_f_departments_name'} do |main_case|
     main_case.department.name
   end
 

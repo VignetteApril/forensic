@@ -55,7 +55,7 @@ features:
                               case_executing, closing_case, case_memos, case_process_records", 'center_admin_user, center_director_user, center_director_user']
   - [财务人员案件查询, main_cases, "filed_unpaid_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
                                  payment_order_management, case_executing, closing_case, case_memos, case_process_records, update_financial_stage", 'center_finance_user']
-  - [财务统计, main_cases, "finance_check_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
+  - [统计报表, main_cases, "finance_check_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
                                  payment_order_management, case_executing, closing_case, case_memos, case_process_records, update_financial_stage", 'center_finance_user']
   - [待归档的案件, main_cases, "apply_filing_cases, open_barcode_image, edit, filing_info, print_transfer_doc_barcode,
                               payment_order_management, case_executing, closing_case, case_memos, case_process_records", 'center_archivist_user']

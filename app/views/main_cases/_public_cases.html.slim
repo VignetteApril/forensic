@@ -146,6 +146,12 @@ css:
   }
 
 javascript:
+    $('.check-for-bsdatepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        autoclose: true,
+        todayHighlight: true
+    });
     var status = 'false'
     if(localStorage.s){
         status = localStorage.s

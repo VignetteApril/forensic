@@ -203,6 +203,12 @@ css:
   }
 
 javascript:
+    $('.check-for-bsdatepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        autoclose: true,
+        todayHighlight: true
+    });
 
     var status = 'false'
     if(localStorage.s){
@@ -281,9 +287,9 @@ javascript:
     });
 
     // filter 联动
-    var province_select = $("#finance_main_cases_grid_f_province_id");
-    var city_select = $("#finance_main_cases_grid_f_city_id");
-    var district_select = $("#finance_main_cases_grid_f_district_id");
+    var province_select = $("select[id$='main_cases_grid_f_province_id']");
+    var city_select = $("select[id$='main_cases_grid_f_city_id']");
+    var district_select = $("select[id$='main_cases_grid_f_district_id']");
     var request_url_cities = window.location.origin + '/areas/cities.json';
     var request_url_districts = window.location.origin + '/areas/districts.json';
 
@@ -309,11 +315,12 @@ javascript:
     });
 
     // 受委托科室下拉列表联动
-    var departments_select  = $("#finance_main_cases_grid_f_departments_name");
-    var matters_select      = $("#finance_main_cases_grid_f_matter")
-    var pass_user_select    = $("#finance_main_cases_grid_f_pass_user");
-    var ident_user_select   = $("#finance_main_cases_grid_f_ident_users")
+    var departments_select  = $("select[id$='main_cases_grid_f_departments_name']");
+    var matters_select      = $("select[id$='main_cases_grid_f_matter']");
+    var pass_user_select    = $("select[id$='main_cases_grid_f_pass_user']");
+    var ident_user_select   = $("select[id$='main_cases_grid_f_ident_users']");
     var request_url_matters = window.location.origin + '/departments/finance_matters.json';
+    console.log(departments_select);
 
     departments_select.selectize({
         valueField: 'id',
@@ -328,6 +335,7 @@ javascript:
                     },
                     dataType: 'json',
                     success: function (data) {
+                        console.log('!!!');
                         reloadSelectize(matters_select, data.mastters, default_select_id = '')
                         reloadSelectize(pass_user_select, data.pass_users, default_select_id = '')
                         reloadSelectize(ident_user_select, data.ident_users, default_select_id = '')
@@ -338,17 +346,18 @@ javascript:
 
     // 设置缴费方式搜索后默认显示的值
     var pay_method_selected = "#{@payment_method}"
-    var pay_method_select = $("#finance_main_cases_grid_f_payment_method").selectize();
-    set_default_selected(pay_method_select, pay_method_selected)
+    var pay_method_select = $("select[id$='main_cases_grid_f_payment_method']").selectize();
+    set_default_selected(pay_method_select, pay_method_selected);
 
     // 设置开票状态搜索后默认显示的值
-    var bill_status_selected = "#{@bill_status}"
-    var bill_status_select = $("#finance_main_cases_grid_f_bill_status").selectize();
-    set_default_selected(bill_status_select, bill_status_selected)
+    var bill_status_selected = "#{@bill_status}";
+    var bill_status_select = $("select[id$='main_cases_grid_f_bill_status']").selectize();
+    set_default_selected(bill_status_select, bill_status_selected);
 
     // 设置缴费日期搜索后默认显示的值
-    var pay_start_date = $("#finance_main_cases_grid_f_pay_date_fr");
-    var pay_end_date   = $("#finance_main_cases_grid_f_pay_date_to");
+
+    var pay_start_date = $("input[id$='main_cases_grid_f_pay_date_fr']");
+    var pay_end_date   = $("input[id$='main_cases_grid_f_pay_date_to']");
     var pay_date_fr = "#{@pay_date_fr}"
     var pay_date_to = "#{@pay_date_to}"
     pay_start_date.datepicker().datepicker("update", pay_date_fr);
@@ -356,12 +365,13 @@ javascript:
 
     // 设置搜索类型搜索后默认显示的值
     var search_type_selected = "#{@search_type}"
-    var search_type_select = $("#finance_main_cases_grid_f_search_type").selectize();
+    var search_type_select = $("select[id$='main_cases_grid_f_search_type']").selectize();
     set_default_selected(search_type_select, search_type_selected)
 
     // 设置搜索日期搜索后默认显示的值
-    var search_start_date = $("#finance_main_cases_grid_f_search_date_fr");
-    var search_end_date   = $("#finance_main_cases_grid_f_search_date_to");
+
+    var search_start_date = $("input[id$='main_cases_grid_f_search_date_fr']");
+    var search_end_date   = $("input[id$='main_cases_grid_f_search_date_to']");
     var search_date_fr = "#{@search_date_fr}"
     var search_date_to = "#{@search_date_to}"
     search_start_date.datepicker().datepicker("update", search_date_fr);
