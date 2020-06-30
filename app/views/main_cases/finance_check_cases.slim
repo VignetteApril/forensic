@@ -203,12 +203,12 @@ css:
   }
 
 javascript:
-    $('.check-for-bsdatepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        language: 'zh-CN',
-        autoclose: true,
-        todayHighlight: true
-    });
+    // $('.check-for-bsdatepicker').datepicker({
+    //     format: 'yyyy-mm-dd',
+    //     language: 'zh-CN',
+    //     autoclose: true,
+    //     todayHighlight: true
+    // });
 
     var status = 'false'
     if(localStorage.s){
@@ -360,8 +360,8 @@ javascript:
     var pay_end_date   = $("input[id$='main_cases_grid_f_pay_date_to']");
     var pay_date_fr = "#{@pay_date_fr}"
     var pay_date_to = "#{@pay_date_to}"
-    pay_start_date.datepicker().datepicker("update", pay_date_fr);
-    pay_end_date.datepicker().datepicker("update", pay_date_to);
+    pay_start_date.datepicker({language: 'zh-CN'}).datepicker("update", pay_date_fr);
+    pay_end_date.datepicker({language: 'zh-CN'}).datepicker("update", pay_date_to);
 
     // 设置搜索类型搜索后默认显示的值
     var search_type_selected = "#{@search_type}"
@@ -374,6 +374,6 @@ javascript:
     var search_end_date   = $("input[id$='main_cases_grid_f_search_date_to']");
     var search_date_fr = "#{@search_date_fr}"
     var search_date_to = "#{@search_date_to}"
-    search_start_date.datepicker().datepicker("update", search_date_fr);
-    search_end_date.datepicker().datepicker("update", search_date_to);
+    search_start_date.datepicker({language: 'zh-CN'}).datepicker("update", search_date_fr);
+    search_end_date.datepicker({language: 'zh-CN'}).datepicker("update", search_date_to);
 

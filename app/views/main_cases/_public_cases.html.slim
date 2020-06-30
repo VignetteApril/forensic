@@ -146,12 +146,6 @@ css:
   }
 
 javascript:
-    $('.check-for-bsdatepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        language: 'zh-CN',
-        autoclose: true,
-        todayHighlight: true
-    });
     var status = 'false'
     if(localStorage.s){
         status = localStorage.s
@@ -265,8 +259,8 @@ javascript:
     var search_end_date   = $("#main_cases_grid_f_search_date_to");
     var search_date_fr = "#{@search_date_fr}"
     var search_date_to = "#{@search_date_to}"
-    search_start_date.datepicker().datepicker("update", search_date_fr);
-    search_end_date.datepicker().datepicker("update", search_date_to);
+    search_start_date.datepicker({language: 'zh-CN'}).datepicker("update", search_date_fr);
+    search_end_date.datepicker({language: 'zh-CN'}).datepicker("update", search_date_to);
 
 
 
