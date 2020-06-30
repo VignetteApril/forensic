@@ -264,7 +264,7 @@ class MainCasesController < ApplicationController
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'finance_main_cases_grid')
-    export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
+    export_grid_if_requested('finance_main_cases_grid' => 'finance_main_cases_grid')
   end
 
   # 案件状态为【申请归档】的案件列表页面
