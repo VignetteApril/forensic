@@ -263,7 +263,7 @@ class MainCasesController < ApplicationController
                                   per_page: 20,
                                   order: 'created_at',
                                   order_direction: 'desc',
-                                  name: 'main_cases_grid')
+                                  name: 'finance_main_cases_grid')
     export_grid_if_requested('main_cases_grid' => 'main_cases_grid')
   end
 
