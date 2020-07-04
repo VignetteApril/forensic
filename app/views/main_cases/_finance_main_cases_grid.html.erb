@@ -20,7 +20,7 @@
   end
 
   g.column name: '联系方式', attribute: 'organization_phone', filter: false, ordering: false do |main_case|
-     main_case.organization_phone
+     main_case.wtr_phone
   end
 
   g.column name: '被鉴定方', attribute: 'name', assoc: :appraised_unit, detach_with_id: :appraised_unit_name_filter, ordering: false do |main_case|

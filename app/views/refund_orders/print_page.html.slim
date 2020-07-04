@@ -45,6 +45,7 @@ css:
   }
 
   td {
+    width: 100px;
     border: solid #000 1px;
   }
 
@@ -169,8 +170,6 @@ javascript:
   var total_cost = document.getElementById('total_cost').textContent;
   var paid_num = document.getElementById('paid_num').textContent;
   var refund_cost = document.getElementById('refund_cost').textContent;
-
-  console.log(total_cost);
 
   total_cost_big_num.appendChild( document.createTextNode(digitUppercase(total_cost)) );
   paid_num_big_num.appendChild( document.createTextNode(digitUppercase(paid_num)) );
