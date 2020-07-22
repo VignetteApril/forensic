@@ -100,7 +100,7 @@ class PaymentOrdersController < ApplicationController
 		respond_to do |format|
 			if @payment_order.update(payment_order_params.merge({ order_stage: :confirm }))
 				attach_data_str(@payment_order, payment_order_params[:data_str]) if payment_order_params[:data_str].present?
-				format.html { redirect_to finance_index_main_case_payment_orders_path(@main_case, @payment_order), notice: '缴费单成功确认'}
+				format.html { redirect_to finance_edit_main_case_payment_order_path(@main_case, @payment_order), notice: '缴费单成功确认'}
 				format.json { render :show, status: :ok, location: @payment_order }
 			else
 				format.html { render :edit }
