@@ -62,15 +62,15 @@
 
 
   g.column name: '省', attribute: 'province_id', detach_with_id: :financial_province_filter, ordering: false, custom_filter: @provinces, allow_multiple_selection: false do |main_case|
-     Area.find_by_id(main_case.province_id).name
+     Area.find_by_id(main_case.province_id).try(:name)
    end
 
    g.column name: '市', attribute: 'city_id', ordering: false, detach_with_id: :financial_city_filter, custom_filter: @cities, allow_multiple_selection: false do |main_case|
-     Area.find_by_id(main_case.city_id).name
+     Area.find_by_id(main_case.city_id).try(:name)
    end
 
    g.column name: '区', ordering: false, detach_with_id: :financial_district_filter, attribute: 'district_id', custom_filter: @districts, allow_multiple_selection: false do |main_case|
-     Area.find_by_id(main_case.district_id).name
+     Area.find_by_id(main_case.district_id).try(:name)
    end
 
   g.column name: '财务状态', attribute: 'financial_stage', detach_with_id: :financial_stage_filter, custom_filter: financial_stage_collection,

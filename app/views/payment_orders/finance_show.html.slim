@@ -19,11 +19,11 @@ hr
     span = "交款联系人电话：#{@payment_order.payer_contacts_phone}"
 .row
   .col-md-4
-    span = "委托人：#{@payment_order.consigner}"
+    span = "委托人：#{@payment_order.main_case.organization_name}"
   .col-md-4
-    span = "委托人联系人：#{@payment_order.consiggner_contacts}"
+    span = "委托人联系人：#{@payment_order.main_case.user_name}"
   .col-md-4
-    span = "委托人联系人电话：#{@payment_order.consiggner_contacts_phone}"
+    span = "委托人联系人电话：#{@payment_order.main_case.wtr_phone}"
 .row
   .col-md-2
     span = "鉴定费：#{@payment_order.appraisal_cost}"
