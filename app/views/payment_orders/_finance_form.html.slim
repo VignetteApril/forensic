@@ -31,11 +31,11 @@
     .col-md-2
       - wtr_user = User.find_by_id(@main_case.wtr_id)
       - org = wtr_user.try(:organization)
-      = f.input :consigner, label: '委托方', input_html: { value: org.try(:name) }
+      = f.input :consigner, label: '委托方', input_html: { value: @main_case.organization_name }
     .col-md-2
-      = f.input :consiggner_contacts, label: '委托方联系人', input_html: { value: wtr_user.try(:name) }
+      = f.input :consiggner_contacts, label: '委托方联系人', input_html: { value: @main_case.user_name }
     .col-md-2
-      = f.input :consiggner_contacts_phone, label: '委托方联系人电话', input_html: { value: wtr_user.try(:mobile_phone) }
+      = f.input :consiggner_contacts_phone, label: '委托方联系人电话', input_html: { value: @main_case.wtr_phone }
   .row
     .col-md-2
       = f.input :appraisal_cost, label: '鉴定费'
