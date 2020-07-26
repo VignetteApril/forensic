@@ -136,6 +136,11 @@ class MainCase < ApplicationRecord
     state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
     after_all_transitions :record_case_process, :notify_user_case_stage_changed
 
+    # 转换到待立案状态
+    event :turn_pending, after: :update_filed_date do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :pending
+    end
+
     # 转换到 立案状态
     event :turn_filed, after: :update_filed_date do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :filed

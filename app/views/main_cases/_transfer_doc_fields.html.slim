@@ -1,6 +1,6 @@
 .nested-fields
   .row.pt-1
-    .col-md-1 
+    .col-md-1
       span class= 'nested-name-input border-0 serial-no pl-4' readonly= "readonly" = f.object.serial_no
     .col-md-1
       = f.input :name, as: :text, label: false, input_html: { class: 'nested-name-input border-0 n', readonly: "readonly" }
@@ -20,9 +20,8 @@
       - if f.object.barcode_image.attached?
         = link_to open_barcode_image_main_cases_path(transfer_doc_id: f.object.id), remote: true
           = image_tag("barcode.png", alt: "条码", style: 'height: 35px; width: auto;')
-    .col-md-1 
+    .col-md-1
       = link_to_remove_association "移除", f, class: 'btn btn-danger nested-fields-close'
-           / = link_to_remove_association "移除", f, class: 'btn btn-danger nested-fields-close', data: {confirm: '确定删除吗'} 
 
 css:
   .form-control[readonly] {

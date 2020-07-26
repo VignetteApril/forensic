@@ -112,12 +112,12 @@
           .col-md-8
             h4.card-title 移交材料
           .col-md-4
-            = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary add-file pull-right', 
+            = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary add-file pull-right',
                     data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append , toggle: "modal",
-                    target: "#nested_modal"}        
+                    target: "#nested_modal"}
       .card-body style="margin-bottom:15px;"
         / .row.mb-1 style="border:1px solid #6c757d"
-        .row.mb-1 
+        .row.mb-1
           .col-md-1
             span 序号
           .col-md-1
@@ -137,7 +137,7 @@
           .col-md-1.text-center
             span 条码
 
-        #transfer_docs style="margin:-15px;position:relative;top:10px"
+        #transfer_docs style="margin:-15px;position:relative;top:10px;"
           = f.simple_fields_for :transfer_docs do |transfer_doc|
             = render 'transfer_doc_fields', f: transfer_doc, render_options: { wrapper: 'bootstrap' }
 
@@ -191,8 +191,13 @@
 css:
   .table-responsive{
     overflow-x: inherit;
-  }    
+  }
 javascript:
+    var transfer_docs = #{@main_case.transfer_docs.select{ |item| !item.id.nil? }.to_json.html_safe};
+    if (transfer_docs.length == 0) {
+      $('#transfer_docs').children()[0].remove();
+
+    }
     $('#transfer_docs')
       .on('cocoon:after-insert', function(e, added_task) {
         function setHeight(element) {
@@ -203,9 +208,7 @@ javascript:
         }).on('input', function () {
           setHeight(this);
         });
-
-
-      })
+      });
 
     // 导入用户用到的事件
     $('#user_select').selectize({

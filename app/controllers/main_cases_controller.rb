@@ -801,7 +801,7 @@ class MainCasesController < ApplicationController
     current_org = @current_user.organization
     redirect_to root_path, notice: '请您关联相关机构' and return if current_org.nil?
 
-    data = current_org.main_cases.pending
+    data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :pending)
     @main_cases = initialize_grid(data,
                                   include: :transfer_docs,
                                   enable_export_to_csv: true,
