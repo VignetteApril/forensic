@@ -202,7 +202,7 @@ class BillsController < ApplicationController
     def guard_edit_destroy
       redirect_to payment_order_management_main_case_path(@main_case), notice: '发票已开或已领走！' if @bill.billed? || @bill.taked_away?
     end
-  
+
     def get_redirect_path_from_action_name action_name, payment_order = nil
       case action_name
       when 'finance_index'

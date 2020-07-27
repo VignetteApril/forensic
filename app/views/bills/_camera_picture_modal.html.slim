@@ -41,10 +41,14 @@ javascript:
     });
 
     Webcam.set({
-        width: 320,
-        height: 240,
+        width: 1280,
+        height: 720,
         image_format: 'jpeg',
-        jpeg_quality: 90
+        jpeg_quality: 90,
+        constraints: {
+          width: { exact: 1280 },
+          height: { exact: 720 }
+        }
     });
     Webcam.attach( '#my_camera' );
 
@@ -53,7 +57,7 @@ javascript:
         Webcam.snap(function (data_uri) {
             // display results in page
             document.getElementById('results').innerHTML =
-                '<h5>委托书图像：</h2>' +
+                '<h5>发票图像：</h2>' +
                 '<img id="shot" src="' + data_uri + '"/>';
         });
     }

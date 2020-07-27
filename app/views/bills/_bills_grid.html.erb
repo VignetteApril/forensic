@@ -1,7 +1,7 @@
 <%= define_grid(@bills, hide_submit_button: true, hide_reset_button: true, hide_csv_button: true) do |g|
 
   g.column name: '案号', assoc: :main_case, attribute: 'case_no_display', detach_with_id: :case_no_display_filter do |bill|
-    link_to bill.main_case.case_no_display, edit_main_case_path(bill.main_case) if bill.main_case
+    link_to bill.main_case.case_no_display || '案号暂未生成', edit_main_case_path(bill.main_case) if bill.main_case
   end
 
   g.column name: '发票类型' do |a|
@@ -59,7 +59,7 @@
 
   g.column in_csv: false do |bill|
     if can?('bills', 'update') && bill.unBilled?
-      link_to '编辑', dyn_form_modal_main_case_bill_path(@main_case, bill), method: :post, remote: true, class: 'btn btn-primary btn-sm'
+      link_to '编辑', dyn_form_modal_main_case_bill_path(bill.main_case, bill), method: :post, remote: true, class: 'btn btn-primary btn-sm'
     end
   end
 
