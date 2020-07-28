@@ -100,6 +100,7 @@ class BillsController < ApplicationController
     else
       payment_order = nil
     end
+    attach_data_str(@bill, bill_params[:data_str]) if bill_params[:data_str].present?
 
     respond_to do |format|
       if @bill.update(bill_params)
