@@ -73,3 +73,16 @@ html, body, #login-page {
   flex-direction: row;
 }
 
+.wice-grid {
+  overflow-y: auto;
+}
+
+.wice-grid thead {
+  background-color: aliceblue;
+}
+
+.wice-grid thead th {
+  position: sticky; top: 0;
+  background-color: aliceblue;
+}
+
