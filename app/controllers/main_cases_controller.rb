@@ -1290,7 +1290,7 @@ class MainCasesController < ApplicationController
     end
 
     def set_filter_instance(data, current_user)
-      if params["main_cases_grid"] && params["main_cases_grid"]["export"].nil?
+      if params["main_cases_grid"] && params["main_cases_grid"]["export"].nil? && params["main_cases_grid"]["page"].nil?
         province_id = params["main_cases_grid"]["f"]["province_id"][0] if params["main_cases_grid"]["f"]["province_id"]
         city_id = params["main_cases_grid"]["f"]["city_id"][0] if params["main_cases_grid"]["f"]["city_id"]
 
