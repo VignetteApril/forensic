@@ -17,7 +17,7 @@ class MainCasesController < ApplicationController
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
   skip_before_action :authorize, only: [:payment, :express_route]
-  skip_before_action :can, only: [:payment, :express_route]
+  skip_before_action :can, only: [:payment, :express_route, :create_organization_and_user, :organization_and_user]
   skip_before_action :verify_authenticity_token, only: :express_route
 
   # 我的案件页面
@@ -758,21 +758,22 @@ class MainCasesController < ApplicationController
                                 email: "boot@forensic.com",
                                 password: '123456',
                                 password_confirmation: '123456',
-                                mobile_phone: wtr_phone)
+                                mobile_phone: wtr_phone,
+                                commonly_used: true)
           if @user.save
             flash.now[:success] = "委托方和委托人创建成功！请用户使用账号：#{current_user_login}和密码：123456 登录"
             format.js
           else
             flash.now[:danger] = '系统中已经存在该委托方信息，请使用上面的下拉列表选择之后点击【导入】按钮'
-            format.js { render 'layouts/display_flash' }
+            format.js
           end
         else
           flash.now[:danger] = '系统中已经存在该委托方信息，请使用上面的下拉列表选择之后点击【导入】按钮'
-          format.js { render 'layouts/display_flash' }
+          format.js
         end
       else
         flash.now[:danger] = '委托方创建失败！请选择地区信息！'
-        format.js { render 'layouts/display_flash' }
+        format.js
       end
     end
   end

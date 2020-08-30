@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class UsersController < ApplicationController
-  skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor]
+  skip_before_action :can, only: [:edit_password, :update_password,:new_consignor,:create_consignor, :commonly_used]
   before_action :set_user, only: [:ban, :edit, :update, :destroy, :reset_password, :update_password, :confirm_user, :edit_org, :cancel_user, :update_confirm_user_org, :edit_self]
   after_action :make_log, only: [:create, :update, :destroy, :reset_password, :update_password]
   before_action :set_selected_departments, only: [:edit, :update, :new, :create, :edit_self]
@@ -14,13 +14,28 @@ class UsersController < ApplicationController
   # 页面中醒目显示“新建用户”按钮；针对每一个用户，页面上显示：查看、编辑、禁用/启用、删除按钮。
   def index
     if @current_user.admin?
-      @users = initialize_grid( User, per_page: 20,
+      @users = initialize_grid( User.where(commonly_used: false), per_page: 20,
                                 order: 'sort_no', order_direction: 'asc',
                                 name: 'users',
                                 enable_export_to_csv: true, csv_file_name: 'users' )
     else
-      @users = initialize_grid( User, per_page: 20,
+      @users = initialize_grid( User.where(commonly_used: false), per_page: 20,
                                 conditions: { organization_id: @current_user.organization.try(:id) },
+                                order: 'sort_no', order_direction: 'asc',
+                                name: 'users',
+                                enable_export_to_csv: true, csv_file_name: 'users' )
+    end
+    export_grid_if_requested
+  end
+
+  def commonly_used
+    if @current_user.admin?
+      @users = initialize_grid( User.where(commonly_used: true), per_page: 20,
+                                order: 'sort_no', order_direction: 'asc',
+                                name: 'users',
+                                enable_export_to_csv: true, csv_file_name: 'users' )
+    else
+      @users = initialize_grid( User.where(commonly_used: true), per_page: 20,
                                 order: 'sort_no', order_direction: 'asc',
                                 name: 'users',
                                 enable_export_to_csv: true, csv_file_name: 'users' )
@@ -158,7 +173,7 @@ class UsersController < ApplicationController
               "value": "已被驳回"
           }
         }
-        send_wx_msg(@user,data) 
+        send_wx_msg(@user,data)
 
         format.html { redirect_to confirm_users_users_path, notice: '已驳回用户申请信息' }
       else
@@ -250,7 +265,7 @@ class UsersController < ApplicationController
           dep = org.departments.create(:name=>params["user"]["department_names"])
         end
         user.departments = dep.id.to_s
-        if user.save 
+        if user.save
           wtr_role.user_roles.find_or_create_by user_id: user.id, role_id: wtr_role.id
           redirect_to '/login' ,flash: { success: '创建委托人成功,请登录' }
         else
@@ -271,7 +286,7 @@ class UsersController < ApplicationController
 
     msg_url = URI("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=#{token}")
     req_data = {
-      "data": data, 
+      "data": data,
       "page":"pages/login/login",
       "touser": user.open_id,
       "template_id": "DmlBLeL8AJsT3tnJcXtQgNhIXTHLq8I3HTagSlurBsU",

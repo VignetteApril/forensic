@@ -188,6 +188,19 @@
   .form-actions
     = f.button :submit, '保存', class: 'btn btn-success'
 
+
+.modal.fade id="flashModal" tabindex="999" role="dialog" aria-labelledby="flashModal" aria-hidden="true" style="z-index: 10000000 !important;"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" 提示信息
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-body
+        .row
+          .d-flex.justify-content-center.w-100
+            #flashBody
+
 css:
   .table-responsive{
     overflow-x: inherit;

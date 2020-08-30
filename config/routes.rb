@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     get :cancel_user,  :on => :member
     get :edit_org,:on => :member
     post :update_confirm_user_org,:on => :member
+    get :commonly_used, on: :collection
   end
 
   resources :session do

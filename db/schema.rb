@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_27_034240) do
+ActiveRecord::Schema.define(version: 2020_08_30_014442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -597,6 +597,7 @@ ActiveRecord::Schema.define(version: 2020_06_27_034240) do
     t.string "open_id"
     t.boolean "is_ban", default: false
     t.string "ident_number"
+    t.boolean "commonly_used", default: false
     t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["sort_no"], name: "index_users_on_sort_no"
   end

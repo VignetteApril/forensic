@@ -124,6 +124,10 @@ aside.app-sidebar
                 a.treeview-item href="#{users_path}" class="#{active_class_with_action(controller, 'users', 'index')}"
                   i.app-menu__icon.fa
                   span.app-menu__label 用户管理
+              li
+                a.treeview-item href="#{commonly_used_users_path}" class="#{active_class_with_action(controller, 'users', 'commonly_used')}"
+                  i.app-menu__icon.fa
+                  span.app-menu__label 常用用户管理
             - if can?('roles', 'index')
               li
                 a.treeview-item href="#{roles_path}" class="#{active_class(controller, 'roles')}"
