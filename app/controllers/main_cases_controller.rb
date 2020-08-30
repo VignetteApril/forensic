@@ -719,7 +719,7 @@ class MainCasesController < ApplicationController
     user_name = params[:user_name]
 
     res = User.includes(:organization).where.not(user_type: :center_user).where('name like ?', "%#{user_name}%").map do |user|
-      user.name = "#{ user.name } 所属机构：#{ user.organization.name }"
+      user.name = "#{ user.try(:name) } 所属机构：#{ user.organization.try(:name) }"
       user
     end
 
