@@ -1,0 +1,16 @@
+<%= grid(@frequent_contacts, hide_submit_button: false, hide_reset_button: false) do |g|
+  g.column name: '委托联系人', attribute: 'name'
+
+  g.column name: '省', attribute: 'province_id', ordering: false, custom_filter: @provinces, allow_multiple_selection: false do |iterm|
+     Area.find_by_id(iterm.province_id).try(:name)
+   end
+  g.column name:  '市', attribute: 'city_id', custom_filter: @cities, allow_multiple_selection: false do |iterm|
+    Area.find_by_id(iterm.city_id).try(:name)
+  end
+  g.column name:  '区', attribute: 'district_id', custom_filter: @districts, allow_multiple_selection: false do |iterm|
+    Area.find_by_id(iterm.district_id).try(:name)
+  end
+  g.column name:  '委托方', attribute: 'client_name'
+  g.column name:  '委托联系人电话', attribute: 'phone'
+  g.column name:  '委托方地址', attribute: 'client_addr'
+end -%>

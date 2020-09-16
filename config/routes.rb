@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :frequent_contacts do
+    post :user_search, on: :collection
+    get :organization_and_user, on: :collection
+  end
   resources :recive_express_orders
   resources :express_orders
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

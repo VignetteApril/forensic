@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: case_memos
+#
+#  id               :bigint           not null, primary key
+#  user_id          :bigint
+#  main_case_id     :bigint
+#  content          :string
+#  visibility_range :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
 class CaseMemo < ApplicationRecord
   belongs_to :user
   belongs_to :main_case

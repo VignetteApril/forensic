@@ -1,3 +1,31 @@
+# == Schema Information
+#
+# Table name: organizations
+#
+#  id                :bigint           not null, primary key
+#  name              :string
+#  code              :integer
+#  desc              :string
+#  area_id           :bigint
+#  addr              :string
+#  phone             :string
+#  wechat_id         :string
+#  org_type          :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  ancestry          :string
+#  abbreviation      :string
+#  province_id       :integer
+#  city_id           :integer
+#  district_id       :integer
+#  payee             :string
+#  open_account_bank :string
+#  account_number    :string
+#  level             :string
+#  is_confirm        :boolean          default(TRUE)
+#  town              :string
+#  post_code         :string
+#
 # 机构组织
 class Organization < ApplicationRecord
   attr_accessor :organization_id,:is_new_org
@@ -12,6 +40,7 @@ class Organization < ApplicationRecord
   has_many :identification_cycles, dependent: :destroy # 每个机构中很有多个鉴定周期，当机构被删除时，则鉴定周期也无意义
   has_many :material_cycles, dependent: :destroy # 每个机构中有很多个补充材料周期
   has_many :incoming_records, dependent: :destroy #每个机构中有很多个到账记录
+  has_many :frequent_contacts, dependent: :destroy
 
   validates :name, uniqueness: true, presence: true  #机构名称唯一，必填
   validates :abbreviation, presence: { message: '不能为空' }, unless: :is_court?

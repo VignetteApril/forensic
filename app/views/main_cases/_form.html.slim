@@ -241,7 +241,7 @@ javascript:
         load: function (query, callback) {
             if (!query.length) return callback();
             $.ajax({
-                url: "#{user_search_main_cases_url}",
+                url: "#{user_search_frequent_contacts_url}",
                 type: 'POST',
                 data: { user_name: query },
                 error: function () {

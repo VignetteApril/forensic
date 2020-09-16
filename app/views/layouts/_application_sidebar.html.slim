@@ -125,7 +125,7 @@ aside.app-sidebar
                   i.app-menu__icon.fa
                   span.app-menu__label 用户管理
               li
-                a.treeview-item href="#{commonly_used_users_path}" class="#{active_class_with_action(controller, 'users', 'commonly_used')}"
+                a.treeview-item href="#{frequent_contacts_path}" class="#{active_class_with_action(controller, 'frequent_contacts', 'index')}"
                   i.app-menu__icon.fa
                   span.app-menu__label 常用用户管理
             - if can?('roles', 'index')

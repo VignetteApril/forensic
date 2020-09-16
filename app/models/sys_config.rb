@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: sys_configs
+#
+#  id         :bigint           not null, primary key
+#  key        :string
+#  value      :string
+#  desc       :text
+#  gem        :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class SysConfig < ApplicationRecord
   validates :key, :presence => true, :uniqueness => true, :length => {:minimum => 1, :maximum => 100}
 

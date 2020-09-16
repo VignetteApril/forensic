@@ -1,4 +1,13 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: identification_cycles
+#
+#  id              :bigint           not null, primary key
+#  day             :integer
+#  organization_id :bigint
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
 
 one:
   day: 1

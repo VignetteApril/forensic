@@ -280,6 +280,7 @@ cn:
       role: "角色"
       notification: "个人事务提醒"
       organization: '机构'
+      frequent_contact: 常用联系人
     attributes:
       main_case:
         matter: "鉴定事项"
@@ -344,6 +345,12 @@ cn:
         payee: '收款人'
         open_account_bank: '开户行'
         account_number: '收款人账号'
+      frequent_contact:
+        name: 委托人联系人
+        client_name: 委托方
+        client_addr: 委托方地址
+        phone: 委托方联系人电话
+        organization_id: 机构
     errors:
       models:
         user:

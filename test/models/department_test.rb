@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: departments
+#
+#  id              :bigint           not null, primary key
+#  name            :string(200)      not null
+#  description     :text
+#  parent_id       :string
+#  ancestry        :string
+#  sort_no         :integer
+#  code            :string(20)       default("0000000000"), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  organization_id :bigint
+#  matter          :string
+#  case_types      :string
+#  abbreviation    :string
+#  case_start_no   :integer
+#
 require "test_helper"
 
 describe Department do

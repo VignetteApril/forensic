@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: bills
+#
+#  id             :bigint           not null, primary key
+#  organization   :string
+#  address        :string
+#  code           :string
+#  bank           :string
+#  phone          :string
+#  main_case_id   :bigint
+#  amount         :float
+#  created_at     :datetime
+#  updated_at     :datetime
+#  bill_stage     :integer          default("unBilled")
+#  bank_account   :string
+#  bill_type      :integer
+#  recipient      :string
+#  recipient_date :datetime
+#
 class Bill < ApplicationRecord
   attr_accessor :data_str
   attr_accessor :current_action_name

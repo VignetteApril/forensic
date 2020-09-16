@@ -1,3 +1,43 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                :bigint           not null, primary key
+#  login             :string(50)       not null
+#  name              :string(20)
+#  email             :string(100)
+#  mobile_phone      :string(100)
+#  hashed_password   :string
+#  salt              :string
+#  sort_no           :integer
+#  gender            :string(10)
+#  address           :string
+#  memo              :text
+#  changed_password  :boolean
+#  orgnization_name  :string(20)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  session_id        :string
+#  api_key           :string
+#  wechat_id         :string
+#  organization_id   :bigint
+#  is_locked         :boolean          default(FALSE)
+#  user_type         :integer
+#  remember_digest   :string
+#  departments       :string
+#  department_names  :string
+#  landline          :string
+#  province_id       :integer
+#  city_id           :integer
+#  district_id       :integer
+#  organization_name :string
+#  confirm_stage     :integer          default("confirm")
+#  form_id           :string
+#  open_id           :string
+#  is_ban            :boolean          default(FALSE)
+#  ident_number      :string
+#  commonly_used     :boolean          default(FALSE)
+#
 require "test_helper"
 
 describe User do

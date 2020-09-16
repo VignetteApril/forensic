@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: express_orders
+#
+#  id             :bigint           not null, primary key
+#  receiver       :string
+#  receiver_addr  :string
+#  receiver_phone :string
+#  company_type   :integer
+#  content        :string
+#  order_date     :datetime
+#  main_case_id   :bigint
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  user_id        :bigint
+#  order_num      :string
+#  case_no        :string
+#  reporter       :string
+#
 class ExpressOrder < ApplicationRecord
 	belongs_to :main_case
 	belongs_to :user

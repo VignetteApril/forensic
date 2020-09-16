@@ -40,7 +40,7 @@ $(document).ready(function () {
             });
 
             // 导入用户
-            var request_url_org_and_user = window.location.origin + '/main_cases/organization_and_user';
+            var request_url_org_and_user = window.location.origin + '/frequent_contacts/organization_and_user';
             var organization_name = $('#main_case_organization_name');
             var user_name = $('#main_case_user_name');
             var wtr_phone = $('#main_case_wtr_phone');
@@ -72,19 +72,21 @@ $(document).ready(function () {
             });
 
             // 根据用户填写的委托方信息和委托人信息
-            var request_create_org_user = window.location.origin + '/main_cases/create_organization_and_user';
+            var request_create_org_user = window.location.origin + '/frequent_contacts';
             $('#create_org_user').click(function () {
                 $.ajax({
                     url: request_create_org_user,
                     type: 'POST',
                     data: {
-                        wtr_phone: wtr_phone.val(),
-                        user_name: user_name.val(),
-                        organization_name: organization_name.val(),
-                        organization_addr: organization_addr.val(),
-                        province_id: province_select2.val(),
-                        city_id: city_select2.val(),
-                        district_id: district_select2.val()
+                        frequent_contact: {
+                            phone: wtr_phone.val(),
+                            name: user_name.val(),
+                            client_name: organization_name.val(),
+                            client_addr: organization_addr.val(),
+                            province_id: province_select2.val(),
+                            city_id: city_select2.val(),
+                            district_id: district_select2.val()
+                        }
                     },
                     dataType: 'script'
                 })

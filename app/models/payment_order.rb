@@ -1,3 +1,39 @@
+# == Schema Information
+#
+# Table name: payment_orders
+#
+#  id                        :bigint           not null, primary key
+#  main_case_id              :bigint
+#  payer                     :string
+#  payer_contacts            :string
+#  payer_contacts_phone      :string
+#  consigner                 :string
+#  consiggner_contacts       :string
+#  consiggner_contacts_phone :string
+#  appraisal_cost            :float
+#  business_cost             :float
+#  appear_court_cost         :float
+#  investigation_cost        :float
+#  other_cost                :float
+#  payment_in_advance        :float
+#  payment_type              :integer
+#  payment_people            :string
+#  payment_accept_type       :integer
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  consult_cost              :float
+#  payment_date              :datetime
+#  total_cost                :float
+#  take_bill                 :boolean          default(FALSE)
+#  bill_id                   :bigint
+#  cash_pay                  :float
+#  check_pay                 :float
+#  check_num                 :string
+#  card_pay                  :float
+#  remit_pay                 :float
+#  order_stage               :integer          default("not_submit")
+#  mobile_pay                :float
+#
 class PaymentOrder < ApplicationRecord
   attr_accessor :incoming_record_id
 	attr_accessor :claim_user_id

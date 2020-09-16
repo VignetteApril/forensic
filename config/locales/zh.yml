@@ -10,6 +10,10 @@ zh:
         password_confirmation: "重复密码"
       organization:
         name: "单位名称"
+      frequent_contact:
+        name: 委托人联系人
+        client: 委托方
+        phone: 委托方联系人电话
     errors:
       models:
         user:

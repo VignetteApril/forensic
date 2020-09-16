@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_30_014442) do
+ActiveRecord::Schema.define(version: 2020_09_15_132824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,6 +274,19 @@ ActiveRecord::Schema.define(version: 2020_08_30_014442) do
     t.datetime "updated_at", null: false
     t.string "app"
     t.index ["controller_name"], name: "index_features_on_controller_name"
+  end
+
+  create_table "frequent_contacts", force: :cascade do |t|
+    t.string "name"
+    t.integer "province_id"
+    t.integer "city_id"
+    t.integer "district_id"
+    t.integer "organization_id"
+    t.string "client_name"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "client_addr"
   end
 
   create_table "identification_cycles", force: :cascade do |t|

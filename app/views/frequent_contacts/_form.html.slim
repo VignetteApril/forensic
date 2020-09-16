@@ -1,0 +1,30 @@
+= form_for @frequent_contact do |f|
+  - if @frequent_contact.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@frequent_contact.errors.count, "error")} prohibited this frequent_contact from being saved:"
+      ul
+        - @frequent_contact.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :province_id
+    = f.number_field :province_id
+  .field
+    = f.label :city_id
+    = f.number_field :city_id
+  .field
+    = f.label :district_id
+    = f.number_field :district_id
+  .field
+    = f.label :organization_id
+    = f.number_field :organization_id
+  .field
+    = f.label :client_name
+    = f.text_field :client_name
+  .field
+    = f.label :phone
+    = f.text_field :phone
+  .actions = f.submit

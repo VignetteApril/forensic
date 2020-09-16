@@ -1,4 +1,16 @@
 # -*- encoding : utf-8 -*-
+
+# == Schema Information
+#
+# Table name: roles
+#
+#  id          :bigint           not null, primary key
+#  description :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  r_type      :integer
+#  name        :integer
+#
 class Role < ApplicationRecord
   validates :name, :presence => true
 

@@ -1,4 +1,20 @@
 # -*- encoding : utf-8 -*-
+
+# == Schema Information
+#
+# Table name: notifications
+#
+#  id           :bigint           not null, primary key
+#  title        :string
+#  url          :string
+#  user_id      :integer          not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  channel      :integer
+#  status       :boolean          default(FALSE)
+#  description  :text
+#  main_case_id :bigint
+#
 class Notification < ApplicationRecord
     belongs_to :user
     belongs_to :main_case

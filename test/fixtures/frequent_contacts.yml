@@ -1,0 +1,34 @@
+# == Schema Information
+#
+# Table name: frequent_contacts
+#
+#  id              :bigint           not null, primary key
+#  name            :string
+#  province_id     :integer
+#  city_id         :integer
+#  district_id     :integer
+#  organization_id :integer
+#  client_name     :string
+#  phone           :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  client_addr     :string
+#
+
+one:
+  name: MyString
+  province_id: 1
+  city_id: 1
+  district_id: 1
+  organization_id: 1
+  client_name: MyString
+  phone: MyString
+
+two:
+  name: MyString
+  province_id: 1
+  city_id: 1
+  district_id: 1
+  organization_id: 1
+  client_name: MyString
+  phone: MyString

@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @frequent_contact.name
+p
+  strong Province:
+  = @frequent_contact.province_id
+p
+  strong City:
+  = @frequent_contact.city_id
+p
+  strong District:
+  = @frequent_contact.district_id
+p
+  strong Organization:
+  = @frequent_contact.organization_id
+p
+  strong Client name:
+  = @frequent_contact.client_name
+p
+  strong Phone:
+  = @frequent_contact.phone
+
+=> link_to 'Edit', edit_frequent_contact_path(@frequent_contact)
+'|
+=< link_to 'Back', frequent_contacts_path

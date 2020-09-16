@@ -1,0 +1,3 @@
+$('#flashBody').html("<%= escape_javascript(render partial: 'layouts/flash_message') %>")
+$('#main_case_wtr_id').val("<%= @frequent_contact.try(:id) %>")
+$('#flashModal').modal('show')

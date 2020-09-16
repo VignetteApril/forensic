@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: doc_templates
+#
+#  id         :bigint           not null, primary key
+#  name       :string
+#  desc       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class DocTemplate < ApplicationRecord
   has_one_attached :attachment
 
