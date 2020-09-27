@@ -71,7 +71,7 @@ class FrequentContactsController < ApplicationController
 
   def user_search
     user_name = params[:user_name]
-    res = @current_user.organization.frequent_contacts.where('name like ?', "%#{user_name}%").map do |user|
+    res = @current_user.organization.frequent_contacts.where('name like ?', "#{user_name}").map do |user|
       user.name = "#{ user.try(:name) } 所属机构：#{ user.client_name }"
       user
     end

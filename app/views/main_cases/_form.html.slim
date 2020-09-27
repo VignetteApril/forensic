@@ -27,6 +27,7 @@
               label 选择已有的委托方信息导入
               #user_select
             .col-md-4
+              button type="button"  class='btn btn-primary' id='search_user' style='margin-top: 25px; margin-left: 10px' 搜索
               button type="button"  class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
       .card-body.principal
         .row
@@ -224,12 +225,18 @@ javascript:
       });
 
     // 导入用户用到的事件
-    $('#user_select').selectize({
+    var query_type = '';
+    var user_select = $('#user_select').selectize({
         valueField: 'id',
         labelField: 'name',
         searchField: 'name',
         maxItems: 1,
+        options: [],
         create: false,
+        dropdownParent : 'body',
+        onType: function (query) {
+          query_type = query;
+        },
         render: {
             option: function (item, escape) {
                 console.log(item);
@@ -237,21 +244,36 @@ javascript:
                          '<span>' + escape(item.name) + '</span>'
                        '</div>';
             }
-        },
-        load: function (query, callback) {
-            if (!query.length) return callback();
-            $.ajax({
-                url: "#{user_search_frequent_contacts_url}",
-                type: 'POST',
-                data: { user_name: query },
-                error: function () {
-                    callback();
-                },
-                success: function (res) {
-                    callback(res.users.slice(0, 10));
-                }
-            });
         }
+    });
+
+    var control = user_select[0].selectize;
+
+    $("#search_user").click(function(){
+      $.ajax({
+        url: "#{user_search_frequent_contacts_url}",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {
+          user_name: query_type
+        },
+        success: function(res) {
+          users = res.users
+          control.clearOptions();
+          for(var i = 0; i < users.length; i++){
+            control.addOption({
+              id: users[i]["id"],
+              name: users[i]["name"],
+            });
+          }
+          control.open();
+          query_type = "";
+        },
+        error: function() {
+          alert("error");
+        }
+      })
     });
 
     //新增模态框初始化input btn
