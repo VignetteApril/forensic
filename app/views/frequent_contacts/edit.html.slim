@@ -1,8 +1,7 @@
-h1 Editing frequent_contact
-
-== render 'form'
-
-=> link_to 'Show', @frequent_contact
-'|
-=< link_to 'Back', frequent_contacts_path
+= link_to '返回', frequent_contacts_path, class: 'btn btn-primary mb-2'
+.card
+  .card-header
+    .card-title 编辑常用联系人
+  .card-body
+    = render 'form'
 

@@ -1,7 +1,8 @@
 class FrequentContactsController < ApplicationController
   before_action :set_frequent_contact, only: [:show, :edit, :update, :destroy]
   before_action :set_new_areas, only: [:index]
-  skip_before_action :can, only: [:create, :user_search, :index, :organization_and_user]
+  before_action :set_edit_areas, only: [:edit]
+  skip_before_action :can, only: [:create, :user_search, :index, :organization_and_user, :edit, :destroy, :update]
 
 
   # GET /frequent_contacts
@@ -12,7 +13,11 @@ class FrequentContactsController < ApplicationController
                                          order: 'created_at',
                                          order_direction: 'desc',
                                          per_page: 10,
+                                         enable_export_to_csv: true,
+                                         csv_file_name: 'frequent_contacts',
+                                         csv_field_separator: ',',
                                          name: 'frequent_contacts_grid')
+    export_grid_if_requested('frequent_contacts_grid' => 'frequent_contacts_grid')
   end
 
   # GET /frequent_contacts/1
@@ -50,7 +55,7 @@ class FrequentContactsController < ApplicationController
   def update
     respond_to do |format|
       if @frequent_contact.update(frequent_contact_params)
-        format.html { redirect_to @frequent_contact, notice: 'Frequent contact was successfully updated.' }
+        format.html { redirect_to frequent_contacts_url, notice: '常用联系人更新成功！' }
         format.json { render :show, status: :ok, location: @frequent_contact }
       else
         format.html { render :edit }
@@ -64,7 +69,7 @@ class FrequentContactsController < ApplicationController
   def destroy
     @frequent_contact.destroy
     respond_to do |format|
-      format.html { redirect_to frequent_contacts_url, notice: 'Frequent contact was successfully destroyed.' }
+      format.html { redirect_to frequent_contacts_url, notice: '常用联系人删除成功！' }
       format.json { head :no_content }
     end
   end
@@ -138,5 +143,13 @@ class FrequentContactsController < ApplicationController
       @provinces = Area.roots.map { |province| [province.name, province.id] }
       @cities =  Area.find(@provinces.first[1]).children.map { |item| [item.name, item.id] }
       @districts = Area.find(@cities.first[1]).children.map { |item| [item.name, item.id] }
+    end
+
+    def set_edit_areas
+      province_id = @frequent_contact.province_id
+      city_id = @frequent_contact.city_id
+      @provinces = Area.roots
+      @cities = province_id.nil? ? @provinces.first.children : Area.find(province_id).children
+      @districts = city_id.nil? ? [] : Area.find(city_id).children
     end
 end

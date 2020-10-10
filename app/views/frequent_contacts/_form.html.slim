@@ -1,4 +1,4 @@
-= form_for @frequent_contact do |f|
+= simple_form_for(@frequent_contact) do |f|
   - if @frequent_contact.errors.any?
     #error_explanation
       h2 = "#{pluralize(@frequent_contact.errors.count, "error")} prohibited this frequent_contact from being saved:"
@@ -6,25 +6,56 @@
         - @frequent_contact.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :province_id
-    = f.number_field :province_id
-  .field
-    = f.label :city_id
-    = f.number_field :city_id
-  .field
-    = f.label :district_id
-    = f.number_field :district_id
-  .field
-    = f.label :organization_id
-    = f.number_field :organization_id
-  .field
-    = f.label :client_name
-    = f.text_field :client_name
-  .field
-    = f.label :phone
-    = f.text_field :phone
-  .actions = f.submit
+  .row
+    .col-md-4
+      = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
+    .col-md-4
+      = f.input :city_id, collection: @cities, label: '市', include_blank: true
+    .col-md-4
+      = f.input :district_id, collection: @districts, label: '区县', include_blank: true
+  .row
+    .col-md-4
+      = f.input :name, label: '委托方名称（请书写委托方全称）'
+    .col-md-4
+      = f.input :client_name, label: '委托方'
+    .col-md-4
+      = f.input :phone, label: '委托联系人电话'
+  .row
+    .col-md-12
+      = f.input :client_addr, label: '委托方地址'
+  .form-actions
+    = f.button :submit, '保存', class: 'btn btn-success'
+
+javascript:
+  var province_select2 = $("#frequent_contact_province_id");
+  var city_select2 = $("#frequent_contact_city_id");
+  var district_select2 = $("#frequent_contact_district_id");
+  var request_url_cities = window.location.origin + '/areas/cities.json';
+  var request_url_districts = window.location.origin + '/areas/districts.json';
+
+  // listening the select2 change method
+  province_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: ['name'],
+      onChange: function(value) {
+          appendDataToSelect2(request_url_cities, value, city_select2, 'name', 'cities');
+          district_select2[0].selectize.clear();
+          district_select2[0].selectize.clearOptions();
+      }
+  });
+
+  city_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: ['name'],
+      onChange: function(value) {
+          appendDataToSelect2(request_url_districts, value, district_select2, 'name', 'districts');
+      }
+  });
+
+  district_select2.selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: ['name'],
+  });

@@ -13,4 +13,11 @@
   g.column name:  '委托方', attribute: 'client_name'
   g.column name:  '委托联系人电话', attribute: 'phone'
   g.column name:  '委托方地址', attribute: 'client_addr'
+  g.column in_csv: false, html: {style: "width:15px;"}  do |iterm|
+    link_to '编辑', edit_frequent_contact_path(iterm), class: 'btn btn-secondary btn-sm'
+  end
+
+  g.column in_csv: false, html: {style: "width:15px;"}  do |iterm|
+    link_to '删除', iterm, method: :delete, data: { confirm: '您确认删除吗？' }, class: 'btn btn-danger btn-sm'
+  end
 end -%>
