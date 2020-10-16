@@ -70,16 +70,9 @@ class ApplicationController < ActionController::Base
 
   # 用户登录验证
   def authorize
-    
+
     if session[:user_id]
       @current_user ||= User.find_by_id(session[:user_id])
-    elsif cookies.signed[:user_id]
-      user = User.find_by(id: cookies.signed[:user_id])
-      if user && user.authenticated?(cookies[:remember_token])
-        session[:user_id] = user.id
-        user.update_columns(session_id: session.id) if FORBID_SHADOW_LOGIN
-        @current_user = user
-      end
     else
       redirect_to main_app.login_url, notice: ("请您先登录系统" unless (controller_name == 'session' && action_name == 'index'))
       return
