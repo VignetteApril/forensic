@@ -4,31 +4,31 @@ class SessionController < ApplicationController
   skip_before_action :authorize, only: [:create, :new, :destroy, :aosignin, :aologin]
   skip_before_action :can, only: [:index, :create, :new, :destroy, :ao, :aologin, :aosignin]
   skip_before_action :verify_authenticity_token, only: :create
-  
+
   # 显示系统登录之后的首页
   def index
     # session[:bread] = [ { "title" => '主页',  "url_str" => root_path() } ]
     # session[:bread_clear] = [ root_path() ]
-    
+
     @base_date = SysLog.where(user_id: @current_user.id).order("log_date DESC") # .first.log_date
     make_log(@current_user) if @base_date && !@base_date.empty? && @base_date.first.log_date < RELEASE_NOTES.last['date']
   end
-  
+
   # 显示系统用户登录页面
   def new
     if cookies.signed[:user_id]
       user = User.find_by(id: cookies.signed[:user_id])
-      if user && user.authenticated?(cookies[:remember_token])
+      if user
         redirect_to acceptable_url('main_cases', 'index')
       end
     end
   end
-  
+
   # 用户登录信息提交，用户身份验证，成功之后转向系统首页
   def create
     if user = User.authenticate(params[:login], params[:password])
       redirect_to :login, flash: { danger: '用户被锁定，请联系管理员' } and return  if user.is_locked == true
-      redirect_to :login, flash: { danger: '用户权限正在审核，请联系管理员' } and return  unless user.confirm? 
+      redirect_to :login, flash: { danger: '用户权限正在审核，请联系管理员' } and return  unless user.confirm?
       redirect_to :login, flash: { danger: '用户被禁用，请联系管理员' } and return  if user.is_ban == true
 
       session[:user_id] = user.id
@@ -81,7 +81,7 @@ class SessionController < ApplicationController
       redirect_to :login, flash: { danger: '用户名或者密码输入错误' }
     end
   end
-  
+
   # 用户注销
   def destroy
     # 忘记永久记住的用户
