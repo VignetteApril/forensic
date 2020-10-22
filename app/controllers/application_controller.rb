@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
       redirect_to main_app.login_url, notice: ("请您先登录系统" unless (controller_name == 'session' && action_name == 'index'))
       return
     end
-  
+
     if @current_user.session_id != session.id and FORBID_SHADOW_LOGIN
       # session[:user_id] = nil
       redirect_to main_app.login_url, notice: ("您的账号在其它位置登录过，请您重新登录" unless (controller_name == 'session' && action_name == 'index'))
@@ -118,43 +118,47 @@ class ApplicationController < ActionController::Base
   # 2. 所在功能模块所在的频道中第一个能访问的功能模块
   # 3. 系统首页
   def acceptable_url(controller, action)
-
     # current_user = User.find(session[:user_id])
-    APPS.each do |channel|
-      next if channel["module_chain"].nil?
-      channel["module_chain"].each do |m|
-        if m["controller"] == controller && (m["action"] || 'index') == action
-          # 1. 返回需要访问的功能模块的首页
-          @current_user.roles.each do |r|
-            r.features.each do |f|
-              if f.controller_name == controller && f.action_names.split(",").include?(m["action"].nil? ? 'index' : m["action"])
-                return "/#{controller}/#{m["action"]}"
-              end
-            end
-          end
-          # 2. 如果需要访问的应用的首页也没有权限的话，则返回所在功能模块所在的频道中第一个能访问的功能模块
-          channel["module_chain"].each do |mm|
+    begin
+      APPS.each do |channel|
+        next if channel["module_chain"].nil?
+        channel["module_chain"].each do |m|
+          if m["controller"] == controller && (m["action"] || 'index') == action
+            # 1. 返回需要访问的功能模块的首页
             @current_user.roles.each do |r|
               r.features.each do |f|
-                if f.controller_name == mm["controller"] && f.action_names.split(",").include?(mm["action"].nil? ? 'index' : mm["action"])
-                  return "/#{mm["controller"]}/#{mm["action"]}"
+                if f.controller_name == controller && f.action_names.split(",").include?(m["action"].nil? ? 'index' : m["action"])
+                  return "/#{controller}/#{m["action"]}"
                 end
               end
             end
-          end
+            # 2. 如果需要访问的应用的首页也没有权限的话，则返回所在功能模块所在的频道中第一个能访问的功能模块
+            channel["module_chain"].each do |mm|
+              @current_user.roles.each do |r|
+                r.features.each do |f|
+                  if f.controller_name == mm["controller"] && f.action_names.split(",").include?(mm["action"].nil? ? 'index' : mm["action"])
+                    return "/#{mm["controller"]}/#{mm["action"]}"
+                  end
+                end
+              end
+            end
 
-          # 3. 如果还没有权限的话，则返回到系统首页面
-          return "/"
+            # 3. 如果还没有权限的话，则返回到系统首页面
+            return "/"
+          end
         end
       end
+    rescue Exception => e
+      return "/"
     end
+
     return "/"
   end
 
   # 记录系统日志
   def make_log(object=0, keyword="")
     # return if get_license_type == 'application'
-    log_msg = "**********\n" + 
+    log_msg = "**********\n" +
               "Time: " + Time.now.to_s(:db) + ", " +
               "UID: " + @current_user&.id.to_s + ", " +
               "UName: " + @current_user&.name.to_s + ", " +
