@@ -37,10 +37,8 @@
                 = password_field_tag :password, params[:password], class: "form-control", \
                                                   placeholder: "默认的密码是：Fc123456", "aria-describedby" => "password-status"
               .form-group
-                = check_box_tag :remember_me, params[:remember_me]
-                .form-label.d-inline-block 记住我
-                span　　　　　　还没有账号？请前去
-                a href="#{new_consignor_users_path}" 注册
+                / span　　　　　　还没有账号？请前去
+                / a href="#{new_consignor_users_path}" 注册
               .form-footer
                 button type="submit" class="btn btn-primary btn-block"
                  | 登 录
