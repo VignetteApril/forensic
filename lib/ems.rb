@@ -1,4 +1,5 @@
 require 'hmac-sha1'
+require 'pry'
 
 module Ems
 	class HttpCaller
@@ -10,9 +11,9 @@ module Ems
 		THREE_SEGMENT_CODE_URL = 'http://211.156.195.187:8086/ceshi_csb_broker'
 
 		# 下单取号参数
-		ORDER_NUMBER_URL = 'https://211.156.195.17/iwaybillno-web/a/iwaybill/receive'
+		ORDER_NUMBER_URL = 'https://211.156.195.15/iwaybillno-web/a/iwaybill/receive'
 		# 下单取号private_key
-		ORDER_NUMBER_PRIVATE_KEY = 'key123xydJDPT'
+		ORDER_NUMBER_PRIVATE_KEY = 'klnjDnoumh3y'
 
 		class << self
 			# 下单取号接口
@@ -126,7 +127,7 @@ module Ems
 									   "receiverAddress":{"province":"#{current_order.province_name}","city":"#{current_order.city_name}","area":"#{current_order.district_name}","town":"#{current_order.town}","detail":"#{current_order.receiver_addr}","zip":"#{current_order.receiver_post_code}"},
 									   "objectId":"#{current_order.order_num}"}]
 				# 参数列表
-				normal_params = { 
+				normal_params = {
 					              logisticsInterface: logisticsInterface.to_json,
 					              data_digest: 'bb',
 					              wp_code: 'WELLWIN'
@@ -141,9 +142,7 @@ module Ems
 				url = URI(THREE_SEGMENT_CODE_URL)
 				url.query = URI.encode_www_form(normal_params)
 				result = HTTParty.post(url, headers: headers, verify: false )
-				Rails.logger.info result
-				rs = JSON.parse(result)
-				rs["body"]["result"][0]["routeCode"]
+				result["body"]["result"][0]["routeCode"]
 			end
 
 			def get_ems_logistics express_num
