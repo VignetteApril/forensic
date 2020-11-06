@@ -6,9 +6,9 @@ module Ems
 		# 三段码参数
 		API_NAME     = 'routInfoQueryForPDD'
 		API_VERSION  = '1.0.0'
-		AccessKey 	 = 'dd979a77b2a44e54b65f01dcbc0bae04'
-		SecretKey 	 = 'kCZfusS4Zn300MTnYtIlWzhdoE8='
-		THREE_SEGMENT_CODE_URL = 'http://211.156.195.187:8086/ceshi_csb_broker'
+		AccessKey 	 = 'fb47938ddfe3439abf082aabeef4440b'
+		SecretKey 	 = 'slXp9uMJE9LBUmAZZasL0WuPJrI='
+		THREE_SEGMENT_CODE_URL = 'https://211.156.195.14:443/csb_jidi1_1'
 
 		# 下单取号参数
 		ORDER_NUMBER_URL = 'https://211.156.195.15/iwaybillno-web/a/iwaybill/receive'
