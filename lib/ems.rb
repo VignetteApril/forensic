@@ -162,7 +162,7 @@ module Ems
 		                proviceNo: '99',
 		                sendID: 'zhijian',
 		              }
-		    url = URI('http://211.156.195.29/querypush-twswn/mailTrack/queryMailTrackWn/plus')
+		    url = URI('http://211.156.195.35/querypush-twswn/mailTrack/queryMailTrackWn/plus')
 		    url.query = URI.encode_www_form(_params)
 		    result = HTTParty.post(url, headers: { 'Content-Type' => 'text/plain;charset=UTF-8' } )
 		    result
