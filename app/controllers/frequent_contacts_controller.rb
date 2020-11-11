@@ -91,8 +91,8 @@ class FrequentContactsController < ApplicationController
     @current_city = Area.find_by(id: user.city_id)
     @current_district = Area.find_by(id: user.district_id)
     @provinces = Area.roots
-    @cites = @current_province.children
-    @districts = @current_city.children
+    @cites = @current_province.try(:children)
+    @districts = @current_city.try(:children)
 
     @organization_name = user.client_name
     @wtr_phone = user.phone
@@ -102,9 +102,9 @@ class FrequentContactsController < ApplicationController
     rs_current_province = { name: @current_province.name, id: @current_province.id }
     rs_current_city = { name: @current_city.name, id: @current_city.id }
     rs_current_district = { name: @current_district.name, id: @current_district.id }
-    rs_provinces = @provinces.map { |province| { name: province.name, id: province.id } }
-    rs_cities = @cites.map { |city| { name: city.name, id: city.id } }
-    rs_districts = @districts.map { |district| { name: district.name, id: district.id } }
+    rs_provinces = @provinces.map { |province| { name: province.name, id: province.id } } rescue nil
+    rs_cities = @cites.map { |city| { name: city.name, id: city.id } } rescue nil
+    rs_districts = @districts.map { |district| { name: district.name, id: district.id } } rescue nil
 
     respond_to do |format|
       format.json { render json: { current_province: rs_current_province,
