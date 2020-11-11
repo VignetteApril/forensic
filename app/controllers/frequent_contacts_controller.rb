@@ -99,9 +99,9 @@ class FrequentContactsController < ApplicationController
     @organization_addr = user.client_addr
     @user_name = user.name
 
-    rs_current_province = { name: @current_province.name, id: @current_province.id }
-    rs_current_city = { name: @current_city.name, id: @current_city.id }
-    rs_current_district = { name: @current_district.name, id: @current_district.id }
+    rs_current_province = { name: @current_province.name, id: @current_province.id } rescue nil
+    rs_current_city = { name: @current_city.name, id: @current_city.id } rescue nil
+    rs_current_district = { name: @current_district.name, id: @current_district.id } rescue nil
     rs_provinces = @provinces.map { |province| { name: province.name, id: province.id } } rescue nil
     rs_cities = @cites.map { |city| { name: city.name, id: city.id } } rescue nil
     rs_districts = @districts.map { |district| { name: district.name, id: district.id } } rescue nil
