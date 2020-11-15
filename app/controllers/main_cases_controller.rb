@@ -840,7 +840,7 @@ class MainCasesController < ApplicationController
     @main_case.transfer_docs.build
 
     # 设置鉴定事项
-    set_department_matters
+    set_department_matters if !@entrust_order.department.try(:id).nil?
 
     # 设定案件类型
     set_case_types
