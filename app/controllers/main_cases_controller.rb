@@ -835,7 +835,7 @@ class MainCasesController < ApplicationController
                                                   wtr_phone: @wtr.mobile_phone,
                                                   organization_addr: wtr_org.addr,
                                                   matter: @entrust_order.matter,
-                                                  department_id: @entrust_order.department.id})
+                                                  department_id: @entrust_order.department.try(:id)})
     @main_case.build_appraised_unit(@entrust_order.appraised_unit.attributes)
     @main_case.transfer_docs.build
 
