@@ -16,6 +16,7 @@ class MainCasesController < ApplicationController
   before_action :set_case_types, only: [:edit, :update]
   before_action :set_entrust_orders, only: [ :edit, :update, :new, :create ]
   before_action :set_departments, only: [:new, :edit, :create, :update, :new_with_entrust_order]
+  before_action :check_department, only: [:department_closed_cases, :department_cases, :pending_cases]
   skip_before_action :authorize, only: [:payment, :express_route]
   skip_before_action :can, only: [:payment, :express_route, :create_organization_and_user, :organization_and_user]
   skip_before_action :verify_authenticity_token, only: :express_route
@@ -73,8 +74,6 @@ class MainCasesController < ApplicationController
   end
 
   def department_closed_cases
-    redirect_to main_cases_path, flash: { alert: '请设置科室！' } and return if @current_user.departments.nil?
-
     data = MainCase.where(department_id: @current_user.departments.split(','), case_stage: :close)
     data = set_filter_instance(data, @current_user)
     @main_cases = initialize_grid(data,
@@ -1337,5 +1336,9 @@ class MainCasesController < ApplicationController
       end
 
       data
+    end
+
+    def check_department
+      redirect_to main_cases_path, flash: { alert: '请设置科室！' } and return if @current_user.departments.nil?
     end
 end
