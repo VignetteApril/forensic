@@ -48,20 +48,17 @@
   end
 
   g.column name: '省', ordering: false do |main_case|
-     province_id = main_case.department.organization.province_id
-     province = Area.find_by_id province_id
+     province = Area.find_by_id main_case.province_id
      province.nil? ? '' : province.name
    end
 
    g.column name: '市', ordering: false do |main_case|
-     city_id = main_case.department.organization.city_id
-     city = Area.find_by_id city_id
+     city = Area.find_by_id main_case.city_id
      city.nil? ? '' : city.name
    end
 
    g.column name: '区', ordering: false do |main_case|
-     district_id = main_case.department.organization.district_id
-     district = Area.find_by_id district_id
+     district = Area.find_by_id main_case.district_id
      district.nil? ? '' : district.name
    end
 
