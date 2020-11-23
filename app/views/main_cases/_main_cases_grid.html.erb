@@ -44,7 +44,7 @@
   end
 
   g.column name: '缴费总金额', attribute: 'amount', ordering: false, filter: false do |main_case|
-    main_case.amount
+    main_case.payment_orders.where.not(order_stage: :cancel).sum(:total_cost)
   end
 
   g.column name: '省', ordering: false do |main_case|
