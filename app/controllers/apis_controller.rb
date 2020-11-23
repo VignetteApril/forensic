@@ -369,7 +369,7 @@ class ApisController < ApplicationController
 			"appraised_unit":e.appraised_unit,
 			ident_users: User.where(id: e.ident_users).map(&:name).join(','),
 			pass_user: User.find_by(id: e.pass_user).try(:name),
-			filed_date: e.filed_date.strftime("%Y年 %m月 %d日"),
+			filed_date: e.filed_date.strftime("%Y年 %m月 %d日") rescue nil,
 			distance_of_time: get_distance_of_time(e),
 			"entrust_people"=>(User.find_by(:id => e.wtr_id).present?)? User.find_by(:id => e.wtr_id).name: "",
 			"organization_name"=>e.organization_name,
