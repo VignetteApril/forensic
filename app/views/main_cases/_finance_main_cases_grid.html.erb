@@ -57,9 +57,8 @@
   end
 
   g.column name: '缴费总金额', attribute: 'amount', ordering: false, filter: false do |main_case|
-    main_case.amount
+    main_case.payment_orders.where.not(order_stage: :cancel).sum(:total_cost)
   end
-
 
   g.column name: '省', attribute: 'province_id', detach_with_id: :financial_province_filter, ordering: false, custom_filter: @provinces, allow_multiple_selection: false do |main_case|
      Area.find_by_id(main_case.province_id).try(:name)
