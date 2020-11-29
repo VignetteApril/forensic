@@ -321,6 +321,8 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       # 案件创建后跳转到待立案的案件
       if @main_case.save
+        # 使案件进入待立案的状态
+        @main_case.turn_pending!
         format.html { redirect_to pending_cases_main_cases_path, notice: '案件已经成功创建了！' }
         format.json { render :show, status: :created, location: @main_case }
       else
