@@ -240,7 +240,7 @@ body
         = image_tag url_for(@reciver.barcode_image), class: 'barcode-image'
         span.barcode-num = @reciver.order_num
       #three-code.left
-          span.deviation 
+          span.deviation
           span style="font-size: 30" = @reciver.three_segment_code
       #sender.left
           span.deviation = "收件人：#{@reciver.reporter} 电话：#{@reciver.receiver_phone}"
@@ -281,7 +281,7 @@ body
           br
           span#note 快件送达收货人地址，经收件人或收件人允许的代收人签字，视为送达
       #order.left
-          
+
           span.deviation 件数：
           span
           span.deviation 重量（KG）：
@@ -303,7 +303,7 @@ body
           br
           span = "电话：#{@reciver.receiver_phone}"
           br
-          span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.town + @reciver.receiver_addr}"
+          span = "地址：#{@reciver.province_name + @reciver.city_name + @reciver.district_name + @reciver.receiver_addr}"
 
       #pickup.right
           span.deviation = "寄件人：#{@current_user.name}"
