@@ -4,14 +4,17 @@
   .card-body
     .row
       .col-md-4
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='entrust_user_container' style="height:500px;width:100%"
       .col-md-4
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='entrust_user_container1' style="height:500px;width:100%"
       .col-md-4
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='entrust_user_container2' style="height:500px;width:100%"
 
 javascript:
-  $(document).ready(function() {  
+  $(document).ready(function() {
    var data = $('.hidden').text();
    var json_data = JSON.parse(data).entrust_user;
 
@@ -21,10 +24,10 @@ javascript:
        plotShadow: false
    };
    var title = {
-      text: '今年案件数量-按鉴定中心统计'   
-   };   
+      text: '今年案件数量-按鉴定中心统计'
+   };
 
-   
+
    var tooltip = {
       pointFormat: '{series.name}: <b>{point.y}</b>'
    };
@@ -34,14 +37,14 @@ javascript:
          {y: 5,name: "鉴定中心2"},
          {y: 5,name: "鉴定中心3"}
       ]
-   //输入数据   
+   //输入数据
    pie_data = json_data.cases_count
 
    var series= [{
       type: 'pie',
       name: '数量',
       data: pie_data
-   }]; 
+   }];
 
    var plotOptions = {
       pie: {
@@ -56,15 +59,18 @@ javascript:
          }
       }
    };
-    
-      
-   var json = {}; 
-   json.chart = chart; 
-   json.title = title;     
-   json.tooltip = tooltip;  
+
+
+   var json = {};
+   json.chart = chart;
+   json.title = title;
+   json.tooltip = tooltip;
    json.series = series;
    json.plotOptions = plotOptions;
-   $('#entrust_user_container').highcharts(json);
+   var high_chart = Highcharts.chart('entrust_user_container', json);
+   $("#capture_entrust_user_container").click(function(){
+      high_chart.exportChartLocal();
+   });
 
 
   // ---------------
@@ -73,10 +79,10 @@ javascript:
       type: 'column'
    };
    var title1 = {
-      text: '当前案件数量-按状态统计'   
+      text: '当前案件数量-按状态统计'
    };
    var subtitle1 = {
-      text: ''  
+      text: ''
    };
    var xAxis1 = {
       categories: ['待立案',
@@ -92,8 +98,8 @@ javascript:
    var yAxis1 = {
       min: 0,
       title: {
-         text: ''         
-      }      
+         text: ''
+      }
    };
    var tooltip1 = {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -108,7 +114,7 @@ javascript:
          pointPadding: 0.2,
          borderWidth: 0
       }
-   };  
+   };
    var credits1 = {
       enabled: false
    };
@@ -120,17 +126,17 @@ javascript:
    var series1= [{
         name: '案件数量',
             data: stage_data
-        }];     
-      
-   var json1 = {};   
-   json1.chart = chart1; 
-   json1.title = title1;   
-   json1.subtitle = subtitle1; 
+        }];
+
+   var json1 = {};
+   json1.chart = chart1;
+   json1.title = title1;
+   json1.subtitle = subtitle1;
    json1.tooltip = tooltip1;
    json1.xAxis = xAxis1;
-   json1.yAxis = yAxis1;  
+   json1.yAxis = yAxis1;
    json1.series = series1;
-   json1.plotOptions = plotOptions1;  
+   json1.plotOptions = plotOptions1;
    json1.credits = credits1;
    $('#entrust_user_container1').highcharts(json1);
 
@@ -144,7 +150,7 @@ javascript:
    }
 
    var title2 = {
-      text: '我委托的案件数量-按月统计'   
+      text: '我委托的案件数量-按月统计'
    };
    var subtitle2 = {
       text: ''
@@ -161,7 +167,7 @@ javascript:
          width: 1,
          color: '#808080'
       }]
-   };   
+   };
 
    var tooltip2 = {
       valueSuffix: ''
@@ -178,7 +184,7 @@ javascript:
       {
          name: '案件数量',
          data: month_count
-      }, 
+      },
    ];
 
    var json2 = {};

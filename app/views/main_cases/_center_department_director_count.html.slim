@@ -1,10 +1,11 @@
-.card
+.card id="center_department_director_user_container"
   .card-header
     .card-title style='text-align:center;font-size:18pt'本科室案件统计分析
   .card-body
     .row
       .col-md-2 style="display:flex;align-items:center;font-size:11pt"
-        span 选择科室：
+        span 当前科室: &nbsp;
+        =  @current_department.try(:name)
       .col-md-2
         .btn-group
           button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 选择科室
@@ -13,14 +14,15 @@
               a class="dropdown-item caret" href="/main_cases/personal_count?department_id=#{item[:id]}" = item[:name]
     .row.mt-2
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_department_director_user_container1' style="height:500px;width:100%"
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_department_director_user_container2' style="height:500px;width:100%"
 
 javascript:
-  $(document).ready(function() {  
+  $(document).ready(function() {
    var data = $('.hidden').text()
-   console.log(data)
    var json_data = JSON.parse(data).center_department_director_user
 
   // ---------------
@@ -29,10 +31,10 @@ javascript:
       type: 'column'
    };
    var title1 = {
-      text: '本科室案件数量-按状态统计'   
+      text: '本科室案件数量-按状态统计'
    };
    var subtitle1 = {
-      text: ''  
+      text: ''
    };
    var xAxis1 = {
       categories: ['待立案',
@@ -48,8 +50,8 @@ javascript:
    var yAxis1 = {
       min: 0,
       title: {
-         text: ''         
-      }      
+         text: ''
+      }
    };
    var tooltip1 = {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -64,7 +66,7 @@ javascript:
          pointPadding: 0.2,
          borderWidth: 0
       }
-   };  
+   };
    var credits1 = {
       enabled: false
    };
@@ -76,19 +78,20 @@ javascript:
    var series1= [{
         name: '案件数量',
             data: stage_data
-        }];     
-      
-   var json1 = {};   
-   json1.chart = chart1; 
-   json1.title = title1;   
-   json1.subtitle = subtitle1; 
+        }];
+
+   var json1 = {};
+   json1.chart = chart1;
+   json1.title = title1;
+   json1.subtitle = subtitle1;
    json1.tooltip = tooltip1;
    json1.xAxis = xAxis1;
-   json1.yAxis = yAxis1;  
+   json1.yAxis = yAxis1;
    json1.series = series1;
-   json1.plotOptions = plotOptions1;  
+   json1.plotOptions = plotOptions1;
    json1.credits = credits1;
-   $('#center_department_director_user_container1').highcharts(json1);
+   // var high_chart1 = $('#center_department_director_user_container1').highcharts(json1);
+   var high_chart1 = Highcharts.chart('center_department_director_user_container1', json1);
 
    //--------------
    //输入数据
@@ -100,7 +103,7 @@ javascript:
    }
 
    var title2 = {
-      text: '本科室立案案件数量-按月统计'   
+      text: '本科室立案案件数量-按月统计'
    };
    var subtitle2 = {
       text: ''
@@ -117,7 +120,7 @@ javascript:
          width: 1,
          color: '#808080'
       }]
-   };   
+   };
 
    var tooltip2 = {
       valueSuffix: ''
@@ -134,7 +137,7 @@ javascript:
       {
          name: '案件数量',
          data: month_count
-      }, 
+      },
    ];
 
    var json2 = {};
@@ -147,6 +150,14 @@ javascript:
    json2.legend = legend2;
    json2.series = series2;
 
-   $('#center_department_director_user_container2').highcharts(json2);
+   var high_chart2 = Highcharts.chart('center_department_director_user_container2', json2);
+
+   $("#capture_center_department_director_user_container1").click(function(){
+      high_chart1.exportChartLocal();
+   });
+
+   $("#capture_center_department_director_user_container2").click(function(){
+      high_chart2.exportChartLocal();
+   });
 
   });

@@ -4,23 +4,27 @@
   .card-body
     .row
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_director_container3' style="height:500px;width:100%"
     .row
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_director_container' style="height:500px;width:100%"
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_director_container0' style="height:500px;width:100%"
-    .row      
+    .row
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_director_container1' style="height:500px;width:100%"
       .col-md-6
+        span style="top: 10px;right: 50px;position: absolute;z-index: 999;" 导出
         .per-chart id='center_director_container2' style="height:500px;width:100%"
 
 
 javascript:
-  $(document).ready(function() {  
+  $(document).ready(function() {
    var data = $('.hidden').text()
-   console.log(data)
    var json_data = JSON.parse(data).center_director_user
 
    var chart = {
@@ -29,10 +33,10 @@ javascript:
        plotShadow: false
    };
    var title = {
-      text: '今年案件数量-按委托方统计'   
-   };   
+      text: '今年案件数量-按委托方统计'
+   };
 
-   
+
    var tooltip = {
       pointFormat: '{series.name}: <b>{point.y}</b>'
    };
@@ -42,14 +46,14 @@ javascript:
          {y: 5,name: "鉴定中心2"},
          {y: 5,name: "鉴定中心3"}
       ]
-   //输入数据   
+   //输入数据
    pie_data = json_data.center_cases_count
 
    var series= [{
       type: 'pie',
       name: '数量',
       data: pie_data
-   }]; 
+   }];
 
    var plotOptions = {
       pie: {
@@ -64,16 +68,18 @@ javascript:
          }
       }
    };
-    
-      
-   var json = {}; 
-   json.chart = chart; 
-   json.title = title;     
-   json.tooltip = tooltip;  
+
+
+   var json = {};
+   json.chart = chart;
+   json.title = title;
+   json.tooltip = tooltip;
    json.series = series;
    json.plotOptions = plotOptions;
-   $('#center_director_container').highcharts(json);
-
+   var high_chart = Highcharts.chart('center_director_container', json);
+   $("#capture_center_director_container").click(function(){
+      high_chart.exportChartLocal();
+   });
 
   // ---------------
 
@@ -83,10 +89,10 @@ javascript:
        plotShadow: false
    };
    var title0 = {
-      text: '今年案件数量-按科室统计'   
-   };   
+      text: '今年案件数量-按科室统计'
+   };
 
-   
+
    var tooltip0 = {
       pointFormat: '{series.name}: <b>{point.y}</b>'
    };
@@ -96,14 +102,14 @@ javascript:
          {y: 5,name: "鉴定中心2"},
          {y: 5,name: "鉴定中心3"}
       ]
-   //输入数据    
+   //输入数据
    pie_data = json_data.department_cases_count
 
    var series0= [{
       type: 'pie',
       name: '数量',
       data: pie_data
-   }]; 
+   }];
 
    var plotOptions0 = {
       pie: {
@@ -118,27 +124,29 @@ javascript:
          }
       }
    };
-    
-      
-   var json0 = {}; 
-   json0.chart = chart0; 
-   json0.title = title0;     
-   json0.tooltip = tooltip0;  
+
+
+   var json0 = {};
+   json0.chart = chart0;
+   json0.title = title0;
+   json0.tooltip = tooltip0;
    json0.series = series0;
    json0.plotOptions = plotOptions0;
-   $('#center_director_container0').highcharts(json0);
+   var high_chart0 = Highcharts.chart('center_director_container0', json0);
+   $("#capture_center_director_container0").click(function(){
+      high_chart0.exportChartLocal();
+   });
 
-
-  // --------------- 
+  // ---------------
 
    var chart1 = {
       type: 'column'
    };
    var title1 = {
-      text: '当前案件数量-按状态统计'   
+      text: '当前案件数量-按状态统计'
    };
    var subtitle1 = {
-      text: ''  
+      text: ''
    };
    var xAxis1 = {
       categories: ['待立案',
@@ -154,8 +162,8 @@ javascript:
    var yAxis1 = {
       min: 0,
       title: {
-         text: ''         
-      }      
+         text: ''
+      }
    };
    var tooltip1 = {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -170,7 +178,7 @@ javascript:
          pointPadding: 0.2,
          borderWidth: 0
       }
-   };  
+   };
    var credits1 = {
       enabled: false
    };
@@ -182,17 +190,17 @@ javascript:
    var series1= [{
         name: '案件数量',
             data: stage_data
-        }];     
-      
-   var json1 = {};   
-   json1.chart = chart1; 
-   json1.title = title1;   
-   json1.subtitle = subtitle1; 
+        }];
+
+   var json1 = {};
+   json1.chart = chart1;
+   json1.title = title1;
+   json1.subtitle = subtitle1;
    json1.tooltip = tooltip1;
    json1.xAxis = xAxis1;
-   json1.yAxis = yAxis1;  
+   json1.yAxis = yAxis1;
    json1.series = series1;
-   json1.plotOptions = plotOptions1;  
+   json1.plotOptions = plotOptions1;
    json1.credits = credits1;
    $('#center_director_container1').highcharts(json1);
 
@@ -206,7 +214,7 @@ javascript:
    }
 
    var title2 = {
-      text: '本中心委托的案件数量-按月统计'   
+      text: '本中心委托的案件数量-按月统计'
    };
    var subtitle2 = {
       text: ''
@@ -223,7 +231,7 @@ javascript:
          width: 1,
          color: '#808080'
       }]
-   };   
+   };
 
    var tooltip2 = {
       valueSuffix: ''
@@ -240,7 +248,7 @@ javascript:
       {
          name: '案件数量',
          data:  month_count
-      }, 
+      },
    ];
 
    var json2 = {};
@@ -288,7 +296,7 @@ javascript:
           }
       }
       // 创建图表
-      $('#center_director_container3').highcharts({
+      var high_chart3 = Highcharts.chart('center_director_container3', {
           chart: {
               type: 'pie'
           },
@@ -339,5 +347,9 @@ javascript:
                   }
               }
           }]
+      });
+
+      $("#capture_center_director_container3").click(function(){
+        high_chart3.exportChartLocal();
       });
   });

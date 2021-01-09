@@ -49,7 +49,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -66,7 +66,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -81,7 +81,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -102,7 +102,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -122,7 +122,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -139,7 +139,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -160,7 +160,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -259,7 +259,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'finance_main_cases_grid')
@@ -278,7 +278,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -809,7 +809,7 @@ class MainCasesController < ApplicationController
                                   enable_export_to_csv: true,
                                   csv_file_name: 'main_cases',
                                   csv_field_separator: ',',
-                                  per_page: 20,
+                                  per_page: 50,
                                   order: 'created_at',
                                   order_direction: 'desc',
                                   name: 'main_cases_grid')
@@ -933,6 +933,7 @@ class MainCasesController < ApplicationController
         this_month_begin = this_month_begin - 1.month
         @data['entrust_user']['month_mycase_count'] << {"count":my_case.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
       end
+      @data['entrust_user']['month_mycase_count'].reverse!
     end
 
     if @current_user.center_director_user?
@@ -968,6 +969,7 @@ class MainCasesController < ApplicationController
         this_month_begin = this_month_begin - 1.month
         @data['center_director_user']['month_mycase_count'] << {"count":center_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
       end
+      @data['center_director_user']['month_mycase_count'].reverse!
 
       # 组合图二维饼图的数据(省市查看案件数据量)
       province_count_hash = center_cases.group(:province_id).count
@@ -1001,10 +1003,10 @@ class MainCasesController < ApplicationController
     end
 
     if  @current_user.center_department_director_user?
+      @current_department = Department.find_by(id: params[:department_id])
       @data['center_department_director_user'] = {}
       @data['center_department_director_user']["departments_select"] = @current_user.departments.split(",").map{|e| {"name":Department.find_by(id:e).name,"id":e}}
       @data['center_department_director_user']['department_selected'] = params[:department_id].blank? ? @data['center_department_director_user']["departments_select"][0][:id] : params[:department_id]
-
       department_cases = MainCase.where(:department_id =>@data['center_department_director_user']['department_selected'])
 
       @data['center_department_director_user']['stage_count'] =[]
@@ -1023,6 +1025,8 @@ class MainCasesController < ApplicationController
         this_month_begin = this_month_begin - 1.month
         @data['center_department_director_user']['month_mycase_count'] << {"count":department_cases.where(created_at: this_month_begin..this_month_end).count,"time":this_month_begin.strftime("%Y-%m")}
       end
+
+      @data['center_department_director_user']['month_mycase_count'].reverse!
     end
   end
 

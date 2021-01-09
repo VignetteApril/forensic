@@ -56,10 +56,6 @@
     MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
   end
 
-  g.column name: '缴费总金额', attribute: 'amount', ordering: false, filter: false do |main_case|
-    main_case.payment_orders.where.not(order_stage: :cancel).sum(:total_cost)
-  end
-
   g.column name: '省', attribute: 'province_id', detach_with_id: :financial_province_filter, ordering: false, custom_filter: @provinces, allow_multiple_selection: false do |main_case|
      Area.find_by_id(main_case.province_id).try(:name)
    end
@@ -98,15 +94,15 @@
     ''
   end
 
-  g.column name: '未缴费', detach_with_id: :unpaid_filter, ordering: false, html: {style: 'display: none'} do |main_case|
+  g.column name: '缴费总金额', attribute: 'amount', ordering: false, filter: false do |main_case|
+    main_case.payment_orders.where.not(order_stage: :cancel).sum(:total_cost)
+  end
+
+  g.column name: '未缴费', detach_with_id: :unpaid_filter, ordering: false do |main_case|
     main_case.payment_orders.where.not(order_stage: :confirm).sum(:total_cost)
   end
 
-  g.column name: '已缴费', detach_with_id: :paid_filter, ordering: false, html: {style: 'display: none'} do |main_case|
+  g.column name: '已缴费', detach_with_id: :paid_filter, ordering: false do |main_case|
     main_case.payment_orders.confirm.sum(:total_cost)
-  end
-
-  g.column name: '金额', attribute: 'amount', detach_with_id: :amount_filter, ordering: false, html: {style: 'display: none'} do |main_case|
-    main_case.amount
   end
 end -%>
