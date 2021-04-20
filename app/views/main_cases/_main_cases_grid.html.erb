@@ -35,7 +35,7 @@
 
    g.column name: '经办人', attribute: 'pass_user', detach_with_id: :pass_user_filter, ordering: false, custom_filter: @users,
   allow_multiple_selection: false do |main_case|
-    User.find(main_case.pass_user).try(:name) if main_case.pass_user
+    User.find_by(id: main_case.pass_user).try(:name) if main_case.pass_user
   end
 
   g.column name: '鉴定人', attribute: 'ident_users', detach_with_id: :ident_users_filter, ordering: false, custom_filter: @users,
