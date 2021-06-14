@@ -41,8 +41,6 @@ class SessionController < ApplicationController
 
       user.update_columns(session_id: session.id) if FORBID_SHADOW_LOGIN
 
-      flash.now[:success] = "尊敬的用户您好！您使用的系统目前已经欠费，为了不影响您的正常使用，请及时付款！"
-
       # 登录成功后根据用户的角色跳转到对应的界面
       # 平台管理员          => 机构管理
       # 委托人             => 我的案件（委托人）
@@ -54,29 +52,30 @@ class SessionController < ApplicationController
       # 鉴定中心助理       => 我的案件（和鉴定人一样）
       # 鉴定中心档案管理员  => 待归档的案件列表
       # 鉴定中心财务人员    => 已立案待付款的案件列表
+      alert_message = "尊敬的用户您好！您使用的系统目前已经欠费，为了不影响您的正常使用，请及时付款"
 
       if user.admin_user?
-        redirect_to organizations_url
+        redirect_to organizations_url, flash: { danger: alert_message }
       elsif user.client_entrust_user?
-        redirect_to wtr_cases_main_cases_url
+        redirect_to wtr_cases_main_cases_url, flash: { danger: alert_message }
       elsif user.center_admin_user?
-        redirect_to departments_url
+        redirect_to departments_url, flash: { danger: alert_message }
       elsif user.center_filing_user?
-        redirect_to org_orders_entrust_orders_url
+        redirect_to org_orders_entrust_orders_url, flash: { danger: alert_message }
       elsif user.center_director_user?
-        redirect_to personal_count_main_cases_url
+        redirect_to personal_count_main_cases_url, flash: { danger: alert_message }
       elsif user.center_department_director_user?
-        redirect_to personal_count_main_cases_url
+        redirect_to personal_count_main_cases_url, flash: { danger: alert_message }
       elsif user.center_ident_user?
-        redirect_to main_cases_url
+        redirect_to main_cases_url, flash: { danger: alert_message }
       elsif user.center_assistant_user?
-        redirect_to main_cases_url
+        redirect_to main_cases_url, flash: { danger: alert_message }
       elsif user.center_archivist_user?
-        redirect_to apply_filing_cases_main_cases_url
+        redirect_to apply_filing_cases_main_cases_url, flash: { danger: alert_message }
       elsif user.center_finance_user?
-        redirect_to filed_unpaid_cases_main_cases_url
+        redirect_to filed_unpaid_cases_main_cases_url, flash: { danger: alert_message }
       else
-        redirect_to main_cases_path
+        redirect_to main_cases_path, flash: { danger: alert_message }
       end
 
     else
