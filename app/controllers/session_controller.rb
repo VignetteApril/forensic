@@ -41,6 +41,8 @@ class SessionController < ApplicationController
 
       user.update_columns(session_id: session.id) if FORBID_SHADOW_LOGIN
 
+      flash.now[:success] = "尊敬的用户您好！您使用的系统目前已经欠费，为了不影响您的正常使用，请及时付款！"
+
       # 登录成功后根据用户的角色跳转到对应的界面
       # 平台管理员          => 机构管理
       # 委托人             => 我的案件（委托人）
