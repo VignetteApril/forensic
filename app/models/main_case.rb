@@ -283,8 +283,8 @@ class MainCase < ApplicationRecord
     center = self.department.organization
     dep_abbreviation = self.department.try(:abbreviation).blank? ? "" : self.department.try(:abbreviation)
     org_abbreviation = center.try(:abbreviation).blank? ? "" : center.try(:abbreviation)
-    beginning_of_year = Date.today.beginning_of_year
-    end_of_year = Date.today.end_of_year
+    beginning_of_year = DateTime.now.beginning_of_year
+    end_of_year = DateTime.now.end_of_year
     # 找到当前年份 当前科室 所有的case_no不为nil的案件 按照案件的编号排序
     main_cases = MainCase.where.not(id: self.id, case_no: nil).where(created_at: beginning_of_year..end_of_year, department_id: self.department.id ).order(:case_no)
 
