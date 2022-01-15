@@ -17,8 +17,7 @@
   end
 
   g.column name: '标题', attribute: 'title' do |a|
-    # link_to a.title.blank? ? "..." : a.title, notification_path(a)
-    a.title
+    link_to a.title, a.url
   end
   g.column name: '生成时间', attribute: 'created_at', filter: false do |a|
     distance_of_time_in_words_to_now(a.created_at, include_seconds: false) + "之前"

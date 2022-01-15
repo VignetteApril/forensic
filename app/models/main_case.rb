@@ -314,7 +314,8 @@ class MainCase < ApplicationRecord
         user.notifications.create( channel: :change_case_status,
                                    title: "案件#{self.serial_no}状态变更通知",
                                    description: "案件#{self.serial_no}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{FINANCIAL_STAGE_MAP[self.financial_stage.to_sym]}状态",
-                                   main_case_id: self.id, url: Rails.application.routes.url_helpers.payment_order_management_main_case_url(self, only_path: true))
+                                   main_case_id: self.id, 
+                                   url: Rails.application.routes.url_helpers.payment_order_management_main_case_url(self, only_path: true))
       end
     end
   end
@@ -335,7 +336,8 @@ class MainCase < ApplicationRecord
       user.notifications.create( channel: :change_case_status,
                                  title: "案件#{self.serial_no}状态变更通知",
                                  description: "案件#{self.serial_no}于#{Time.now.strftime('%Y年%m月%d日%H时%M分')}变更为#{CASE_STAGE_MAP[self.case_stage.to_sym]}状态",
-                                 main_case_id: self.id, url: Rails.application.routes.url_helpers.edit_main_case_url(self, only_path: true))
+                                 main_case_id: self.id, 
+                                 url: Rails.application.routes.url_helpers.edit_main_case_url(self, only_path: true))
     end
   end
 

@@ -28,13 +28,13 @@ header class="app-header"
         .app-notification__content
           - @current_user.notifications.where(:status=>false).each do |notice|
             li
-              a.app-notification__item data-id="#{notice.id}"
+              .app-notification__item
                 span.app-notification__icon
                   span.fa-stack.fa-lg
                     i.fa.fa-circle.fa-stack-2x.text-primary
                     i.fa.fa-envelope.fa-stack-1x.fa-inverse
                 div
-                  p.app-notification__message = notice.title
+                  p.app-notification__message = link_to notice.title, notice.url
                   p.app-notification__meta = notice.description
 
         li.app-notification__footer
