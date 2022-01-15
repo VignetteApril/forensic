@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: 6, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: 6, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -40,12 +40,12 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "unit_type"
     t.string "name"
     t.integer "gender"
-    t.datetime "birthday"
+    t.datetime "birthday", precision: 6
     t.integer "id_type"
     t.string "id_num"
     t.string "addr"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.bigint "main_case_id"
     t.bigint "entrust_order_id"
     t.integer "wtr_id"
@@ -60,8 +60,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "name"
     t.integer "code"
     t.integer "area_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "ancestry"
     t.index ["ancestry"], name: "index_areas_on_ancestry"
   end
@@ -74,13 +74,13 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "phone"
     t.bigint "main_case_id"
     t.float "amount"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.integer "bill_stage", default: 0
     t.string "bank_account"
     t.integer "bill_type"
     t.string "recipient"
-    t.datetime "recipient_date"
+    t.datetime "recipient_date", precision: 6
     t.index ["main_case_id"], name: "index_bills_on_main_case_id"
   end
 
@@ -89,8 +89,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.bigint "main_case_id"
     t.string "content"
     t.integer "visibility_range"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["main_case_id"], name: "index_case_memos_on_main_case_id"
     t.index ["user_id"], name: "index_case_memos_on_user_id"
   end
@@ -98,16 +98,16 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "case_process_records", force: :cascade do |t|
     t.bigint "main_case_id"
     t.string "detail"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["main_case_id"], name: "index_case_process_records_on_main_case_id"
   end
 
   create_table "case_talks", force: :cascade do |t|
     t.integer "user_id"
     t.string "detail"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "main_case_id"
   end
 
@@ -115,10 +115,55 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.bigint "user_id"
     t.bigint "main_case_id"
     t.integer "pos"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["main_case_id"], name: "index_case_users_on_main_case_id"
     t.index ["user_id"], name: "index_case_users_on_user_id"
+  end
+
+  create_table "cases_basic", id: :integer, default: nil, force: :cascade do |t|
+    t.string "flow_no", limit: 100, null: false
+    t.string "case_no", limit: 100, null: false
+    t.string "devolve_name", limit: 255, null: false
+    t.integer "city", null: false
+    t.string "accusers", limit: 255
+    t.string "appellees", limit: 255
+    t.integer "case_kind", limit: 2, null: false
+    t.integer "devolve_time", null: false
+    t.integer "appellate_time", null: false
+    t.integer "apprase_cyc", limit: 2, null: false
+    t.string "link_man", limit: 50
+    t.string "link_tel", limit: 20
+    t.string "link_mobile", limit: 20
+    t.integer "consign_type", limit: 2, null: false
+    t.string "devolve_caseno", limit: 50
+    t.integer "case_cause", limit: 2, null: false
+    t.integer "apprase_type", limit: 2, null: false
+    t.string "apprase_details", limit: 500
+    t.integer "by_apprase", limit: 2, null: false
+    t.string "by_apprase_name", limit: 255
+    t.string "by_linkman", limit: 50
+    t.string "by_linktel", limit: 20
+    t.integer "appellate_state", limit: 2, null: false
+    t.string "audit_user", limit: 20
+    t.integer "devolve_depart", null: false
+    t.integer "state", limit: 2, null: false
+    t.integer "state_time", null: false
+    t.integer "charge_state", limit: 2
+    t.float "charge_total"
+    t.float "charge_appraise"
+    t.float "charge_payed"
+    t.float "charge_back"
+    t.integer "uid", null: false
+    t.integer "efficient_time", null: false
+    t.integer "dateline", null: false
+    t.date "payment_time"
+    t.index ["case_no"], name: "case_no"
+    t.index ["devolve_depart"], name: "devolve_depart"
+    t.index ["efficient_time"], name: "efficient_time"
+    t.index ["flow_no"], name: "flow_no"
+    t.index ["state_time"], name: "state_time"
+    t.index ["uid"], name: "uid"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -126,13 +171,13 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: 6
+    t.datetime "locked_at", precision: 6
+    t.datetime "failed_at", precision: 6
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
@@ -143,8 +188,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "case_stage"
     t.boolean "check_archived"
     t.integer "check_archived_no"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "doc_template_id"
     t.integer "docable_id"
     t.string "docable_type"
@@ -158,8 +203,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "ancestry"
     t.integer "sort_no"
     t.string "code", limit: 20, default: "0000000000", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.bigint "organization_id"
     t.string "matter"
     t.string "case_types"
@@ -173,8 +218,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "doc_templates", force: :cascade do |t|
     t.string "name"
     t.string "desc"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "entrust_orders", force: :cascade do |t|
@@ -184,8 +229,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.text "base_info"
     t.string "anyou"
     t.bigint "organization_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "status", default: 0
     t.text "matter"
     t.bigint "department_id"
@@ -200,10 +245,10 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "receiver_phone"
     t.integer "company_type"
     t.string "content"
-    t.datetime "order_date"
+    t.datetime "order_date", precision: 6
     t.bigint "main_case_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
     t.string "order_num"
     t.string "case_no"
@@ -216,8 +261,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "user_id", null: false
     t.string "title", null: false
     t.text "url", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "features", force: :cascade do |t|
@@ -225,8 +270,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "controller_name"
     t.string "action_names"
     t.string "role_names"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "app"
     t.index ["controller_name"], name: "index_features_on_controller_name"
   end
@@ -247,8 +292,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "identification_cycles", force: :cascade do |t|
     t.integer "day"
     t.bigint "organization_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_identification_cycles_on_organization_id"
   end
 
@@ -257,9 +302,9 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "pay_account"
     t.string "pay_person_name"
     t.float "amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "pay_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "pay_date", precision: 6
     t.integer "pay_type"
     t.bigint "payment_order_id"
     t.bigint "organization_id"
@@ -274,12 +319,12 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "serial_no"
     t.string "case_no_display"
     t.integer "user_id"
-    t.datetime "accept_date"
+    t.datetime "accept_date", precision: 6
     t.integer "case_stage"
-    t.datetime "case_close_date"
+    t.datetime "case_close_date", precision: 6
     t.string "case_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "user_name"
     t.string "organization_name"
     t.integer "organization_id"
@@ -293,9 +338,9 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.text "base_info"
     t.integer "pass_user"
     t.integer "sign_user"
-    t.datetime "supplement_date"
+    t.datetime "supplement_date", precision: 6
     t.string "case_property"
-    t.datetime "commission_date"
+    t.datetime "commission_date", precision: 6
     t.integer "financial_stage"
     t.integer "case_no"
     t.integer "province_id"
@@ -304,14 +349,14 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "identification_cycle"
     t.integer "material_cycle"
     t.string "ident_users"
-    t.datetime "acceptance_date"
+    t.datetime "acceptance_date", precision: 6
     t.integer "wtr_id"
     t.string "payer"
     t.string "payer_phone"
     t.float "amount"
     t.string "wtr_phone"
     t.bigint "entrust_order_id"
-    t.datetime "filed_date"
+    t.datetime "filed_date", precision: 6
     t.string "appraisal_opinion"
     t.string "original_appraisal_opinion"
     t.boolean "is_repeat", default: false
@@ -331,8 +376,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "material_cycles", force: :cascade do |t|
     t.integer "day"
     t.bigint "organization_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["organization_id"], name: "index_material_cycles_on_organization_id"
   end
 
@@ -340,8 +385,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "title"
     t.string "url"
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "channel"
     t.boolean "status", default: false
     t.text "description"
@@ -360,8 +405,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "phone"
     t.string "wechat_id"
     t.integer "org_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "ancestry"
     t.string "abbreviation"
     t.integer "province_id"
@@ -395,10 +440,10 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "payment_type"
     t.string "payment_people"
     t.integer "payment_accept_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.float "consult_cost"
-    t.datetime "payment_date"
+    t.datetime "payment_date", precision: 6
     t.float "total_cost"
     t.boolean "take_bill", default: false
     t.bigint "bill_id"
@@ -417,13 +462,13 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "sender"
     t.integer "company_type"
     t.string "content"
-    t.datetime "order_date"
+    t.datetime "order_date", precision: 6
     t.string "order_num"
     t.bigint "main_case_id"
     t.bigint "user_id"
     t.string "case_no"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "reporter"
     t.string "receiver_mobile"
     t.string "receiver_phone"
@@ -452,8 +497,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "refund_checker_id"
     t.float "total_cost"
     t.bigint "main_case_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.integer "order_stage", default: 0
     t.string "refund_reason"
     t.string "payer"
@@ -466,16 +511,16 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "role_features", force: :cascade do |t|
     t.integer "role_id", null: false
     t.integer "feature_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["feature_id"], name: "index_role_features_on_feature_id"
     t.index ["role_id"], name: "index_role_features_on_role_id"
   end
 
   create_table "roles", force: :cascade do |t|
     t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "r_type"
     t.integer "name"
   end
@@ -483,8 +528,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "sessions", force: :cascade do |t|
     t.string "session_id", null: false
     t.text "data"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
@@ -494,16 +539,16 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.string "value"
     t.text "desc"
     t.string "gem"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "sys_logs", force: :cascade do |t|
     t.integer "user_id"
     t.text "log_content"
     t.date "log_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["log_date"], name: "index_sys_logs_on_log_date"
     t.index ["user_id"], name: "index_sys_logs_on_user_id"
   end
@@ -513,11 +558,11 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.integer "num"
     t.string "traits"
     t.string "status"
-    t.datetime "receive_date"
+    t.datetime "receive_date", precision: 6
     t.string "barcode"
     t.bigint "main_case_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "doc_type"
     t.string "unit"
     t.integer "serial_no", default: 0
@@ -527,8 +572,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
   create_table "user_roles", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "role_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["role_id"], name: "index_user_roles_on_role_id"
     t.index ["user_id"], name: "index_user_roles_on_user_id"
   end
@@ -546,8 +591,8 @@ ActiveRecord::Schema.define(version: 2022_01_14_163253) do
     t.text "memo"
     t.boolean "changed_password"
     t.string "orgnization_name", limit: 20
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "session_id"
     t.string "api_key"
     t.string "wechat_id"
