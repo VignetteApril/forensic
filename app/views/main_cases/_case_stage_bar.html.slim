@@ -1,32 +1,48 @@
-.row
-  .col-md-4
-    / = link_to '返回', main_cases_path, class: 'btn btn-primary mb-2 back'
-    .mt-3
-      span.h6.ml-3 = "#{'案件流水号：' + main_case.serial_no}"
-  .col-md-8 style="display: flex; flex-direction: row-reverse"
-    div.mt-2
-      span.mr-2.mt-2.h6 = "案件编号：#{@main_case.case_no_display}"
-      button type="button" class="btn btn-primary" data-toggle="modal" data-target="#case_no_modal" 生成案号
-    div
-      = simple_form_for(main_case, method: :patch, url: update_case_stage_main_case_path, html: {width: '100%'}) do |f|
-        .item style="display: flex; align-items: center; justify-content: center"
-          span style="width:100px" 案件状态：
-          .item style="display:none;"
-            = f.input :page_type, as: :hidden, input_html: {value: "#{case_stage}"}
-          .item style="width:200px;padding-right:30px;height:100%"
-            = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, selected: @main_case.case_stage, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
-          .item style="width:100px;"
-            = f.button :submit, '提交', class: 'btn-success', wrapper_html: {style: 'display:inline'}
-.row.ml-1
-  .col-md-2
-    .d-flex.flex-row.align-items-center
-      span = "受理日期: "
-      span.ml-1 = @main_case.commission_date.strftime('%Y-%m-%d') if @main_case.commission_date
-  .col-md-2
-    .d-flex.flex-row.align-items-center
-      span = "立案日期: "
-      span = @main_case.acceptance_date.strftime('%Y-%m-%d') if @main_case.acceptance_date
-  .col-md-2
-    .d-flex.flex-row.align-items-center
-      span = "登记日期: "
-      span = @main_case.created_at.strftime('%Y-%m-%d')
+.card.mb-2.gray-card
+  .card-body
+    .row
+      .col-md-6
+        .row style="display: flex; align-items: center; "
+          .col
+            span.h6 = "案件流水号: " 
+            span = "#{main_case.serial_no}"
+        .row
+          .col
+            .d-flex.flex-row.align-items-center
+              span.mr-1 = "受理日期: "
+              span.mr-1 = @main_case.commission_date.strftime('%Y-%m-%d') if @main_case.commission_date
+
+              span.mr-1 = "立案日期: "
+              span.mr-1 = @main_case.acceptance_date.strftime('%Y-%m-%d') if @main_case.acceptance_date
+
+              span.mr-1 = "登记日期: "
+              span.mr-2 = @main_case.created_at.strftime('%Y-%m-%d')
+
+              = simple_form_for(main_case, method: :patch, url: update_case_stage_main_case_path, html: {width: '5%', "margin-top": '0px !important'}) do |f|
+                .item style="display: flex; align-items: center; justify-content: center"
+                  span 案件状态：
+                  .item style="display:none;"
+                    = f.input :page_type, as: :hidden, input_html: {value: "#{case_stage}"}
+                  .item.mr-1 style="width:110px; height:100%"
+                    = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, selected: @main_case.case_stage, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
+                  .item
+                    = f.button :submit, '提交', class: 'btn-success btn-md', wrapper_html: {style: 'display:inline'}
+
+      .col-md-6
+        .row style="display: flex; align-items: center; "
+          .col 
+            div style="float: right;"
+              span.h6 = "归档号: " 
+              span = "#{main_case.case_no_display}"
+              button.btn-sm.ml-2 type="button" class="btn btn-primary" data-toggle="modal" data-target="#case_no_modal" 生成案号
+        .row.mt-1 style="display: flex; align-items: center;"
+          .col
+            div style="float: right;"
+              span.h6 = "案件机构案号:  "
+              input#stage_org_case_number style="width: 250px;"
+
+        .row.mt-1 style="display: flex; align-items: center;"
+          .col
+            div style="float: right;"
+              span.h6 = "司法鉴定案件编号:  "  
+              input#forensic_case_number  style="width: 250px;"

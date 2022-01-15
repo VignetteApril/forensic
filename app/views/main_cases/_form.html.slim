@@ -5,7 +5,7 @@
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
       h4
-        | 该模板文档保存时出错：
+        | 该案件保存时出错：
         = pluralize(@main_case.errors.count, "个错误")
       ul
         - @main_case.errors.full_messages.each do |message|
@@ -13,6 +13,9 @@
             = message
   .form-inputs
     = f.input :data_str, as: :hidden
+    = f.input :org_case_number, as: :hidden
+    = f.input :forensic_case_number, as: :hidden
+    
     - if @wtr.nil?
       = f.input :wtr_id, :as => :hidden
     - else
@@ -306,3 +309,19 @@ javascript:
         $('#main_case_original_appraisal_opinion').addClass('d-none');
         $('.main_case_original_appraisal_opinion').addClass('d-none');
     }
+
+    $('#stage_org_case_number').bind('input propertrychange', function(){
+      var stage_org_case_number = $('#stage_org_case_number').val();
+      $('#main_case_org_case_number').val(stage_org_case_number)
+    })
+
+    $('#forensic_case_number').bind('input propertrychange', function(){
+      var stage_forensic_case_number = $('#forensic_case_number').val();
+      $('#main_case_forensic_case_number').val(stage_forensic_case_number)
+    })
+    
+    var main_case_org_case_number = $('#main_case_org_case_number').val();
+    $('#stage_org_case_number').val(main_case_org_case_number);
+
+    var main_stage_forensic_case_number = $('#main_case_forensic_case_number').val();
+    $('#forensic_case_number').val(main_stage_forensic_case_number);

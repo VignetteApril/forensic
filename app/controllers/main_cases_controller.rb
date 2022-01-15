@@ -1137,6 +1137,8 @@ class MainCasesController < ApplicationController
                                         :is_repeat,
                                         :data_str,
                                         :archive_location,
+                                        :org_case_number,
+                                        :forensic_case_number,
                                         transfer_docs_attributes: [:id,
                                                                    :name,
                                                                    :doc_type,
