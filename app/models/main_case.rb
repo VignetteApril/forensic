@@ -99,14 +99,14 @@ class MainCase < ApplicationRecord
   enum case_stage: [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
   enum financial_stage: [:unpaid, :not_fully_paid, :paid, :refunded]
   CASE_STAGE_MAP = {
-    pending: '待立案',
+    pending: '已立案-待受理',
     add_material: '待补充材料',
     filed: '立案',
-    rejected: '退案',
-    executing: '执行中',
+    rejected: '已受理-退案',
+    executing: '已受理-鉴定中',
     executed: '执行完成',
-    apply_filing: '申请归档',
-    close: '结案归档'
+    apply_filing: '已完成-待归档',
+    close: '已归档'
   }
 
   CASE_STAGE_COLOR_MAP = {

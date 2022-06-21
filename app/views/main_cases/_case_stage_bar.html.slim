@@ -23,7 +23,7 @@
                   span 案件状态：
                   .item style="display:none;"
                     = f.input :page_type, as: :hidden, input_html: {value: "#{case_stage}"}
-                  .item.mr-1 style="width:110px; height:100%"
+                  .item.mr-1 style="width:150px; height:100%"
                     = f.input :case_stage, label: false, collection: MainCase.case_stage_collection, selected: @main_case.case_stage, include_blank: false, wrapper_html: {style: 'position:relative;top:12px;'}
                   .item
                     = f.button :submit, '提交', class: 'btn-success btn-md', wrapper_html: {style: 'display:inline'}
