@@ -17,21 +17,22 @@
         h4.card-title 补充材料
       .card-body.principal
         .row
-          .col-md-4
-            = f.input :material_cycle, collection: @material_cycles, label: '补充材料周期（天）', include_blank: false
-          .col-md-8.mt-4
-            = f.button :submit, '保存', class: 'btn btn-success pull-right'
-            button type="button" class="btn btn-primary mr-1 pull-right" data-toggle="modal" data-target="#add_material_case_doc_modal" 上传文件
-        .row
-          .col-md-12
-            #add_material_case_docs
-              - @main_case.case_docs.where(case_stage: :add_materials).each do |doc|
-                = image_tag('word.png', height: '40', width: '32')
-                .doc-msg style="display:inline-block;position:relative;top:15px;"
-                  span.ml-2 = doc.name
-                  br
-                  span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
-                  span.ml-2 = link_to '下载', edit_office_online_download_doc_path(doc_id: doc.id) if doc.attachment.attached?
+          .col
+            .d-flex.flex-row.align-items-center
+              span.mr-3
+                = f.input :material_cycle, collection: @material_cycles, label: '补充材料周期（天）', include_blank: false
+              span.mr-3
+                #add_material_case_docs
+                  - @main_case.case_docs.where(case_stage: :add_materials).each do |doc|
+                    = image_tag('word.png', height: '40', width: '32')
+                    .doc-msg style="display:inline-block;position:relative;top:15px;"
+                      span.ml-2 = doc.name
+                      br
+                      span.edit-doc.ml-2 style='cursor: pointer; color: #009688;' aria-hidden="true" data-doc-id="#{doc.id}"编辑
+                      span.ml-2 = link_to '下载', edit_office_online_download_doc_path(doc_id: doc.id) if doc.attachment.attached?
+              span
+                button type="button" class="btn btn-primary mr-1" data-toggle="modal" data-target="#add_material_case_doc_modal" 上传文件
+                = f.button :submit, '保存', class: 'btn btn-success'
 
 = simple_form_for(@main_case, method: :patch, url: update_filing_main_case_path) do |f|
   .form-inputs

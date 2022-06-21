@@ -35,7 +35,7 @@
                   / a href="./forgot-password.html" class="float-right small"
                   /   | 忘记密码
                 = password_field_tag :password, params[:password], class: "form-control", \
-                                                  placeholder: "默认的密码是：Fc123456", "aria-describedby" => "password-status"
+                                                  placeholder: "", "aria-describedby" => "password-status"
               .form-group
                 / span　　　　　　还没有账号？请前去
                 / a href="#{new_consignor_users_path}" 注册
