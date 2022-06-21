@@ -2,7 +2,6 @@ header class="app-header"
   = link_to main_cases_path, class: 'app-header__logo'
     = image_tag("logo.png", alt: "forensic logo", style: 'height: 30px; width: auto;')
     span 智慧司法云服务平台
-  / a.app-sidebar__toggle href="#" data-toggle="sidebar" aria-label="Hide Sidebar"
   // Navbar Right Menu
   ul.app-nav
     ul.text-white style="display:flex;align-items:center;"
@@ -26,7 +25,7 @@ header class="app-header"
       ul.app-notification.dropdown-menu.dropdown-menu-right
         li.app-notification__title = "您有 #{@current_user.notifications.where(:status=>false).count} 条新的消息"
         .app-notification__content
-          - @current_user.notifications.where(:status=>false).each do |notice|
+          - @current_user.notifications.where(:status=>false).limit(5).each do |notice|
             li
               .app-notification__item
                 span.app-notification__icon
