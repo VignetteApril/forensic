@@ -36,7 +36,7 @@ aside.app-sidebar
       - else
         a.app-menu__item.text-white
           i class="app-menu__icon fa fa-laptop"
-          span class="app-menu__label" 案件
+          span class="app-menu__label" 案件管理
         ul.treeview-menu.case-bar
           - if can?('main_cases', 'new')
             li
@@ -138,11 +138,11 @@ aside.app-sidebar
           li
             a.app-menu__item href="#{entrust_orders_path}" class="#{active_class_with_action(controller, 'entrust_orders', 'index')}"
               i.app-menu__icon.fa.fa-laptop
-              span.app-menu__label 委托单
+              span.app-menu__label 委托单管理
         - if can?('entrust_orders', 'org_orders') && can?('entrust_orders', 'org_orders_unclaimed')
           a.app-menu__item.text-white
             i class="app-menu__icon fa fa-laptop"
-            span class="app-menu__label" 委托单
+            span class="app-menu__label" 委托单管理
           ul.treeview-menu
             - if can?('entrust_orders', 'org_orders')
               li
@@ -192,7 +192,7 @@ aside.app-sidebar
           li
             a.app-menu__item href="#{personal_count_main_cases_path}" class="#{active_class_with_action(controller, 'main_cases', 'personal_count')}"
               i.app-menu__icon.fa.fa-laptop
-              span.app-menu__label 统计
+              span.app-menu__label 统计管理
 
         - if can?('incoming_records', 'claim_record_list')
           li
