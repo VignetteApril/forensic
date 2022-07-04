@@ -14,11 +14,11 @@
   hr
   .row
     .col-md-2
-      = f.input :payer, label: '交款人'
+      = f.input :payer, label: '缴款人'
     .col-md-2
-      = f.input :payer_contacts, label: '交款联系人'
+      = f.input :payer_contacts, label: '缴款联系人'
     .col-md-2
-      = f.input :payer_contacts_phone, label: '交款联系人电话'
+      = f.input :payer_contacts_phone, label: '缴款联系人电话'
     .col-md-2
       - wtr_user = User.find_by_id(@main_case.wtr_id)
       - org = wtr_user.try(:organization)
