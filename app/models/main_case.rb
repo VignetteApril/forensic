@@ -95,18 +95,38 @@ class MainCase < ApplicationRecord
   after_save :set_entrust_order_status
 
   # 案件状态：待立案、待补充材料、立案、退案、执行中、执行完成、申请归档、结案
+  enum case_stage: [ :pending,
+                     :add_material,
+                     :filed,
+                     :rejected,
+                     :executing,
+                     :executed,
+                     :apply_filing,
+                     :close,
+                     :not_accepted,
+                     :suspended,
+                     :pending_appointment,
+                     :add_material_acceptance ]
+
   # 财务状态：未付款、未付清、已付清、已退款
-  enum case_stage: [ :pending, :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close ]
-  enum financial_stage: [:unpaid, :not_fully_paid, :paid, :refunded]
+  enum financial_stage: [:unpaid,
+                         :not_fully_paid,
+                         :paid,
+                         :refunded]
+
   CASE_STAGE_MAP = {
     pending: '已立案-待受理',
-    add_material: '待补充材料',
+    add_material: '已立案-补充材料中',
     filed: '立案',
     rejected: '已受理-退案',
     executing: '已受理-鉴定中',
     executed: '执行完成',
     apply_filing: '已完成-待归档',
-    close: '已归档'
+    close: '已归档',
+    not_accepted: '已立案-不受理',
+    suspended: '已受理-中止',
+    pending_appointment: '已受理-待约时间',
+    add_material_acceptance: '已受理-补充材料中'
   }
 
   CASE_STAGE_COLOR_MAP = {
@@ -127,7 +147,7 @@ class MainCase < ApplicationRecord
   }
 
   FINANCIAL_STAGE_MAP = {
-    unpaid: '未缴款',
+    unpaid: '已立案-未缴费',
     not_fully_paid: '未完全缴款',
     paid: '已缴款',
     refunded: '已退款'
@@ -190,7 +210,7 @@ class MainCase < ApplicationRecord
 
   aasm(:case, column: :case_stage, enum: true) do
     state :pending, initial: true
-    state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close
+    state :add_material, :filed, :rejected, :executing, :executed, :apply_filing, :close, :not_accepted, :suspended, :pending_appointment, :add_material_acceptance
     after_all_transitions :record_case_process, :notify_user_case_stage_changed
 
     # 转换到待立案状态
@@ -231,6 +251,26 @@ class MainCase < ApplicationRecord
     # 转换到 结案状态
     event :turn_close, after: :update_close_case_date do
       transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :close
+    end
+
+    # 转换到 已立案-不受理
+    event :turn_not_accepted do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :not_accepted
+    end
+
+    # 转换到 已受理-中止
+    event :turn_suspended do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :suspended
+    end
+
+    # 转换到 已受理-待约时间
+    event :turn_pending_appointment do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :pending_appointment
+    end
+
+    # 转换到 已受理-补充材料中
+    event :turn_add_material_acceptance do
+      transitions from: MainCase.case_stages.keys.map(&:to_sym), to: :add_material_acceptance
     end
   end
 
