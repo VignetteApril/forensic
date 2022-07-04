@@ -1,7 +1,7 @@
 <%= define_grid(@finance_payment_orders, hide_submit_button: true, hide_reset_button: true, hide_csv_button: true) do |g|
 
   g.row_attributes do |a|
-    { 'data-href': finance_show_main_case_payment_order_path(a.main_case, a), class: 'clickable-row' }
+    { 'data-href': finance_edit_main_case_payment_order_path(a.main_case, a), class: 'clickable-row' }
   end
 
   g.action_column html_check_box: false, html: {style: "width:80px;"} do |a|
@@ -33,7 +33,8 @@
   end
 
   g.column name: '鉴定事项', custom_filter: false do |a|
-     JSON.parse(a.main_case.matter).join(',') unless a.main_case && a.main_case.matter.blank?
+     str = JSON.parse(a.main_case.matter).join(',') unless a.main_case && a.main_case.matter.blank?
+     str.length > 6 ? str[0..6] + '......' : str
   end
 
 	g.column name: '状态', html: {style: "width:50px;"}, custom_filter: false do |a|
@@ -42,11 +43,6 @@
 
   g.column name: '预览', html: {style: "width:50px;"}, custom_filter: false do |a|
     button_tag '预览', type: 'button', data: { toggle: 'modal', target: '#preview_image', imageUrl: url_for(a.attachment) }, class: 'btn btn-primary btn-sm ml-2 preview_button' if a.attachment.attached?
-  end
-
-
-  g.column in_csv: false do |a|
-    link_to '查看', finance_edit_main_case_payment_order_path(a.main_case, a), class: 'btn btn-secondary btn-sm'
   end
 
   g.column in_csv: false do |payment_order|
@@ -77,13 +73,3 @@
     end
   end
 end -%>
-
-<!--<script>-->
-<!--    $(".clickable-row").click(function (e) {-->
-<!--        // 通过当前点击元素判断是否点击的是带有id的元素-->
-<!--        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js-->
-<!--        if (e.target.id == '') {-->
-<!--            window.location = $(this).data("href");-->
-<!--        }-->
-<!--    });-->
-<!--</script>-->

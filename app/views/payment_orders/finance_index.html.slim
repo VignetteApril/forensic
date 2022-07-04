@@ -25,3 +25,13 @@ javascript:
         console.log(e.target.dataset.imageurl);
         $('#preview_image_image').attr('src', e.target.dataset.imageurl);
     });
+
+    $(".clickable-row").dblclick(function (e) {
+        // 通过当前点击元素判断是否点击的是带有id的元素
+        // 带有id的元素都具有原始的js事件，所有不应该触发跳转到编辑页面的js
+        if (e.target.id == '') {
+            // window.location = $(this).data("href");
+            var new_page = $(this).data("href");
+            window.open(new_page, '_blank');
+        }
+    });
