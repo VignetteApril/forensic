@@ -10,7 +10,8 @@
       span = "案件编号：#{@main_case.case_no_display}"
     .col-md-2
       span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
-
+    .col-md-2
+      span = "被鉴定人：#{@main_case.appraised_unit.name}"
   hr
   .row
     .col-md-2
