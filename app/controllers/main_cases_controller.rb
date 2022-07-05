@@ -1033,7 +1033,7 @@ class MainCasesController < ApplicationController
   # 案件详情页
   def show_payment_order
     @payment_order = PaymentOrder.find_by_id(params[:payment_order_id])
-    render 'payment_orders/finance_show'
+    render 'payment_orders/finance_edit'
   end
 
   # 导出CSV方法

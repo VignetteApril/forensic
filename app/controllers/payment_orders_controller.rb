@@ -9,7 +9,8 @@ class PaymentOrdersController < ApplicationController
                                             :finance_show,
                                             :print_page,
                                             :finance_edit,
-                                            :finance_update ]
+                                            :finance_update,
+											:show ]
 
   # 财务管理人员看到的缴费单列表页面
   # 能够看到当前机构下的所有缴费的提交清单
@@ -192,6 +193,12 @@ class PaymentOrdersController < ApplicationController
     @main_case = @payment_order.main_case
   end
 
+  # 非财务人员查看缴费单详情页
+  def show
+	@request_type = :PUT
+    @path = main_case_payment_order_path
+  end
+
   # 财务人员打印缴费单的页面
   def print_page
     render :layout => false
@@ -231,10 +238,10 @@ class PaymentOrdersController < ApplicationController
 		end
 
     def set_main_case
-			@main_case = MainCase.find_by_id(params[:main_case_id])
-		end
+		@main_case = MainCase.find_by_id(params[:main_case_id])
+	end
 
     def set_payment_order
-			@payment_order = PaymentOrder.find(params[:id])
-		end
+		@payment_order = PaymentOrder.find(params[:id])
+	end
 end

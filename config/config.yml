@@ -85,6 +85,7 @@ features:
   - [委托人查看案件, main_cases, 'wtr_cases, edit, case_memos, create_case_memo, case_process_records', 'client_entrust_user']
   - [统计, main_cases, 'personal_count', 'client_entrust_user,center_director_user,center_department_director_user']
   - [删除案件, main_cases, 'destroy', 'center_admin_user, center_director_user, center_department_director_user']
+  - [查看缴费单, payment_orders, 'show', 'all']
 
 apps:
   - name: 系统管理
