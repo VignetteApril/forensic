@@ -53,12 +53,6 @@
   end
 
   g.column in_csv: false do |payment_order|
-    if can?('payment_orders', 'edit') && !payment_order.confirm? && !payment_order.cancel?
-      link_to '编辑', edit_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-secondary btn-sm', id: 'edit_order'
-    end
-  end
-
-  g.column in_csv: false do |payment_order|
     # 一旦财务人员确认了该缴费单，该缴费单就不能被删除了，只能作废
     if can?('payment_orders', 'destroy') && !payment_order.cancel? && !payment_order.confirm?
       link_to '删除', main_case_payment_order_path(payment_order.main_case, payment_order), method: :delete, data: { confirm: '确定删除么?' }, class: 'btn btn-danger btn-sm', id: 'destroy_order'
