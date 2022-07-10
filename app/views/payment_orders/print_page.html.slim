@@ -49,6 +49,10 @@ css:
     border: solid #000 1px;
   }
 
+  .control-area {
+    height: 20px;
+  }
+
   .print-footer {
     font-size: 10px;
   }
@@ -72,7 +76,10 @@ body
       table cellspacing="0" cellpadding="5"
         tr
           td 缴款人
-          td = @payment_order.payer
+          td
+            .control-area
+              .inner-area
+                = @payment_order.payer
           td 缴款人联系人
           td = @payment_order.payer_contacts
           td 缴款联系人电话
@@ -114,7 +121,10 @@ body
           td 汇款日期
           td = @payment_order.payment_date.nil? ? '' : @payment_order.payment_date.strftime('%Y年%m月%d日')
           td 汇款人
-          td = @payment_order.payment_people
+          td
+            .control-area
+              .inner-area
+                = @payment_order.payment_people
         tr
           td 现金金额
           td = @payment_order.cash_pay
@@ -180,3 +190,21 @@ javascript:
 
     total_cost_big_num.appendChild( document.createTextNode(digitUppercase(total_cost)) );
     pre_paid_big_num.appendChild( document.createTextNode(digitUppercase(pre_paid)) );
+
+
+    var outputs = document.getElementsByClassName('inner-area')
+
+    function resize_to_fit(output, outputContainer) {
+      let fontSize = window.getComputedStyle(output).fontSize;
+      output.style.fontSize = (parseFloat(fontSize) - 1) + 'px';
+
+      if(output.clientHeight >= outputContainer.clientHeight){
+        resize_to_fit(output, outputContainer);
+      }
+    }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    for(i = 0; i < outputs.length; i++) {
+        resize_to_fit(outputs[i], outputs[i].parentNode);
+    }
+  });
