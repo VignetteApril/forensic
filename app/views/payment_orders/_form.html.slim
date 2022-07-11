@@ -74,7 +74,7 @@
       = f.input :check_num, label: '支票号码', disabled: action_name == 'show'
     .col-md-2
       = f.input :payment_accept_type, label: '委托受理方式', collection: PaymentOrder.payment_accept_type_collection, disabled: action_name == 'show'
-  - if action_name == 'edit'
+  - if action_name == 'edit' || action_name == 'new'
     .form-actions
       = f.button :submit, '确认', class: 'btn btn-success'
 
