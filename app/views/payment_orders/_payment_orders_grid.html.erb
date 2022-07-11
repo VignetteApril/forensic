@@ -90,8 +90,7 @@
 
   g.column in_csv: false, html: {style: "width:15px;"} do |payment_order|
     # 查案缴费单
-    if can?('main_cases', 'show_payment_order')
-      # link_to '查看', edit_main_case_payment_order_path(payment_order.main_case, payment_order), class: 'btn btn-secondary btn-sm'
+    if can?('payment_orders', 'show')
       link_to '查看', main_case_payment_order_path( payment_order ), class: 'btn btn-secondary btn-sm'
     end
   end
