@@ -34,33 +34,31 @@
               button type="button"  class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
       .card-body.principal
         .row
-          .col-md-4
+          .col-md-1
             = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
-          .col-md-4
+          .col-md-1
             = f.input :city_id, collection: @cities, label: '市', include_blank: true
-          .col-md-4
+          .col-md-1
             = f.input :district_id, collection: @districts, label: '区县', include_blank: true
-        .row
-          .col-md-4
+          .col-md-3
             = f.input :organization_name, label: '委托方名称（请书写委托方全称）'
-          .col-md-4
+          .col-md-3
             = f.input :user_name, label: '委托联系人'
-          .col-md-4
+          .col-md-3
             = f.input :wtr_phone, label: '委托联系人电话'
             small class="form-text text-muted"
         .row
-          .col-md-8
-            = f.input :organization_addr, label: '委托方地址'
           .col-md-4
-            / 这里需要设置button的type因为默认的button type是submit，会自动提交表单
-            button#create_org_user.btn.btn-primary.mt-4.pull-right type="button" 保存成常用联系人
-        // 只有当前案件没有对应的委托单时才可以关联委托单
-        - if @main_case.entrust_order.nil?
-          .row.no-gutters
-            .col-md-8
-              = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
-        - else
-          = f.input :entrust_order_id, :as => :hidden, html: { value: @main_case.entrust_order.id }
+            = f.input :organization_addr, label: '委托方地址'
+          .col-md-2
+            // 只有当前案件没有对应的委托单时才可以关联委托单
+            - if @main_case.entrust_order.nil?
+                = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
+            - else
+              = f.input :entrust_order_id, :as => :hidden, html: { value: @main_case.entrust_order.id }
+          .col-md-2
+            button#create_org_user.btn.btn-primary.mt-4 type="button" 保存成常用联系人
+       
     // 委托鉴定事项card
     .card.gray-card
       .card-header

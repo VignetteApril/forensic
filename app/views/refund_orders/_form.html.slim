@@ -8,53 +8,56 @@
       span = "案件编号：#{@main_case.case_no_display}"
     .col-md-2
       span = "鉴定事项：#{JSON.parse(@main_case.matter).join(',') unless @main_case.matter.blank?}"
+    .col-md-2
+      span = "案件机构案号: #{@main_case.org_case_number}"
 
   hr
   .row
-    .col-md-2
+    .col-md-3
       = f.input :appraisal_cost, label: '鉴定费'
-    .col-md-2
+    .col-md-3
       = f.input :business_cost, label: '差旅费'
-    .col-md-2
+    .col-md-3
       = f.input :appear_court_cost, label: '出庭费'
-    .col-md-2
+  .row
+    .col-md-3
       = f.input :investigation_cost, label: '调查费'
-    .col-md-2
+    .col-md-3
       = f.input :consult_cost, label: '咨询费'
-    .col-md-2
+    .col-md-3
       = f.input :other_cost, label: '其他'
   .row
-    .col-md-2
+    .col-md-3
       = f.input :total_cost, label: '缴费总计', input_html: { class: 'refund-total-cost-input' }
-    .col-md-2
+    .col-md-3
       = f.input :paid_num, label: '已付金额'
-    .col-md-4
+    .col-md-3
       = f.input :refund_cost, label: '退费金额', input_html: { class: 'refund-cost-input' }
-    .col-md-4
-      = f.input :refund_reason, label: '退费原因'
   .row.mb-2
-    .col-md-2
+    .col-md-3
       span 大写金额: &nbsp
       span class='refund-total-cost'
-    .col-md-2
+    .col-md-3
       span 大写金额: &nbsp
       span class='paid-total-cost'
-    .col-md-4
+    .col-md-3
       span 大写金额: &nbsp
       span class='refund-cost'
   .row
-    .col-md-4
+    .col-md-2
       = f.input :payee_id, label: '领款人', collection: @main_case.department.user_array.map{|e|[e.name,e.id]}
-    .col-md-4
+    .col-md-2
       = f.input :refund_checker_id, label: '退费审核人', collection: @main_case.department.user_array.map{|e|[e.name,e.id]}
-    .col-md-4
+    .col-md-2
       = f.input :refund_dealer_id, label: '退费经办人', collection: @main_case.department.user_array.map{|e|[e.name,e.id]}
+    .col-md-3
+      = f.input :refund_reason, label: '退费原因'
   .row
-    .col-md-4
+    .col-md-3
       = f.input :payer, label: '缴款人'
-    .col-md-4
+    .col-md-3
       = f.input :payer_contract, label: '缴款联系人'
-    .col-md-4
+    .col-md-3
       = f.input :contract_phone, label: '联系电话'
 
   .form-actions
