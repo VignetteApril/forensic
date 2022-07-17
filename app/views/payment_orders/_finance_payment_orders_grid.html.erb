@@ -20,7 +20,7 @@
     a.main_case.organization_name
   end
 
-  g.column name: '被鉴定人', custom_filter: false do |a|
+  g.column name: '被鉴定人', custom_filter: false, assoc: :appraised_unit, attribute: 'name', detach_with_id: :appraised_unit_name_filter do |a|
      a.main_case.appraised_unit.try(:name) if a.main_case
   end
 

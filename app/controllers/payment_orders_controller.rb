@@ -17,8 +17,8 @@ class PaymentOrdersController < ApplicationController
   def finance_index
 		data = PaymentOrder.none
 		if !@current_user.organization.nil?
-      main_case_ids = @current_user.organization.main_cases.pluck(:id)
-      data = PaymentOrder.where(main_case_id: main_case_ids).where.not(order_stage: :cancel)
+			main_case_ids = @current_user.organization.main_cases.pluck(:id)
+			data = PaymentOrder.where(main_case_id: main_case_ids).where.not(order_stage: :cancel)
 		end
 
 		@finance_payment_orders = initialize_grid(data,

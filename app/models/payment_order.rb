@@ -41,9 +41,9 @@ class PaymentOrder < ApplicationRecord
 
 	belongs_to :main_case
 	belongs_to :bill, required: false
-  has_one :incoming_record # 缴费单和到账记录一一对应
+    has_one :incoming_record # 缴费单和到账记录一一对应
 	has_one_attached :attachment
-
+	has_one :appraised_unit, through: :main_case
 
 	before_destroy :update_incoming_record_nil
   after_save :update_incoming_record_claimed

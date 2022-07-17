@@ -10,6 +10,10 @@
     span 案件号:
     .w-75.ml-2
       = grid_filter @finance_payment_orders, :case_no_display_filter
+  .col-md-4.d-flex.flex-row.align-items-center
+    span 被鉴定人:
+    .w-75.ml-2
+      = grid_filter @finance_payment_orders, :appraised_unit_name_filter
 .row.mb-2.no-gutters
   .col-md-12
     .external-buttons.mb-2.float-right
