@@ -307,6 +307,7 @@ class MainCasesController < ApplicationController
   # GET /main_cases/1/edit
   def edit
     @main_case.transfer_docs.build if @main_case.transfer_docs.empty?
+    @case_memo = @main_case.case_memos.new
   end
 
   # POST /main_cases
