@@ -46,6 +46,11 @@
     User.find_by(id: main_case.pass_user).try(:name) if main_case.pass_user
   end
 
+  g.column name: '鉴定助理', attribute: 'assist_ident_user', detach_with_id: :assist_ident_user_filter, ordering: false, custom_filter: @users,
+           allow_multiple_selection: false do |main_case|
+    User.find_by(id: main_case.assist_ident_user).try(:name) if main_case.assist_ident_user
+  end
+
   g.column name: '鉴定人', attribute: 'ident_users', detach_with_id: :ident_users_filter, ordering: false, custom_filter: @users,
   allow_multiple_selection: false do |main_case|
     User.where(id: main_case.ident_users).map { |user| user.name }.join(',') if main_case.ident_users

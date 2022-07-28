@@ -122,7 +122,10 @@ class DepartmentsController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: { mastters: matters, ident_users: users, pass_users: users } }
+      format.json { render json: { mastters: matters,
+                                   ident_users: users,
+                                   pass_users: users,
+                                   assist_ident_users: users } }
     end
   end
 

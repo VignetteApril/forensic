@@ -502,6 +502,7 @@ class MainCasesController < ApplicationController
     respond_to do |format|
       if @main_case.update(identification_cycle: params[:main_case][:identification_cycle],
                            pass_user: params[:main_case][:pass_user],
+                           assist_ident_user: params[:main_case][:assist_ident_user],
                            sign_user: params[:main_case][:sign_user],
                            ident_users: ident_users,
                            payer: params[:main_case][:payer],
@@ -1194,6 +1195,7 @@ class MainCasesController < ApplicationController
                                                                      :payment_accept_type,
                                                                      :take_bill,
                                                                      :id,
+                                                                     :assist_ident_user,
                                                                      :_destroy, refund_orders_attributes: [ :id,
                                                                                                             :_destroy,
                                                                                                             :total_cost,

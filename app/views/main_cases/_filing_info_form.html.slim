@@ -48,8 +48,10 @@
           .col-md-2
             = f.input :pass_user, collection: @users, label: '立案人', include_blank: true
           .col-md-2
+            = f.input :assist_ident_user, collection: @users, label: '鉴定助理', include_blank: true
+          .col-md-2
             = f.input :sign_user, collection: @users, label: '授权签字人', include_blank: true
-          .col-md-6
+          .col-md-4
             = f.input :ident_users, collection: @users, label: '指定鉴定人', include_blank: true,
                     include_hidden: false, input_html: {multiple: true}
             span id="passwordHelpBlock" class="form-text text-muted" = @ident_users

@@ -24,6 +24,7 @@
         span 立案人:
       .col-md-9
         = grid_filter @main_cases, :pass_user_filter
+
   .col-md-3
     .row.no-gutters.mb-2
       .col-md-2
@@ -49,6 +50,13 @@
         = grid_filter @main_cases, :case_stage_filter
 
 .row.no-gutters
+  .col-md-3
+    .row.no-gutters
+      .col-md-2
+        span 鉴定助理:
+      .col-md-9
+        = grid_filter @main_cases, :assist_ident_user_filter
+
   .col-md-3
     .row.no-gutters
       .col-md-2
@@ -226,6 +234,7 @@ javascript:
     var departments_select  = $("#main_cases_grid_f_departments_name");
     var pass_user_select    = $("#main_cases_grid_f_pass_user");
     var ident_user_select   = $("#main_cases_grid_f_ident_users")
+    var assist_ident_user_select = $("#main_cases_grid_f_assist_ident_user")
     var request_url_matters = window.location.origin + '/departments/finance_matters.json';
 
     departments_select.selectize({
@@ -243,6 +252,7 @@ javascript:
                     success: function (data) {
                         reloadSelectize(pass_user_select, data.pass_users, default_select_id = '')
                         reloadSelectize(ident_user_select, data.ident_users, default_select_id = '')
+                        reloadSelectize(assist_ident_user_select, data.assist_ident_users, default_select_id = '')
                     }
                 });
         }
