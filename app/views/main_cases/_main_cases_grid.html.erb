@@ -33,7 +33,7 @@
      MainCase::CASE_STAGE_MAP[main_case.case_stage.to_sym]
    end
 
-   g.column name: '经办人', attribute: 'pass_user', detach_with_id: :pass_user_filter, ordering: false, custom_filter: @users,
+   g.column name: '立案人', attribute: 'pass_user', detach_with_id: :pass_user_filter, ordering: false, custom_filter: @users,
   allow_multiple_selection: false do |main_case|
     User.find_by(id: main_case.pass_user).try(:name) if main_case.pass_user
   end

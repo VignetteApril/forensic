@@ -122,7 +122,7 @@ body
     .print-footer
       .footer-info
         span = "退款单位：#{@refund_order.main_case.department.organization.name}"
-        span = "经办人：_____________"
+        span = "立案人：_____________"
         span = "领款人：_____________"
       .today
         = image_tag url_for(@refund_order.main_case.barcode_image), style: 'height: 50px; float: right' if @refund_order.main_case.barcode_image
