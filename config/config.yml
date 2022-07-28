@@ -86,6 +86,7 @@ features:
   - [统计, main_cases, 'personal_count', 'client_entrust_user,center_director_user,center_department_director_user']
   - [删除案件, main_cases, 'destroy', 'center_admin_user, center_director_user, center_department_director_user']
   - [查看缴费单, payment_orders, 'show', 'all']
+  - [立案人创建便签, main_cases, 'case_memos, create_case_memo, case_process_records', 'center_filing_user']
 
 apps:
   - name: 系统管理
