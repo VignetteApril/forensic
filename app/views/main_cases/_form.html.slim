@@ -86,12 +86,12 @@
             .row
               .col-md-12
                 = f.input :base_info, label: '基本案情', as: :text, :input_html => {:rows => 2}
-          .col-md-6
-            = simple_form_for([@main_case, @case_memo], method: :post, url: create_case_memo_main_case_path, remote: true) do |f|
-              = f.input :content, label: '创建便签', as: :text, :input_html => { :rows => 2 }
-              div style="display: flex; flex-direction: row-reverse; "
-                button#case_memo_submit.btn.btn-success.btn-sm style='height: 100%; margin-left: 10px; margin-top: 2px' type="button" 创建便签
-                = f.input :visibility_range, label: false, collection: CaseMemo.visibility_range_collection, wrapper_html: { style: 'width: 150px;' }
+          / .col-md-6
+          /   = simple_form_for([@main_case, @case_memo], method: :post, url: create_case_memo_main_case_path, remote: true) do |f|
+          /     = f.input :content, label: '创建便签', as: :text, :input_html => { :rows => 2 }
+          /     div style="display: flex; flex-direction: row-reverse; "
+          /       button#case_memo_submit.btn.btn-success.btn-sm style='height: 100%; margin-left: 10px; margin-top: 2px' type="button" 创建便签
+          /       = f.input :visibility_range, label: false, collection: CaseMemo.visibility_range_collection, wrapper_html: { style: 'width: 150px;' }
         .row
           .col-md-12
             = f.input :is_repeat, label: '是否重复鉴定', as: :boolean
@@ -332,30 +332,3 @@ javascript:
 
     var main_stage_forensic_case_number = $('#main_case_forensic_case_number').val();
     $('#forensic_case_number').val(main_stage_forensic_case_number);
-
-    $('#case_memo_submit').click(function () {
-        case_memo_content = $('#case_memo_content')
-        case_memo_visibility_range = $('#case_memo_visibility_range')
-
-        console.log(case_memo_content.val())
-        console.log(case_memo_visibility_range.val())
-        $.ajax({
-            url: '#{create_case_memo_main_case_url}',
-            type: "POST",
-            data: {
-                'case_memo': {
-                    'content': case_memo_content.val(),
-                    'visibility_range': case_memo_visibility_range.val()
-                }
-            },
-            dataType: 'json',
-            success: handleSuccess()
-        });
-
-        return false;
-    });
-
-
-    function handleSuccess(data) {
-        alert('便签创建成功！');
-    }
