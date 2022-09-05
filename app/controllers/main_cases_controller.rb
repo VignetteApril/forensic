@@ -865,12 +865,15 @@ class MainCasesController < ApplicationController
   end
 
   # 便签主页面
-  # 鉴定人可以看到除了仅自己可见的其他所有便签（当然自己的设置的仅自己可见自己仍然可以看到）
-  # 委托人可以看到可见范围是 案件 和 本案件和领导的便签
-  # 鉴定中心的科室主任的可见范围是 本案件和领导
+  # 「鉴定人」和 「立案人」可以看到除了仅自己可见的其他所有便签（当然自己的设置的仅自己可见自己仍然可以看到）
+  # 「委托人」可以看到可见范围是 案件 和 本案件和领导
+  # 「鉴定中心的科室主任」的可见范围是 本案件和领导
+  # 「鉴定助理」可以看到 本案件 和 案件内部
   def case_memos
-    @case_memos = if @main_case.temp_ident_user?(@current_user)
+    @case_memos = if @main_case.temp_ident_user?(@current_user) || @main_case.case_filer?(@current_user)
       @main_case.case_memos.where.not(visibility_range: :only_me)
+    elsif @main_case.assistant?(@current_user)
+      @main_case.case_memos.where(visibility_range: [:current_case, :inner_current_case])
     elsif @main_case.wtr?(@current_user)
       @main_case.case_memos.where(visibility_range: [:current_case, :current_case_and_leader])
     elsif @current_user.center_department_director_user?

@@ -452,4 +452,12 @@ class MainCase < ApplicationRecord
   def matter_display
     JSON.parse(self.matter).join(',')
   end
+
+  def assistant?(user)
+    self.assist_ident_user == user.id
+  end
+
+  def case_filer?(user)
+    self.pass_user == user.id
+  end
 end
