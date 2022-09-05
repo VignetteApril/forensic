@@ -1,0 +1,325 @@
+// render 移交材料的modal
+= render "nested_modal"
+= render 'main_cases/camera_picture_modal'
+= simple_form_for(@main_case) do |f|
+  - if @main_case.errors.any?
+    #error_explanation.alert.alert-warning
+      h4
+        | 该案件保存时出错：
+        = pluralize(@main_case.errors.count, "个错误")
+      ul
+        - @main_case.errors.full_messages.each do |message|
+          li
+            = message
+  .form-inputs
+    = f.input :data_str, as: :hidden
+    = f.input :org_case_number, as: :hidden
+    = f.input :forensic_case_number, as: :hidden
+    
+    - if @wtr.nil?
+      = f.input :wtr_id, :as => :hidden
+    - else
+      = f.input :wtr_id, :as => :hidden, input_html: { value: @wtr.id }
+    // 委托方card
+    .card.gray-card
+      .card-header
+        h4.card-title.d-inline-block 委托方
+        .card-header-btn
+          .row.no-gutters
+            .col-md-4
+              label 选择已有的委托方信息导入
+              #user_select
+            .col-md-4
+              button type="button"  class='btn btn-primary' id='search_user' style='margin-top: 25px; margin-left: 10px' 搜索
+              button type="button"  class='btn btn-primary' id='import_user' style='margin-top: 25px; margin-left: 10px' 导入
+      .card-body.principal
+        .row
+          .col-md-1
+            = f.input :province_id, collection: @provinces, label: '省份', include_blank: false
+          .col-md-1
+            = f.input :city_id, collection: @cities, label: '市', include_blank: true
+          .col-md-1
+            = f.input :district_id, collection: @districts, label: '区县', include_blank: true
+          .col-md-3
+            = f.input :organization_name, label: '委托方名称（请书写委托方全称）'
+          .col-md-3
+            = f.input :user_name, label: '委托联系人'
+          .col-md-3
+            = f.input :wtr_phone, label: '委托联系人电话'
+            small class="form-text text-muted"
+        .row
+          .col-md-4
+            = f.input :organization_addr, label: '委托方地址'
+          .col-md-2
+            // 只有当前案件没有对应的委托单时才可以关联委托单
+            - if @main_case.entrust_order.nil?
+                = f.input :entrust_order_id, label: '关联委托单', collection: @entrust_orders
+            - else
+              = f.input :entrust_order_id, :as => :hidden, html: { value: @main_case.entrust_order.id }
+          .col-md-2
+            button#create_org_user.btn.btn-primary.mt-4 type="button" 保存成常用联系人
+       
+    // 委托鉴定事项card
+    .card.gray-card
+      .card-header
+        h4.card-title 委托鉴定事项
+      .card-body
+        .row
+          .col-md-4
+            = f.input :anyou, label: '案由', collection: @anyou
+          .col-md-4
+            = f.input :case_property, label: '案件性质', collection: @case_property
+          .col-md-4
+            = f.input :commission_date, as: :date, label: '委托日期', html5: true
+        .row
+          .col-md-4
+            = f.association :department, label: '受委托科室', collection: @departments
+          .col-md-4
+            = f.input :matter, label: '鉴定事项', collection: @department_matters, selected: @selected_matters, include_hidden: false, include_blank: true, input_html: { multiple: true }
+          .col-md-4
+            = f.input :case_type, label: '案件类型', collection: @collection_case_types, selected: @case_type
+        .row
+          .col-md-6
+            = f.input :matter_demand, label: '鉴定事项及要求', as: :text, :input_html => {:rows => 2}
+          .col-md-6
+            = f.input :base_info, label: '基本案情', as: :text, :input_html => {:rows => 2}
+        .row
+          .col-md-12
+            = f.input :is_repeat, label: '是否重复鉴定', as: :boolean
+          .col-md-12
+            = f.input :original_appraisal_opinion, label: '原鉴定意见', as: :text, input_html: { rows: 2 }
+        hr
+        .row
+          .col-md-6
+            .attachment_upload
+              = f.input :entrust_docs, label: '上传委托书', as: :file, input_html: {direct_upload: true, multiple: true}
+              span.h5 当前委托书
+              ul
+              - @main_case.entrust_docs.each do |entrust_doc|
+                li.mt-2
+                  span = "#{entrust_doc.blob.filename}"
+                  // 只有当位图书为图片类型时才渲染modal
+                  - if entrust_doc.blob.content_type.match? (/png|jpg|jpeg/)
+                    button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#preview_image" 预览
+                    = render partial: 'preview_image_modal', locals: {wts_image_url: entrust_doc}
+          .col-md-6
+            .alert.alert-warning.d-none id='camera_alert' role="alert" 当前设备没有摄像头，请使用带有摄像头设备的进行该操作
+            button.mt-2 type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#camera_picture_modal" 从摄像头中上传
+
+
+    // 移交材料card
+    .card.gray-card
+      .card-header
+        .row
+          .col-md-8
+            h4.card-title 移交材料
+          .col-md-4
+            = link_to_add_association '增加材料', f, :transfer_docs, class: 'btn btn-primary add-file pull-right',
+                    data: { association_insertion_node: '#transfer_docs', association_insertion_method: :append , toggle: "modal",
+                    target: "#nested_modal"}
+      .card-body style="margin-bottom:15px;"
+        / .row.mb-1 style="border:1px solid #6c757d"
+        .row.mb-1
+          .col-md-1
+            span 序号
+          .col-md-1
+            span 检材名称
+          .col-md-1
+            span 类型
+          .col-md-1
+            span 数量
+          .col-md-1
+            span 单位
+          .col-md-1
+            span 性状
+          .col-md-1
+            span 状况
+          .col-md-3.text-center
+            span 收到时间
+          .col-md-1.text-center
+            span 条码
+
+        #transfer_docs style="margin:-15px;position:relative;top:10px;"
+          = f.simple_fields_for :transfer_docs do |transfer_doc|
+            = render 'transfer_doc_fields', f: transfer_doc, render_options: { wrapper: 'bootstrap' }
+
+    // 被鉴定人card
+    .card.gray-card
+      .card-header
+        h4.card-title 被鉴定人
+      .card-body
+        = f.simple_fields_for :appraised_unit do |appraised_unit|
+          .row
+            .col-md-12
+              - if appraised_unit.object.unit_type.nil?
+                = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
+                        collection: AppraisedUnit.unit_types_arr, checked: AppraisedUnit.unit_types_arr.first, :item_wrapper_class => 'form-check form-check-inline'
+              - else
+                = appraised_unit.input :unit_type, label: '类型', as: :radio_buttons,
+                        collection: AppraisedUnit.unit_types_arr, :item_wrapper_class => 'form-check form-check-inline'
+          .user-fields class="#{appraised_unit.object.unit_type == 'unit' ? 'd-none' : ''}"
+            .row
+              .col-md-2
+                = appraised_unit.input :name, label: '名称'
+              .col-md-1
+                = appraised_unit.input :gender, label: '性别', collection: AppraisedUnit.genders_arr
+              .col-md-2
+                = appraised_unit.input :birthday, as: :date, label: '生日', html5: true
+              .col-md-2
+                = appraised_unit.input :nationality, label: '国籍', collection: NATIONALITY, selected: appraised_unit.object.nationality.nil? ? '中国' : appraised_unit.object.nationality
+              .col-md-2
+                = appraised_unit.input :id_type, label: '证件类型', collection: AppraisedUnit.id_types_arr
+              .col-md-3
+                = appraised_unit.input :id_num, label: '证件号码'
+            .row
+              .col-md-6
+                = appraised_unit.input :addr, label: '联系地址'
+          .company-fields class="#{appraised_unit.object.unit_type == 'unit' ? '' : 'd-none'}"
+            .row
+              - if appraised_unit.object.unit_type == 'unit'
+                .col-md-4
+                  = appraised_unit.input :name, label: '名称'
+                .col-md-8
+                  = appraised_unit.input :addr, label: '联系地址'
+              - else
+                .col-md-4
+                  = appraised_unit.input :name, label: '名称', input_html: {disabled: 'disabled'}
+                .col-md-8
+                  = appraised_unit.input :addr, label: '联系地址', input_html: {disabled: 'disabled'}
+
+  .form-actions
+    = f.button :submit, '保存', class: 'btn btn-success'
+
+
+.modal.fade id="flashModal" tabindex="999" role="dialog" aria-labelledby="flashModal" aria-hidden="true" style="z-index: 10000000 !important;"
+  .modal-dialog.modal-lg role="document"
+    .modal-content
+      .modal-header
+        h5 class="modal-title" 提示信息
+        button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          span aria-hidden="true" &times;
+      .modal-body
+        .row
+          .d-flex.justify-content-center.w-100
+            #flashBody
+
+css:
+  .table-responsive{
+    overflow-x: inherit;
+  }
+javascript:
+    var transfer_docs = #{@main_case.transfer_docs.select{ |item| !item.id.nil? }.to_json.html_safe};
+    if (transfer_docs.length == 0) {
+      $('#transfer_docs').children()[0].remove();
+
+    }
+    $('#transfer_docs')
+      .on('cocoon:after-insert', function(e, added_task) {
+        function setHeight(element) {
+          $(element).css({'height':'auto','overflow-y':'hidden'}).height(element.scrollHeight);
+        }
+        $('#transfer_docs').find('textarea').each(function () {
+          setHeight(this);
+        }).on('input', function () {
+          setHeight(this);
+        });
+      });
+
+    // 导入用户用到的事件
+    var query_type = '';
+    var user_select = $('#user_select').selectize({
+        valueField: 'id',
+        labelField: 'name',
+        searchField: 'name',
+        maxItems: 1,
+        options: [],
+        create: false,
+        dropdownParent : 'body',
+        onType: function (query) {
+          query_type = query;
+        },
+        render: {
+            option: function (item, escape) {
+                console.log(item);
+                return '<div>' +
+                         '<span>' + escape(item.name) + '</span>'
+                       '</div>';
+            }
+        }
+    });
+
+    var control = user_select[0].selectize;
+
+    $("#search_user").click(function(){
+      $.ajax({
+        url: "#{user_search_frequent_contacts_url}",
+        type: "post",
+        dataType: "json",
+        async: false,
+        data: {
+          user_name: query_type
+        },
+        success: function(res) {
+          users = res.users
+          control.clearOptions();
+          for(var i = 0; i < users.length; i++){
+            control.addOption({
+              id: users[i]["id"],
+              name: users[i]["name"],
+            });
+          }
+          control.open();
+          query_type = "";
+        },
+        error: function() {
+          alert("error");
+        }
+      })
+    });
+
+    //新增模态框初始化input btn
+    $('.add-file').click(function (){
+      $('#nested_modal').find('input').val("");
+      $('#nested_modal').find('.unit-btn').text("");
+      $('#nested_modal').find('.unit-btn').attr("data","")
+    })
+
+    if($('body').attr('data-controller') == 'main_cases' && $('body').attr('data-action') == 'new'){
+      console.log('新建案件页面')
+      $('.nested-fields-close').click()
+    }
+
+    $('#main_case_is_repeat').click(function (e) {
+        if (e.currentTarget.checked == false) {
+            $('#main_case_original_appraisal_opinion').addClass('d-none');
+            $('#main_case_original_appraisal_opinion').val('');
+            $('.main_case_original_appraisal_opinion').addClass('d-none');
+        } else {
+            $('#main_case_original_appraisal_opinion').removeClass('d-none');
+            $('.main_case_original_appraisal_opinion').removeClass('d-none');
+        }
+    });
+
+    if ($('#main_case_is_repeat')[0].checked == true) {
+        $('#main_case_original_appraisal_opinion').removeClass('d-none');
+        $('.main_case_original_appraisal_opinion').removeClass('d-none');
+    } else {
+        $('#main_case_original_appraisal_opinion').addClass('d-none');
+        $('.main_case_original_appraisal_opinion').addClass('d-none');
+    }
+
+    $('#stage_org_case_number').bind('input propertrychange', function(){
+      var stage_org_case_number = $('#stage_org_case_number').val();
+      $('#main_case_org_case_number').val(stage_org_case_number)
+    })
+
+    $('#forensic_case_number').bind('input propertrychange', function(){
+      var stage_forensic_case_number = $('#forensic_case_number').val();
+      $('#main_case_forensic_case_number').val(stage_forensic_case_number)
+    })
+    
+    var main_case_org_case_number = $('#main_case_org_case_number').val();
+    $('#stage_org_case_number').val(main_case_org_case_number);
+
+    var main_stage_forensic_case_number = $('#main_case_forensic_case_number').val();
+    $('#forensic_case_number').val(main_stage_forensic_case_number);
