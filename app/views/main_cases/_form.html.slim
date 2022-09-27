@@ -1,7 +1,7 @@
 // render 移交材料的modal
 = render "nested_modal"
 = render 'main_cases/camera_picture_modal'
-= simple_form_for(@main_case) do |f|
+= simple_form_for(@main_case, html: { id: :edit_main_case } ) do |f|
   - if @main_case.errors.any?
     #error_explanation.alert.alert-warning
       h4
@@ -197,7 +197,7 @@
                   = appraised_unit.input :addr, label: '联系地址', input_html: {disabled: 'disabled'}
 
   .form-actions
-    = f.button :submit, '保存', class: 'btn btn-success', form: 'edit_main_case_1'
+    = f.button :submit, '保存', class: 'btn btn-success', form: 'edit_main_case'
 
 
 .modal.fade id="flashModal" tabindex="999" role="dialog" aria-labelledby="flashModal" aria-hidden="true" style="z-index: 10000000 !important;"
